@@ -201,6 +201,21 @@ def get_json_files():
     cur = g.db.execute('select id, path, description from files')
     files = [dict(id=row[0], path=row[1], description=row[2]) for row in cur.fetchall()]
 
+    for file in files:
+        file_id = file['id']
+
+        cur = g.db.execute('select personid from filepersons where fileid = ?', (file_id,))
+        persons = [filepersons_row[0] for filepersons_row in cur.fetchall()]
+        file['persons'] = persons
+
+        cur = g.db.execute('select locationid from filelocations where fileid = ?', (file_id,))
+        locations = [filelocations_row[0] for filelocations_row in cur.fetchall()]
+        file['locations'] = locations
+
+        cur = g.db.execute('select tagid from filetags where fileid = ?', (file_id,))
+        tags = [filetags_row[0] for filetags_row in cur.fetchall()]
+        file['tags'] = tags
+
     return jsonify(dict(files=files))
 
 
@@ -259,7 +274,20 @@ def get_json_file():
     if row is None:
         abort(404)
 
-    return jsonify( dict(id=row[0], path=row[1], description=row[2]) )
+    if file_id is None:
+        # Needed if the path argument was used in the URL
+        file_id = row[0]
+
+    cur = g.db.execute('select personid from filepersons where fileid = ?', (file_id,))
+    persons = [filepersons_row[0] for filepersons_row in cur.fetchall()]
+
+    cur = g.db.execute('select locationid from filelocations where fileid = ?', (file_id,))
+    locations = [filelocations_row[0] for filelocations_row in cur.fetchall()]
+
+    cur = g.db.execute('select tagid from filetags where fileid = ?', (file_id,))
+    tags = [filetags_row[0] for filetags_row in cur.fetchall()]
+
+    return jsonify( dict(id=row[0], path=row[1], description=row[2], persons=persons, locations=locations, tags=tags) )
 
 
 @app.route('/person', methods=['GET'])
