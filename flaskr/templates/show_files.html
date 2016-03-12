@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('add_file') }}" method=post class=add-file>
+      <dl>
+        <dt>File path:
+        <dd><input type=text size=30 name=path>
+        <dt>File description:
+        <dd><textarea name=description rows=5 cols=40></textarea>
+        <dd><input type=submit value=Share>
+      </dl>
+    </form>
+  {% endif %}
+  <ul class=files>
+  {% for file in files %}
+    <li><h2>{{ file.path }}</h2>{{ file.description|safe }}
+  {% else %}
+    <li><em>No files here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
