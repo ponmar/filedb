@@ -44,7 +44,7 @@ def teardown_request(exception):
 @app.route('/')
 def show_files():
     cur = g.db.execute('select path, description from files order by id')
-    files = cur.fetchall()
+    files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
     return render_template('show_files.html', files=files)
 
 
@@ -104,8 +104,32 @@ def add_tag():
     return redirect(url_for('show_files'))
 
 
-@app.route('/tag', methods=['DELETE'])
+@app.route('/file', methods=['DELETE'])
 def remove_file():
+    if not session.get('logged_in'):
+        abort(401)
+    # TODO
+    return redirect(url_for('show_files'))
+
+
+@app.route('/person', methods=['DELETE'])
+def remove_person():
+    if not session.get('logged_in'):
+        abort(401)
+    # TODO
+    return redirect(url_for('show_files'))
+
+
+@app.route('/location', methods=['DELETE'])
+def remove_location():
+    if not session.get('logged_in'):
+        abort(401)
+    # TODO
+    return redirect(url_for('show_files'))
+
+
+@app.route('/tag', methods=['DELETE'])
+def remove_tag():
     if not session.get('logged_in'):
         abort(401)
     # TODO
