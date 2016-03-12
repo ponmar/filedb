@@ -117,7 +117,37 @@ def add_tag():
 # API: modify data
 #
 
-# TODO
+# TODO: change from POST -> PUT?
+@app.route('/add_file_person', methods=['POST'])
+def add_file_person():
+    if not session.get('logged_in'):
+        abort(401)
+    # TODO: get file_id or file_path from url
+    # TODO: get person_id from path
+    # TODO: insert into filepersons
+    return 'OK'
+
+
+# TODO: change from POST -> PUT?
+@app.route('/add_file_location', methods=['POST'])
+def add_file_location():
+    if not session.get('logged_in'):
+        abort(401)
+    # TODO: get file_id or file_path from url
+    # TODO: get person_id from path
+    # TODO: insert into filepersons
+    return 'OK'
+
+
+# TODO: change from POST -> PUT?
+@app.route('/add_file_tag', methods=['POST'])
+def add_file_tag():
+    if not session.get('logged_in'):
+        abort(401)
+    # TODO: get file_id or file_path from url
+    # TODO: get person_id from path
+    # TODO: insert into filepersons
+    return 'OK'
 
 #
 # API: delete data
