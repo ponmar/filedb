@@ -42,7 +42,7 @@ def teardown_request(exception):
 
 @app.route('/')
 def show_files():
-    cur = g.db.execute('select path, description from files') #  order by id
+    cur = g.db.execute('select path, description from files') # order by id
     files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
 
     cur = g.db.execute('select name from persons')
@@ -114,6 +114,12 @@ def add_tag():
 
 
 #
+# API: modify data
+#
+
+# TODO
+
+#
 # API: delete data
 #
 
@@ -121,8 +127,6 @@ def add_tag():
 def remove_file():
     if not session.get('logged_in'):
         abort(401)
-
-    # TODO: make a ON DELETE CASCADE to remove stuff from other tables referring to this entry?
 
     file_id = request.args.get('id')
     file_path = request.args.get('path')
@@ -256,6 +260,48 @@ def get_json_file():
         abort(404)
 
     return jsonify( dict(id=row[0], path=row[1], description=row[2]) )
+
+
+@app.route('/person', methods=['GET'])
+def get_json_person():
+    if not session.get('logged_in'):
+        abort(401)
+    person_id = request.args.get('id')
+    if person_id is None:
+        abort(404)
+    cur = g.db.execute('select id, name from persons where id = ?', (person_id,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+    return jsonify( dict(id=row[0], name=row[1]) )
+
+
+@app.route('/location', methods=['GET'])
+def get_json_location():
+    if not session.get('logged_in'):
+        abort(401)
+    location_id = request.args.get('id')
+    if location_id is None:
+        abort(404)
+    cur = g.db.execute('select id, name from persons where id = ?', (location_id,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+    return jsonify( dict(id=row[0], name=row[1]) )
+
+
+@app.route('/tag', methods=['GET'])
+def get_json_tag():
+    if not session.get('logged_in'):
+        abort(401)
+    tag_id = request.args.get('id')
+    if tag_id is None:
+        abort(404)
+    cur = g.db.execute('select id, name from tags where id = ?', (tag_id,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+    return jsonify( dict(id=row[0], name=row[1]) )
 
 
 #
