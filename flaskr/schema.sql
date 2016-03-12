@@ -28,16 +28,16 @@ create table tags (
 );
 
 create table filepersons(
-    fileid integer references files(id),
-    personid integer references persons(id)
+    fileid integer references files(id) on delete cascade,
+    personid integer references persons(id) on delete cascade
 );
 
 create table filelocations(
-    fileid integer references files(id),
-    locationid integer references locations(id)
+    fileid integer references files(id) on delete cascade,
+    locationid integer references locations(id) on delete cascade
 );
 
 create table filetags(
-    fileid integer references files(id),
-    tagid integer references tags(id)
+    fileid integer references files(id) on delete cascade,
+    tagid integer references tags(id) on delete cascade
 );
