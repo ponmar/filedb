@@ -151,7 +151,7 @@ def remove_tag():
 
 
 #
-# API: get JSON with many data
+# API: get JSON with many items
 #
 
 @app.route('/files', methods=['GET'])
@@ -159,8 +159,8 @@ def get_json_files():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select path, description from files')
-    files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, path, description from files')
+    files = [dict(id=row[0], path=row[1], description=row[2]) for row in cur.fetchall()]
 
     return jsonify(dict(files=files))
 
@@ -170,8 +170,8 @@ def get_json_persons():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select name from persons')
-    persons = [dict(path=row[0]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, name from persons')
+    persons = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
 
     return jsonify(dict(persons=persons))
 
@@ -181,8 +181,8 @@ def get_json_locations():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select name from locations')
-    locations = [dict(path=row[0]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, name from locations')
+    locations = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
 
     return jsonify(dict(locations=locations))
 
@@ -192,14 +192,14 @@ def get_json_tags():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select name from tags')
-    tags = [dict(path=row[0]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, name from tags')
+    tags = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
 
     return jsonify(dict(tags=tags))
 
 
 #
-# API: get JSON with one specific data
+# API: get JSON with one specific item
 #
 
 @app.route('/file', methods=['GET'])
@@ -208,12 +208,12 @@ def get_json_file():
         abort(401)
 
     file_path = request.args.get('path')
-    cur = g.db.execute('select path, description from files where path = ?', (file_path,))
+    cur = g.db.execute('select id, path, description from files where path = ?', (file_path,))
     row = cur.fetchone()
     if row is None:
         abort(404)
 
-    return jsonify( dict(path=row[0], description=row[1]) )
+    return jsonify( dict(id=row[0], path=row[1], description=row[2]) )
 
 
 #

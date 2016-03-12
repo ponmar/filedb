@@ -13,34 +13,37 @@ create table files (
 );
 
 create table persons (
-    name text primary key
+    id integer primary key autoincrement,
+    name text not null
 );
 
 create table locations (
-    name text primary key
+    id integer primary key autoincrement,
+    name text not null
 );
 
 create table tags (
-    name text primary key
+    id integer primary key autoincrement,
+    name text not null
 );
 
 create table filepersons(
     fileid integer,
-    personname text,
+    personid integer,
     foreign key(fileid) references files(id),
-    foreign key(personname) references persons(name)
+    foreign key(personid) references persons(id)
 );
 
 create table filelocations(
     fileid integer,
-    locationname text,
+    locationid integer,
     foreign key(fileid) references files(id),
-    foreign key(locationname) references locations(name)
+    foreign key(locationid) references locations(id)
 );
 
 create table filetags(
     fileid integer,
-    tagname text,
+    tagid integer,
     foreign key(fileid) references files(id),
-    foreign key(tagname) references tags(name)
+    foreign key(tagid) references tags(id)
 );
