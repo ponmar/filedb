@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if session.logged_in %}
-    <form action="{{ url_for('add_file') }}" method=post class=add-file>
+    <form action="{{ url_for('add_file') }}" method=post class=add-item>
       <dl>
         <dt>File path:
         <dd><input type=text size=30 name=path>
@@ -10,12 +10,67 @@
         <dd><input type=submit value=Add>
       </dl>
     </form>
+
+    <form action="{{ url_for('add_person') }}" method=post class=add-item>
+      <dl>
+        <dt>Person name:
+        <dd><input type=text size=30 name=name>
+        <dd><input type=submit value=Add>
+      </dl>
+    </form>
+
+    <form action="{{ url_for('add_location') }}" method=post class=add-item>
+      <dl>
+        <dt>Location name:
+        <dd><input type=text size=30 name=name>
+        <dd><input type=submit value=Add>
+      </dl>
+    </form>
+
+    <form action="{{ url_for('add_tag') }}" method=post class=add-item>
+      <dl>
+        <dt>Tag name:
+        <dd><input type=text size=30 name=name>
+        <dd><input type=submit value=Add>
+      </dl>
+    </form>
+
   {% endif %}
-  <ul class=files>
+
+  <h2>Files</h2>
+  <ul class=items>
   {% for file in files %}
-    <li><h2>{{ file.path }}</h2>{{ file.description|safe }}
+    <li>{{ file.path }} {{ file.description|safe }}
   {% else %}
     <li><em>No files here so far</em>
   {% endfor %}
   </ul>
+
+  <h2>Persons</h2>
+  <ul class=items>
+  {% for person in persons %}
+    <li>{{ person.name }}
+  {% else %}
+    <li><em>No persons here so far</em>
+  {% endfor %}
+  </ul>
+
+  <h2>Locations</h2>
+  <ul class=items>
+  {% for location in locations %}
+    <li>{{ location.name }}
+  {% else %}
+    <li><em>No locations here so far</em>
+  {% endfor %}
+  </ul>
+
+  <h2>Tags</h2>
+  <ul class=items>
+  {% for tag in tags %}
+    <li>{{ tag.name }}
+  {% else %}
+    <li><em>No tags here so far</em>
+  {% endfor %}
+  </ul>
+
 {% endblock %}

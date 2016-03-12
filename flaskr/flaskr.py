@@ -1,10 +1,8 @@
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash
-from contextlib import closing
+     abort, render_template, flash, jsonify
 
 # Configuration
-#DATABASE = '/tmp/flaskr.db'
 DATABASE = 'flaskr.db'
 SQL_SCHEMA = 'schema.sql'
 DEBUG = True
@@ -22,12 +20,9 @@ def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
 
-def init_db():
-    with closing(connect_db()) as db:
-        with app.open_resource(SQL_SCHEMA, mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
-
+#
+# Database handle for every request
+#
 
 @app.before_request
 def before_request():
@@ -41,12 +36,30 @@ def teardown_request(exception):
         db.close()
 
 
+#
+# HTML page with forms for testing some API functionality
+#
+
 @app.route('/')
 def show_files():
-    cur = g.db.execute('select path, description from files order by id')
+    cur = g.db.execute('select path, description from files') #  order by id
     files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
-    return render_template('show_files.html', files=files)
 
+    cur = g.db.execute('select name from persons')
+    persons = [dict(name=row[0]) for row in cur.fetchall()]
+
+    cur = g.db.execute('select name from locations')
+    locations = [dict(name=row[0]) for row in cur.fetchall()]
+
+    cur = g.db.execute('select name from tags')
+    tags = [dict(name=row[0]) for row in cur.fetchall()]
+
+    return render_template('debug.html', files=files, persons=persons, locations=locations, tags=tags)
+
+
+#
+# API: add data
+#
 
 @app.route('/file', methods=['POST'])
 def add_file():
@@ -56,10 +69,9 @@ def add_file():
         g.db.execute('insert into files (path, description) values (?, ?)',
                      [request.form['path'], request.form['description']])
         g.db.commit()
-        flash('File added')
     except sqlite3.IntegrityError:
-        flash('File already added')
-    return redirect(url_for('show_files'))
+        abort(409)
+    return 'OK'
 
 
 @app.route('/person', methods=['POST'])
@@ -70,10 +82,9 @@ def add_person():
         g.db.execute('insert into persons (name) values (?)',
                      [request.form['name']])
         g.db.commit()
-        flash('Person added')
     except sqlite3.IntegrityError:
-        flash('Person already added')
-    return redirect(url_for('show_files'))
+        abort(409)
+    return 'OK'
 
 
 @app.route('/location', methods=['POST'])
@@ -81,13 +92,12 @@ def add_location():
     if not session.get('logged_in'):
         abort(401)
     try:
-        g.db.execute('insert into location (name) values (?)',
+        g.db.execute('insert into locations (name) values (?)',
                      [request.form['name']])
         g.db.commit()
-        flash('Location added')
     except sqlite3.IntegrityError:
-        flash('Location already added')
-    return redirect(url_for('show_files'))
+        abort(409)
+    return 'OK'
 
 
 @app.route('/tag', methods=['POST'])
@@ -95,20 +105,24 @@ def add_tag():
     if not session.get('logged_in'):
         abort(401)
     try:
-        g.db.execute('insert into tag (name) values (?)',
+        g.db.execute('insert into tags (name) values (?)',
                  [request.form['name']])
         g.db.commit()
-        flash('Tag added')
     except sqlite3.IntegrityError:
-        flash('Tag already added')
-    return redirect(url_for('show_files'))
+        abort(409)
+    return 'OK'
 
+
+#
+# API: delete data
+#
 
 @app.route('/file', methods=['DELETE'])
 def remove_file():
     if not session.get('logged_in'):
         abort(401)
-    # TODO
+    # TODO: remove from table
+    # TODO: make a ON DELETE CASCADE to remove stuff from other tables refering to this entry
     return redirect(url_for('show_files'))
 
 
@@ -116,7 +130,7 @@ def remove_file():
 def remove_person():
     if not session.get('logged_in'):
         abort(401)
-    # TODO
+    # TODO: remove from table
     return redirect(url_for('show_files'))
 
 
@@ -124,7 +138,7 @@ def remove_person():
 def remove_location():
     if not session.get('logged_in'):
         abort(401)
-    # TODO
+    # TODO: remove from table
     return redirect(url_for('show_files'))
 
 
@@ -132,9 +146,79 @@ def remove_location():
 def remove_tag():
     if not session.get('logged_in'):
         abort(401)
-    # TODO
+    # TODO: remove from table
     return redirect(url_for('show_files'))
 
+
+#
+# API: get JSON with many data
+#
+
+@app.route('/files', methods=['GET'])
+def get_json_files():
+    if not session.get('logged_in'):
+        abort(401)
+
+    cur = g.db.execute('select path, description from files')
+    files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
+
+    return jsonify(dict(files=files))
+
+
+@app.route('/persons', methods=['GET'])
+def get_json_persons():
+    if not session.get('logged_in'):
+        abort(401)
+
+    cur = g.db.execute('select name from persons')
+    persons = [dict(path=row[0]) for row in cur.fetchall()]
+
+    return jsonify(dict(persons=persons))
+
+
+@app.route('/locations', methods=['GET'])
+def get_json_locations():
+    if not session.get('logged_in'):
+        abort(401)
+
+    cur = g.db.execute('select name from locations')
+    locations = [dict(path=row[0]) for row in cur.fetchall()]
+
+    return jsonify(dict(locations=locations))
+
+
+@app.route('/tags', methods=['GET'])
+def get_json_tags():
+    if not session.get('logged_in'):
+        abort(401)
+
+    cur = g.db.execute('select name from tags')
+    tags = [dict(path=row[0]) for row in cur.fetchall()]
+
+    return jsonify(dict(tags=tags))
+
+
+#
+# API: get JSON with one specific data
+#
+
+@app.route('/file', methods=['GET'])
+def get_json_file():
+    if not session.get('logged_in'):
+        abort(401)
+
+    file_path = request.args.get('path')
+    cur = g.db.execute('select path, description from files where path = ?', (file_path,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+
+    return jsonify( dict(path=row[0], description=row[1]) )
+
+
+#
+# Auth
+#
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -162,4 +246,3 @@ if __name__ == '__main__':
     #app.run(host='0.0.0.0')
     #app.debug = True
     app.run()
-    #init_db()

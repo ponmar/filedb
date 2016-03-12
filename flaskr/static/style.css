@@ -6,11 +6,11 @@ h2              { font-size: 1.2em; }
 
 .page           { margin: 2em auto; width: 35em; border: 5px solid #ccc;
                   padding: 0.8em; background: white; }
-.files          { list-style: none; margin: 0; padding: 0; }
-.files li       { margin: 0.8em 1.2em; }
-.files li h2    { margin-left: -1em; }
-.add-file       { font-size: 0.9em; border-bottom: 1px solid #ccc; }
-.add-file dl    { font-weight: bold; }
+.items          { list-style: none; margin: 0; padding: 0; }
+.items li       { margin: 0.8em 1.2em; }
+.items li h2    { margin-left: -1em; }
+.add-item       { font-size: 0.9em; border-bottom: 1px solid #ccc; }
+.add-item dl    { font-weight: bold; }
 .metanav        { text-align: right; font-size: 0.8em; padding: 0.3em;
                   margin-bottom: 1em; background: #fafafa; }
 .flash          { background: #cee5F5; padding: 0.5em;
