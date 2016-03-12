@@ -14,17 +14,17 @@ create table files (
 
 create table persons (
     id integer primary key autoincrement,
-    name text not null
+    name text unique not null
 );
 
 create table locations (
     id integer primary key autoincrement,
-    name text not null
+    name text unique not null
 );
 
 create table tags (
     id integer primary key autoincrement,
-    name text not null
+    name text unique not null
 );
 
 create table filepersons(
