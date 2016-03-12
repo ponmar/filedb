@@ -121,33 +121,68 @@ def add_tag():
 def remove_file():
     if not session.get('logged_in'):
         abort(401)
-    # TODO: remove from table
-    # TODO: make a ON DELETE CASCADE to remove stuff from other tables refering to this entry
-    return redirect(url_for('show_files'))
+
+    # TODO: make a ON DELETE CASCADE to remove stuff from other tables referring to this entry?
+
+    file_id = request.args.get('id')
+    file_path = request.args.get('path')
+
+    try:
+        if file_id is not None:
+            g.db.execute('delete from files where id = ?', (file_id,))
+        elif file_path is not None:
+            g.db.execute('delete from files where path = ?', (file_path,))
+        else:
+            abort(404)
+    except sqlite3.IntegrityError:
+        abort(409)
+
+    return 'OK'
 
 
 @app.route('/person', methods=['DELETE'])
 def remove_person():
     if not session.get('logged_in'):
         abort(401)
-    # TODO: remove from table
-    return redirect(url_for('show_files'))
+    person_id = request.args.get('id')
+    try:
+        if person_id is not None:
+            g.db.execute('delete from persons where id = ?', (person_id,))
+        else:
+            abort(404)
+    except sqlite3.IntegrityError:
+        abort(409)
+    return 'OK'
 
 
 @app.route('/location', methods=['DELETE'])
 def remove_location():
     if not session.get('logged_in'):
         abort(401)
-    # TODO: remove from table
-    return redirect(url_for('show_files'))
+    location_id = request.args.get('id')
+    try:
+        if location_id is not None:
+            g.db.execute('delete from locations where id = ?', (location_id,))
+        else:
+            abort(404)
+    except sqlite3.IntegrityError:
+        abort(409)
+    return 'OK'
 
 
 @app.route('/tag', methods=['DELETE'])
 def remove_tag():
     if not session.get('logged_in'):
         abort(401)
-    # TODO: remove from table
-    return redirect(url_for('show_files'))
+    tag_id = request.args.get('id')
+    try:
+        if tag_id is not None:
+            g.db.execute('delete from tags where id = ?', (tag_id,))
+        else:
+            abort(404)
+    except sqlite3.IntegrityError:
+        abort(409)
+    return 'OK'
 
 
 #
