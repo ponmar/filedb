@@ -207,9 +207,16 @@ def get_json_file():
     if not session.get('logged_in'):
         abort(401)
 
+    file_id = request.args.get('id')
     file_path = request.args.get('path')
-    cur = g.db.execute('select id, path, description from files where path = ?', (file_path,))
-    row = cur.fetchone()
+
+    row = None
+    if file_id is not None:
+        cur = g.db.execute('select id, path, description from files where id = ?', (file_id,))
+        row = cur.fetchone()
+    elif file_path is not None:
+        cur = g.db.execute('select id, path, description from files where path = ?', (file_path,))
+        row = cur.fetchone()
     if row is None:
         abort(404)
 
