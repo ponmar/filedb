@@ -28,22 +28,16 @@ create table tags (
 );
 
 create table filepersons(
-    fileid integer,
-    personid integer,
-    foreign key(fileid) references files(id),
-    foreign key(personid) references persons(id)
+    fileid integer references files(id),
+    personid integer references persons(id)
 );
 
 create table filelocations(
-    fileid integer,
-    locationid integer,
-    foreign key(fileid) references files(id),
-    foreign key(locationid) references locations(id)
+    fileid integer references files(id),
+    locationid integer references locations(id)
 );
 
 create table filetags(
-    fileid integer,
-    tagid integer,
-    foreign key(fileid) references files(id),
-    foreign key(tagid) references tags(id)
+    fileid integer references files(id),
+    tagid integer references tags(id)
 );
