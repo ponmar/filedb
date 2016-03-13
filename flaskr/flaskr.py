@@ -122,87 +122,53 @@ def add_tag():
 # API: modify data (internally rows are are deleted from tables, but in the API it looks like a file item is modified)
 #
 
-@app.route('/add_file_person', methods=['PUT'])
+@app.route('/add_to_file', methods=['PUT'])
 def add_file_person():
     if not session.get('logged_in'):
         abort(401)
+
     file_id = request.args.get('fileid')
     person_id = request.args.get('personid')
-    if file_id is None or person_id is None:
-        abort(404)
-    try:
-        g.db.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
-        g.db.commit()
-    except sqlite3.IntegrityError:
-        abort(409)
-    return 'OK'
-
-
-@app.route('/add_file_location', methods=['PUT'])
-def add_file_location():
-    if not session.get('logged_in'):
-        abort(401)
-    file_id = request.args.get('fileid')
     location_id = request.args.get('locationid')
-    if file_id is None or location_id is None:
-        abort(404)
-    try:
-        g.db.execute('insert into filelocations (fileid, locationid) values (?, ?)', (file_id, location_id))
-        g.db.commit()
-    except sqlite3.IntegrityError:
-        abort(409)
-    return 'OK'
-
-
-@app.route('/add_file_tag', methods=['PUT'])
-def add_file_tag():
-    if not session.get('logged_in'):
-        abort(401)
-    file_id = request.args.get('fileid')
     tag_id = request.args.get('tagid')
-    if file_id is None or tag_id is None:
+    if file_id is None or (person_id is None and location_id is None and tag_id is None):
         abort(404)
+
     try:
-        g.db.execute('insert into filetags (fileid, tagid) values (?, ?)', (file_id, tag_id))
+        # TODO: use a transaction (all or nothing!)
+        if person_id is not None:
+            g.db.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
+        if location_id is not None:
+            g.db.execute('insert into filelocations (fileid, locationid) values (?, ?)', (file_id, location_id))
+        if tag_id is not None:
+            g.db.execute('insert into filetags (fileid, tagid) values (?, ?)', (file_id, tag_id))
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
 
 
-@app.route('/remove_file_person', methods=['PUT'])
-def remove_file_person():
+@app.route('/remove_from_file', methods=['PUT'])
+def remove_from_file():
     if not session.get('logged_in'):
         abort(401)
     file_id = request.args.get('fileid')
     person_id = request.args.get('personid')
-    if file_id is None or person_id is None:
-        abort(404)
-    # TODO: remove from filepersons
-    return 'OK'
-
-
-@app.route('/remove_file_location', methods=['PUT'])
-def remove_file_location():
-    if not session.get('logged_in'):
-        abort(401)
-    file_id = request.args.get('fileid')
     location_id = request.args.get('locationid')
-    if file_id is None or location_id is None:
-        abort(404)
-    # TODO: remove from filelocations
-    return 'OK'
-
-
-@app.route('/remove_file_tag', methods=['PUT'])
-def remove_file_tag():
-    if not session.get('logged_in'):
-        abort(401)
-    file_id = request.args.get('fileid')
     tag_id = request.args.get('tagid')
-    if file_id is None or tag_id is None:
+    if file_id is None or (person_id is None and location_id is None and tag_id is None):
         abort(404)
-    # TODO: remove from filetags
+    try:
+        # TODO: use a transaction (all or nothing!)
+        if person_id is not None:
+            g.db.execute('delete from filepersons where fileid = ? and personid = ?', (file_id, person_id))
+        if location_id is not None:
+            g.db.execute('delete from filelocations where fileid = ? and locationid = ?', (file_id, location_id))
+        if tag_id is not None:
+            g.db.execute('delete from filetags where fileid = ? and tagid = ?', (file_id, tag_id))
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
     return 'OK'
 
 
