@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash, jsonify
+     abort, render_template, flash, jsonify, send_from_directory
 
 # Configuration
 DATABASE = 'flaskr.db'
@@ -375,6 +375,24 @@ def get_json_tag():
     return jsonify( dict(id=row[0], name=row[1]) )
 
 
+@app.route('/filecontent', methods=['GET'])
+def get_file_content():
+    if not session.get('logged_in'):
+        abort(401)
+    file_id = request.args.get('id')
+    if file_id is None:
+        abort(404)
+    cur = g.db.execute('select path from files where id = ?', (file_id,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+    file_path = row[0]
+    # TODO: need to adjust directory separator depending on os?
+    # TODO: make files directory configurable (on windows in may be x:\...\ and in linux a sym-link to a mounted samba-share)
+    # TODO: does this set content-type correct?
+    return send_from_directory('files', file_path)
+
+
 #
 # Auth
 #
@@ -384,21 +402,18 @@ def login():
     error = None
     if request.method == 'POST':
         if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('show_files'))
+            abort(401)
+        if request.form['password'] != app.config['PASSWORD']:
+            abort(401)
+        session['logged_in'] = True
+        return "OK"
     return render_template('login.html', error=error)
 
 
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
-    flash('You were logged out')
-    return redirect(url_for('show_files'))
+    return "OK"
 
 
 if __name__ == '__main__':
