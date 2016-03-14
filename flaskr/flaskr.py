@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash, jsonify, send_from_directory
+import datetime
 
 # Configuration
 DATABASE = 'flaskr.db'
@@ -45,19 +46,14 @@ def show_files():
     cur = g.db.execute('select path, description from files') # order by id
     files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
 
-    cur = g.db.execute('select name from persons')
-    persons = [dict(name=row[0]) for row in cur.fetchall()]
+    cur = g.db.execute('select name, description, dateofbirth from persons')
+    persons = [dict(name=row[0], description=row[1], dateofbirth=row[2]) for row in cur.fetchall()]
 
     cur = g.db.execute('select name from locations')
     locations = [dict(name=row[0]) for row in cur.fetchall()]
 
     cur = g.db.execute('select name from tags')
     tags = [dict(name=row[0]) for row in cur.fetchall()]
-
-    print(str(files))
-    print(str(persons))
-    print(str(locations))
-    print(str(tags))
 
     return render_template('debug.html', files=files, persons=persons, locations=locations, tags=tags)
 
@@ -83,9 +79,24 @@ def add_file():
 def add_person():
     if not session.get('logged_in'):
         abort(401)
+
+    name = request.form['name']
+    description = request.form['description']
+    date_of_birth = None
+
+    if 'dateofbirth' in request.form:
+        dateofbirth_str = request.form['dateofbirth']
+        if dateofbirth_str:
+            try:
+                # Required format: YYYY-MM-DD
+                datetime.datetime.strptime(dateofbirth_str, '%Y-%m-%d')
+            except ValueError:
+                abort(404)
+            date_of_birth = dateofbirth_str
+
     try:
-        g.db.execute('insert into persons (name) values (?)',
-                     [request.form['name']])
+        g.db.execute('insert into persons (name, description, dateofbirth) values (?, ?, ?)',
+                     [name, description, date_of_birth])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
@@ -267,8 +278,8 @@ def get_json_persons():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, name from persons')
-    persons = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, name, description, dateofbirth from persons')
+    persons = [dict(id=row[0], name=row[1], description=row[2], dateofbirth=row[3]) for row in cur.fetchall()]
 
     return jsonify(dict(persons=persons))
 
@@ -322,15 +333,15 @@ def get_json_file():
         file_id = row[0]
 
     cur = g.db.execute('select personid from filepersons where fileid = ?', (file_id,))
-    persons = [filepersons_row[0] for filepersons_row in cur.fetchall()]
+    person_ids = [filepersons_row[0] for filepersons_row in cur.fetchall()]
 
     cur = g.db.execute('select locationid from filelocations where fileid = ?', (file_id,))
-    locations = [filelocations_row[0] for filelocations_row in cur.fetchall()]
+    location_ids = [filelocations_row[0] for filelocations_row in cur.fetchall()]
 
     cur = g.db.execute('select tagid from filetags where fileid = ?', (file_id,))
-    tags = [filetags_row[0] for filetags_row in cur.fetchall()]
+    tag_ids = [filetags_row[0] for filetags_row in cur.fetchall()]
 
-    return jsonify( dict(id=row[0], path=row[1], description=row[2], persons=persons, locations=locations, tags=tags) )
+    return jsonify( dict(id=row[0], path=row[1], description=row[2], personsids=person_ids, locationids=location_ids, tagids=tag_ids) )
 
 
 @app.route('/person', methods=['GET'])
@@ -340,11 +351,11 @@ def get_json_person():
     person_id = request.args.get('id')
     if person_id is None:
         abort(404)
-    cur = g.db.execute('select id, name from persons where id = ?', (person_id,))
+    cur = g.db.execute('select id, name, description, dateofbirth from persons where id = ?', (person_id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
-    return jsonify( dict(id=row[0], name=row[1]) )
+    return jsonify( dict(id=row[0], name=row[1], description=row[2], dateofbirth=row[3]) )
 
 
 @app.route('/location', methods=['GET'])
@@ -354,7 +365,7 @@ def get_json_location():
     location_id = request.args.get('id')
     if location_id is None:
         abort(404)
-    cur = g.db.execute('select id, name from persons where id = ?', (location_id,))
+    cur = g.db.execute('select id, name from locations where id = ?', (location_id,))
     row = cur.fetchone()
     if row is None:
         abort(404)

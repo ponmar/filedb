@@ -15,6 +15,10 @@
       <dl>
         <dt>Person name:
         <dd><input type=text size=30 name=name>
+        <dt>Person description:
+        <dd><textarea name=description rows=5 cols=40></textarea>
+        <dt>Person date of birth (YYYY-MM-DD):
+        <dd><input type=text size=30 name=dateofbirth>
         <dd><input type=submit value=Add>
       </dl>
     </form>
@@ -49,7 +53,7 @@
   <h2>Persons</h2>
   <ul class=items>
   {% for person in persons %}
-    <li>{{ person.name }}
+    <li>{{ person.name }} {{ person.description|safe }} {{ person.dateofbirth|safe }}
   {% else %}
     <li><em>No persons here so far</em>
   {% endfor %}

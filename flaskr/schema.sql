@@ -14,7 +14,9 @@ create table files (
 
 create table persons (
     id integer primary key autoincrement not null,
-    name text unique not null
+    name text not null,
+    description text,
+    dateofbirth varchar(10)
 );
 
 create table locations (
