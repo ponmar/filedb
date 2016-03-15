@@ -4,10 +4,19 @@
 <div class=page>
   <h1>FileDB</h1>
   <div class=metanav>
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
+  {% if session.logged_in %}
+    <a href="{{ url_for('app_logout') }}">log out</a>
   {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+    <form action="{{ url_for('app_login') }}" method=post>
+      <dl>
+        <dt>Username:
+        <dd><input type=text name=username>
+        <dt>Password:
+        <dd><input type=password name=password>
+        <dd><input type=submit value=Login>
+      </dl>
+    </form>
   {% endif %}
   </div>
   {% for message in get_flashed_messages() %}

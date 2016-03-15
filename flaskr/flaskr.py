@@ -39,11 +39,16 @@ def teardown_request(exception):
 
 
 #
-# HTML page with forms for testing some API functionality
+# Webapp
 #
 
 @app.route('/')
-def show_files():
+def app_index():
+    return render_template('index.html')
+
+
+@app.route('/debug')
+def app_debug():
     cur = g.db.execute('select path, description from files') # order by id
     files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
 
@@ -64,7 +69,7 @@ def show_files():
 #
 
 @app.route('/file', methods=['POST'])
-def add_file():
+def api_add_file():
     if not session.get('logged_in'):
         abort(401)
     try:
@@ -79,7 +84,7 @@ def add_file():
 
 
 @app.route('/person', methods=['POST'])
-def add_person():
+def api_add_person():
     if not session.get('logged_in'):
         abort(401)
 
@@ -107,7 +112,7 @@ def add_person():
 
 
 @app.route('/location', methods=['POST'])
-def add_location():
+def api_add_location():
     if not session.get('logged_in'):
         abort(401)
     try:
@@ -120,7 +125,7 @@ def add_location():
 
 
 @app.route('/tag', methods=['POST'])
-def add_tag():
+def api_add_tag():
     if not session.get('logged_in'):
         abort(401)
     try:
@@ -137,7 +142,7 @@ def add_tag():
 #
 
 @app.route('/add_to_file', methods=['PUT'])
-def add_file_person():
+def api_add_file_person():
     if not session.get('logged_in'):
         abort(401)
 
@@ -163,7 +168,7 @@ def add_file_person():
 
 
 @app.route('/remove_from_file', methods=['PUT'])
-def remove_from_file():
+def api_remove_from_file():
     if not session.get('logged_in'):
         abort(401)
     file_id = request.args.get('fileid')
@@ -191,7 +196,7 @@ def remove_from_file():
 #
 
 @app.route('/file', methods=['DELETE'])
-def remove_file():
+def api_remove_file():
     if not session.get('logged_in'):
         abort(401)
     file_id = request.args.get('id')
@@ -205,7 +210,7 @@ def remove_file():
 
 
 @app.route('/person', methods=['DELETE'])
-def remove_person():
+def api_remove_person():
     if not session.get('logged_in'):
         abort(401)
     person_id = request.args.get('id')
@@ -219,7 +224,7 @@ def remove_person():
 
 
 @app.route('/location', methods=['DELETE'])
-def remove_location():
+def api_remove_location():
     if not session.get('logged_in'):
         abort(401)
     location_id = request.args.get('id')
@@ -233,7 +238,7 @@ def remove_location():
 
 
 @app.route('/tag', methods=['DELETE'])
-def remove_tag():
+def api_remove_tag():
     if not session.get('logged_in'):
         abort(401)
     tag_id = request.args.get('id')
@@ -251,7 +256,7 @@ def remove_tag():
 #
 
 @app.route('/files', methods=['GET'])
-def get_json_files():
+def api_get_json_files():
     if not session.get('logged_in'):
         abort(401)
 
@@ -277,7 +282,7 @@ def get_json_files():
 
 
 @app.route('/persons', methods=['GET'])
-def get_json_persons():
+def api_get_json_persons():
     if not session.get('logged_in'):
         abort(401)
 
@@ -288,7 +293,7 @@ def get_json_persons():
 
 
 @app.route('/locations', methods=['GET'])
-def get_json_locations():
+def api_get_json_locations():
     if not session.get('logged_in'):
         abort(401)
 
@@ -299,7 +304,7 @@ def get_json_locations():
 
 
 @app.route('/tags', methods=['GET'])
-def get_json_tags():
+def api_get_json_tags():
     if not session.get('logged_in'):
         abort(401)
 
@@ -314,7 +319,7 @@ def get_json_tags():
 #
 
 @app.route('/file', methods=['GET'])
-def get_json_file():
+def api_get_json_file():
     if not session.get('logged_in'):
         abort(401)
 
@@ -348,7 +353,7 @@ def get_json_file():
 
 
 @app.route('/person', methods=['GET'])
-def get_json_person():
+def api_get_json_person():
     if not session.get('logged_in'):
         abort(401)
     person_id = request.args.get('id')
@@ -362,7 +367,7 @@ def get_json_person():
 
 
 @app.route('/location', methods=['GET'])
-def get_json_location():
+def api_get_json_location():
     if not session.get('logged_in'):
         abort(401)
     location_id = request.args.get('id')
@@ -376,7 +381,7 @@ def get_json_location():
 
 
 @app.route('/tag', methods=['GET'])
-def get_json_tag():
+def api_get_json_tag():
     if not session.get('logged_in'):
         abort(401)
     tag_id = request.args.get('id')
@@ -390,7 +395,7 @@ def get_json_tag():
 
 
 @app.route('/filecontent', methods=['GET'])
-def get_file_content():
+def api_get_file_content():
     if not session.get('logged_in'):
         abort(401)
     file_id = request.args.get('id')
@@ -408,22 +413,43 @@ def get_file_content():
 # Auth
 #
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            abort(401)
-        if request.form['password'] != app.config['PASSWORD']:
-            abort(401)
+def login(username, password):
+    logged_in = app.config['USERNAME'] and password == app.config['PASSWORD']
+    if logged_in:
         session['logged_in'] = True
-        return "OK"
-    return render_template('login.html', error=error)
+    return logged_in
+
+
+def logout():
+    session.pop('logged_in', None)
+
+
+@app.route('/app_login', methods=['POST'])
+def app_login():
+    error = None
+    if not login(request.form['username'],
+                 request.form['password']):
+        error = 'Invalid username or password'
+    return redirect(url_for('app_index'), error)
+
+
+@app.route('/app_logout', methods=['GET'])
+def app_logout():
+    logout()
+    return redirect(url_for('app_index'))
+
+
+@app.route('/login', methods=['POST'])
+def api_login():
+    if not login(request.form['username'],
+                 request.form['password']):
+        abort(401)
+    return "OK"
 
 
 @app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
+def api_logout():
+    logout()
     return "OK"
 
 
