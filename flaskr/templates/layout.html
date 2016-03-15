@@ -13,6 +13,7 @@
 
     <script src=" {{ url_for('static', filename='jquery.min.js') }}"></script>
     <script src=" {{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <script src=" {{ url_for('static', filename='scripts.js') }}"></script>
   </head>
 
   {% block body %}
@@ -34,7 +35,6 @@
             <li><a href="">Categorize Random Files</a></li>
             <li><a href="{{ url_for('app_debug') }}">Debug</a></li>
             <li><a href="">About</a></li>
-            <li><a href="">Contact</a></li>
             {% if session.logged_in %}
               <li><a href="{{ url_for('app_logout') }}">Log Out</a></li>
             {% else %}
@@ -49,7 +49,6 @@
 
       <div class="starter-template">
         <br><br><br>
-        <h1>FileDB</h1>
         {% block content %}{% endblock %}
       </div>
 

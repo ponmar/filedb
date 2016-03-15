@@ -1,7 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
 
-  {% if session.logged_in %}
-  {% endif %}
+{% if session.logged_in %}
+
+<h1>Browse Files</h1>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Persons</div>
+  <div class="panel-body" id="personbuttons"></div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Locations</div>
+  <div class="panel-body" id="locationbuttons"></div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Tags</div>
+  <div class="panel-body" id="tagbuttons"></div>
+</div>
+
+{% endif %}
 
 {% endblock %}
