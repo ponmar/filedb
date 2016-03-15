@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+
+  {% if session.logged_in %}
+    <ul>
+      <li><a href="{{ url_for('app_browse') }}">Browse files</a></li>
+      <li>Categorize random files</li>
+      <li><a href="{{ url_for('app_debug') }}">Debug</a></li>
+    </ul>
+  {% endif %}
+
+{% endblock %}

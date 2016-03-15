@@ -47,10 +47,15 @@ def app_index():
     return render_template('index.html')
 
 
+@app.route('/browse')
+def app_browse():
+    return render_template('browse.html')
+
+
 @app.route('/debug')
 def app_debug():
-    cur = g.db.execute('select path, description from files') # order by id
-    files = [dict(path=row[0], description=row[1]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, path, description from files') # order by id
+    files = [dict(id=row[0], path=row[1], description=row[2]) for row in cur.fetchall()]
 
     cur = g.db.execute('select name, description, dateofbirth from persons')
     persons = [dict(name=row[0], description=row[1], dateofbirth=row[2]) for row in cur.fetchall()]
@@ -318,14 +323,7 @@ def api_get_json_tags():
 # API: get JSON with one specific item
 #
 
-@app.route('/file', methods=['GET'])
-def api_get_json_file():
-    if not session.get('logged_in'):
-        abort(401)
-
-    file_id = request.args.get('id')
-    file_path = request.args.get('path')
-
+def get_file_json(file_id = None, file_path = None):
     row = None
     if file_id is not None:
         cur = g.db.execute('select id, path, description from files where id = ?', (file_id,))
@@ -333,8 +331,9 @@ def api_get_json_file():
     elif file_path is not None:
         cur = g.db.execute('select id, path, description from files where path = ?', (file_path,))
         row = cur.fetchone()
+
     if row is None:
-        abort(404)
+        return None
 
     if file_id is None:
         # Needed if the path argument was used in the URL
@@ -352,56 +351,64 @@ def api_get_json_file():
     return jsonify( dict(id=row[0], path=row[1], description=row[2], personsids=person_ids, locationids=location_ids, tagids=tag_ids) )
 
 
-@app.route('/person', methods=['GET'])
-def api_get_json_person():
+@app.route('/file_by_path/<path>', methods=['GET'])
+def api_json_file_by_path(path):
     if not session.get('logged_in'):
         abort(401)
-    person_id = request.args.get('id')
-    if person_id is None:
+    file_json = get_file_json(file_path=path)
+    if file_json is None:
         abort(404)
-    cur = g.db.execute('select id, name, description, dateofbirth from persons where id = ?', (person_id,))
+    return file_json
+
+
+@app.route('/file/<int:id>', methods=['GET'])
+def api_json_file_by_id(id):
+    if not session.get('logged_in'):
+        abort(401)
+    file_json = get_file_json(file_id=id)
+    if file_json is None:
+        abort(404)
+    return file_json
+
+
+@app.route('/person/<int:id>', methods=['GET'])
+def api_get_json_person(id):
+    if not session.get('logged_in'):
+        abort(401)
+    cur = g.db.execute('select id, name, description, dateofbirth from persons where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
     return jsonify( dict(id=row[0], name=row[1], description=row[2], dateofbirth=row[3]) )
 
 
-@app.route('/location', methods=['GET'])
-def api_get_json_location():
+@app.route('/location/<int:id>', methods=['GET'])
+def api_get_json_location(id):
     if not session.get('logged_in'):
         abort(401)
-    location_id = request.args.get('id')
-    if location_id is None:
-        abort(404)
-    cur = g.db.execute('select id, name from locations where id = ?', (location_id,))
+    cur = g.db.execute('select id, name from locations where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
     return jsonify( dict(id=row[0], name=row[1]) )
 
 
-@app.route('/tag', methods=['GET'])
-def api_get_json_tag():
+@app.route('/tag/<int:id>', methods=['GET'])
+def api_get_json_tag(id):
     if not session.get('logged_in'):
         abort(401)
-    tag_id = request.args.get('id')
-    if tag_id is None:
-        abort(404)
-    cur = g.db.execute('select id, name from tags where id = ?', (tag_id,))
+    cur = g.db.execute('select id, name from tags where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
     return jsonify( dict(id=row[0], name=row[1]) )
 
 
-@app.route('/filecontent', methods=['GET'])
-def api_get_file_content():
+@app.route('/filecontent/<int:id>', methods=['GET'])
+def api_get_file_content(id):
     if not session.get('logged_in'):
         abort(401)
-    file_id = request.args.get('id')
-    if file_id is None:
-        abort(404)
-    cur = g.db.execute('select path from files where id = ?', (file_id,))
+    cur = g.db.execute('select path from files where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
         abort(404)

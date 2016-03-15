@@ -42,7 +42,7 @@
   <h2>Files</h2>
   <ul class=items>
   {% for file in files %}
-    <li>{{ file.path }} {{ file.description|safe }}
+    <li><a href="{{ url_for('api_get_file_content', id=file.id) }}">{{ file.path }}</a> {{ file.description|safe }}
   {% else %}
     <li><em>No files here so far</em>
   {% endfor %}
