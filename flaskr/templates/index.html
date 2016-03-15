@@ -1,12 +1,18 @@
 {% extends "layout.html" %}
-{% block body %}
+{% block content %}
 
-  {% if session.logged_in %}
-    <ul>
-      <li><a href="{{ url_for('app_browse') }}">Browse files</a></li>
-      <li>Categorize random files</li>
-      <li><a href="{{ url_for('app_debug') }}">Debug</a></li>
-    </ul>
+  {% if not session.logged_in %}
+    <form action="{{ url_for('app_login') }}" method=post>
+      <dl>
+        <dt>Username:
+        <dd><input type=text name=username>
+        <dt>Password:
+        <dd><input type=password name=password>
+        <dd><input type=submit value=Login>
+      </dl>
+    </form>
+  {% else %}
+    <p class="lead">Welcome!</p>
   {% endif %}
 
 {% endblock %}

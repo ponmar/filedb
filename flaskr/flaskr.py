@@ -433,11 +433,9 @@ def logout():
 
 @app.route('/app_login', methods=['POST'])
 def app_login():
-    error = None
-    if not login(request.form['username'],
-                 request.form['password']):
-        error = 'Invalid username or password'
-    return redirect(url_for('app_index'), error)
+    login(request.form['username'],
+          request.form['password'])
+    return redirect(url_for('app_index'))
 
 
 @app.route('/app_logout', methods=['GET'])

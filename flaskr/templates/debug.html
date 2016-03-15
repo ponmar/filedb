@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
-{% block body %}
+{% block content %}
   {% if session.logged_in %}
-    <form action="{{ url_for('api_add_file') }}" method=post class=add-item>
+    <form action="{{ url_for('api_add_file') }}" method=post>
       <dl>
         <dt>File path:
         <dd><input type=text size=30 name=path>
@@ -11,7 +11,7 @@
       </dl>
     </form>
 
-    <form action="{{ url_for('api_add_person') }}" method=post class=add-item>
+    <form action="{{ url_for('api_add_person') }}" method=post>
       <dl>
         <dt>Person name:
         <dd><input type=text size=30 name=name>
@@ -23,7 +23,7 @@
       </dl>
     </form>
 
-    <form action="{{ url_for('api_add_location') }}" method=post class=add-item>
+    <form action="{{ url_for('api_add_location') }}" method=post>
       <dl>
         <dt>Location name:
         <dd><input type=text size=30 name=name>
@@ -31,7 +31,7 @@
       </dl>
     </form>
 
-    <form action="{{ url_for('api_add_tag') }}" method=post class=add-item>
+    <form action="{{ url_for('api_add_tag') }}" method=post>
       <dl>
         <dt>Tag name:
         <dd><input type=text size=30 name=name>
@@ -40,7 +40,7 @@
     </form>
 
   <h2>Files</h2>
-  <ul class=items>
+  <ul>
   {% for file in files %}
     <li><a href="{{ url_for('api_get_file_content', id=file.id) }}">{{ file.path }}</a> {{ file.description|safe }}
   {% else %}
@@ -49,7 +49,7 @@
   </ul>
 
   <h2>Persons</h2>
-  <ul class=items>
+  <ul>
   {% for person in persons %}
     <li>{{ person.name }} {{ person.description|safe }} {{ person.dateofbirth|safe }}
   {% else %}
@@ -58,7 +58,7 @@
   </ul>
 
   <h2>Locations</h2>
-  <ul class=items>
+  <ul>
   {% for location in locations %}
     <li>{{ location.name }}
   {% else %}
@@ -67,7 +67,7 @@
   </ul>
 
   <h2>Tags</h2>
-  <ul class=items>
+  <ul>
   {% for tag in tags %}
     <li>{{ tag.name }}
   {% else %}
