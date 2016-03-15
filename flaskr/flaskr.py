@@ -49,19 +49,9 @@ def app_index():
 
 @app.route('/app_files')
 def app_files():
-    cur = g.db.execute('select id, path, description from files') # order by id
+    cur = g.db.execute('select id, path, description from files order by path')
     files = [dict(id=row[0], path=row[1], description=row[2]) for row in cur.fetchall()]
-
-    cur = g.db.execute('select name, description, dateofbirth from persons')
-    persons = [dict(name=row[0], description=row[1], dateofbirth=row[2]) for row in cur.fetchall()]
-
-    cur = g.db.execute('select name from locations')
-    locations = [dict(name=row[0]) for row in cur.fetchall()]
-
-    cur = g.db.execute('select name from tags')
-    tags = [dict(name=row[0]) for row in cur.fetchall()]
-
-    return render_template('debug.html', files=files, persons=persons, locations=locations, tags=tags)
+    return render_template('files.html', files=files)
 
 
 @app.route('/browse')
