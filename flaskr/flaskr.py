@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, flash, jsonify, send_from_directory
+     abort, render_template, jsonify, send_from_directory
 import datetime
 
 # Configuration
@@ -10,6 +10,7 @@ DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'admin'
+FILES_DIRECTORY = 'files'
 
 # Create the application
 app = Flask(__name__)
@@ -67,6 +68,8 @@ def add_file():
     if not session.get('logged_in'):
         abort(401)
     try:
+        # TODO: check that file exists?
+        # TODO: require certain directory separator ('/', not '\')
         g.db.execute('insert into files (path, description) values (?, ?)',
                      [request.form['path'], request.form['description']])
         g.db.commit()
@@ -398,10 +401,7 @@ def get_file_content():
     if row is None:
         abort(404)
     file_path = row[0]
-    # TODO: need to adjust directory separator depending on os?
-    # TODO: make files directory configurable (on windows in may be x:\...\ and in linux a sym-link to a mounted samba-share)
-    # TODO: does this set content-type correct?
-    return send_from_directory('files', file_path)
+    return send_from_directory(FILES_DIRECTORY, file_path)
 
 
 #
