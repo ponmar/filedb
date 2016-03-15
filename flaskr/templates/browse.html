@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<script>
+	$("#browse_files_page").addClass('active');
+</script>
+
 {% if session.logged_in %}
 
 <h1>Browse Files</h1>
@@ -19,6 +23,8 @@
   <div class="panel-heading">Tags</div>
   <div class="panel-body" id="tagbuttons"></div>
 </div>
+
+<button type="button" class="btn btn-default">Show</button>
 
 {% endif %}
 

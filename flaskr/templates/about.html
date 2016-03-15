@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<script>
+	$("#about_page").addClass('active');
+</script>
+
+{% if session.logged_in %}
+
+  <h1>About</h1>
+
+
+{% endif %}
+{% endblock %}

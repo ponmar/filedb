@@ -1,45 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
-  {% if session.logged_in %}
-    <form action="{{ url_for('api_add_file') }}" method=post>
-      <dl>
-        <dt>File path:
-        <dd><input type=text size=30 name=path>
-        <dt>File description:
-        <dd><textarea name=description rows=5 cols=40></textarea>
-        <dd><input type=submit value=Add>
-      </dl>
-    </form>
 
-    <form action="{{ url_for('api_add_person') }}" method=post>
-      <dl>
-        <dt>Person name:
-        <dd><input type=text size=30 name=name>
-        <dt>Person description:
-        <dd><textarea name=description rows=5 cols=40></textarea>
-        <dt>Person date of birth (YYYY-MM-DD):
-        <dd><input type=text size=30 name=dateofbirth>
-        <dd><input type=submit value=Add>
-      </dl>
-    </form>
+<script>
+	$("#files_page").addClass('active');
+</script>
 
-    <form action="{{ url_for('api_add_location') }}" method=post>
-      <dl>
-        <dt>Location name:
-        <dd><input type=text size=30 name=name>
-        <dd><input type=submit value=Add>
-      </dl>
-    </form>
+{% if session.logged_in %}
 
-    <form action="{{ url_for('api_add_tag') }}" method=post>
-      <dl>
-        <dt>Tag name:
-        <dd><input type=text size=30 name=name>
-        <dd><input type=submit value=Add>
-      </dl>
-    </form>
-
-  <h2>Files</h2>
+  <h1>Files</h1>
   <ul>
   {% for file in files %}
     <li><a href="{{ url_for('api_get_file_content', id=file.id) }}">{{ file.path }}</a> {{ file.description|safe }}
@@ -48,33 +16,5 @@
   {% endfor %}
   </ul>
 
-  <h2>Persons</h2>
-  <ul>
-  {% for person in persons %}
-    <li>{{ person.name }} {{ person.description|safe }} {{ person.dateofbirth|safe }}
-  {% else %}
-    <li><em>No persons here so far</em>
-  {% endfor %}
-  </ul>
-
-  <h2>Locations</h2>
-  <ul>
-  {% for location in locations %}
-    <li>{{ location.name }}
-  {% else %}
-    <li><em>No locations here so far</em>
-  {% endfor %}
-  </ul>
-
-  <h2>Tags</h2>
-  <ul>
-  {% for tag in tags %}
-    <li>{{ tag.name }}
-  {% else %}
-    <li><em>No tags here so far</em>
-  {% endfor %}
-  </ul>
-
-  {% endif %}
-
+{% endif %}
 {% endblock %}

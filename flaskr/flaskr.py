@@ -47,13 +47,8 @@ def app_index():
     return render_template('index.html')
 
 
-@app.route('/browse')
-def app_browse():
-    return render_template('browse.html')
-
-
-@app.route('/debug')
-def app_debug():
+@app.route('/app_files')
+def app_files():
     cur = g.db.execute('select id, path, description from files') # order by id
     files = [dict(id=row[0], path=row[1], description=row[2]) for row in cur.fetchall()]
 
@@ -67,6 +62,21 @@ def app_debug():
     tags = [dict(name=row[0]) for row in cur.fetchall()]
 
     return render_template('debug.html', files=files, persons=persons, locations=locations, tags=tags)
+
+
+@app.route('/browse')
+def app_browse():
+    return render_template('browse.html')
+
+
+@app.route('/categories')
+def app_categories():
+    return render_template('categories.html')
+
+
+@app.route('/about')
+def app_about():
+    return render_template('about.html')
 
 
 #
