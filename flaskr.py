@@ -88,6 +88,15 @@ def api_add_file():
     return 'OK'
 
 
+# TODO: use function to check all values from forms
+def get_form_str(param_name, min_length = 3, max_length = 50):
+    if param_name in request.form:
+        param_value = request.form[param_name]
+        if len(param_value) in range(min_length, max_length+1):
+            return param_value
+    return None
+
+
 @app.route('/person', methods=['POST'])
 def api_add_person():
     if not session.get('logged_in'):

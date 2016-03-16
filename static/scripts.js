@@ -58,7 +58,7 @@ var tags = null;
             $.getJSON("/files", function(result){
                 $("#files").empty();
                 files = result['files'];
-                for (var i=0, tag; tag = tags[i]; i++){
+                for (var i=0, file; file = files[i]; i++){
                     $("#files").append('<a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a><br>');
                 }
             });
