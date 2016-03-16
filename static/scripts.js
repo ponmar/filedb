@@ -9,7 +9,7 @@ var tags = null;
 
         if ($('#personbuttons').length){
             for (var i=0, person; person = persons[i]; i++){
-               $("#personbuttons").append('<button type="button" class="btn btn-default">' + person['name'] + '</button>');
+               $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + person['name'] + '</label>');
             }
         }
 
@@ -25,7 +25,7 @@ var tags = null;
 
         if ($('#locationbuttons').length){
             for (var i=0, location; location = locations[i]; i++){
-               $("#locationbuttons").append('<button type="button" class="btn btn-default">' + location['name'] + '</button>');
+               $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + location['name'] + '</label>');
             }
         }
 
@@ -41,7 +41,7 @@ var tags = null;
 
         if ($('#tagbuttons').length){
             for (var i=0, tag; tag = tags[i]; i++){
-               $("#tagbuttons").append('<button type="button" class="btn btn-default">' + tag['name'] + '</button>');
+               $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + tag['name'] + '</label>');
             }
         }
 
