@@ -200,57 +200,45 @@ def api_remove_from_file():
 # API: delete data
 #
 
-@app.route('/file', methods=['DELETE'])
-def api_remove_file():
+@app.route('/file/<int:id>', methods=['DELETE'])
+def api_remove_file(id):
     if not session.get('logged_in'):
         abort(401)
-    file_id = request.args.get('id')
-    if file_id is None:
-        abort(404)
     try:
-        g.db.execute('delete from files where id = ?', (file_id,))
+        g.db.execute('delete from files where id = ?', (id,))
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
 
 
-@app.route('/person', methods=['DELETE'])
-def api_remove_person():
+@app.route('/person/<int:id>', methods=['DELETE'])
+def api_remove_person(id):
     if not session.get('logged_in'):
         abort(401)
-    person_id = request.args.get('id')
-    if person_id is None:
-        abort(404)
     try:
-        g.db.execute('delete from persons where id = ?', (person_id,))
+        g.db.execute('delete from persons where id = ?', (id,))
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
 
 
-@app.route('/location', methods=['DELETE'])
-def api_remove_location():
+@app.route('/location/<int:id>', methods=['DELETE'])
+def api_remove_location(id):
     if not session.get('logged_in'):
         abort(401)
-    location_id = request.args.get('id')
-    if location_id is None:
-        abort(404)
     try:
-        g.db.execute('delete from locations where id = ?', (location_id,))
+        g.db.execute('delete from locations where id = ?', (id,))
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
 
 
-@app.route('/tag', methods=['DELETE'])
-def api_remove_tag():
+@app.route('/tag/<int:id>', methods=['DELETE'])
+def api_remove_tag(id):
     if not session.get('logged_in'):
         abort(401)
-    tag_id = request.args.get('id')
-    if tag_id is None:
-        abort(404)
     try:
-        g.db.execute('delete from tags where id = ?', (tag_id,))
+        g.db.execute('delete from tags where id = ?', (id,))
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'

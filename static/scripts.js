@@ -8,13 +8,13 @@ var tags = null;
         persons = result['persons'];
 
         if ($('#personbuttons').length){
-            for (var i=0, person; person = persons[i]; i++) {
+            for (var i=0, person; person = persons[i]; i++){
                $("#personbuttons").append('<button type="button" class="btn btn-default">' + person['name'] + '</button>');
             }
         }
 
         if ($('#personstable').length){
-            for (var i=0, person; person = persons[i]; i++) {
+            for (var i=0, person; person = persons[i]; i++){
                 $("#personstable").append('<tr><td>' + person['name'] + '</td><td>' + person['description'] + '</td><td>' + person['dateofbirth'] + '</td><td></td></tr>');
             }
         }
@@ -24,13 +24,13 @@ var tags = null;
         locations = result['locations'];
 
         if ($('#locationbuttons').length){
-            for (var i=0, location; location = locations[i]; i++) {
+            for (var i=0, location; location = locations[i]; i++){
                $("#locationbuttons").append('<button type="button" class="btn btn-default">' + location['name'] + '</button>');
             }
         }
 
         if ($('#locationstable').length){
-            for (var i=0, location; location = locations[i]; i++) {
+            for (var i=0, location; location = locations[i]; i++){
                 $("#locationstable").append('<tr><td>' + location['name'] + '</td><td></td></tr>');
             }
         }
@@ -40,16 +40,29 @@ var tags = null;
         tags = result['tags'];
 
         if ($('#tagbuttons').length){
-            for (var i=0, tag; tag = tags[i]; i++) {
+            for (var i=0, tag; tag = tags[i]; i++){
                $("#tagbuttons").append('<button type="button" class="btn btn-default">' + tag['name'] + '</button>');
             }
         }
 
         if ($('#tagstable').length){
-            for (var i=0, tag; tag = tags[i]; i++) {
+            for (var i=0, tag; tag = tags[i]; i++){
                 $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td></td></tr>');
             }
         }
     });
+
+    if ($('#browse_files_button').length){
+        $("#browse_files_button").click(function(){
+            // TODO: add selected persons, locations and tags to url
+            $.getJSON("/files", function(result){
+                $("#files").empty();
+                files = result['files'];
+                for (var i=0, tag; tag = tags[i]; i++){
+                    $("#files").append('<a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a><br>');
+                }
+            });
+        });
+    }
 
  });
