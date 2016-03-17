@@ -102,7 +102,8 @@ def api_add_person():
     if not session.get('logged_in'):
         abort(401)
 
-    name = request.form['name']
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
     description = request.form['description']
     date_of_birth = None
 
@@ -117,8 +118,8 @@ def api_add_person():
             date_of_birth = dateofbirth_str
 
     try:
-        g.db.execute('insert into persons (name, description, dateofbirth) values (?, ?, ?)',
-                     [name, description, date_of_birth])
+        g.db.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
+                     [firstname, lastname, description, date_of_birth])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
@@ -288,8 +289,8 @@ def api_get_json_persons():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, name, description, dateofbirth from persons')
-    persons = [dict(id=row[0], name=row[1], description=row[2], dateofbirth=row[3]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons')
+    persons = [dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) for row in cur.fetchall()]
 
     return jsonify(dict(persons=persons))
 
@@ -372,11 +373,11 @@ def api_json_file_by_id(id):
 def api_get_json_person(id):
     if not session.get('logged_in'):
         abort(401)
-    cur = g.db.execute('select id, name, description, dateofbirth from persons where id = ?', (id,))
+    cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
-    return jsonify( dict(id=row[0], name=row[1], description=row[2], dateofbirth=row[3]) )
+    return jsonify( dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) )
 
 
 @app.route('/location/<int:id>', methods=['GET'])

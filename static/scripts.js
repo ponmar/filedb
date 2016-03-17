@@ -9,13 +9,15 @@ var tags = null;
 
         if ($('#personbuttons').length){
             for (var i=0, person; person = persons[i]; i++){
-               $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + person['name'] + '</label>');
+                var name = person['firstname'] + ' ' + person['lastname'];
+                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + name + '</label>');
             }
         }
 
         if ($('#personstable').length){
             for (var i=0, person; person = persons[i]; i++){
-                $("#personstable").append('<tr><td>' + person['name'] + '</td><td>' + person['description'] + '</td><td>' + person['dateofbirth'] + '</td><td></td></tr>');
+                var name = person['firstname'] + ' ' + person['lastname'];
+                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + person['description'] + '</td><td>' + person['dateofbirth'] + '</td><td></td></tr>');
             }
         }
     });
@@ -25,7 +27,7 @@ var tags = null;
 
         if ($('#locationbuttons').length){
             for (var i=0, location; location = locations[i]; i++){
-               $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + location['name'] + '</label>');
+                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + location['name'] + '</label>');
             }
         }
 
@@ -41,7 +43,7 @@ var tags = null;
 
         if ($('#tagbuttons').length){
             for (var i=0, tag; tag = tags[i]; i++){
-               $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + tag['name'] + '</label>');
+                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + tag['name'] + '</label>');
             }
         }
 
