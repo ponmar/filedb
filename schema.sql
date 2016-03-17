@@ -9,7 +9,8 @@ drop table if exists tags;
 create table files (
     id integer primary key autoincrement not null,
     path text unique not null,
-    description text
+    description text,
+    datetime varchar(19)
 );
 
 create table persons (

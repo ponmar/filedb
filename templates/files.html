@@ -10,7 +10,7 @@
   <h1>Files</h1>
   <ul>
   {% for file in files %}
-    <li><a href="{{ url_for('api_get_file_content', id=file.id) }}">{{ file.path }}</a> {{ file.description|safe }}
+    <li><a href="{{ url_for('api_get_file_content', id=file.id) }}">{{ file.path }}</a> {{ file.description|safe }} {{ file.datetime|safe }}
   {% else %}
     <li><em>No files here so far</em>
   {% endfor %}

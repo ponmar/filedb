@@ -3,6 +3,8 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, send_from_directory
 import datetime
 import os
+import jpegfile
+import re
 
 # Configuration
 DATABASE = 'flaskr.db'
@@ -50,8 +52,8 @@ def app_index():
 
 @app.route('/app_files')
 def app_files():
-    cur = g.db.execute('select id, path, description from files order by path')
-    files = [dict(id=row[0], path=row[1], description=row[2]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, path, description, datetime from files order by path')
+    files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
     return render_template('files.html', files=files)
 
 
@@ -84,11 +86,26 @@ def api_add_file():
         path = request.form['path']
         description = request.form['description']
 
-        if not os.path.isfile(path):
-            abort(404, 'No file with path ' + path)
+        file_path = FILES_DIRECTORY + '/' + path
 
-        g.db.execute('insert into files (path, description) values (?, ?)',
-                     [path, description])
+        if not os.path.isfile(file_path):
+            abort(404, 'No file with path {} within the {} directory'.format(file, FILES_DIRECTORY))
+
+        file_datetime = None
+        if file_path.endswith('.jpg'):
+            # Read date and time from jpeg exif information
+            # TODO: what exceptions can be raised here?
+            exif_file = jpegfile.JpegFile(file_path)
+            file_datetime = exif_file.get_date_time()
+
+        # Try to read date from path
+        if file_datetime is None:
+            match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
+            if match_obj:
+                file_datetime = match_obj.group()
+
+        g.db.execute('insert into files (path, description, datetime) values (?, ?, ?)',
+                     [path, description, file_datetime])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
@@ -270,8 +287,8 @@ def api_get_json_files():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, path, description from files')
-    files = [dict(id=row[0], path=row[1], description=row[2]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, path, description, datetime from files')
+    files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
 
     for file in files:
         file_id = file['id']
@@ -331,10 +348,10 @@ def api_get_json_tags():
 def get_file_json(file_id = None, file_path = None):
     row = None
     if file_id is not None:
-        cur = g.db.execute('select id, path, description from files where id = ?', (file_id,))
+        cur = g.db.execute('select id, path, description, datetime from files where id = ?', (file_id,))
         row = cur.fetchone()
     elif file_path is not None:
-        cur = g.db.execute('select id, path, description from files where path = ?', (file_path,))
+        cur = g.db.execute('select id, path, description, datetime from files where path = ?', (file_path,))
         row = cur.fetchone()
 
     if row is None:
@@ -353,7 +370,7 @@ def get_file_json(file_id = None, file_path = None):
     cur = g.db.execute('select tagid from filetags where fileid = ?', (file_id,))
     tag_ids = [filetags_row[0] for filetags_row in cur.fetchall()]
 
-    return jsonify( dict(id=row[0], path=row[1], description=row[2], personsids=person_ids, locationids=location_ids, tagids=tag_ids) )
+    return jsonify( dict(id=row[0], path=row[1], description=row[2], datetime=row[3], personsids=person_ids, locationids=location_ids, tagids=tag_ids) )
 
 
 @app.route('/file_by_path/<path>', methods=['GET'])
