@@ -2,6 +2,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, send_from_directory
 import datetime
+import os
 
 # Configuration
 DATABASE = 'flaskr.db'
@@ -78,10 +79,16 @@ def api_add_file():
     if not session.get('logged_in'):
         abort(401)
     try:
-        # TODO: check that file exists?
         # TODO: require certain directory separator ('/', not '\')
+        # TODO: check that path within files directory
+        path = request.form['path']
+        description = request.form['description']
+
+        if not os.path.isfile(path):
+            abort(404, 'No file with path ' + path)
+
         g.db.execute('insert into files (path, description) values (?, ?)',
-                     [request.form['path'], request.form['description']])
+                     [path, description])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
