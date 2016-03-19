@@ -52,6 +52,8 @@ def app_index():
 
 @app.route('/app_files')
 def app_files():
+    if not session.get('logged_in'):
+        return redirect(url_for('app_index'))
     cur = g.db.execute('select id, path, description, datetime from files order by path')
     files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
     return render_template('files.html', files=files)
@@ -59,17 +61,22 @@ def app_files():
 
 @app.route('/browse')
 def app_browse():
+    if not session.get('logged_in'):
+        return redirect(url_for('app_index'))
     return render_template('browse.html')
 
 
 @app.route('/categories')
 def app_categories():
+    if not session.get('logged_in'):
+        return redirect(url_for('app_index'))
     return render_template('categories.html')
 
 
 @app.route('/about')
 def app_about():
-    print('about')
+    if not session.get('logged_in'):
+        return redirect(url_for('app_index'))
     return render_template('about.html')
 
 
