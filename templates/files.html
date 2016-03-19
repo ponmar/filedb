@@ -29,9 +29,9 @@
 </div>
 
 <table class="table" id="filestable">
-    <tr><th>Path</th><th>Description</th><th>Date and Time</th></tr>
+    <tr><th>Path</th><th>Description</th><th>Date and Time</th><th>Actions</th></tr>
     {% for file in files %}
-    <tr><td><a href="{{ url_for('api_get_file_content', id=file.id) }}">{{ file.path }}</a></td><td>{{ file.description|safe }}</td><td>{{ file.datetime|safe }}</td></tr>
+    <tr><td><a href="{{ url_for('api_get_file_content', id=file.id) }}">{{ file.path }}</a></td><td>{{ file.description|safe }}</td><td>{{ file.datetime|safe }}</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>
     {% endfor %}
 </table>
 
