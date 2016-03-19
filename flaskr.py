@@ -120,6 +120,17 @@ def api_add_file():
     return 'OK'
 
 
+@app.route('/directory', methods=['POST'])
+def api_add_directory():
+    if not session.get('logged_in'):
+        abort(401)
+
+    # TODO: add all files in directory.
+    # TODO: add all files in subdirectories? Perhaps a depth integer argument?
+
+    return 'OK'
+
+
 # TODO: use function to check all values from forms
 def get_form_str(param_name, min_length = 3, max_length = 50):
     if param_name in request.form:
