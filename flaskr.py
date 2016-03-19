@@ -69,6 +69,7 @@ def app_categories():
 
 @app.route('/about')
 def app_about():
+    print('about')
     return render_template('about.html')
 
 
@@ -82,7 +83,7 @@ def api_add_file():
         abort(401)
     try:
         # TODO: require certain directory separator ('/', not '\')
-        # TODO: check that path within files directory
+        # TODO: check that path within files directory (no .. etc)
         path = request.form['path']
         description = request.form['description']
 

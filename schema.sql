@@ -10,7 +10,7 @@ create table files (
     id integer primary key autoincrement not null,
     path text unique not null,
     description text,
-    datetime varchar(19)
+    datetime varchar(19) // Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS
 );
 
 create table persons (
@@ -18,7 +18,7 @@ create table persons (
     firstname text not null,
     lastname text not null,
     description text,
-    dateofbirth varchar(10)
+    dateofbirth varchar(10) // Format: YYYY-MM-DD
 );
 
 create table locations (
