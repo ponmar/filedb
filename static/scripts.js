@@ -81,7 +81,14 @@ function get_all_files(){
         $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Date and Time</th><th>Actions</th></tr>');
         files = result['files'];
         for (var i=0, file; file = files[i]; i++){
-            $("#filestable").append('<tr><td><a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + file['description'] + '</td><td>' + file['datetime'] + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
+            $("#filestable").append('<tr><td><a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(file['datetime']) + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
         }
     });
+}
+
+function get_printable_value(value){
+    if (value != null && value != ""){
+        return value;
+    }
+    return 'N/A';
 }
