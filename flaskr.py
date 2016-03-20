@@ -13,7 +13,7 @@ DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'admin'
-FILES_DIRECTORY = 'files'
+FILES_ROOT_DIRECTORY = 'files'
 
 # Create the application
 app = Flask(__name__)
@@ -88,34 +88,9 @@ def app_about():
 def api_add_file():
     if not session.get('logged_in'):
         abort(401)
-    try:
-        # TODO: require certain directory separator ('/', not '\')
-        # TODO: check that path within files directory (no .. etc)
-        path = request.form['path']
-        description = request.form['description']
-
-        file_path = FILES_DIRECTORY + '/' + path
-
-        if not os.path.isfile(file_path):
-            abort(404, 'No file with path {} within the {} directory'.format(file, FILES_DIRECTORY))
-
-        file_datetime = None
-        if file_path.endswith('.jpg'):
-            # Read date and time from jpeg exif information
-            # TODO: what exceptions can be raised here?
-            exif_file = jpegfile.JpegFile(file_path)
-            file_datetime = exif_file.get_date_time()
-
-        # Try to read date from path
-        if file_datetime is None:
-            match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
-            if match_obj:
-                file_datetime = match_obj.group()
-
-        g.db.execute('insert into files (path, description, datetime) values (?, ?, ?)',
-                     [path, description, file_datetime])
-        g.db.commit()
-    except sqlite3.IntegrityError:
+    path = request.form['path']
+    description = request.form['description']
+    if not add_file(path):
         abort(409)
     return 'OK'
 
@@ -125,10 +100,52 @@ def api_add_directory():
     if not session.get('logged_in'):
         abort(401)
 
-    # TODO: add all files in directory.
-    # TODO: add all files in subdirectories? Perhaps a depth integer argument?
+    path = request.form['path']
+    directory_path = FILES_ROOT_DIRECTORY + '/' + path
+
+    if not os.path.isdir(directory_path):
+        abort(404, 'Specified path {} is not a directory within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
+
+    for new_file in os.listdir(directory_path):
+        if new_file.endswith('.jpg'):
+            #print(new_file)
+            if not add_file(path + '/' + new_file):
+                print 'Error'
 
     return 'OK'
+
+
+def add_file(path, file_description=None, file_datetime=None):
+    # TODO: require certain directory separator ('/', not '\')
+    # TODO: check that path within files directory (no .. etc)
+    try:
+        file_path = FILES_ROOT_DIRECTORY + '/' + path
+
+        if not os.path.isfile(file_path):
+            abort(404, 'No file with path {} within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
+
+        # TODO: chat that path not already in database
+
+        if file_datetime is None:
+            if file_path.endswith('.jpg'):
+                # Read date and time from jpeg exif information
+                # TODO: what exceptions can be raised here?
+                exif_file = jpegfile.JpegFile(file_path)
+                file_datetime = exif_file.get_date_time()
+
+            # Try to read date from sub-path
+            if file_datetime is None:
+                match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
+                if match_obj:
+                    file_datetime = match_obj.group()
+
+        g.db.execute('insert into files (path, description, datetime) values (?, ?, ?)',
+                     [path, file_description, file_datetime])
+        g.db.commit()
+        return True
+
+    except sqlite3.IntegrityError:
+        return False
 
 
 # TODO: use function to check all values from forms
@@ -454,7 +471,7 @@ def api_get_file_content(id):
     if row is None:
         abort(404)
     file_path = row[0]
-    return send_from_directory(FILES_DIRECTORY, file_path)
+    return send_from_directory(FILES_ROOT_DIRECTORY, file_path)
 
 
 #
