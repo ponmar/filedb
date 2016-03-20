@@ -69,7 +69,6 @@ var tags = null;
 
     if ($('#button_show_all_files').length){
         $("#button_show_all_files").click(function(){
-            //alert('show files')
             get_all_files();
         });
     }
