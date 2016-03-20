@@ -67,4 +67,21 @@ var tags = null;
         });
     }
 
- });
+    if ($('#button_show_all_files').length){
+        $("#button_show_all_files").click(function(){
+            //alert('show files')
+            get_all_files();
+        });
+    }
+});
+
+function get_all_files(){
+    $.getJSON("/files", function(result){
+        $("#filestable").empty();
+        $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Date and Time</th><th>Actions</th></tr>');
+        files = result['files'];
+        for (var i=0, file; file = files[i]; i++){
+            $("#filestable").append('<tr><td><a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + file['description'] + '</td><td>' + file['datetime'] + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
+        }
+    });
+}
