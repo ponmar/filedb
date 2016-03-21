@@ -5,15 +5,7 @@ import datetime
 import os
 import jpegfile
 import re
-
-# Configuration
-DATABASE = 'flaskr.db'
-SQL_SCHEMA = 'schema.sql'
-DEBUG = True
-SECRET_KEY = 'development key'
-USERNAME = 'admin'
-PASSWORD = 'admin'
-FILES_ROOT_DIRECTORY = 'files'
+from config import *
 
 # Create the application
 app = Flask(__name__)
@@ -514,9 +506,3 @@ def api_login():
 def api_logout():
     logout()
     return "OK"
-
-
-if __name__ == '__main__':
-    #app.run(host='0.0.0.0')
-    #app.debug = True
-    app.run()
