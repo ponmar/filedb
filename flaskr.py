@@ -1,11 +1,13 @@
+import datetime
+import re
+import os
+from contextlib import closing
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, send_from_directory
-import datetime
-import os
 import jpegfile
-import re
 from config import *
+
 
 # Create the application
 app = Flask(__name__)
@@ -15,6 +17,13 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
+
+
+def init_db():
+    with closing(connect_db()) as db:
+        with app.open_resource(SQL_SCHEMA, mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
 
 
 #
@@ -100,10 +109,29 @@ def api_add_directory():
 
     for new_file in os.listdir(directory_path):
         if new_file.endswith('.jpg'):
-            #print(new_file)
             if not add_file(path + '/' + new_file):
                 print 'Error'
 
+    return 'OK'
+
+
+@app.route('/import', methods=['GET', 'POST'])
+def api_import_files():
+    if not session.get('logged_in'):
+        abort(401)
+    for root, directories, filenames in os.walk(FILES_ROOT_DIRECTORY):
+        for filename in filenames:
+            filename_with_path = os.path.join(root, filename)
+            filename_in_wanted_directory = os.path.sep.join(filename_with_path.split(os.path.sep)[1:])
+
+            try:
+                filename_in_wanted_directory = unicode(filename_in_wanted_directory, "utf-8")
+            except UnicodeDecodeError:
+                continue
+
+            print 'Imported file: ' + filename_in_wanted_directory
+            if not add_file(filename_in_wanted_directory):
+                print 'Could not import file: ' + filename_with_path
     return 'OK'
 
 
@@ -116,7 +144,7 @@ def add_file(path, file_description=None, file_datetime=None):
         if not os.path.isfile(file_path):
             abort(404, 'No file with path {} within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
 
-        # TODO: chat that path not already in database
+        # TODO: check that path not already in database
 
         if file_datetime is None:
             if file_path.endswith('.jpg'):
