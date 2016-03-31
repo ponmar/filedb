@@ -119,18 +119,14 @@ def api_add_directory():
 def api_import_files():
     if not session.get('logged_in'):
         abort(401)
-    for root, directories, filenames in os.walk(FILES_ROOT_DIRECTORY):
+	# Note: unicode is required to get unicode filename paths
+    for root, directories, filenames in os.walk(unicode(FILES_ROOT_DIRECTORY)):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_in_wanted_directory = os.path.sep.join(filename_with_path.split(os.path.sep)[1:])
-
-            try:
-                filename_in_wanted_directory = unicode(filename_in_wanted_directory, "utf-8")
-            except UnicodeDecodeError:
-                continue
-
-            print 'Imported file: ' + filename_in_wanted_directory
-            if not add_file(filename_in_wanted_directory):
+            if add_file(filename_in_wanted_directory):
+                print 'Imported file: ' + filename_in_wanted_directory
+            else:
                 print 'Could not import file: ' + filename_with_path
     return 'OK'
 
