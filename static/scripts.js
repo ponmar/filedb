@@ -17,7 +17,12 @@ var tags = null;
         if ($('#personstable').length){
             for (var i=0, person; person = persons[i]; i++){
                 var name = person['firstname'] + ' ' + person['lastname'];
-                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + person['description'] + '</td><td>' + person['dateofbirth'] + '</td><td></td></tr>');
+                var dateofbirth = person['dateofbirth'];
+                var age = null;
+                if (dateofbirth != null){
+                    age = getAge(dateofbirth);
+                }
+                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td></td></tr>');
             }
         }
     });
@@ -90,4 +95,15 @@ function get_printable_value(value){
         return value;
     }
     return 'N/A';
+}
+
+function getAge(dateString){
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
+        age--;
+    }
+    return age;
 }
