@@ -94,7 +94,7 @@ def api_add_file():
     if path is None:
         abort(409, 'No file path specified')
     if not add_file(path, description):
-        abort(409)
+        abort(409, 'File not added')
     return 'OK'
 
 
@@ -151,6 +151,9 @@ def add_file(path, file_description=None, file_datetime=None):
         if not os.path.isfile(file_path):
             abort(404, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
 
+        if file_path in IGNORED_FILES:
+            return False
+
         # TODO: check that path not already in database
 
         if file_description == '':
@@ -167,6 +170,7 @@ def add_file(path, file_description=None, file_datetime=None):
                     exif_file = jpegfile.JpegFile(file_path)
                     file_datetime = exif_file.get_date_time()
                 except IOError:
+                    # TODO: ignore error and add file?
                     return False
 
             # Try to read date from sub-path (part of the path within the configured files directory)

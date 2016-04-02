@@ -6,3 +6,4 @@ USERNAME = 'admin'
 PASSWORD = 'admin'
 FILES_ROOT_DIRECTORY = 'x:/'
 #FILES_ROOT_DIRECTORY = 'files'
+IGNORED_FILES = ['Thumbs.db']
