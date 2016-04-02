@@ -89,9 +89,11 @@ def app_about():
 def api_add_file():
     if not session.get('logged_in'):
         abort(401)
-    path = request.form['path']
-    description = request.form['description']
-    if not add_file(path):
+    path = get_form_str('path', request.form)
+    description = get_form_str('description', request.form)
+    if path is None:
+        abort(409, 'No file path specified')
+    if not add_file(path, description):
         abort(409)
     return 'OK'
 
@@ -101,7 +103,10 @@ def api_add_directory():
     if not session.get('logged_in'):
         abort(401)
 
-    path = request.form['path']
+    path = get_form_str('path', request.form)
+    if path is None:
+        abort(409, 'No directory path specified')
+
     directory_path = FILES_ROOT_DIRECTORY + '/' + path
 
     if not os.path.isdir(directory_path):
@@ -119,11 +124,14 @@ def api_add_directory():
 def api_import_files():
     if not session.get('logged_in'):
         abort(401)
-	# Note: unicode is required to get unicode filename paths
+    # Note: unicode is required to get unicode filename paths
     for root, directories, filenames in os.walk(unicode(FILES_ROOT_DIRECTORY)):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
-            filename_in_wanted_directory = os.path.sep.join(filename_with_path.split(os.path.sep)[1:])
+            # Note that unix style paths should be used internally
+            filename_with_path = filename_with_path.replace('\\', '/')
+            filename_in_wanted_directory = '/'.join(filename_with_path.split('/')[1:])
+
             if add_file(filename_in_wanted_directory):
                 print 'Imported file: ' + filename_in_wanted_directory
             else:
@@ -142,6 +150,12 @@ def add_file(path, file_description=None, file_datetime=None):
 
         # TODO: check that path not already in database
 
+        if file_description == '':
+            file_description = None
+
+        if file_datetime == '':
+            file_datetime = None
+
         if file_datetime is None:
             if file_path.endswith('.jpg'):
                 # Read date and time from jpeg exif information
@@ -149,7 +163,7 @@ def add_file(path, file_description=None, file_datetime=None):
                 exif_file = jpegfile.JpegFile(file_path)
                 file_datetime = exif_file.get_date_time()
 
-            # Try to read date from sub-path
+            # Try to read date from sub-path (part of the path within the configured files directory)
             if file_datetime is None:
                 match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
                 if match_obj:
@@ -164,11 +178,10 @@ def add_file(path, file_description=None, file_datetime=None):
         return False
 
 
-# TODO: use function to check all values from forms
-def get_form_str(param_name, min_length = 3, max_length = 50):
-    if param_name in request.form:
-        param_value = request.form[param_name]
-        if len(param_value) in range(min_length, max_length+1):
+def get_form_str(param_name, form, min_length = 1, max_length = 100):
+    if param_name in form:
+        param_value = form[param_name]
+        if len(param_value) in range(min_length, max_length + 1):
             return param_value
     return None
 
@@ -178,20 +191,24 @@ def api_add_person():
     if not session.get('logged_in'):
         abort(401)
 
-    firstname = request.form['firstname']
-    lastname = request.form['lastname']
-    description = request.form['description']
-    date_of_birth = None
+    firstname = get_form_str('firstname', request.form)
+    lastname = get_form_str('lastname', request.form)
+    description = get_form_str('description', request.form)
+    date_of_birth = get_form_str('dateofbirth', request.form)
 
-    if 'dateofbirth' in request.form:
-        dateofbirth_str = request.form['dateofbirth']
-        if dateofbirth_str:
-            try:
-                # Required format: YYYY-MM-DD
-                datetime.datetime.strptime(dateofbirth_str, '%Y-%m-%d')
-            except ValueError:
-                abort(404)
-            date_of_birth = dateofbirth_str
+    if firstname is None:
+        abort(404, 'Person firstname not specified')
+
+    if lastname is None:
+        abort(404, 'Person lastname not specified')
+
+    if date_of_birth is not None:
+        try:
+            # Required format: YYYY-MM-DD
+            # This is just to verify the format of the string, so the returned datetime object is ignored
+            datetime.datetime.strptime(date_of_birth, '%Y-%m-%d')
+        except ValueError:
+            abort(404)
 
     try:
         g.db.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
@@ -206,9 +223,13 @@ def api_add_person():
 def api_add_location():
     if not session.get('logged_in'):
         abort(401)
+
+    name = get_form_str('name', request.form)
+    if name is None:
+        abort(404, 'Location name not specified')
+
     try:
-        g.db.execute('insert into locations (name) values (?)',
-                     [request.form['name']])
+        g.db.execute('insert into locations (name) values (?)', [name])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
@@ -219,9 +240,13 @@ def api_add_location():
 def api_add_tag():
     if not session.get('logged_in'):
         abort(401)
+
+    name = get_form_str('name', request.form)
+    if name is None:
+        abort(404, 'Tag name not specified')
+
     try:
-        g.db.execute('insert into tags (name) values (?)',
-                 [request.form['name']])
+        g.db.execute('insert into tags (name) values (?)', [name])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
@@ -241,11 +266,14 @@ def api_add_file_person():
     person_id = request.args.get('personid')
     location_id = request.args.get('locationid')
     tag_id = request.args.get('tagid')
-    if file_id is None or (person_id is None and location_id is None and tag_id is None):
-        abort(404)
+
+    if file_id is None:
+        abort(404, 'File id not specified')
+    if person_id is None and location_id is None and tag_id is None:
+        abort(404, 'Person, location or tag id not specified')
 
     try:
-        # TODO: use a transaction (all or nothing!)
+        # TODO: use a transaction (all or nothing!) or require that only one thing is to be added to the file
         if person_id is not None:
             g.db.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
         if location_id is not None:
@@ -266,10 +294,14 @@ def api_remove_from_file():
     person_id = request.args.get('personid')
     location_id = request.args.get('locationid')
     tag_id = request.args.get('tagid')
-    if file_id is None or (person_id is None and location_id is None and tag_id is None):
-        abort(404)
+
+    if file_id is None:
+        abort(404, 'File id not specified')
+    if person_id is None and location_id is None and tag_id is None:
+        abort(404, 'Person, location or tag id not specified')
+
     try:
-        # TODO: use a transaction (all or nothing!)
+        # TODO: use a transaction (all or nothing!) or require that only one thing is to be added to the file
         if person_id is not None:
             g.db.execute('delete from filepersons where fileid = ? and personid = ?', (file_id, person_id))
         if location_id is not None:
@@ -487,6 +519,7 @@ def api_get_file_content(id):
     if row is None:
         abort(404)
     file_path = row[0]
+    print 'Trying: ' + file_path
     return send_from_directory(FILES_ROOT_DIRECTORY, file_path)
 
 
