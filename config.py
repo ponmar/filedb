@@ -4,4 +4,5 @@ DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'admin'
-FILES_ROOT_DIRECTORY = 'files'
+FILES_ROOT_DIRECTORY = 'x:/'
+#FILES_ROOT_DIRECTORY = 'files'

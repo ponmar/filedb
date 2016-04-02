@@ -13,6 +13,7 @@ if __name__ == "__main__":
         flaskr.init_db()
         print('Done.')
     else:
+        # TODO: check that the configured files directory exists? Does that work if is a mounted volume in windows?
         print('Starting the FileDB server...')
         #app.run(host='0.0.0.0')
         #app.debug = True

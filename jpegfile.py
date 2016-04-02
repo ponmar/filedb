@@ -2,7 +2,13 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 
 DATE_AND_TIME_TAG_VALUE_LENGTH = len('YYYY:MM:DD HH:MM:SS')
-DATE_TIME_TAG_NAME = 'DateTime'
+# Note: there is also a DateTime (can be much later?) and DateTimeDigitized
+DATE_TIME_TAG_NAME = 'DateTimeOriginal'
+
+
+def is_jpeg_file(file_path):
+    # Note: sometimes .JPG file extension is used instead of .jpg
+    return file_path.lower().endswith('.jpg')
 
 
 class JpegFile:
@@ -11,10 +17,11 @@ class JpegFile:
 
         image = Image.open(filename)
         info = image._getexif()
-        for tag, value in info.items():
-            decoded = TAGS.get(tag, tag)
-            self.__tags[decoded] = value
-        #print(str(exif_file.__tags))
+        if info is not None:
+            for tag, value in info.items():
+                decoded = TAGS.get(tag, tag)
+                self.__tags[decoded] = value
+        #print(str(self.__tags))
 
     def get_date_time(self):
         if DATE_TIME_TAG_NAME in self.__tags:

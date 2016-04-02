@@ -113,9 +113,8 @@ def api_add_directory():
         abort(404, 'Specified path {} is not a directory within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
 
     for new_file in os.listdir(directory_path):
-        if new_file.endswith('.jpg'):
-            if not add_file(path + '/' + new_file):
-                print 'Error'
+        if not add_file(path + '/' + new_file):
+            print 'Error'
 
     return 'OK'
 
@@ -128,9 +127,13 @@ def api_import_files():
     for root, directories, filenames in os.walk(unicode(FILES_ROOT_DIRECTORY)):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
+            #print filename_with_path
+
             # Note that unix style paths should be used internally
             filename_with_path = filename_with_path.replace('\\', '/')
             filename_in_wanted_directory = '/'.join(filename_with_path.split('/')[1:])
+
+            #print 'Trying: [{}] [{}]'.format(filename_with_path, filename_in_wanted_directory)
 
             if add_file(filename_in_wanted_directory):
                 print 'Imported file: ' + filename_in_wanted_directory
@@ -146,7 +149,7 @@ def add_file(path, file_description=None, file_datetime=None):
         file_path = FILES_ROOT_DIRECTORY + '/' + path
 
         if not os.path.isfile(file_path):
-            abort(404, 'No file with path {} within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
+            abort(404, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
 
         # TODO: check that path not already in database
 
@@ -157,11 +160,14 @@ def add_file(path, file_description=None, file_datetime=None):
             file_datetime = None
 
         if file_datetime is None:
-            if file_path.endswith('.jpg'):
+            if jpegfile.is_jpeg_file(file_path):
                 # Read date and time from jpeg exif information
                 # TODO: what exceptions can be raised here?
-                exif_file = jpegfile.JpegFile(file_path)
-                file_datetime = exif_file.get_date_time()
+                try:
+                    exif_file = jpegfile.JpegFile(file_path)
+                    file_datetime = exif_file.get_date_time()
+                except IOError:
+                    return False
 
             # Try to read date from sub-path (part of the path within the configured files directory)
             if file_datetime is None:
