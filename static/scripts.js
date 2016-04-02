@@ -20,7 +20,7 @@ var tags = null;
                 var dateofbirth = person['dateofbirth'];
                 var age = null;
                 if (dateofbirth != null){
-                    age = getAge(dateofbirth);
+                    age = get_age(dateofbirth);
                 }
                 $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td></td></tr>');
             }
@@ -82,22 +82,28 @@ var tags = null;
 function get_all_files(){
     $.getJSON("/files", function(result){
         $("#filestable").empty();
-        $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Date and Time</th><th>Actions</th></tr>');
+        $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Actions</th></tr>');
         files = result['files'];
         for (var i=0, file; file = files[i]; i++){
-            $("#filestable").append('<tr><td><a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(file['datetime']) + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
+            var datetime = file['datetime'];
+            var age = null;
+            if (datetime != null){
+                // TODO: works with the datetime format?
+                age = get_age(datetime);
+            }
+            $("#filestable").append('<tr><td><a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
         }
     });
 }
 
 function get_printable_value(value){
-    if (value != null && value != ""){
+    if (value !== null && value !== ""){
         return value;
     }
     return 'N/A';
 }
 
-function getAge(dateString){
+function get_age(dateString){
     var today = new Date();
     var birthDate = new Date(dateString);
     var age = today.getFullYear() - birthDate.getFullYear();
