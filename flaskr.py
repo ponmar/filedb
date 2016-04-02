@@ -142,42 +142,40 @@ def api_import_files():
     return 'OK'
 
 
-def add_file(path, file_description=None, file_datetime=None):
+def add_file(path, file_description=None):
     # TODO: require certain directory separator ('/', not '\')
     # TODO: check that path within files directory (no .. etc)
     try:
         file_path = FILES_ROOT_DIRECTORY + '/' + path
 
-        if not os.path.isfile(file_path):
-            abort(404, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
+        # TODO: check that path not already in database
 
         if file_path in IGNORED_FILES:
             return False
 
-        # TODO: check that path not already in database
+        if not os.path.isfile(file_path):
+            abort(404, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
 
         if file_description == '':
             file_description = None
 
-        if file_datetime == '':
-            file_datetime = None
+        file_datetime = None
 
+        if jpegfile.is_jpeg_file(file_path):
+            # Read date and time from jpeg exif information
+            # TODO: what exceptions can be raised here?
+            try:
+                exif_file = jpegfile.JpegFile(file_path)
+                file_datetime = exif_file.get_date_time()
+            except IOError:
+                # TODO: ignore error and add file?
+                return False
+
+        # Try to read date from sub-path (part of the path within the configured files directory)
         if file_datetime is None:
-            if jpegfile.is_jpeg_file(file_path):
-                # Read date and time from jpeg exif information
-                # TODO: what exceptions can be raised here?
-                try:
-                    exif_file = jpegfile.JpegFile(file_path)
-                    file_datetime = exif_file.get_date_time()
-                except IOError:
-                    # TODO: ignore error and add file?
-                    return False
-
-            # Try to read date from sub-path (part of the path within the configured files directory)
-            if file_datetime is None:
-                match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
-                if match_obj:
-                    file_datetime = match_obj.group()
+            match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
+            if match_obj:
+                file_datetime = match_obj.group()
 
         g.db.execute('insert into files (path, description, datetime) values (?, ?, ?)',
                      [path, file_description, file_datetime])
