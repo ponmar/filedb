@@ -18,4 +18,4 @@ BLACKLISTED_FILE_PATH_PATTERNS = ['Thumbs.db', 'nytt/', 'unsorted/', 'TN_', 'pri
 # A file will be added if its path ends with any of the specified patterns.
 # Specify an empty list to white-list all files (if not being black-listed before)
 # Note: file path is made lower-case before scan (i.e. specify the file extension in lower-case).
-WHITELISTED_FILE_EXTENSIONS = ['.jpg', '.png', '.bmp', '.gif', '.avi', '.mpg', '.mp4', '.mkv']
+WHITELISTED_FILE_EXTENSIONS = ['.jpg', '.png', '.bmp', '.gif', '.avi', '.mpg', '.mp4', '.mkv', '.mov']

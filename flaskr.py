@@ -129,6 +129,7 @@ def api_import_files():
             filename_with_path = os.path.join(root, filename)
             #print filename_with_path
 
+            # TODO: do the same path adjustments when adding file or directory (and do not duplicate code)
             # Note that unix style paths should be used internally
             filename_with_path = filename_with_path.replace('\\', '/')
             filename_in_wanted_directory = '/'.join(filename_with_path.split('/')[1:])
@@ -168,13 +169,12 @@ def add_file(path, file_description=None):
 
         if jpegfile.is_jpeg_file(file_path):
             # Read date and time from jpeg exif information
-            # TODO: what exceptions can be raised here?
             try:
                 exif_file = jpegfile.JpegFile(file_path)
                 file_datetime = exif_file.get_date_time()
             except IOError:
-                # TODO: ignore error and add file?
-                return False
+                # Note: for some reason this happens for some working JPEG files, so we should still add the file
+                print 'Could not read JPEG file for extracting date and time information: ' + path
 
         if file_datetime is None:
             # Try to read date from sub-path (part of the path within the configured files directory)

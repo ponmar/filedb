@@ -13,6 +13,7 @@ def is_jpeg_file(file_path):
 
 class JpegFile:
     def __init__(self, filename):
+        """May raise IOError for some JPEG files."""
         self.__tags = {}
 
         image = Image.open(filename)
