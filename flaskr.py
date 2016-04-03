@@ -146,12 +146,17 @@ def add_file(path, file_description=None):
     # TODO: require certain directory separator ('/', not '\')
     # TODO: check that path within files directory (no .. etc)
     try:
+        if file_is_blacklisted(path):
+            print 'Ignored blacklisted file: ' + path
+            return False
+
+        if not file_is_whitelisted(path):
+            print 'Ignored non-whitelisted file: ' + path
+            return False
+
         file_path = FILES_ROOT_DIRECTORY + '/' + path
 
         # TODO: check that path not already in database
-
-        if file_path in IGNORED_FILES:
-            return False
 
         if not os.path.isfile(file_path):
             abort(404, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
@@ -171,11 +176,9 @@ def add_file(path, file_description=None):
                 # TODO: ignore error and add file?
                 return False
 
-        # Try to read date from sub-path (part of the path within the configured files directory)
         if file_datetime is None:
-            match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
-            if match_obj:
-                file_datetime = match_obj.group()
+            # Try to read date from sub-path (part of the path within the configured files directory)
+            file_datetime = get_date_from_path(path)
 
         g.db.execute('insert into files (path, description, datetime) values (?, ?, ?)',
                      [path, file_description, file_datetime])
@@ -184,6 +187,33 @@ def add_file(path, file_description=None):
 
     except sqlite3.IntegrityError:
         return False
+
+
+def get_date_from_path(path):
+    match_obj = re.search(r'\d{4}-\d{2}-\d{2}', path)
+    if match_obj:
+        return match_obj.group()
+    return None
+
+
+def file_is_blacklisted(file_path):
+    for pattern in BLACKLISTED_FILE_PATH_PATTERNS:
+        if file_path.find(pattern) != -1:
+            return True
+    return False
+
+
+def file_is_whitelisted(file_path):
+    if not WHITELISTED_FILE_EXTENSIONS:
+        return True
+
+    file_path = file_path.lower()
+
+    for pattern in WHITELISTED_FILE_EXTENSIONS:
+        if file_path.endswith(pattern):
+            return True
+
+    return False
 
 
 def get_form_str(param_name, form, min_length = 1, max_length = 100):
