@@ -409,16 +409,34 @@ def api_get_json_files():
     if not session.get('logged_in'):
         abort(401)
 
+    # TODO: input validation needed?
     person_ids = request.args.get('personids')
     location_ids = request.args.get('locationids')
     tag_ids = request.args.get('tagids')
+
+    if person_ids is None:
+        person_ids = ""
+    if location_ids is None:
+        location_ids = ""
+    if tag_ids is None:
+        tag_ids = ""
 
     print 'Person ids: ' + person_ids
     print 'Location ids: ' + location_ids
     print 'Tag ids: ' + tag_ids
 
-    # TODO: add person_ids, location_ids and tag_ids to query
-    cur = g.db.execute('select id, path, description, datetime from files')
+    # For debugging:
+    person_ids = '1'
+    location_ids = '1'
+    tag_ids = '1'
+
+    # TODO: only add where-clause when filtering wanted. Only join when filtering wanted?
+    #cur = g.db.execute('select id, path, description, datetime from files')
+    #cur = g.db.execute('select id, path, description, datetime from files inner join filepersons on files.id = filepersons.fileid inner join filelocations on files.id = filelocations.fileid inner join filetags on files.id = filetags.fileid where filepersons.personid in ({}) and filelocations.locationid in ({}) and filetags.tagid in ({})'.format(person_ids, location_ids, tag_ids))
+
+    # Testing join without where-clause
+    cur = g.db.execute('select id, path, description, datetime from files inner join filepersons on files.id = filepersons.fileid inner join filelocations on files.id = filelocations.fileid inner join filetags on files.id = filetags.fileid')
+
     files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
 
     for file in files:
