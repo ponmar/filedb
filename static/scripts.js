@@ -10,7 +10,7 @@ var tags = null;
         if ($('#personbuttons').length){
             for (var i=0, person; person = persons[i]; i++){
                 var name = person['firstname'] + ' ' + person['lastname'];
-                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + name + '</label>');
+                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label>');
             }
         }
 
@@ -32,7 +32,7 @@ var tags = null;
 
         if ($('#locationbuttons').length){
             for (var i=0, location; location = locations[i]; i++){
-                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + location['name'] + '</label>');
+                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label>');
             }
         }
 
@@ -48,7 +48,7 @@ var tags = null;
 
         if ($('#tagbuttons').length){
             for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="">' + tag['name'] + '</label>');
+                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label>');
             }
         }
 
@@ -71,6 +71,8 @@ var tags = null;
             });
         });
     }
+
+    // TODO: handle start slideshow button press
 
     if ($('#button_show_all_files').length){
         $("#button_show_all_files").click(function(){

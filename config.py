@@ -14,7 +14,7 @@ FILES_ROOT_DIRECTORY = 'x:/'
 # make it possible to start without mounting this directory.
 # Note: it will not be possible to get file content when the root directory is
 #       missing
-ALLOW_MISSING_ROOT_DIRECTORY = False
+ALLOW_MISSING_ROOT_DIRECTORY = True
 
 # Files are ignored when any of the blacklisted file patterns can be found in the file path.
 # Black-listed file patterns are case sensitive.
@@ -27,5 +27,3 @@ BLACKLISTED_FILE_PATH_PATTERNS = ['TN_', 'Thumbs.db', 'nytt/', 'unsorted/', 'pri
 # Note: file path is made lower-case before scan (i.e. specify the file
 #       extension in lower-case).
 WHITELISTED_FILE_EXTENSIONS = ['.jpg', '.png', '.bmp', '.gif', '.avi', '.mpg', '.mp4', '.mkv', '.mov', '.pdf']
-
-
