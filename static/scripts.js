@@ -62,7 +62,46 @@ var tags = null;
     if ($('#browse_files_button').length){
         $("#browse_files_button").click(function(){
             // TODO: add selected persons, locations and tags to url
-            $.getJSON("/files", function(result){
+            var checked_persons = '';
+            for (var i=0, person; person = persons[i]; i++){
+                var id = 'person_' + person['id'];
+                var checkbox = document.getElementById(id);
+                if (checkbox != null && checkbox.checked) {
+                    checked_persons += person['id'] + ',';
+                }
+            }
+            if (checked_persons != ""){
+                checked_persons = checked_persons.slice(0, -1);
+            }
+
+            var checked_tags = '';
+            for (var i=0, tag; tag = tags[i]; i++){
+                var id = 'tag_' + tag['id'];
+                var checkbox = document.getElementById(id);
+                if (checkbox != null && checkbox.checked) {
+                    checked_tags += tag['id'] + ',';
+                }
+            }
+            if (checked_tags != ""){
+                checked_tags = checked_tags.slice(0, -1);
+            }
+
+            var checked_locations = '';
+            for (var i=0, location; location = locations[i]; i++){
+                var id = 'location_' + location['id'];
+                var checkbox = document.getElementById(id);
+                if (checkbox != null && checkbox.checked) {
+                    checked_locations += location['id'] + ',';
+                }
+            }
+            if (checked_locations != ""){
+                checked_locations = checked_locations.slice(0, -1);
+            }
+
+            var url = '/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
+            //alert(url);
+
+            $.getJSON(url, function(result){
                 $("#files").empty();
                 files = result['files'];
                 for (var i=0, file; file = files[i]; i++){

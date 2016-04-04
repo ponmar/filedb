@@ -409,6 +409,15 @@ def api_get_json_files():
     if not session.get('logged_in'):
         abort(401)
 
+    person_ids = request.args.get('personids')
+    location_ids = request.args.get('locationids')
+    tag_ids = request.args.get('tagids')
+
+    print 'Person ids: ' + person_ids
+    print 'Location ids: ' + location_ids
+    print 'Tag ids: ' + tag_ids
+
+    # TODO: add person_ids, location_ids and tag_ids to query
     cur = g.db.execute('select id, path, description, datetime from files')
     files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
 
