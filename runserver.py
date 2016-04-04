@@ -1,11 +1,19 @@
+import os
 import argparse
 import flaskr
+import config
+
+
+def validate_root_directory():
+    is_dir = os.path.isdir(config.FILES_ROOT_DIRECTORY)
+    if not is_dir:
+        print 'Warning: root directory is not a directory'
+    return config.ALLOW_MISSING_ROOT_DIRECTORY or is_dir
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A file database and server application.')
     parser.add_argument('--initdb', help='clean the database', action='store_true')
-    #parser.add_argument('--importdir', help='import a directory recursively')
-    #parser.add_argument('--runserver', help='start the server with the specified root directory for files', default='files')
     args = parser.parse_args()
 
     if args.initdb:
@@ -13,8 +21,8 @@ if __name__ == "__main__":
         flaskr.init_db()
         print('Done.')
     else:
-        # TODO: check that the configured files directory exists? Does that work if is a mounted volume in windows?
-        print('Starting the FileDB server...')
-        #app.run(host='0.0.0.0')
-        #app.debug = True
-        flaskr.app.run(debug=True)
+        if validate_root_directory():
+            print('Starting the FileDB server...')
+            #app.run(host='0.0.0.0')
+            #app.debug = True
+            flaskr.app.run(debug=True)
