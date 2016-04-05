@@ -4,7 +4,7 @@ var tags = null;
 
  $(document).ready(function(){
 
-    $.getJSON("/persons", function(result){
+    $.getJSON("/api/persons", function(result){
         persons = result['persons'];
 
         if ($('#personbuttons').length){
@@ -27,7 +27,7 @@ var tags = null;
         }
     });
 
-    $.getJSON("/locations", function(result){
+    $.getJSON("/api/locations", function(result){
         locations = result['locations'];
 
         if ($('#locationbuttons').length){
@@ -43,7 +43,7 @@ var tags = null;
         }
     });
 
-    $.getJSON("/tags", function(result){
+    $.getJSON("/api/tags", function(result){
         tags = result['tags'];
 
         if ($('#tagbuttons').length){
@@ -98,7 +98,7 @@ var tags = null;
                 checked_locations = checked_locations.slice(0, -1);
             }
 
-            var url = '/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
+            var url = '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
             //alert(url);
 
             $.getJSON(url, function(result){
@@ -121,7 +121,7 @@ var tags = null;
 });
 
 function get_all_files(){
-    $.getJSON("/files", function(result){
+    $.getJSON("/api/files", function(result){
         $("#filestable").empty();
         $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Actions</th></tr>');
         files = result['files'];
@@ -132,7 +132,7 @@ function get_all_files(){
                 // TODO: works with the datetime format?
                 age = get_age(datetime);
             }
-            $("#filestable").append('<tr><td><a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
+            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
         }
     });
 }

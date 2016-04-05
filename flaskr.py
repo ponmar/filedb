@@ -51,7 +51,7 @@ def app_index():
     return render_template('index.html')
 
 
-@app.route('/app_files')
+@app.route('/files')
 def app_files():
     if not session.get('logged_in'):
         return redirect(url_for('app_index'))
@@ -81,11 +81,26 @@ def app_about():
     return render_template('about.html')
 
 
+@app.route('/person/<int:id>', methods=['GET'])
+def app_person():
+    return "TODO"
+
+
+@app.route('/location/<int:id>', methods=['GET'])
+def app_location():
+    return "TODO"
+
+
+@app.route('/tag/<int:id>', methods=['GET'])
+def app_tag():
+    return "TODO"
+
+
 #
 # API: add data
 #
 
-@app.route('/file', methods=['POST'])
+@app.route('/api/file', methods=['POST'])
 def api_add_file():
     if not session.get('logged_in'):
         abort(401)
@@ -98,7 +113,7 @@ def api_add_file():
     return 'OK'
 
 
-@app.route('/directory', methods=['POST'])
+@app.route('/api/directory', methods=['POST'])
 def api_add_directory():
     if not session.get('logged_in'):
         abort(401)
@@ -119,7 +134,7 @@ def api_add_directory():
     return 'OK'
 
 
-@app.route('/import', methods=['GET', 'POST'])
+@app.route('/api/import', methods=['GET', 'POST'])
 def api_import_files():
     if not session.get('logged_in'):
         abort(401)
@@ -224,7 +239,7 @@ def get_form_str(param_name, form, min_length = 1, max_length = 100):
     return None
 
 
-@app.route('/person', methods=['POST'])
+@app.route('/api/person', methods=['POST'])
 def api_add_person():
     if not session.get('logged_in'):
         abort(401)
@@ -258,7 +273,7 @@ def api_add_person():
     return make_response(jsonify({'message': 'Person created'}), 201)
 
 
-@app.route('/location', methods=['POST'])
+@app.route('/api/location', methods=['POST'])
 def api_add_location():
     if not session.get('logged_in'):
         abort(401)
@@ -276,7 +291,7 @@ def api_add_location():
     return make_response(jsonify({'message': 'Location created'}), 201)
 
 
-@app.route('/tag', methods=['POST'])
+@app.route('/api/tag', methods=['POST'])
 def api_add_tag():
     if not session.get('logged_in'):
         abort(401)
@@ -298,7 +313,7 @@ def api_add_tag():
 # API: modify data (internally rows are are deleted from tables, but in the API it looks like a file item is modified)
 #
 
-@app.route('/add_to_file', methods=['PUT'])
+@app.route('/api/add_to_file', methods=['PUT'])
 def api_add_file_person():
     if not session.get('logged_in'):
         abort(401)
@@ -327,7 +342,7 @@ def api_add_file_person():
     return 'OK'
 
 
-@app.route('/remove_from_file', methods=['PUT'])
+@app.route('/api/remove_from_file', methods=['PUT'])
 def api_remove_from_file():
     if not session.get('logged_in'):
         abort(401)
@@ -359,7 +374,7 @@ def api_remove_from_file():
 # API: delete data
 #
 
-@app.route('/file/<int:id>', methods=['DELETE'])
+@app.route('/api/file/<int:id>', methods=['DELETE'])
 def api_remove_file(id):
     if not session.get('logged_in'):
         abort(401)
@@ -370,7 +385,7 @@ def api_remove_file(id):
     return 'OK'
 
 
-@app.route('/person/<int:id>', methods=['DELETE'])
+@app.route('/api/person/<int:id>', methods=['DELETE'])
 def api_remove_person(id):
     if not session.get('logged_in'):
         abort(401)
@@ -381,7 +396,7 @@ def api_remove_person(id):
     return 'OK'
 
 
-@app.route('/location/<int:id>', methods=['DELETE'])
+@app.route('/api/location/<int:id>', methods=['DELETE'])
 def api_remove_location(id):
     if not session.get('logged_in'):
         abort(401)
@@ -392,7 +407,7 @@ def api_remove_location(id):
     return 'OK'
 
 
-@app.route('/tag/<int:id>', methods=['DELETE'])
+@app.route('/api/tag/<int:id>', methods=['DELETE'])
 def api_remove_tag(id):
     if not session.get('logged_in'):
         abort(401)
@@ -407,7 +422,7 @@ def api_remove_tag(id):
 # API: get JSON with many items
 #
 
-@app.route('/files', methods=['GET'])
+@app.route('/api/files', methods=['GET'])
 def api_get_json_files():
     if not session.get('logged_in'):
         abort(401)
@@ -460,7 +475,7 @@ def api_get_json_files():
     return jsonify(dict(files=files))
 
 
-@app.route('/persons', methods=['GET'])
+@app.route('/api/persons', methods=['GET'])
 def api_get_json_persons():
     if not session.get('logged_in'):
         abort(401)
@@ -471,7 +486,7 @@ def api_get_json_persons():
     return jsonify(dict(persons=persons))
 
 
-@app.route('/locations', methods=['GET'])
+@app.route('/api/locations', methods=['GET'])
 def api_get_json_locations():
     if not session.get('logged_in'):
         abort(401)
@@ -482,7 +497,7 @@ def api_get_json_locations():
     return jsonify(dict(locations=locations))
 
 
-@app.route('/tags', methods=['GET'])
+@app.route('/api/tags', methods=['GET'])
 def api_get_json_tags():
     if not session.get('logged_in'):
         abort(401)
@@ -525,7 +540,7 @@ def get_file_json(file_id = None, file_path = None):
     return jsonify( dict(id=row[0], path=row[1], description=row[2], datetime=row[3], personsids=person_ids, locationids=location_ids, tagids=tag_ids) )
 
 
-@app.route('/file_by_path/<path>', methods=['GET'])
+@app.route('/api/file_by_path/<path>', methods=['GET'])
 def api_json_file_by_path(path):
     if not session.get('logged_in'):
         abort(401)
@@ -535,7 +550,7 @@ def api_json_file_by_path(path):
     return file_json
 
 
-@app.route('/file/<int:id>', methods=['GET'])
+@app.route('/api/file/<int:id>', methods=['GET'])
 def api_json_file_by_id(id):
     if not session.get('logged_in'):
         abort(401)
@@ -545,7 +560,7 @@ def api_json_file_by_id(id):
     return file_json
 
 
-@app.route('/person/<int:id>', methods=['GET'])
+@app.route('/api/person/<int:id>', methods=['GET'])
 def api_get_json_person(id):
     if not session.get('logged_in'):
         abort(401)
@@ -556,7 +571,7 @@ def api_get_json_person(id):
     return jsonify( dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) )
 
 
-@app.route('/location/<int:id>', methods=['GET'])
+@app.route('/api/location/<int:id>', methods=['GET'])
 def api_get_json_location(id):
     if not session.get('logged_in'):
         abort(401)
@@ -567,7 +582,7 @@ def api_get_json_location(id):
     return jsonify( dict(id=row[0], name=row[1]) )
 
 
-@app.route('/tag/<int:id>', methods=['GET'])
+@app.route('/api/tag/<int:id>', methods=['GET'])
 def api_get_json_tag(id):
     if not session.get('logged_in'):
         abort(401)
@@ -578,7 +593,7 @@ def api_get_json_tag(id):
     return jsonify( dict(id=row[0], name=row[1]) )
 
 
-@app.route('/filecontent/<int:id>', methods=['GET'])
+@app.route('/api/filecontent/<int:id>', methods=['GET'])
 def api_get_file_content(id):
     if not session.get('logged_in'):
         abort(401)
@@ -619,7 +634,7 @@ def app_logout():
     return redirect(url_for('app_index'))
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def api_login():
     if not login(request.form['username'],
                  request.form['password']):
@@ -627,7 +642,7 @@ def api_login():
     return "OK"
 
 
-@app.route('/logout')
+@app.route('/api/logout')
 def api_logout():
     logout()
     return "OK"
