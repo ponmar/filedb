@@ -22,7 +22,7 @@ var tags = null;
                 if (dateofbirth != null){
                     age = get_age(dateofbirth);
                 }
-                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td></td></tr>');
+                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a></td></tr>');
             }
         }
     });
@@ -38,7 +38,7 @@ var tags = null;
 
         if ($('#locationstable').length){
             for (var i=0, location; location = locations[i]; i++){
-                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td></td></tr>');
+                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td><a href="/location/' + location['id'] + '">Edit</a></td></tr>');
             }
         }
     });
@@ -54,7 +54,7 @@ var tags = null;
 
         if ($('#tagstable').length){
             for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td></td></tr>');
+                $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a></td></tr>');
             }
         }
     });

@@ -82,17 +82,17 @@ def app_about():
 
 
 @app.route('/person/<int:id>', methods=['GET'])
-def app_person():
+def app_person(id):
     return "TODO"
 
 
 @app.route('/location/<int:id>', methods=['GET'])
-def app_location():
+def app_location(id):
     return "TODO"
 
 
 @app.route('/tag/<int:id>', methods=['GET'])
-def app_tag():
+def app_tag(id):
     return "TODO"
 
 
