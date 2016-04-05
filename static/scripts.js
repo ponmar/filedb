@@ -132,7 +132,7 @@ function get_all_files(){
                 // TODO: works with the datetime format?
                 age = get_age(datetime);
             }
-            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td><button type="submit" class="btn btn-default">Delete</button></td></tr>');
+            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td><a href="" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
         }
     });
 }

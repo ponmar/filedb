@@ -439,21 +439,29 @@ def api_get_json_files():
     if tag_ids is None:
         tag_ids = ""
 
-    print 'Person ids: ' + person_ids
-    print 'Location ids: ' + location_ids
-    print 'Tag ids: ' + tag_ids
+    query = 'select id, path, description, datetime from files '
+    if person_ids:
+        query += 'inner join filepersons on files.id = filepersons.fileid '
+    if location_ids:
+        query += 'inner join filelocations on files.id = filelocations.fileid '
+    if tag_ids:
+        query += 'inner join filetags on files.id = filetags.fileid '
 
-    # For debugging:
-    person_ids = '1'
-    location_ids = '1'
-    tag_ids = '1'
+    where_statements = []
+    if person_ids:
+        where_statements.append('filepersons.personid in (' + person_ids + ')')
+        query += 'where filepersons.personid in ({}) and filelocations.locationid in ({}) and filetags.tagid in ({})'
+    if location_ids:
+        where_statements.append('filelocations.locationid in (' + location_ids + ')')
+        #query += 'where filepersons.personid in ({}) and filelocations.locationid in ({}) and filetags.tagid in ({})'
+    if tag_ids:
+        where_statements.append('filetags.tagid in (' + tag_ids + ')')
 
-    # TODO: only add where-clause when filtering wanted. Only join when filtering wanted?
-    #cur = g.db.execute('select id, path, description, datetime from files')
-    #cur = g.db.execute('select id, path, description, datetime from files inner join filepersons on files.id = filepersons.fileid inner join filelocations on files.id = filelocations.fileid inner join filetags on files.id = filetags.fileid where filepersons.personid in ({}) and filelocations.locationid in ({}) and filetags.tagid in ({})'.format(person_ids, location_ids, tag_ids))
+    if len(where_statements) > 0:
+        query += 'where ' + ' and '.join(where_statements)
 
-    # Testing join without where-clause
-    cur = g.db.execute('select id, path, description, datetime from files inner join filepersons on files.id = filepersons.fileid inner join filelocations on files.id = filelocations.fileid inner join filetags on files.id = filetags.fileid')
+    print 'Query: ' + query
+    cur = g.db.execute(query)
 
     files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
 
