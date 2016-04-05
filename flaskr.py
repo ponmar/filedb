@@ -4,7 +4,7 @@ import os
 from contextlib import closing
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, jsonify, send_from_directory
+     abort, render_template, jsonify, send_from_directory, make_response
 import jpegfile
 from config import *
 
@@ -235,10 +235,10 @@ def api_add_person():
     date_of_birth = get_form_str('dateofbirth', request.form)
 
     if firstname is None:
-        abort(404, 'Person firstname not specified')
+        abort(400, 'Person firstname not specified')
 
     if lastname is None:
-        abort(404, 'Person lastname not specified')
+        abort(400, 'Person lastname not specified')
 
     if date_of_birth is not None:
         try:
@@ -246,7 +246,7 @@ def api_add_person():
             # This is just to verify the format of the string, so the returned datetime object is ignored
             datetime.datetime.strptime(date_of_birth, '%Y-%m-%d')
         except ValueError:
-            abort(404)
+            abort(400, 'Invalid date of birth format')
 
     try:
         g.db.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
@@ -254,7 +254,8 @@ def api_add_person():
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
+    # TODO: add created person id
+    return make_response(jsonify({'message': 'Person created'}), 201)
 
 
 @app.route('/location', methods=['POST'])
@@ -264,14 +265,15 @@ def api_add_location():
 
     name = get_form_str('name', request.form)
     if name is None:
-        abort(404, 'Location name not specified')
+        abort(400, 'Location name not specified')
 
     try:
         g.db.execute('insert into locations (name) values (?)', [name])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
+    # TODO: add created location id
+    return make_response(jsonify({'message': 'Location created'}), 201)
 
 
 @app.route('/tag', methods=['POST'])
@@ -281,14 +283,15 @@ def api_add_tag():
 
     name = get_form_str('name', request.form)
     if name is None:
-        abort(404, 'Tag name not specified')
+        abort(400, 'Tag name not specified')
 
     try:
         g.db.execute('insert into tags (name) values (?)', [name])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
+    # TODO: add created tag id
+    return make_response(jsonify({'message': 'Tag created'}), 201)
 
 
 #
@@ -306,9 +309,9 @@ def api_add_file_person():
     tag_id = request.args.get('tagid')
 
     if file_id is None:
-        abort(404, 'File id not specified')
+        abort(400, 'File id not specified')
     if person_id is None and location_id is None and tag_id is None:
-        abort(404, 'Person, location or tag id not specified')
+        abort(400, 'Person, location or tag id not specified')
 
     try:
         # TODO: use a transaction (all or nothing!) or require that only one thing is to be added to the file
@@ -334,9 +337,9 @@ def api_remove_from_file():
     tag_id = request.args.get('tagid')
 
     if file_id is None:
-        abort(404, 'File id not specified')
+        abort(400, 'File id not specified')
     if person_id is None and location_id is None and tag_id is None:
-        abort(404, 'Person, location or tag id not specified')
+        abort(400, 'Person, location or tag id not specified')
 
     try:
         # TODO: use a transaction (all or nothing!) or require that only one thing is to be added to the file
