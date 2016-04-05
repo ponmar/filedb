@@ -110,7 +110,7 @@ def api_add_directory():
     directory_path = FILES_ROOT_DIRECTORY + '/' + path
 
     if not os.path.isdir(directory_path):
-        abort(404, 'Specified path {} is not a directory within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
+        abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
 
     for new_file in os.listdir(directory_path):
         if not add_file(path + '/' + new_file):
@@ -160,7 +160,7 @@ def add_file(path, file_description=None):
         # TODO: check that path not already in database
 
         if not os.path.isfile(file_path):
-            abort(404, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
+            abort(400, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
 
         if file_description == '':
             file_description = None
