@@ -59,6 +59,36 @@ var tags = null;
         }
     });
 
+    if ($('#add_person_form').length){
+        $("#add_person_form").submit(function(evt){
+            evt.preventDefault();
+            $.getJSON("/api/person", $("#add_person_form").serialize(), function(json){
+                // TODO: reload person table data
+                // TODO: show error?
+            });
+        });
+    }
+
+    if ($('#add_location_form').length){
+        $("#add_location_form").submit(function(evt){
+            evt.preventDefault();
+            $.getJSON("/api/location", $("#add_location_form").serialize(), function(json){
+                // TODO: reload location table data
+                // TODO: show error?
+            });
+        });
+    }
+
+    if ($('#add_tag_form').length){
+        $("#add_tag_form").submit(function(evt){
+            evt.preventDefault();
+            $.getJSON("/api/person", $("#add_tag_form").serialize(), function(json){
+                // TODO: reload person table data
+                // TODO: show error?
+            });
+        });
+    }
+
     if ($('#browse_files_button').length){
         $("#browse_files_button").click(function(){
             // TODO: add selected persons, locations and tags to url

@@ -10,7 +10,7 @@
 <h1>Edit Categories</h1>
 
 <h2>Persons</h2>
-<form action="{{ url_for('api_add_person') }}" method=post class="navbar-form navbar-left" role="search">
+<form action="{{ url_for('api_add_person') }}" method=post class="navbar-form navbar-left" role="search" id="add_person_form">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="First name" name="firstname">
         <input type="text" class="form-control" placeholder="Last name" name="lastname">
@@ -24,7 +24,7 @@
 </table>
 
 <h2>Locations</h2>
-<form action="{{ url_for('api_add_location') }}" method=post class="navbar-form navbar-left" role="search">
+<form action="{{ url_for('api_add_location') }}" method=post class="navbar-form navbar-left" role="search" id="add_location_form">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Name" name="name">
     </div>
@@ -35,7 +35,7 @@
 </table>
 
 <h2>Tags</h2>
-<form action="{{ url_for('api_add_tag') }}" method=post class="navbar-form navbar-left" role="search">
+<form action="{{ url_for('api_add_tag') }}" method=post class="navbar-form navbar-left" role="search" id="add_tag_form">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Name" name="name">
     </div>
