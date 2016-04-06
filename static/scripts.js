@@ -118,6 +118,21 @@ var tags = null;
             get_all_files();
         });
     }
+
+    if ($('#import_button').length){
+        $("#import_button").click(function(){
+            if (window.confirm("This action may take several minutes. Continue?")){
+                $("#import_result").text("Importing, please wait...");
+                $.post("/api/import", function(data) {
+                    $("#import_result").text("");
+                    alert("Files imported successfully");
+                })
+                .fail(function(){
+                    alert("Import failed");
+                });
+            }
+        });
+    }
 });
 
 function get_all_files(){

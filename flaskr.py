@@ -134,7 +134,7 @@ def api_add_directory():
     return 'OK'
 
 
-@app.route('/api/import', methods=['GET', 'POST'])
+@app.route('/api/import', methods=['POST'])
 def api_import_files():
     if not session.get('logged_in'):
         abort(401)
