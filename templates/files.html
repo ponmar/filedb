@@ -21,6 +21,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">Add File(s)</div>
     <div class="panel-body">
+        <div class="alert alert-info" role="alert"><strong>Note:</strong> Paths are specified from within the root directory specified by the configuration parameters FILES_ROOT_DIRECTORY.</div>
         <form action="{{ url_for('api_add_directory') }}" method=post class="navbar-form navbar-left" role="search">
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="From directory path" name="path">
