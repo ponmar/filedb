@@ -3,79 +3,17 @@ var locations = null;
 var tags = null;
 
  $(document).ready(function(){
+    if (needs_persons()){
+        get_persons();
+    }
 
-    $.getJSON("/api/persons", function(result){
-        persons = result['persons'];
+    if (needs_locations()){
+        get_locations();
+    }
 
-        if ($('#personbuttons').length){
-            for (var i=0, person; person = persons[i]; i++){
-                var name = person['firstname'] + ' ' + person['lastname'];
-                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label>');
-            }
-        }
-
-        if ($('#personstable').length){
-            for (var i=0, person; person = persons[i]; i++){
-                var name = person['firstname'] + ' ' + person['lastname'];
-                var dateofbirth = person['dateofbirth'];
-                var age = null;
-                if (dateofbirth != null){
-                    age = get_age(dateofbirth);
-                }
-                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
-            }
-
-            $(".delete_person_button").click(function(evt){
-                var id = $(this).attr('id').replace('delete_person_', '');
-                delete_person(id);
-                return false; // do not follow link
-            });
-        }
-    });
-
-    $.getJSON("/api/locations", function(result){
-        locations = result['locations'];
-
-        if ($('#locationbuttons').length){
-            for (var i=0, location; location = locations[i]; i++){
-                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label>');
-            }
-        }
-
-        if ($('#locationstable').length){
-            for (var i=0, location; location = locations[i]; i++){
-                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
-            }
-
-            $(".delete_location_button").click(function(){
-                var id = $(this).attr('id').replace('delete_location_', '');
-                delete_location(id);
-                return false; // do not follow link
-            });
-        }
-    });
-
-    $.getJSON("/api/tags", function(result){
-        tags = result['tags'];
-
-        if ($('#tagbuttons').length){
-            for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label>');
-            }
-        }
-
-        if ($('#tagstable').length){
-            for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
-            }
-
-            $(".delete_tag_button").click(function(){
-                var id = $(this).attr('id').replace('delete_tag_', '');
-                delete_tag(id);
-                return false; // do not follow link
-            });
-        }
-    });
+    if (needs_tags()){
+        get_tags();
+    }
 
     if ($('#add_person_form').length){
         $("#add_person_form").submit(function(evt){
@@ -118,6 +56,103 @@ var tags = null;
         });
     }
 });
+
+function needs_persons(){
+    return $('#personbuttons').length || $('#personstable').length;
+}
+
+function needs_locations(){
+    return $('#locationbuttons').length || $('#locationstable').length;
+}
+
+function needs_tags(){
+    return $('#tagbuttons').length || $('#tagstable').length;
+}
+
+function get_persons(){
+    $.getJSON("/api/persons", function(result){
+        persons = result['persons'];
+
+        if ($('#personbuttons').length){
+            for (var i=0, person; person = persons[i]; i++){
+                var name = person['firstname'] + ' ' + person['lastname'];
+                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label>');
+            }
+        }
+
+        if ($('#personstable').length){
+            $('#personstable tbody tr:not(:first)').remove();
+
+            for (var i=0, person; person = persons[i]; i++){
+                var name = person['firstname'] + ' ' + person['lastname'];
+                var dateofbirth = person['dateofbirth'];
+                var age = null;
+                if (dateofbirth != null){
+                    age = get_age(dateofbirth);
+                }
+                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+            }
+
+            $(".delete_person_button").click(function(evt){
+                var id = $(this).attr('id').replace('delete_person_', '');
+                delete_person(id);
+                return false; // do not follow link
+            });
+        }
+    });
+}
+
+function get_locations(){
+    $.getJSON("/api/locations", function(result){
+        locations = result['locations'];
+
+        if ($('#locationbuttons').length){
+            for (var i=0, location; location = locations[i]; i++){
+                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label>');
+            }
+        }
+
+        if ($('#locationstable').length){
+            $('#locationstable tbody tr:not(:first)').remove();
+
+            for (var i=0, location; location = locations[i]; i++){
+                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+            }
+
+            $(".delete_location_button").click(function(){
+                var id = $(this).attr('id').replace('delete_location_', '');
+                delete_location(id);
+                return false; // do not follow link
+            });
+        }
+    });
+}
+
+function get_tags(){
+    $.getJSON("/api/tags", function(result){
+        tags = result['tags'];
+
+        if ($('#tagbuttons').length){
+            for (var i=0, tag; tag = tags[i]; i++){
+                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label>');
+            }
+        }
+
+        if ($('#tagstable').length){
+             $('#tagstable tbody tr:not(:first)').remove();
+
+            for (var i=0, tag; tag = tags[i]; i++){
+                $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+            }
+
+            $(".delete_tag_button").click(function(){
+                var id = $(this).attr('id').replace('delete_tag_', '');
+                delete_tag(id);
+                return false; // do not follow link
+            });
+        }
+    });
+}
 
 function get_all_files(){
     $.getJSON("/api/files", function(result){
@@ -183,7 +218,6 @@ function browse_files(){
     }
 
     var url = '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
-    //alert(url);
 
     $.getJSON(url, function(result){
         $("#files").empty();
@@ -212,36 +246,69 @@ function delete_file(id){
 }
 
 function delete_person(id){
-    $.ajax({url: '/api/person/' + id, type: 'DELETE', success: function(result) { alert('Person deleted'); } });
+    $.ajax({
+        url: '/api/person/' + id,
+        type: 'DELETE',
+        success: function(result){
+            get_persons();
+        }
+    })
+    .fail(function(){
+        alert('Delete person failed');
+    });
 }
 
 function delete_location(id){
-    $.ajax({url: '/api/location/' + id, type: 'DELETE', success: function(result) { alert('Location deleted'); } });
+    $.ajax({
+        url: '/api/location/' + id,
+        type: 'DELETE',
+        success: function(result){
+            get_locations();
+        }
+    })
+    .fail(function(){
+        alert('Delete location failed');
+    });
 }
 
 function delete_tag(id){
-    $.ajax({url: '/api/tag/' + id, type: 'DELETE', success: function(result) { alert('Tag deleted'); } });
+    $.ajax({
+        url: '/api/tag/' + id,
+        type: 'DELETE',
+        success: function(result){
+            get_tags();
+        }
+    })
+    .fail(function(){
+        alert('Delete tag failed');
+    });
 }
 
 function post_add_person_form(){
     $.post("/api/person", $("#add_person_form").serialize(), function(json){
-        // TODO: reload person table data
-        // TODO: show error?
-    }, "json");
+        get_persons();
+    }, "json")
+    .fail(function(){
+        alert("Add person failed");
+    });
 }
 
 function post_add_location_form(){
     $.post("/api/location", $("#add_location_form").serialize(), function(json){
-        // TODO: reload location table data
-        // TODO: show error?
-    }, "json");
+        get_locations();
+    }, "json")
+    .fail(function(){
+        alert("Add location failed");
+    });
 }
 
 function post_add_tag_form(){
     $.post("/api/tag", $("#add_tag_form").serialize(), function(json){
-        // TODO: reload person table data
-        // TODO: show error?
-    }, "json");
+        get_tags();
+    }, "json")
+    .fail(function(){
+        alert("Add tag failed");
+    });
 }
 
 function get_printable_value(value){
