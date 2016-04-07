@@ -62,30 +62,30 @@ var tags = null;
     if ($('#add_person_form').length){
         $("#add_person_form").submit(function(evt){
             evt.preventDefault();
-            $.getJSON("/api/person", $("#add_person_form").serialize(), function(json){
+            $.post("/api/person", $("#add_person_form").serialize(), function(json){
                 // TODO: reload person table data
                 // TODO: show error?
-            });
+            }, "json");
         });
     }
 
     if ($('#add_location_form').length){
         $("#add_location_form").submit(function(evt){
             evt.preventDefault();
-            $.getJSON("/api/location", $("#add_location_form").serialize(), function(json){
+            $.post("/api/location", $("#add_location_form").serialize(), function(json){
                 // TODO: reload location table data
                 // TODO: show error?
-            });
+            }, "json");
         });
     }
 
     if ($('#add_tag_form').length){
         $("#add_tag_form").submit(function(evt){
             evt.preventDefault();
-            $.getJSON("/api/person", $("#add_tag_form").serialize(), function(json){
+            $.post("/api/tag", $("#add_tag_form").serialize(), function(json){
                 // TODO: reload person table data
                 // TODO: show error?
-            });
+            }, "json");
         });
     }
 
@@ -168,16 +168,19 @@ var tags = null;
 function get_all_files(){
     $.getJSON("/api/files", function(result){
         $("#filestable").empty();
-        $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Actions</th></tr>');
+        $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
         files = result['files'];
         for (var i=0, file; file = files[i]; i++){
             var datetime = file['datetime'];
             var age = null;
             if (datetime != null){
-                // TODO: works with the datetime format?
                 age = get_age(datetime);
             }
-            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td><a href="" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
+            // TODO: create links to pages for person, location and tag
+            var persons = file['persons'].toString();
+            var locations = file['locations'].toString();
+            var tags = file['tags'].toString();
+            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + persons + '</td><td>' + locations + '</td><td>' + tags + '</td><td><a href="" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
         }
     });
 }
