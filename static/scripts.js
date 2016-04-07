@@ -96,7 +96,7 @@ var tags = null;
             for (var i=0, person; person = persons[i]; i++){
                 var id = 'person_' + person['id'];
                 var checkbox = document.getElementById(id);
-                if (checkbox != null && checkbox.checked) {
+                if (checkbox != null && checkbox.checked){
                     checked_persons += person['id'] + ',';
                 }
             }
@@ -153,10 +153,10 @@ var tags = null;
         $("#import_button").click(function(){
             if (window.confirm("This action may take several minutes. Continue?")){
                 $("#import_result").text("Importing, please wait...");
-                $.post("/api/import", function(data) {
+                $.post("/api/import", function(json) {
                     $("#import_result").text("");
-                    alert("Files imported successfully");
-                })
+                    alert(json['message'] + "\n\nImported files: " + json['num_imported_files'] + "\nNot imported files: " + json['num_not_imported_files']);
+                }, "json")
                 .fail(function(){
                     alert("Import failed");
                 });
