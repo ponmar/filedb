@@ -180,8 +180,14 @@ function get_all_files(){
             var persons = file['persons'].toString();
             var locations = file['locations'].toString();
             var tags = file['tags'].toString();
-            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + persons + '</td><td>' + locations + '</td><td>' + tags + '</td><td><a href="" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
+            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + persons + '</td><td>' + locations + '</td><td>' + tags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
         }
+
+        $(".delete_file_button").click(function(){
+            var id = $(this).attr('id').replace('delete_file_', '');
+            alert(id);
+            $.ajax({url: '/api/person?id=' + id, type: 'DELETE', success: function(result) { alert('File deleted'); } });
+        });
     });
 }
 
