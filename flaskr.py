@@ -139,6 +139,10 @@ def api_import_files():
     if not session.get('logged_in'):
         abort(401)
     # Note: unicode is required to get unicode filename paths
+
+    num_imported_files = 0
+    num_not_imported_files = 0
+
     for root, directories, filenames in os.walk(unicode(FILES_ROOT_DIRECTORY)):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
@@ -153,9 +157,15 @@ def api_import_files():
 
             if add_file(filename_in_wanted_directory):
                 print 'Imported file: ' + filename_in_wanted_directory
+                num_imported_files += 1
             else:
                 print 'Could not import file: ' + filename_with_path
-    return 'OK'
+                num_not_imported_files += 1
+
+    return make_response(jsonify({'message': 'File import finished',
+                                  'num_imported_files': num_imported_files,
+                                  'num_not_imported_files': num_not_imported_files}),
+                         201)
 
 
 def add_file(path, file_description=None):
