@@ -22,8 +22,14 @@ var tags = null;
                 if (dateofbirth != null){
                     age = get_age(dateofbirth);
                 }
-                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a></td></tr>');
+                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
             }
+
+            $(".delete_person_button").click(function(evt){
+                var id = $(this).attr('id').replace('delete_person_', '');
+                delete_person(id);
+                return false; // do not follow link
+            });
         }
     });
 
@@ -38,8 +44,14 @@ var tags = null;
 
         if ($('#locationstable').length){
             for (var i=0, location; location = locations[i]; i++){
-                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td><a href="/location/' + location['id'] + '">Edit</a></td></tr>');
+                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
             }
+
+            $(".delete_location_button").click(function(){
+                var id = $(this).attr('id').replace('delete_location_', '');
+                delete_location(id);
+                return false; // do not follow link
+            });
         }
     });
 
@@ -54,8 +66,14 @@ var tags = null;
 
         if ($('#tagstable').length){
             for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a></td></tr>');
+                $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
             }
+
+            $(".delete_tag_button").click(function(){
+                var id = $(this).attr('id').replace('delete_tag_', '');
+                delete_tag(id);
+                return false; // do not follow link
+            });
         }
     });
 
@@ -185,10 +203,26 @@ function get_all_files(){
 
         $(".delete_file_button").click(function(){
             var id = $(this).attr('id').replace('delete_file_', '');
-            alert(id);
-            $.ajax({url: '/api/person?id=' + id, type: 'DELETE', success: function(result) { alert('File deleted'); } });
+            delete_file(id);
+            return false; // do not follow link
         });
     });
+}
+
+function delete_file(id){
+    $.ajax({url: '/api/file/' + id, type: 'DELETE', success: function(result) { alert('File deleted'); } });
+}
+
+function delete_person(id){
+    $.ajax({url: '/api/person/' + id, type: 'DELETE', success: function(result) { alert('Person deleted'); } });
+}
+
+function delete_location(id){
+    $.ajax({url: '/api/location/' + id, type: 'DELETE', success: function(result) { alert('Location deleted'); } });
+}
+
+function delete_tag(id){
+    $.ajax({url: '/api/tag/' + id, type: 'DELETE', success: function(result) { alert('Tag deleted'); } });
 }
 
 function get_printable_value(value){

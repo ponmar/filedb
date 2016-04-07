@@ -390,6 +390,7 @@ def api_remove_file(id):
         abort(401)
     try:
         g.db.execute('delete from files where id = ?', (id,))
+        g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
@@ -401,6 +402,7 @@ def api_remove_person(id):
         abort(401)
     try:
         g.db.execute('delete from persons where id = ?', (id,))
+        g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
@@ -412,6 +414,7 @@ def api_remove_location(id):
         abort(401)
     try:
         g.db.execute('delete from locations where id = ?', (id,))
+        g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
@@ -423,6 +426,7 @@ def api_remove_tag(id):
         abort(401)
     try:
         g.db.execute('delete from tags where id = ?', (id,))
+        g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return 'OK'
