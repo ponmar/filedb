@@ -80,82 +80,27 @@ var tags = null;
     if ($('#add_person_form').length){
         $("#add_person_form").submit(function(evt){
             evt.preventDefault();
-            $.post("/api/person", $("#add_person_form").serialize(), function(json){
-                // TODO: reload person table data
-                // TODO: show error?
-            }, "json");
+            post_add_person_form();
         });
     }
 
     if ($('#add_location_form').length){
         $("#add_location_form").submit(function(evt){
             evt.preventDefault();
-            $.post("/api/location", $("#add_location_form").serialize(), function(json){
-                // TODO: reload location table data
-                // TODO: show error?
-            }, "json");
+            post_add_location_form();
         });
     }
 
     if ($('#add_tag_form').length){
         $("#add_tag_form").submit(function(evt){
             evt.preventDefault();
-            $.post("/api/tag", $("#add_tag_form").serialize(), function(json){
-                // TODO: reload person table data
-                // TODO: show error?
-            }, "json");
+            post_add_tag_form();
         });
     }
 
     if ($('#browse_files_button').length){
         $("#browse_files_button").click(function(){
-            // TODO: add selected persons, locations and tags to url
-            var checked_persons = '';
-            for (var i=0, person; person = persons[i]; i++){
-                var id = 'person_' + person['id'];
-                var checkbox = document.getElementById(id);
-                if (checkbox != null && checkbox.checked){
-                    checked_persons += person['id'] + ',';
-                }
-            }
-            if (checked_persons != ""){
-                checked_persons = checked_persons.slice(0, -1);
-            }
-
-            var checked_tags = '';
-            for (var i=0, tag; tag = tags[i]; i++){
-                var id = 'tag_' + tag['id'];
-                var checkbox = document.getElementById(id);
-                if (checkbox != null && checkbox.checked) {
-                    checked_tags += tag['id'] + ',';
-                }
-            }
-            if (checked_tags != ""){
-                checked_tags = checked_tags.slice(0, -1);
-            }
-
-            var checked_locations = '';
-            for (var i=0, location; location = locations[i]; i++){
-                var id = 'location_' + location['id'];
-                var checkbox = document.getElementById(id);
-                if (checkbox != null && checkbox.checked) {
-                    checked_locations += location['id'] + ',';
-                }
-            }
-            if (checked_locations != ""){
-                checked_locations = checked_locations.slice(0, -1);
-            }
-
-            var url = '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
-            //alert(url);
-
-            $.getJSON(url, function(result){
-                $("#files").empty();
-                files = result['files'];
-                for (var i=0, file; file = files[i]; i++){
-                    $("#files").append('<a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a><br>');
-                }
-            });
+            browse_files();
         });
     }
 
@@ -169,16 +114,7 @@ var tags = null;
 
     if ($('#import_button').length){
         $("#import_button").click(function(){
-            if (window.confirm("This action may take several minutes. Continue?")){
-                $("#import_result").text("Importing, please wait...");
-                $.post("/api/import", function(json) {
-                    $("#import_result").text("");
-                    alert(json['message'] + "\n\nImported files: " + json['num_imported_files'] + "\nNot imported files: " + json['num_not_imported_files']);
-                }, "json")
-                .fail(function(){
-                    alert("Import failed");
-                });
-            }
+            import_files();
         });
     }
 });
@@ -198,7 +134,7 @@ function get_all_files(){
             var persons = file['persons'].toString();
             var locations = file['locations'].toString();
             var tags = file['tags'].toString();
-            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + persons + '</td><td>' + locations + '</td><td>' + tags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
+            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + persons + '</td><td>' + locations + '</td><td>' + tags + '</td><td>Edit, <a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
         }
 
         $(".delete_file_button").click(function(){
@@ -207,6 +143,68 @@ function get_all_files(){
             return false; // do not follow link
         });
     });
+}
+
+function browse_files(){
+    var checked_persons = '';
+    for (var i=0, person; person = persons[i]; i++){
+        var id = 'person_' + person['id'];
+        var checkbox = document.getElementById(id);
+        if (checkbox != null && checkbox.checked){
+            checked_persons += person['id'] + ',';
+        }
+    }
+    if (checked_persons != ""){
+        checked_persons = checked_persons.slice(0, -1);
+    }
+
+    var checked_tags = '';
+    for (var i=0, tag; tag = tags[i]; i++){
+        var id = 'tag_' + tag['id'];
+        var checkbox = document.getElementById(id);
+        if (checkbox != null && checkbox.checked) {
+            checked_tags += tag['id'] + ',';
+        }
+    }
+    if (checked_tags != ""){
+        checked_tags = checked_tags.slice(0, -1);
+    }
+
+    var checked_locations = '';
+    for (var i=0, location; location = locations[i]; i++){
+        var id = 'location_' + location['id'];
+        var checkbox = document.getElementById(id);
+        if (checkbox != null && checkbox.checked) {
+            checked_locations += location['id'] + ',';
+        }
+    }
+    if (checked_locations != ""){
+        checked_locations = checked_locations.slice(0, -1);
+    }
+
+    var url = '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
+    //alert(url);
+
+    $.getJSON(url, function(result){
+        $("#files").empty();
+        files = result['files'];
+        for (var i=0, file; file = files[i]; i++){
+            $("#files").append('<a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a><br>');
+        }
+    });
+}
+
+function import_files(){
+    if (window.confirm("This action may take several minutes. Continue?")){
+        $("#import_result").text("Importing, please wait...");
+        $.post("/api/import", function(json) {
+            $("#import_result").text("");
+            alert(json['message'] + "\n\nImported files: " + json['num_imported_files'] + "\nNot imported files: " + json['num_not_imported_files']);
+        }, "json")
+        .fail(function(){
+            alert("Import failed");
+        });
+    }
 }
 
 function delete_file(id){
@@ -223,6 +221,27 @@ function delete_location(id){
 
 function delete_tag(id){
     $.ajax({url: '/api/tag/' + id, type: 'DELETE', success: function(result) { alert('Tag deleted'); } });
+}
+
+function post_add_person_form(){
+    $.post("/api/person", $("#add_person_form").serialize(), function(json){
+        // TODO: reload person table data
+        // TODO: show error?
+    }, "json");
+}
+
+function post_add_location_form(){
+    $.post("/api/location", $("#add_location_form").serialize(), function(json){
+        // TODO: reload location table data
+        // TODO: show error?
+    }, "json");
+}
+
+function post_add_tag_form(){
+    $.post("/api/tag", $("#add_tag_form").serialize(), function(json){
+        // TODO: reload person table data
+        // TODO: show error?
+    }, "json");
 }
 
 function get_printable_value(value){

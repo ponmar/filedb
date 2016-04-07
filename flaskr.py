@@ -464,10 +464,8 @@ def api_get_json_files():
     where_statements = []
     if person_ids:
         where_statements.append('filepersons.personid in (' + person_ids + ')')
-        query += 'where filepersons.personid in ({}) and filelocations.locationid in ({}) and filetags.tagid in ({})'
     if location_ids:
         where_statements.append('filelocations.locationid in (' + location_ids + ')')
-        #query += 'where filepersons.personid in ({}) and filelocations.locationid in ({}) and filetags.tagid in ({})'
     if tag_ids:
         where_statements.append('filetags.tagid in (' + tag_ids + ')')
 
