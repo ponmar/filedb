@@ -10,6 +10,15 @@
 <h1>Files</h1>
 
 <div class="panel panel-default">
+    <div class="panel-heading">Import Files</div>
+    <div class="panel-body">
+        <p>Import all files from your configured root directory.</p>
+        <p><button type="submit" class="btn btn-default" id="import_button">Import...</button></p>
+        <p id="import_result"></p>
+    </div>
+</div>
+
+<div class="panel panel-default">
     <div class="panel-heading">Add File(s)</div>
     <div class="panel-body">
         <form action="{{ url_for('api_add_directory') }}" method=post class="navbar-form navbar-left" role="search">
