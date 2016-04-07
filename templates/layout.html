@@ -31,10 +31,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li id="files_page"><a href="{{ url_for('app_files') }}">Files</a></li>
             <li id="browse_files_page"><a href="{{ url_for('app_browse') }}">Browse Files</a></li>
             <li id="categorize_random_files_page"><a href="">Categorize Random Files</a></li>
             <li id="edit_categories_page"><a href="{{ url_for('app_categories') }}">Edit Categories</a></li>
+            <li id="files_page"><a href="{{ url_for('app_files') }}">Edit Files</a></li>
             <li id="about_page"><a href="{{ url_for('app_about') }}">About</a></li>
             {% if session.logged_in %}
               <li><a href="{{ url_for('app_logout') }}">Log Out</a></li>
