@@ -242,7 +242,16 @@ function import_files(){
 }
 
 function delete_file(id){
-    $.ajax({url: '/api/file/' + id, type: 'DELETE', success: function(result) { alert('File deleted'); } });
+    $.ajax({
+        url: '/api/file/' + id,
+        type: 'DELETE',
+        success: function(result){
+            get_all_files();
+        }
+    })
+    .fail(function(){
+        alert('Delete file failed');
+    });
 }
 
 function delete_person(id){
