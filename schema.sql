@@ -23,7 +23,8 @@ create table persons (
 
 create table locations (
     id integer primary key autoincrement not null,
-    name text unique not null
+    name text unique not null,
+    description text
 );
 
 create table tags (

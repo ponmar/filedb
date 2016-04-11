@@ -289,11 +289,13 @@ def api_add_location():
         abort(401)
 
     name = get_form_str('name', request.form)
+    description = get_form_str('description', request.form)
+
     if name is None:
         abort(400, 'Location name not specified')
 
     try:
-        g.db.execute('insert into locations (name) values (?)', [name])
+        g.db.execute('insert into locations (name, description) values (?, ?)', [name, description])
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
@@ -511,8 +513,8 @@ def api_get_json_locations():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, name from locations')
-    locations = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, name, description from locations')
+    locations = [dict(id=row[0], name=row[1], description=row[2]) for row in cur.fetchall()]
 
     return jsonify(dict(locations=locations))
 
@@ -595,11 +597,11 @@ def api_get_json_person(id):
 def api_get_json_location(id):
     if not session.get('logged_in'):
         abort(401)
-    cur = g.db.execute('select id, name from locations where id = ?', (id,))
+    cur = g.db.execute('select id, name, description from locations where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
-    return jsonify( dict(id=row[0], name=row[1]) )
+    return jsonify( dict(id=row[0], name=row[1], description=row[2]) )
 
 
 @app.route('/api/tag/<int:id>', methods=['GET'])

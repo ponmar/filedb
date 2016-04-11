@@ -116,7 +116,7 @@ function get_locations(){
             $('#locationstable tbody tr:not(:first)').remove();
 
             for (var i=0, location; location = locations[i]; i++){
-                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
             }
 
             $(".delete_location_button").click(function(){

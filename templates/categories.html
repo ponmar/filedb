@@ -27,11 +27,12 @@
 <form action="{{ url_for('api_add_location') }}" method=post class="navbar-form navbar-left" role="search" id="add_location_form">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Name" name="name">
+        <input type="text" class="form-control" placeholder="Description" name="description">
     </div>
     <button type="submit" class="btn btn-default">Add</button>
 </form>
 <table class="table" id="locationstable">
-    <tr><th>Name</th><th>Actions</th></tr>
+    <tr><th>Name</th><th>Description</th><th>Actions</th></tr>
 </table>
 
 <h2>Tags</h2>
