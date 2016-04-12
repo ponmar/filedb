@@ -9,18 +9,13 @@ Installation
 
 Creating the database
 =====================
-python runserver.py --initdb
-
-
-Import files recursively (optional)
-===================================
-* Start server
-* Access /import URL (until button added on web page)
+Note! This command removes all existing data in the database.
+>python runserver.py --initdb
 
 
 Starting the server
 ===================
-python runserver.py --runserver <dir>
+>python runserver.py --runserver <dir>
 
 
 Backup
