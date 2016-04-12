@@ -84,6 +84,9 @@ function get_persons(){
             $('#personstable tbody tr:not(:first)').remove();
 
             if (persons.length > 0){
+                $("#no_person_message").hide();
+                //$("#personstable").show();
+
                 for (var i=0, person; person = persons[i]; i++){
                     var name = person['firstname'] + ' ' + person['lastname'];
                     var dateofbirth = person['dateofbirth'];
@@ -101,7 +104,8 @@ function get_persons(){
                 });
             }
             else{
-                $("#personstable").append('<tr><td colspan="6><div class="alert alert-info" role="alert">No persons added yet</div></td></tr>');
+                $("#no_person_message").show();
+                //$("#personstable").hide();
             }
         }
     });
@@ -121,6 +125,9 @@ function get_locations(){
             $('#locationstable tbody tr:not(:first)').remove();
 
             if (locations.length > 0){
+                $("#no_location_message").hide();
+                //$("#locationstable").show();
+
                 for (var i=0, location; location = locations[i]; i++){
                     $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
@@ -132,7 +139,8 @@ function get_locations(){
                 });
             }
             else{
-                $("#locationstable").append('<tr><td colspan="6><div class="alert alert-info" role="alert">No locations added yet</div></td></tr>');
+                $("#no_location_message").show();
+                //$("#locationstable").hide();
             }
         }
     });
@@ -149,9 +157,12 @@ function get_tags(){
         }
 
         if ($('#tagstable').length){
-             $('#tagstable tbody tr:not(:first)').remove();
+            $('#tagstable tbody tr:not(:first)').remove();
 
             if (tags.length > 0){
+                $("#no_tag_message").hide();
+                //$("#tagstable").show();
+
                 for (var i=0, tag; tag = tags[i]; i++){
                     $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
                 }
@@ -163,7 +174,8 @@ function get_tags(){
                 });
             }
             else{
-                $("#tagstable").append('<tr><td colspan="6><div class="alert alert-info" role="alert">No tags added yet</div></td></tr>');
+                $("#no_tag_message").show();
+                //$("#tagstable").hide();
             }
         }
     });
