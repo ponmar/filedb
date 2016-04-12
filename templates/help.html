@@ -15,10 +15,13 @@
 <h2>File Categories</h2>
 <p>The following meta data can be added to each file from the file collection:</p>
 <ul>
+<li>File description</li>
+<li>File date and time</li>
 <li>Person</li>
 <li>Location</li>
 <li>Tag</li>
 </ul>
+<p>The meta data above, called categories, can be used when searching for files or to document historic events represented by the files.</p>
 
 <h2>File Collection</h2>
 <p>FileDB does not modify any files in your file collection. When adding files they are read to extract date and time information when available.</p>
@@ -42,7 +45,10 @@ root
 <p>The root directory can be placed anywhere, see configuration chapter.</p>
 
 <h2>Configuration</h2>
-Configuration parameters are set in a configuration file with Python format. Each parameter is documented in that configuration file (see config.py).
+<p>Configuration parameters are set in a configuration file with Python format. Each parameter is documented in that configuration file (see config.py).</p>
+
+<h2>Backup</h2>
+<p>File catagories are written to a database which is stored in the file flaskr.db. Make regularly backups of this file to avoid losing any data in case of hardware, software or human mistake.</p>
 
 <h2>API</h2>
 <p>This web application fetches and updates data in the FileDB database via its API. The API can be used by other applications.</p>
