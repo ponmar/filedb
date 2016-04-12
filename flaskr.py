@@ -74,11 +74,11 @@ def app_categories():
     return render_template('categories.html')
 
 
-@app.route('/about')
-def app_about():
+@app.route('/help')
+def app_help():
     if not session.get('logged_in'):
         return redirect(url_for('app_index'))
-    return render_template('about.html')
+    return render_template('help.html')
 
 
 @app.route('/person/<int:id>', methods=['GET'])
