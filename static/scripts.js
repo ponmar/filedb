@@ -83,21 +83,26 @@ function get_persons(){
         if ($('#personstable').length){
             $('#personstable tbody tr:not(:first)').remove();
 
-            for (var i=0, person; person = persons[i]; i++){
-                var name = person['firstname'] + ' ' + person['lastname'];
-                var dateofbirth = person['dateofbirth'];
-                var age = null;
-                if (dateofbirth != null){
-                    age = get_age(dateofbirth);
+            if (persons.length > 0){
+                for (var i=0, person; person = persons[i]; i++){
+                    var name = person['firstname'] + ' ' + person['lastname'];
+                    var dateofbirth = person['dateofbirth'];
+                    var age = null;
+                    if (dateofbirth != null){
+                        age = get_age(dateofbirth);
+                    }
+                    $("#personstable").append('<tr><td">' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
-                $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
-            }
 
-            $(".delete_person_button").click(function(evt){
-                var id = $(this).attr('id').replace('delete_person_', '');
-                delete_person(id);
-                return false; // do not follow link
-            });
+                $(".delete_person_button").click(function(evt){
+                    var id = $(this).attr('id').replace('delete_person_', '');
+                    delete_person(id);
+                    return false; // do not follow link
+                });
+            }
+            else{
+                $("#personstable").append('<tr><td colspan="6><div class="alert alert-info" role="alert">No persons added yet</div></td></tr>');
+            }
         }
     });
 }
@@ -115,15 +120,20 @@ function get_locations(){
         if ($('#locationstable').length){
             $('#locationstable tbody tr:not(:first)').remove();
 
-            for (var i=0, location; location = locations[i]; i++){
-                $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
-            }
+            if (locations.length > 0){
+                for (var i=0, location; location = locations[i]; i++){
+                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                }
 
-            $(".delete_location_button").click(function(){
-                var id = $(this).attr('id').replace('delete_location_', '');
-                delete_location(id);
-                return false; // do not follow link
-            });
+                $(".delete_location_button").click(function(){
+                    var id = $(this).attr('id').replace('delete_location_', '');
+                    delete_location(id);
+                    return false; // do not follow link
+                });
+            }
+            else{
+                $("#locationstable").append('<tr><td colspan="6><div class="alert alert-info" role="alert">No locations added yet</div></td></tr>');
+            }
         }
     });
 }
@@ -141,15 +151,20 @@ function get_tags(){
         if ($('#tagstable').length){
              $('#tagstable tbody tr:not(:first)').remove();
 
-            for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
-            }
+            if (tags.length > 0){
+                for (var i=0, tag; tag = tags[i]; i++){
+                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+                }
 
-            $(".delete_tag_button").click(function(){
-                var id = $(this).attr('id').replace('delete_tag_', '');
-                delete_tag(id);
-                return false; // do not follow link
-            });
+                $(".delete_tag_button").click(function(){
+                    var id = $(this).attr('id').replace('delete_tag_', '');
+                    delete_tag(id);
+                    return false; // do not follow link
+                });
+            }
+            else{
+                $("#tagstable").append('<tr><td colspan="6><div class="alert alert-info" role="alert">No tags added yet</div></td></tr>');
+            }
         }
     });
 }
