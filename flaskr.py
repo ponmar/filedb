@@ -110,7 +110,7 @@ def api_add_file():
         abort(409, 'No file path specified')
     if not add_file(path, description):
         abort(409, 'File not added')
-    return 'OK'
+    return create_files_added_response('Add file finished', 1, 0)
 
 
 @app.route('/api/directory', methods=['POST'])
@@ -127,11 +127,17 @@ def api_add_directory():
     if not os.path.isdir(directory_path):
         abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
 
+    num_added_files = 0
+    num_not_added_files = 0
+
     for new_file in os.listdir(directory_path):
-        if not add_file(path + '/' + new_file):
+        if add_file(path + '/' + new_file):
+            num_added_files += 1
+        else:
+            num_not_added_files += 1
             print 'Error'
 
-    return 'OK'
+    return create_files_added_response('Add directory finished', num_added_files, num_not_added_files)
 
 
 @app.route('/api/import', methods=['POST'])
@@ -162,9 +168,13 @@ def api_import_files():
                 print 'Could not import file: ' + filename_with_path
                 num_not_imported_files += 1
 
-    return make_response(jsonify({'message': 'File import finished',
-                                  'num_imported_files': num_imported_files,
-                                  'num_not_imported_files': num_not_imported_files}),
+    return create_files_added_response('File import finished', num_imported_files, num_not_imported_files)
+
+
+def create_files_added_response(message, num_added_files, num_not_added_files):
+    return make_response(jsonify({'message': message,
+                                  'num_added_files': num_added_files,
+                                  'num_not_added_files': num_not_added_files}),
                          201)
 
 

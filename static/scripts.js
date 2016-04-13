@@ -36,6 +36,26 @@ var tags = null;
         });
     }
 
+    if ($('#add_directory_form').length){
+        $("#add_directory_form").submit(function(evt){
+            evt.preventDefault();
+            post_add_directory_form();
+        });
+    }
+
+    if ($('#add_file_form').length){
+        $("#add_file_form").submit(function(evt){
+            evt.preventDefault();
+            post_add_file_form();
+        });
+    }
+
+    if ($('#browse_files_button').length){
+        $("#browse_files_button").click(function(){
+            browse_files();
+        });
+    }
+
     if ($('#browse_files_button').length){
         $("#browse_files_button").click(function(){
             browse_files();
@@ -260,7 +280,7 @@ function import_files(){
         $("#import_result").text("Importing, please wait...");
         $.post("/api/import", function(json) {
             $("#import_result").text("");
-            alert(json['message'] + "\n\nImported files: " + json['num_imported_files'] + "\nNot imported files: " + json['num_not_imported_files']);
+            alert(json['message'] + "\n\nImported files: " + json['num_added_files'] + "\nNot imported files: " + json['num_not_added_files']);
         }, "json")
         .fail(function(){
             alert("Import failed");
@@ -344,6 +364,26 @@ function post_add_tag_form(){
     }, "json")
     .fail(function(){
         alert("Add tag failed");
+    });
+}
+
+function post_add_directory_form(){
+    $.post("/api/directory", $("#add_directory_form").serialize(), function(json){
+        alert(json['message'] + "\n\nAdded files: " + json['num_added_files'] + "\nNot added files: " + json['num_not_added_files']);
+        // TODO: get files for list?
+    }, "json")
+    .fail(function(){
+        alert("Add directory failed");
+    });
+}
+
+function post_add_file_form(){
+    $.post("/api/file", $("#add_file_form").serialize(), function(json){
+        alert(json['message']);
+        // TODO: get files for list?
+    }, "json")
+    .fail(function(){
+        alert("Add file failed");
     });
 }
 
