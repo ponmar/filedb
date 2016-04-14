@@ -104,7 +104,7 @@ def app_tag(id):
 def api_add_file():
     if not session.get('logged_in'):
         abort(401)
-    path = get_form_str('path', request.form)
+    path = get_path_from_form(request.form)
     description = get_form_str('description', request.form)
     if path is None:
         abort(409, 'No file path specified')
@@ -118,7 +118,7 @@ def api_add_directory():
     if not session.get('logged_in'):
         abort(401)
 
-    path = get_form_str('path', request.form)
+    path = get_path_from_form(request.form)
     if path is None:
         abort(409, 'No directory path specified')
 
@@ -152,14 +152,8 @@ def api_import_files():
     for root, directories, filenames in os.walk(unicode(FILES_ROOT_DIRECTORY)):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
-            #print filename_with_path
-
-            # TODO: do the same path adjustments when adding file or directory (and do not duplicate code)
-            # Note that unix style paths should be used internally
-            filename_with_path = filename_with_path.replace('\\', '/')
+            filename_with_path = update_path(filename_with_path)
             filename_in_wanted_directory = '/'.join(filename_with_path.split('/')[1:])
-
-            #print 'Trying: [{}] [{}]'.format(filename_with_path, filename_in_wanted_directory)
 
             if add_file(filename_in_wanted_directory):
                 print 'Imported file: ' + filename_in_wanted_directory
@@ -179,8 +173,10 @@ def create_files_added_response(message, num_added_files, num_not_added_files):
 
 
 def add_file(path, file_description=None):
-    # TODO: require certain directory separator ('/', not '\')
-    # TODO: check that path within files directory (no .. etc)
+    """Add file to database if possible.
+    path is the path within the root directory with / as separator.
+    """
+    # TODO: check that path within files directory (enough to fail if ".." is included?)
     try:
         if file_is_blacklisted(path):
             print 'Ignored blacklisted file: ' + path
@@ -257,6 +253,26 @@ def get_form_str(param_name, form, min_length = 1, max_length = 100):
         if len(param_value) in range(min_length, max_length + 1):
             return param_value
     return None
+
+
+def get_path_from_form(form):
+    path = get_form_str('path', form)
+    if path is None:
+        return None
+    return update_path(path)
+
+
+def update_path(path):
+    # Internal paths should always use "/" as directory separator
+    path = path.replace('\\', '/')
+
+    # This is so that not both file ./file.jpg and file.jpg can be treated
+    # as different files
+    IGNORED_PREFIX = './'
+    if path.startswith(IGNORED_PREFIX):
+        path = path[len(IGNORED_PREFIX):]
+
+    return path
 
 
 @app.route('/api/person', methods=['POST'])
