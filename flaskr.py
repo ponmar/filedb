@@ -284,13 +284,15 @@ def api_add_person():
             abort(400, 'Invalid date of birth format')
 
     try:
-        g.db.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
+        cursor = g.db.cursor()
+        cursor.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
                      [firstname, lastname, description, date_of_birth])
         g.db.commit()
+        return make_response(jsonify({'message': 'Person created',
+                                      'id': cursor.lastrowid}),
+                             201)
     except sqlite3.IntegrityError:
         abort(409)
-    # TODO: add created person id
-    return make_response(jsonify({'message': 'Person created'}), 201)
 
 
 @app.route('/api/location', methods=['POST'])
@@ -305,12 +307,14 @@ def api_add_location():
         abort(400, 'Location name not specified')
 
     try:
-        g.db.execute('insert into locations (name, description) values (?, ?)', [name, description])
+        cursor = g.db.cursor()
+        cursor.execute('insert into locations (name, description) values (?, ?)', [name, description])
         g.db.commit()
+        return make_response(jsonify({'message': 'Location created',
+                                      'id': cursor.lastrowid}),
+                             201)
     except sqlite3.IntegrityError:
         abort(409)
-    # TODO: add created location id
-    return make_response(jsonify({'message': 'Location created'}), 201)
 
 
 @app.route('/api/tag', methods=['POST'])
@@ -323,12 +327,14 @@ def api_add_tag():
         abort(400, 'Tag name not specified')
 
     try:
-        g.db.execute('insert into tags (name) values (?)', [name])
+        cursor = g.db.cursor()
+        cursor.execute('insert into tags (name) values (?)', [name])
         g.db.commit()
+        return make_response(jsonify({'message': 'Tag created',
+                                      'id': cursor.lastrowid}),
+                             201)
     except sqlite3.IntegrityError:
         abort(409)
-    # TODO: add created tag id
-    return make_response(jsonify({'message': 'Tag created'}), 201)
 
 
 #
