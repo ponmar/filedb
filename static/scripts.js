@@ -108,13 +108,12 @@ function get_persons(){
                 //$("#personstable").show();
 
                 for (var i=0, person; person = persons[i]; i++){
-                    var name = person['firstname'] + ' ' + person['lastname'];
                     var dateofbirth = person['dateofbirth'];
                     var age = null;
                     if (dateofbirth != null){
                         age = get_age(dateofbirth);
                     }
-                    $("#personstable").append('<tr><td">' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_person_button").click(function(evt){
