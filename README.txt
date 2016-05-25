@@ -9,7 +9,7 @@ Installation
 
 Creating the database
 =====================
-Note! This command removes all existing data in the database.
+Note! This command removes all existing data in the database if it already exists.
 >python runserver.py --initdb
 
 

@@ -2,7 +2,10 @@ var persons = null;
 var locations = null;
 var tags = null;
 
- $(document).ready(function(){
+var slideshow_files = null;
+var slideshow_index = -1;
+
+$(document).ready(function(){
     if (needs_persons()){
         get_persons();
     }
@@ -50,19 +53,37 @@ var tags = null;
         });
     }
 
+    /*
     if ($('#browse_files_button').length){
         $("#browse_files_button").click(function(){
             browse_files();
         });
     }
+    */
 
-    if ($('#browse_files_button').length){
-        $("#browse_files_button").click(function(){
-            browse_files();
+    if ($('#start_slideshow_button').length){
+        $("#start_slideshow_button").click(function(){
+            prepare_slideshow();
         });
     }
 
-    // TODO: handle start slideshow button press
+    if ($('#slideshow_prev_file_button').length){
+        $('#slideshow_prev_file_button').click(function(){
+            prev_slideshow_file();
+        });
+    }
+
+    if ($('#slideshow_next_file_button').length){
+        $('#slideshow_next_file_button').click(function(){
+            next_slideshow_file();
+        });
+    }
+
+    if ($('#slideshow_random_file_button').length){
+        $('#slideshow_random_file_button').click(function(){
+            random_slideshow_file();
+        });
+    }
 
     if ($('#button_show_all_files').length){
         $("#button_show_all_files").click(function(){
@@ -226,7 +247,7 @@ function get_all_files(){
     });
 }
 
-function browse_files(){
+function create_files_url(){
     var checked_persons = '';
     for (var i=0, person; person = persons[i]; i++){
         var id = 'person_' + person['id'];
@@ -263,15 +284,93 @@ function browse_files(){
         checked_locations = checked_locations.slice(0, -1);
     }
 
-    var url = '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
+    return '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
+}
+
+/*
+function browse_files(){
+    var url = create_files_url();
 
     $.getJSON(url, function(result){
         $("#files").empty();
         files = result['files'];
         for (var i=0, file; file = files[i]; i++){
-            $("#files").append('<a href="/filecontent/' + file['id'] + '">' + file['path'] + '</a><br>');
+            $("#files").append('<a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a><br>');
         }
     });
+}
+*/
+
+function prepare_slideshow(){
+    //alert("Starting slideshow");
+    var url = create_files_url();
+    
+    $.getJSON(url, function(result){
+        show_slideshow(result);
+    });
+}
+
+function show_slideshow(files_json){
+    //alert("showing slideshow");
+    var files = files_json['files']
+  
+    if (files.length > 0){
+        slideshow_files = files;
+        restart_slideshow();
+    }
+    else{
+        clear_slideshow();
+        alert("No files matched your search query");
+    }
+}
+
+function load_slideshow_file(){
+    // TODO: if img exists, just change url
+    var file = slideshow_files[slideshow_index];
+    var file_url = '/api/filecontent/' + file['id'];
+
+    if ($('#slideshow_image').length){
+        $('#slideshow_image').attr('src', file_url);
+    }
+    else{
+        var img = $('<img />', {
+            id: 'slideshow_image',
+            src: file_url,
+            alt: '' // TODO
+        });
+        img.appendTo($('#image_viewer_test')); // Replace with another div with absolute position?
+    }
+}
+
+function restart_slideshow(){
+    slideshow_index = 0;
+    load_slideshow_file();
+}
+
+function clear_slideshow(){
+    slideshow_files = null;
+    slideshow_index = -1;
+}
+
+function next_slideshow_file(){
+    if (slideshow_files != null && slideshow_files.length > 0 && slideshow_index < slideshow_files.length - 1){
+        slideshow_index++;
+        load_slideshow_file();
+    }
+}
+
+function prev_slideshow_file(){
+    if (slideshow_files != null && slideshow_files.length > 0 && slideshow_index > 0){
+        slideshow_index--;
+        load_slideshow_file();
+    }
+}
+
+function random_slideshow_file(){
+    if (slideshow_files != null && slideshow_files.length > 1){
+        slideshow_index = parseInt(Math.random() * slideshow_files.length, 10);
+        load_slideshow_file();
+    }
 }
 
 function import_files(){
