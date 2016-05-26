@@ -104,6 +104,18 @@ $(document).ready(function(){
             import_files();
         });
     }
+
+    // Register slideshow control keys
+    $(document).keypress(function(e){
+        if (e.which == 97){
+            // 'a' pressed
+            prev_slideshow_file();
+        }
+        else if (e.which == 100){
+            // 'd' pressed
+            next_slideshow_file();
+        }
+    });
 });
 
 function needs_persons(){
