@@ -319,7 +319,7 @@ function search_files(){
 
 function update_search_result(files_json){
     slideshow_files = files_json['files'];
-    $("#search_result_text").text(slideshow_files.length + " matches for search query");
+    $("#search_result_text").text(slideshow_files.length + " file matches for search query");
 }
 
 function show_slideshow(){
