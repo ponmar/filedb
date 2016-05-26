@@ -34,23 +34,39 @@
 <!--
 <button type="button" class="btn btn-default" id="browse_files_button">Browse</button>
 -->
-<button type="button" class="btn btn-default" id="start_slideshow_button">Start slideshow</button>
-<button type="button" class="btn btn-default" id="get_relative_path_file_list_button">Export file list (relative paths)</button>
-<button type="button" class="btn btn-default" id="get_absolute_path_file_list_button">Export file list (absolute paths)</button>
+<button type="button" class="btn btn-default" id="search_files_button">Search</button>
 
 <br><br>
 
-<button type="button" class="btn btn-default" id="slideshow_prev_file_button">&lt;&lt; Previous file</button>
-<button type="button" class="btn btn-default" id="slideshow_next_file_button">Next file &gt;&gt;</button>
-<button type="button" class="btn btn-default" id="slideshow_random_file_button">Random file</button>
+<div class="panel panel-default">
+  <div class="panel-heading">Search Result</div>
+  <div class="panel-body"><p id="search_result_text"></p></div>
+</div>
+
+<!--
+<button type="button" class="btn btn-default" id="get_relative_path_file_list_button">Export file list (relative paths)</button>
+<button type="button" class="btn btn-default" id="get_absolute_path_file_list_button">Export file list (absolute paths)</button>
+<br><br>
+-->
+
+<div class="panel panel-default">
+  <div class="panel-heading">Image Browser</div>
+  <div class="panel-body">
+    <button type="button" class="btn btn-default" id="slideshow_prev_file_button">&lt;&lt; Previous</button>
+    <button type="button" class="btn btn-default" id="slideshow_next_file_button">Next &gt;&gt;</button>
+    <button type="button" class="btn btn-default" id="slideshow_random_file_button">Random</button>
+    <button type="button" class="btn btn-default" id="slideshow_play_file_button">Play slideshow</button>
+    <button type="button" class="btn btn-default" id="slideshow_pause_file_button">Pause slideshow</button>
+    <br><br>
+    <p id="slideshow_item_text"></p>
+    <div id="image_viewer_test"></div>
+  </div>
+</div>
 
 <!--
 <div id="files">
 </div>
 -->
-
-<div id="image_viewer_test">
-</div>
 
 {% endif %}
 

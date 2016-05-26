@@ -61,11 +61,19 @@ $(document).ready(function(){
     }
     */
 
+    if ($('#search_files_button').length){
+        $("#search_files_button").click(function(){
+            search_files();
+        });
+    }
+
+    /*
     if ($('#start_slideshow_button').length){
         $("#start_slideshow_button").click(function(){
             prepare_slideshow();
         });
     }
+    */
 
     if ($('#slideshow_prev_file_button').length){
         $('#slideshow_prev_file_button').click(function(){
@@ -301,31 +309,31 @@ function browse_files(){
 }
 */
 
-function prepare_slideshow(){
-    //alert("Starting slideshow");
+function search_files(){
     var url = create_files_url();
-    
     $.getJSON(url, function(result){
-        show_slideshow(result);
+        update_search_result(result);
+        show_slideshow();
     });
 }
 
-function show_slideshow(files_json){
-    //alert("showing slideshow");
-    var files = files_json['files']
-  
-    if (files.length > 0){
-        slideshow_files = files;
+function update_search_result(files_json){
+    slideshow_files = files_json['files'];
+    $("#search_result_text").text(slideshow_files.length + " matches for search query");
+}
+
+function show_slideshow(){
+    if (slideshow_files.length > 0){
+        //slideshow_files = files;
         restart_slideshow();
     }
     else{
         clear_slideshow();
-        alert("No files matched your search query");
+        //alert("No files matched your search query");
     }
 }
 
 function load_slideshow_file(){
-    // TODO: if img exists, just change url
     var file = slideshow_files[slideshow_index];
     var file_url = '/api/filecontent/' + file['id'];
 
@@ -338,8 +346,10 @@ function load_slideshow_file(){
             src: file_url,
             alt: '' // TODO
         });
-        img.appendTo($('#image_viewer_test')); // Replace with another div with absolute position?
+        img.appendTo($('#image_viewer_test'));
     }
+
+    $("#slideshow_item_text").text("Showing file: " + (slideshow_index + 1) + "/" + slideshow_files.length);
 }
 
 function restart_slideshow(){
@@ -350,6 +360,7 @@ function restart_slideshow(){
 function clear_slideshow(){
     slideshow_files = null;
     slideshow_index = -1;
+    $("#slideshow_item_text").text("No files available before search");
 }
 
 function next_slideshow_file(){
