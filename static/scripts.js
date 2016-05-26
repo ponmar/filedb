@@ -142,7 +142,7 @@ function get_persons(){
                     if (dateofbirth != null){
                         age = get_age(dateofbirth);
                     }
-                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="/person/' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td>' + get_person_page_link(person['id'], 'Edit') + ', <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_person_button").click(function(evt){
@@ -177,7 +177,7 @@ function get_locations(){
                 //$("#locationstable").show();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td><a href="/location/' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_location_button").click(function(){
@@ -212,7 +212,7 @@ function get_tags(){
                 //$("#tagstable").show();
 
                 for (var i=0, tag; tag = tags[i]; i++){
-                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="/tag/' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td>' + get_tag_page_link(tag['id'], 'Edit') + ', <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_tag_button").click(function(){
@@ -324,12 +324,10 @@ function update_search_result(files_json){
 
 function show_slideshow(){
     if (slideshow_files.length > 0){
-        //slideshow_files = files;
         restart_slideshow();
     }
     else{
         clear_slideshow();
-        //alert("No files matched your search query");
     }
 }
 
@@ -349,7 +347,88 @@ function load_slideshow_file(){
         img.appendTo($('#image_viewer_test'));
     }
 
-    $("#slideshow_item_text").text("Showing file: " + (slideshow_index + 1) + "/" + slideshow_files.length);
+    var file_text = "Showing file: " + (slideshow_index + 1) + "/" + slideshow_files.length;
+
+    var file_datetime = file['datetime'];
+    if (file_datetime != null){
+        file_text += "<br>Date: " + file_datetime + " (" + get_age(file_datetime) + " years old)";
+    }
+
+    var file_description = file["description"];
+    if (file_description != null){
+        file_text += "<br>Description: " + file_description;
+    }
+
+     var file_person_ids = file['persons'];
+     if (file_person_ids.length > 0){
+         file_text += "<br>Persons: ";
+         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
+            var person = find_person(person_id);
+            if (person != null){
+                file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + ', ';
+            }
+         }
+     }
+
+     var file_location_ids = file['locations'];
+     if (file_location_ids.length > 0){
+         file_text += "<br>Locations: ";
+         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
+            var location = find_location(location_id);
+            if (location != null){
+                file_text += get_location_page_link(location_id, location['name']) + ', ';
+            }
+         }
+     }
+
+     var file_tag_ids = file['tags'];
+     if (file_tag_ids.length > 0){
+         file_text += "<br>Tags: ";
+         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
+            var tag = find_tag(file_tag_id);
+            if (tag != null){
+                file_text += get_tag_page_link(tag_id, tag['name']) + ', ';
+            }
+         }
+     }
+
+    $("#slideshow_item_text").html(file_text);
+}
+
+// TODO: change data structures from array to hashmap to avoid this scanning?
+function find_person(person_id){
+    if (persons != null){
+        for (var i=0, person; person = persons[i]; i++){
+            if (person['id'] == person_id){
+                return person;
+            }
+        }
+    }
+    return null;
+}
+
+// TODO: change data structures from array to hashmap to avoid this scanning?
+function find_location(location_id){
+    if (locations != null){
+        for (var i=0, location; location = locations[i]; i++){
+            if (location['id'] == location_id){
+                return location;
+            }
+        }
+    }
+    return null;
+}
+
+// TODO: change data structures from array to hashmap to avoid this scanning?
+function find_tag(tag_id){
+    if (tags != null){
+        for (var i=0, tag; tag = tags[i]; i++){
+            if (tag['id'] == tag_id){
+                return tag;
+            }
+        }
+    }
+    return null;
 }
 
 function restart_slideshow(){
@@ -512,4 +591,16 @@ function get_age(dateString){
         age--;
     }
     return age;
+}
+
+function get_person_page_link(person_id, link_text){
+    return '<a href="/person/' + person_id + '">' + link_text + '</a>';
+}
+
+function get_location_page_link(location_id, link_text){
+    return '<a href="/location/' + location_id + '">' + link_text + '</a>';
+}
+
+function get_tag_page_link(tag_id, link_text){
+    return '<a href="/tag/' + tag_id + '">' + link_text + '</a>';
 }
