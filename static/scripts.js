@@ -53,14 +53,6 @@ $(document).ready(function(){
         });
     }
 
-    /*
-    if ($('#browse_files_button').length){
-        $("#browse_files_button").click(function(){
-            browse_files();
-        });
-    }
-    */
-
     if ($('#search_files_button').length){
         $("#search_files_button").click(function(){
             search_files();
@@ -307,20 +299,6 @@ function create_files_url(){
     return '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
 }
 
-/*
-function browse_files(){
-    var url = create_files_url();
-
-    $.getJSON(url, function(result){
-        $("#files").empty();
-        files = result['files'];
-        for (var i=0, file; file = files[i]; i++){
-            $("#files").append('<a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a><br>');
-        }
-    });
-}
-*/
-
 function search_files(){
     var url = create_files_url();
     $.getJSON(url, function(result){
@@ -331,7 +309,58 @@ function search_files(){
 
 function update_search_result(files_json){
     slideshow_files = files_json['files'];
-    $("#search_result_text").text(slideshow_files.length + " file matches for search query");
+
+    // TODO: change data-structures for storing unique values?
+    var persons = {};
+    var locations = {};
+    var tags = {};
+
+    // Store unique persons, locations and tags from search result
+    for (var i=0, file; file = files_json[i]; i++){
+        for (var j=0, person_id; person_id = file['persons'][j]; j++){
+            persons[person_id] = person_id;
+        }
+        for (var j=0, person_id; person_id = file['locations'][j]; j++){
+            locations[person_id] = person_id;
+        }
+        for (var j=0, person_id; person_id = file['tags'][j]; j++){
+            tags[person_id] = person_id;
+        }
+    }
+
+    // Create result message
+
+    var text = slideshow_files.length + " file matches for search query<br>Meta-data in result: ";
+
+    if (persons.length > 0 || locations.length > 0 || tags.length > 0){
+        for (var person_id in persons){
+            var person = find_person(person_id);
+            if (person != null){
+                text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + ', '
+            }
+        }
+
+        for (var location_id in locations){
+            var location = find_location(location_id);
+            if (location != null){
+                text += get_location_page_link(location_id, location['name']) + ', '
+            }
+        }
+
+        for (var tag_id in tags){
+            var tag = find_tag(tag_id);
+            if (tag != null){
+                text += get_tag_page_link(tag['name']) + ', '
+            }
+        }
+    }
+    else{
+        text += "none";
+    }
+
+    // TODO: remove ', ' text at the end if any
+
+    $("#search_result_text").html(text);
 }
 
 function show_slideshow(){
@@ -354,7 +383,7 @@ function load_slideshow_file(){
         var img = $('<img />', {
             id: 'slideshow_image',
             src: file_url,
-            alt: '' // TODO
+            alt: file_url
         });
         img.appendTo($('#image_viewer_test'));
     }
@@ -371,38 +400,38 @@ function load_slideshow_file(){
         file_text += "<br>Description: " + file_description;
     }
 
-     var file_person_ids = file['persons'];
-     if (file_person_ids.length > 0){
-         file_text += "<br>Persons: ";
-         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
-            var person = find_person(person_id);
-            if (person != null){
-                file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + ', ';
-            }
-         }
-     }
+    var file_person_ids = file['persons'];
+    if (file_person_ids.length > 0){
+        file_text += "<br>Persons: ";
+        for (var i=0, person_id; person_id = file_person_ids[i]; i++){
+           var person = find_person(person_id);
+           if (person != null){
+               file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + ', ';
+           }
+        }
+    }
 
-     var file_location_ids = file['locations'];
-     if (file_location_ids.length > 0){
-         file_text += "<br>Locations: ";
-         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
-            var location = find_location(location_id);
-            if (location != null){
-                file_text += get_location_page_link(location_id, location['name']) + ', ';
-            }
-         }
-     }
+    var file_location_ids = file['locations'];
+    if (file_location_ids.length > 0){
+        file_text += "<br>Locations: ";
+        for (var i=0, location_id; location_id = file_location_ids[i]; i++){
+           var location = find_location(location_id);
+           if (location != null){
+               file_text += get_location_page_link(location_id, location['name']) + ', ';
+           }
+        }
+    }
 
-     var file_tag_ids = file['tags'];
-     if (file_tag_ids.length > 0){
-         file_text += "<br>Tags: ";
-         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
-            var tag = find_tag(file_tag_id);
-            if (tag != null){
-                file_text += get_tag_page_link(tag_id, tag['name']) + ', ';
-            }
-         }
-     }
+    var file_tag_ids = file['tags'];
+    if (file_tag_ids.length > 0){
+        file_text += "<br>Tags: ";
+        for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
+           var tag = find_tag(file_tag_id);
+           if (tag != null){
+               file_text += get_tag_page_link(tag_id, tag['name']) + ', ';
+           }
+        }
+    }
 
     $("#slideshow_item_text").html(file_text);
 }
