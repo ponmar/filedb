@@ -385,7 +385,7 @@ function load_slideshow_file(){
             src: file_url,
             alt: file_url
         });
-        img.appendTo($('#image_viewer_test'));
+        img.appendTo($('#file_browser_image_div'));
     }
 
     var file_text = "Showing file: " + (slideshow_index + 1) + "/" + slideshow_files.length;
