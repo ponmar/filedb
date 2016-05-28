@@ -97,6 +97,12 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#consistency_check_button').length){
+        $("#consistency_check_button").click(function(){
+            import_files();
+        });
+    }
+
     // Register slideshow control keys
     $(document).keypress(function(e){
         if (e.which == 97){
@@ -505,7 +511,7 @@ function random_slideshow_file(){
 }
 
 function import_files(){
-    if (window.confirm("This action may take several minutes. Continue?")){
+    if (window.confirm("Importing all files may take several minutes. Continue?")){
         $("#import_result").text("Importing, please wait...");
         $.post("/api/import", function(json) {
             $("#import_result").text("");
@@ -514,6 +520,15 @@ function import_files(){
         .fail(function(){
             alert("Import failed");
         });
+    }
+}
+
+function import_files(){
+    if (window.confirm("File consistency check for all file entries may take several minutes. Continue?")){
+        $("#files_consistency_result").text("Running, please wait...");
+        // TODO: new API url for this?
+        alert("Not implemented yet");
+        $("#files_consistency_result").text("");
     }
 }
 
