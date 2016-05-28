@@ -117,15 +117,15 @@ $(document).ready(function(){
 });
 
 function needs_persons(){
-    return $('#personbuttons').length || $('#personstable').length;
+    return $('#personbuttons').length || $('#personstable').length || $('#person_categories').length;
 }
 
 function needs_locations(){
-    return $('#locationbuttons').length || $('#locationstable').length;
+    return $('#locationbuttons').length || $('#locationstable').length || $('#location_categories').length;
 }
 
 function needs_tags(){
-    return $('#tagbuttons').length || $('#tagstable').length;
+    return $('#tagbuttons').length || $('#tagstable').length || $('#tag_categories').length;
 }
 
 function get_persons(){
@@ -166,6 +166,14 @@ function get_persons(){
                 //$("#personstable").hide();
             }
         }
+
+        if ($('#person_categories').length){
+            $('#person_categories').empty();
+            for (var i=0, person; person = persons[i]; i++){
+                var name = person['firstname'] + ' ' + person['lastname'];
+                $("#person_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label>');
+            }
+        }
     });
 }
 
@@ -201,6 +209,14 @@ function get_locations(){
                 //$("#locationstable").hide();
             }
         }
+
+        if ($('#location_categories').length){
+            $('#location_categories').empty();
+            for (var i=0, location; location = locations[i]; i++){
+                $("#location_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label>');
+            }
+
+        }
     });
 }
 
@@ -234,6 +250,13 @@ function get_tags(){
             else{
                 $("#no_tag_message").show();
                 //$("#tagstable").hide();
+            }
+        }
+
+        if ($('#tag_categories').length){
+            $('#tag_categories').empty();
+            for (var i=0, tag; tag = tags[i]; i++){
+                $("#tag_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label>');
             }
         }
     });
