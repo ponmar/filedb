@@ -535,12 +535,13 @@ function random_slideshow_file(){
 
 function import_files(){
     if (window.confirm("Importing all files may take several minutes. Continue?")){
-        $("#import_result").text("Importing, please wait...");
+        $("#import_status").text("Importing, please wait...");
         $.post("/api/import", function(json) {
-            $("#import_result").text("");
-            alert(json['message'] + "\n\nImported files: " + json['num_added_files'] + "\nNot imported files: " + json['num_not_added_files']);
+            $("#import_status").html("Number of imported files: " + json['num_added_files'] + "<br>Number of ignored files: " + json['num_not_added_files']);
+            alert("Import finished");
         }, "json")
         .fail(function(){
+            $("#import_status").text("");
             alert("Import failed");
         });
     }
@@ -548,17 +549,19 @@ function import_files(){
 
 function consistency_check(){
     if (window.confirm("File consistency check for all file entries may take several minutes. Continue?")){
-        $("#files_consistency_result").text("Running, please wait...");
+        $("#files_consistency_status").text("Running, please wait...");
         $.getJSON("/api/fileconsistency", function(result){
             missing_files = result['missing_files'];
             if (missing_files.length == 0){
-                alert('There are no missing files')
+                $("#files_consistency_status").text("There are no missing files");
+                alert('File consistency check finished successfully')
             }
             else{
-                alert("Missing file ids: " + missing_files.toString());
+                // TODO: links to file pages?
+                $("#files_consistency_status").text("Missing files: " + missing_files.toString());
+                alert("Missing files detected!");
             }
         });
-        $("#files_consistency_result").text("");
     }
 }
 

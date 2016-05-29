@@ -169,6 +169,7 @@ def api_import_files():
 
 
 def create_files_added_response(message, num_added_files, num_not_added_files):
+    # TODO: remove message from JSON? It is no longer used by the javascript.
     return make_response(jsonify({'message': message,
                                   'num_added_files': num_added_files,
                                   'num_not_added_files': num_not_added_files}),
