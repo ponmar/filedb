@@ -99,7 +99,7 @@ $(document).ready(function(){
 
     if ($('#consistency_check_button').length){
         $("#consistency_check_button").click(function(){
-            import_files();
+            consistency_check();
         });
     }
 
@@ -546,11 +546,18 @@ function import_files(){
     }
 }
 
-function import_files(){
+function consistency_check(){
     if (window.confirm("File consistency check for all file entries may take several minutes. Continue?")){
         $("#files_consistency_result").text("Running, please wait...");
-        // TODO: new API url for this?
-        alert("Not implemented yet");
+        $.getJSON("/api/fileconsistency", function(result){
+            missing_files = result['missing_files'];
+            if (missing_files.length == 0){
+                alert('There are no missing files')
+            }
+            else{
+                alert("Missing file ids: " + missing_files.toString());
+            }
+        });
         $("#files_consistency_result").text("");
     }
 }
