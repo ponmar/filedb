@@ -146,6 +146,12 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#save_file_categorize_button').length){
+        $('#save_file_categorize_button').click(function(){
+            save_file_categorization();
+        })
+    }
+
     // Register slideshow control keys
     $(document).keypress(function(e){
         if (e.which == 97){
@@ -364,6 +370,8 @@ function categorize_file(){
     var file_date = file['datetime'];
     var file_url = '/api/filecontent/' + file['id'];
 
+    $('#categorize_file_path').text(file['path']);
+
     if (file_description != null){
         $('#file_description').val(file_description);
     }
@@ -486,6 +494,12 @@ function categorize_file_without_date(){
             }
         }
         // TODO: hide image and show message
+    }
+}
+
+function save_file_categorization(){
+    if (categorize_files_index != -1){
+        alert("save");
     }
 }
 

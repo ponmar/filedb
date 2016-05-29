@@ -358,7 +358,7 @@ def api_add_tag():
 
 
 #
-# API: modify data (internally rows are are deleted from tables, but in the API it looks like a file item is modified)
+# API: modify data (internally rows are deleted from tables, but in the API it looks like a file item is modified)
 #
 
 @app.route('/api/add_to_file', methods=['PUT'])
