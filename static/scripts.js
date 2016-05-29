@@ -2,6 +2,9 @@ var persons = null;
 var locations = null;
 var tags = null;
 
+var categorize_files = null;
+var categorize_files_index = -1;
+
 var slideshow_files = null;
 var slideshow_index = -1;
 
@@ -16,6 +19,10 @@ $(document).ready(function(){
 
     if (needs_tags()){
         get_tags();
+    }
+
+    if (needs_files()){
+        get_files();
     }
 
     if ($('#add_person_form').length){
@@ -103,6 +110,30 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#find_file_wo_person_button').length){
+        $('#find_file_wo_person_button').click(function(){
+            categorize_file_without_person();
+        });
+    }
+
+    if ($('#find_file_wo_location_button').length){
+        $('#find_file_wo_location_button').click(function(){
+            categorize_file_without_location();
+        });
+    }
+
+    if ($('#find_file_wo_tag_button').length){
+        $('#find_file_wo_tag_button').click(function(){
+            categorize_file_without_tag();
+        });
+    }
+
+    if ($('#find_file_wo_description_button').length){
+        $('#find_file_wo_description_button').click(function(){
+            categorize_file_without_description();
+        });
+    }
+
     // Register slideshow control keys
     $(document).keypress(function(e){
         if (e.which == 97){
@@ -126,6 +157,10 @@ function needs_locations(){
 
 function needs_tags(){
     return $('#tagbuttons').length || $('#tagstable').length || $('#tag_categories').length;
+}
+
+function needs_files(){
+    return $('#categorize_image_div').length;
 }
 
 function get_persons(){
@@ -262,22 +297,31 @@ function get_tags(){
     });
 }
 
+function get_files(){
+    $.getJSON("/api/files", function(result){
+        if ($('#categorize_image_div').length){
+            categorize_files = result['files'];
+        }
+    });
+}
+
+// TODO: move code to get_files (and check if id exists)?
 function get_all_files(){
     $.getJSON("/api/files", function(result){
         $("#filestable").empty();
         $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
-        files = result['files'];
+        var files = result['files'];
         for (var i=0, file; file = files[i]; i++){
             var datetime = file['datetime'];
             var age = null;
             if (datetime != null){
                 age = get_age(datetime);
             }
-            // TODO: create links to pages for person, location and tag
-            var persons = file['persons'].toString();
-            var locations = file['locations'].toString();
-            var tags = file['tags'].toString();
-            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + persons + '</td><td>' + locations + '</td><td>' + tags + '</td><td>Edit, <a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
+            // TODO: create links to pages for person, location and tag?
+            var numPersons = file['persons'].length;
+            var numLocations = file['locations'].length;
+            var numTags = file['tags'].length;
+            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
         }
 
         $(".delete_file_button").click(function(){
@@ -286,6 +330,90 @@ function get_all_files(){
             return false; // do not follow link
         });
     });
+}
+
+function start_categorize_files(){
+    if (categorize_files != null && categorize_files.length > 0){
+        if (categorize_files_index == -1){
+            // TODO: start catagorizing at random index?
+            categorize_files_index = 0;
+        }
+        else{
+            categorize_files_index++;
+            if (categorize_files_index >= categorize_files.length) {
+                categorize_files_index = 0;
+            }
+        }
+    }
+}
+
+function categorize_file(){
+    //alert("Categorize file: " + file['id']);
+    var file = categorize_files[categorize_files_index];
+    var file_url = '/api/filecontent/' + file['id'];
+
+    if ($('#categorize_image').length){
+        $('#categorize_image').attr('src', file_url);
+    }
+    else{
+        $('#categorize_image_div').empty();
+        var img = $('<img />', {
+            id: 'categorize_image',
+            src: file_url,
+            alt: file_url
+        });
+        img.appendTo($('#categorize_image_div'));
+    }
+
+    // TODO: update meta-data for file on page
+}
+
+function categorize_file_without_person(){
+    start_categorize_files();
+    if (categorize_files_index != -1){
+        for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
+            if (file['persons'].length == 0){
+                categorize_file();
+                break;
+            }
+        }
+    }
+}
+
+function categorize_file_without_location(){
+    start_categorize_files();
+    if (categorize_files_index != -1){
+        for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
+            if (file['locations'].length == 0){
+                categorize_file();
+                break;
+            }
+        }
+    }
+}
+
+function categorize_file_without_tag(){
+    start_categorize_files();
+    if (categorize_files_index != -1){
+        for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
+            if (file['tags'].length == 0){
+                categorize_file();
+                break;
+            }
+        }
+    }
+}
+
+function categorize_file_without_description(){
+    start_categorize_files();
+    if (categorize_files_index != -1){
+        for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
+            if (file['description'] == null){
+                categorize_file();
+                break;
+            }
+        }
+    }
 }
 
 function create_files_url(){
