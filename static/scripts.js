@@ -110,6 +110,12 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#find_file_wo_any_button').length){
+        $('#find_file_wo_any_button').click(function(){
+            categorize_file_without_any();
+        });
+    }
+
     if ($('#find_file_wo_person_button').length){
         $('#find_file_wo_person_button').click(function(){
             categorize_file_without_person();
@@ -131,6 +137,12 @@ $(document).ready(function(){
     if ($('#find_file_wo_description_button').length){
         $('#find_file_wo_description_button').click(function(){
             categorize_file_without_description();
+        });
+    }
+
+    if ($('#find_file_wo_date_button').length){
+        $('#find_file_wo_date_button').click(function(){
+            categorize_file_without_date();
         });
     }
 
@@ -335,7 +347,6 @@ function get_all_files(){
 function start_categorize_files(){
     if (categorize_files != null && categorize_files.length > 0){
         if (categorize_files_index == -1){
-            // TODO: start catagorizing at random index?
             categorize_files_index = 0;
         }
         else{
@@ -348,9 +359,39 @@ function start_categorize_files(){
 }
 
 function categorize_file(){
-    //alert("Categorize file: " + file['id']);
     var file = categorize_files[categorize_files_index];
+    var file_description = file['description'];
+    var file_date = file['datetime'];
     var file_url = '/api/filecontent/' + file['id'];
+
+    if (file_description != null){
+        $('#file_description').val(file_description);
+    }
+    else{
+        $('#file_description').val("");
+    }
+
+    if (file_date != null){
+        $('#file_date').val(file_date);
+    }
+    else{
+        $('#file_date').val("");
+    }
+
+    for (var i=0, person; person = persons[i]; i++){
+        var file_has_person = file['persons'].indexOf(person['id']) != -1;
+        $('#person_' + person['id']).prop('checked', file_has_person);
+    }
+
+    for (var i=0, location; location = locations[i]; i++){
+        var file_has_location = file['locations'].indexOf(location['id']) != -1;
+        $('#location_' + location['id']).prop('checked', file_has_location);
+    }
+
+    for (var i=0, tag; tag = tags[i]; i++){
+        var file_has_tag = file['tags'].indexOf(tag['id']) != -1;
+        $('#tag_' + tag['id']).prop('checked', file_has_tag);
+    }
 
     if ($('#categorize_image').length){
         $('#categorize_image').attr('src', file_url);
@@ -366,6 +407,21 @@ function categorize_file(){
     }
 
     // TODO: update meta-data for file on page
+
+}
+
+// TODO: use only one function with arguments for finding file to categorize?
+function categorize_file_without_any(){
+    start_categorize_files();
+    if (categorize_files_index != -1){
+        for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
+            if (file['persons'].length == 0 && file['locations'].length == 0 && file['tags'].length == 0 && file['description'] == null){
+                categorize_file();
+                break;
+            }
+        }
+        // TODO: hide image and show message
+    }
 }
 
 function categorize_file_without_person(){
@@ -377,6 +433,7 @@ function categorize_file_without_person(){
                 break;
             }
         }
+        // TODO: hide image and show message
     }
 }
 
@@ -389,6 +446,7 @@ function categorize_file_without_location(){
                 break;
             }
         }
+        // TODO: hide image and show message
     }
 }
 
@@ -401,6 +459,7 @@ function categorize_file_without_tag(){
                 break;
             }
         }
+        // TODO: hide image and show message
     }
 }
 
@@ -413,6 +472,20 @@ function categorize_file_without_description(){
                 break;
             }
         }
+        // TODO: hide image and show message
+    }
+}
+
+function categorize_file_without_date(){
+    start_categorize_files();
+    if (categorize_files_index != -1){
+        for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
+            if (file['datetime'] == null){
+                categorize_file();
+                break;
+            }
+        }
+        // TODO: hide image and show message
     }
 }
 
@@ -490,6 +563,7 @@ function update_search_result(files_json){
     var text = slideshow_files.length + " file matches for search query<br>Meta-data in result: ";
 
     if (persons.length > 0 || locations.length > 0 || tags.length > 0){
+        // TODO: does the following syntex for for-loops work?
         for (var person_id in persons){
             var person = find_person(person_id);
             if (person != null){
