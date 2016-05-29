@@ -663,6 +663,19 @@ def api_get_file_content(id):
     return send_from_directory(FILES_ROOT_DIRECTORY, file_path)
 
 
+@app.route('/api/fileconsistency', methods=['GET'])
+def api_fileconsistency():
+    if not session.get('logged_in'):
+        abort(401)
+    missing_files = []
+    cur = g.db.execute('select path, id from files')
+    for file_path, file_id in cur.fetchall():
+        file_path = FILES_ROOT_DIRECTORY + '/' + file_path
+        if not os.path.isfile(file_path):
+            missing_files.append(file_id)
+    return jsonify(dict(missing_files=missing_files))
+
+
 #
 # Auth
 #
