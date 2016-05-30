@@ -1,0 +1,157 @@
+<html>
+<head>
+  <title>FileDB README</title>
+</head>
+<body>
+
+<h1>FileDB README</h1>
+
+<h2>Installation</h2>
+<ol>
+<li>Install Python and pip (installation instructions depends on your OS)</li>
+<li>Install Flask (web server) and Pillow (for reading date and time from JPEG images):<br>
+&gt;pip install flask<br>
+&gt;pip install pillow</li>
+<li>Edit configuration paremeters in config.py</li>
+<li>Create the database:<br>
+Note! This command removes all existing data in the database if it already exists.<br>
+&gt;python runserver.py --initdb
+</li>
+<li>Decide how and when to backup your database (flaskr.db)</li>
+</ol>
+
+<h2>Starting the server</h2>
+&gt;python runserver.py --runserver &lt;dir&gt;
+
+<h2>Accessing FileDB</h2>
+Open <a href="http://localhost:5000">http://localhost:5000</a> in a browser. Note that the port may vary depending on your configuration.
+
+
+<h2>HTTP API</h2>
+<h3>Authentication</h3>
+<pre>Request: POST /api/login?username=username&password=password
+Response: 200 (OK), 401 (Unauthorized), cookie (session=...)
+
+Request: POST /api/logout
+Response: 200 (OK)
+</pre>
+
+<h3>Read data</h3>
+<pre>Request: GET /api/file/&lt;id&gt;
+Request: GET /api/file_by_path/&lt;path&gt;
+Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
+{
+    "id": id,
+    "path": path,
+    "description": description,
+    "personids": [1, 2, ...],
+    "locationids": [1, 2, ...],
+    "tagids": [1, 2, ...]
+}
+
+Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids]
+…
+Response: 200 (OK), 401 (Unathorized)
+{
+    "files" =
+    [
+        Same data here as for single file
+    ]
+}
+
+Request: GET /api/person/&lt;id&gt;
+Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
+{
+    "id": id,
+    "name": name,
+    "description": description,
+    "dateofbirth": dateofbirth
+}
+
+Request: GET /api/persons
+Response: 200 (OK), 401 (Unathorized)
+{
+    "persons" =
+    [
+        Same data here as for single person
+    ]
+}
+
+Request: GET /api/location/&lt;id&gt;
+Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
+{
+    "id": id,
+    "name": name,
+    "description": description
+}
+
+Request: GET /api/locations
+Response: 200 (OK), 401 (Unathorized)
+{
+    "locations" =
+    [
+        Same data here as for single location
+    ]
+}
+
+Request: GET /tag/&lt;id&gt;
+Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
+{
+    "id": id,
+    "name": name
+}
+
+Request: GET /api/tags
+Response: 200 (OK), 401 (Unathorized)
+{
+    "tags" =
+    [
+        Same data here as for single tag
+    ]
+}
+
+Request: GET /api/filecontent/&lt;id&gt;
+Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
+
+Request: GET /api/fileconsistency
+Response: 200 (OK), 401 (Unathorized)
+{
+    "missingfiles" = [fileid, fileid, ...]
+}
+</pre>
+
+<h3>Create data</h3>
+<pre>Request: POST /api/import
+Request: POST /api/file/?path=<>&description=<description>
+Request: POST /api/directory/?path=<>
+Request: POST /api/person/?name=<name>
+Request: POST /api/location/?name=<name>
+Response: 200 (OK), 409 (Conflict), 401 (Unathorized)
+</pre>
+
+<h3>Modify data</h3>
+<pre>Not yet implemented:
+    Request: PUT /api/file/&lt;id&gt;[&path=new_path][&description=new_description]
+    Request: PUT /person/&lt;id&gt;[&name=<new_name>][&dateofbirth=new_dateofbirth][&description=new_description]
+    Request: PUT /api/location/&lt;id&gt;?name=new_name&description=new_description
+    Request: PUT /api/tag/&lt;id&gt;?name=new_name
+    Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
+
+Request: PUT /api/add_to_file/?fileid=&lt;id&gt;[&personid=&lt;id&gt;][&locationid=&lt;id&gt;][&tagid=&lt;id&gt;]
+Response: 200 (OK), 404 (Not Found), 409 (Conflict), 401 (Unathorized)
+
+Request: PUT /api/remove_from_file/?fileid=&lt;id&gt;[&personid=&lt;id&gt;][&locationid=&lt;id&gt;][&tagid=&lt;id&gt;]
+Response: 200 (OK), 404 (Not Found), 409 (Conflict), 401 (Unathorized)
+</pre>
+
+<h3>Remove data</h3>
+<pre>
+Request: DELETE /api/file/&lt;id&gt;
+Request: DELETE /api/person/&lt;id&gt;
+Request: DELETE /api/location/&lt;id&gt;
+Request: DELETE /api/tag/&lt;id&gt;
+Response: 200 (OK). 404 (Not Found), 401 (Unathorized)
+</pre>
+
+</body>
+</html>
