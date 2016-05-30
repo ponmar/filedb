@@ -36,7 +36,7 @@ Request: POST /api/logout
 Response: 200 (OK)
 </pre>
 
-<h3>Read data</h3>
+<h3>Read data: files</h3>
 <pre>Request: GET /api/file/&lt;id&gt;
 Request: GET /api/file_by_path/&lt;path&gt;
 Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
@@ -50,7 +50,6 @@ Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 }
 
 Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids]
-…
 Response: 200 (OK), 401 (Unathorized)
 {
     "files" =
@@ -59,7 +58,12 @@ Response: 200 (OK), 401 (Unathorized)
     ]
 }
 
-Request: GET /api/person/&lt;id&gt;
+Request: GET /api/filecontent/&lt;id&gt;
+Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
+</pre>
+
+<h3>Read data: persons</h3>
+<pre>Request: GET /api/person/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 {
     "id": id,
@@ -76,8 +80,10 @@ Response: 200 (OK), 401 (Unathorized)
         Same data here as for single person
     ]
 }
+</pre>
 
-Request: GET /api/location/&lt;id&gt;
+<h3>Read data: locations</h3>
+<pre>Request: GET /api/location/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 {
     "id": id,
@@ -93,8 +99,10 @@ Response: 200 (OK), 401 (Unathorized)
         Same data here as for single location
     ]
 }
+</pre>
 
-Request: GET /tag/&lt;id&gt;
+<h3>Read data: tags</h3>
+<pre>Request: GET /tag/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 {
     "id": id,
@@ -109,11 +117,10 @@ Response: 200 (OK), 401 (Unathorized)
         Same data here as for single tag
     ]
 }
+</pre>
 
-Request: GET /api/filecontent/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
-
-Request: GET /api/fileconsistency
+<h3>Read data: other</h3>
+<pre>Request: GET /api/fileconsistency
 Response: 200 (OK), 401 (Unathorized)
 {
     "missingfiles" = [fileid, fileid, ...]
@@ -130,18 +137,36 @@ Response: 200 (OK), 409 (Conflict), 401 (Unathorized)
 </pre>
 
 <h3>Modify data</h3>
-<pre>Not yet implemented:
-    Request: PUT /api/file/&lt;id&gt;[&path=new_path][&description=new_description]
-    Request: PUT /person/&lt;id&gt;[&name=<new_name>][&dateofbirth=new_dateofbirth][&description=new_description]
-    Request: PUT /api/location/&lt;id&gt;?name=new_name&description=new_description
-    Request: PUT /api/tag/&lt;id&gt;?name=new_name
+<pre>TODO:
+    Change file path?
+    Change person, location and tag name?
+    Change person date of birth?
+
+Not yet implemented:
+    Request: PUT /api/filedescription/&lt;id&gt;
+    Request: PUT /api/persondescription/&lt;id&gt;
+    Request: PUT /api/locationdescription/&lt;id&gt;
+    Data: description
     Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 
-Request: PUT /api/add_to_file/?fileid=&lt;id&gt;[&personid=&lt;id&gt;][&locationid=&lt;id&gt;][&tagid=&lt;id&gt;]
-Response: 200 (OK), 404 (Not Found), 409 (Conflict), 401 (Unathorized)
+    Request: PUT /api/filepersons/&lt;id&gt;
+    Data: list of person ids
+    Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 
-Request: PUT /api/remove_from_file/?fileid=&lt;id&gt;[&personid=&lt;id&gt;][&locationid=&lt;id&gt;][&tagid=&lt;id&gt;]
-Response: 200 (OK), 404 (Not Found), 409 (Conflict), 401 (Unathorized)
+    Request: PUT /api/filelocations/&lt;id&gt;
+    Data: list of location ids
+    Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
+
+    Request: PUT /api/filetags/&lt;id&gt;
+    Data: list of tag ids
+    Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
+
+Remove:
+    Request: PUT /api/add_to_file/?fileid=&lt;id&gt;[&personid=&lt;id&gt;][&locationid=&lt;id&gt;][&tagid=&lt;id&gt;]
+    Response: 200 (OK), 404 (Not Found), 409 (Conflict), 401 (Unathorized)
+
+    Request: PUT /api/remove_from_file/?fileid=&lt;id&gt;[&personid=&lt;id&gt;][&locationid=&lt;id&gt;][&tagid=&lt;id&gt;]
+    Response: 200 (OK), 404 (Not Found), 409 (Conflict), 401 (Unathorized)
 </pre>
 
 <h3>Remove data</h3>
