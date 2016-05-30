@@ -23,7 +23,7 @@ Note! This command removes all existing data in the database if it already exist
 <h2>Starting the server</h2>
 &gt;python runserver.py --runserver &lt;dir&gt;
 
-<h2>Accessing FileDB</h2>
+<h2>Accessing the FileDB web app</h2>
 Open <a href="http://localhost:5000">http://localhost:5000</a> in a browser. Note that the port may vary depending on your configuration.
 
 
@@ -122,10 +122,10 @@ Response: 200 (OK), 401 (Unathorized)
 
 <h3>Create data</h3>
 <pre>Request: POST /api/import
-Request: POST /api/file/?path=<>&description=<description>
-Request: POST /api/directory/?path=<>
-Request: POST /api/person/?name=<name>
-Request: POST /api/location/?name=<name>
+Request: POST /api/file/?path=path&description=description
+Request: POST /api/directory/?path=path
+Request: POST /api/person/?name=name
+Request: POST /api/location/?name=name
 Response: 200 (OK), 409 (Conflict), 401 (Unathorized)
 </pre>
 
