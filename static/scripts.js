@@ -637,7 +637,7 @@ function load_slideshow_file(){
 
     var file_datetime = file['datetime'];
     if (file_datetime != null){
-        file_text += "<br>Date: " + file_datetime + " (" + get_age(file_datetime) + " years old)";
+        file_text += "<br>Date: " + file_datetime + " (" + get_age(file_datetime) + " years ago)";
     }
 
     var file_description = file["description"];
