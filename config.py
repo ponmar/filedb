@@ -4,6 +4,8 @@ SQL_SCHEMA = 'schema.sql'
 DEBUG = True
 
 SECRET_KEY = 'development key'
+
+# These are the credentials needed to access the web application (and API).
 USERNAME = 'admin'
 PASSWORD = 'admin'
 
@@ -11,7 +13,7 @@ PASSWORD = 'admin'
 FILES_ROOT_DIRECTORY = 'files'
 
 # The root directory can be a mounted samba network share. Set this to True to
-# make it possible to start without mounting this directory.
+# make it possible to start before the network share is mounted.
 # Note: it will not be possible to get file content when the root directory is
 #       missing
 ALLOW_MISSING_ROOT_DIRECTORY = True
