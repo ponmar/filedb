@@ -361,6 +361,46 @@ def api_add_tag():
 # API: modify data (internally rows are deleted from tables, but in the API it looks like a file item is modified)
 #
 
+@app.route('/api/filepersons/<int:file_id>', methods=['PUT'])
+def api_set_file_persons(file_id):
+    # TODO: remove all rows in table filepersons with the specified file id
+    # TODO: for each specified person id: add row in table filepersons
+    person_ids = [] # TODO: add integer list to route somehow?
+    for person_id in person_ids:
+        g.db.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
+    return "TODO"
+
+
+@app.route('/api/filelocations/<int:file_id>', methods=['PUT'])
+def api_set_file_locations(file_id):
+    # TODO: remove all rows in table filelocations with the specified file id
+    # TODO: for each specified person id: add row in table filelocations
+    return "TODO"
+
+
+@app.route('/api/filetags/<int:file_id>', methods=['PUT'])
+def api_set_file_tags(file_id):
+    # TODO: remove all rows in table filetags with the specified file id
+    # TODO: for each specified person id: add row in table filetags
+    return "TODO"
+
+
+@app.route('/api/filedescription/<int:file_id>', methods=['PUT'])
+def api_set_file_description(file_id):
+    return "TODO"
+
+
+@app.route('/api/persondescription/<int:file_id>', methods=['PUT'])
+def api_set_person_description(file_id):
+    return "TODO"
+
+
+@app.route('/api/locationdescription/<int:file_id>', methods=['PUT'])
+def api_set_location_description(file_id):
+    return "TODO"
+
+
+# TODO: remove
 @app.route('/api/add_to_file', methods=['PUT'])
 def api_add_file_person():
     if not session.get('logged_in'):
@@ -389,7 +429,7 @@ def api_add_file_person():
         abort(409)
     return 'OK'
 
-
+# TODO: remove
 @app.route('/api/remove_from_file', methods=['PUT'])
 def api_remove_from_file():
     if not session.get('logged_in'):
