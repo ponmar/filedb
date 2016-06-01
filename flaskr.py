@@ -127,7 +127,7 @@ def api_add_directory():
 
     directory_path = FILES_ROOT_DIRECTORY + '/' + path
 
-    if not os.path.isdir(directory_path):
+    if path == '' or path == '.' or path == './' or not os.path.isdir(directory_path):
         abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, FILES_ROOT_DIRECTORY))
 
     num_added_files = 0
