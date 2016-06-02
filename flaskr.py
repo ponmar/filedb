@@ -7,10 +7,22 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, send_from_directory, make_response
 import jpegfile
 from config import *
+from werkzeug.routing import BaseConverter
+
+
+class IntListConverter(BaseConverter):
+    regex = r'\d+(?:,\d+)*,?'
+
+    def to_python(self, value):
+        return [int(x) for x in value.split(',')]
+
+    def to_url(self, value):
+        return ','.join(str(x) for x in value)
 
 
 # Create the application
 app = Flask(__name__)
+app.url_map.converters['int_list'] = IntListConverter
 app.config.from_object(__name__)
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
@@ -368,101 +380,86 @@ def api_add_tag():
 # API: modify data (internally rows are deleted from tables, but in the API it looks like a file item is modified)
 #
 
-@app.route('/api/filepersons/<int:file_id>', methods=['PUT'])
-def api_set_file_persons(file_id):
-    # TODO: remove all rows in table filepersons with the specified file id
-    # TODO: for each specified person id: add row in table filepersons
-    person_ids = [] # TODO: add integer list to route somehow?
-    for person_id in person_ids:
-        g.db.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
-    return "TODO"
+# TODO: use PUT when tested
+@app.route('/api/filepersons/<int:file_id>/<int_list:person_ids>', methods=['GET'])
+def api_set_file_persons(file_id, person_ids):
+    cursor = g.db.cursor()
+    try:
+        cursor.execute('delete from filepersons where fileid = ?', (file_id,))
+        for person_id in person_ids:
+            cursor.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'message': 'Persons replaced for file'}), 201)
 
 
-@app.route('/api/filelocations/<int:file_id>', methods=['PUT'])
-def api_set_file_locations(file_id):
-    # TODO: remove all rows in table filelocations with the specified file id
-    # TODO: for each specified person id: add row in table filelocations
-    return "TODO"
+# TODO: use PUT when tested
+# TODO: change url to be /api/file so that other file properties can be changed?
+@app.route('/api/filelocations/<int:file_id>/<int_list:location_ids>', methods=['GET'])
+def api_set_file_locations(file_id, location_ids):
+    cursor = g.db.cursor()
+    try:
+        cursor.execute('delete from filelocations where fileid = ?', (file_id,))
+        for location_id in location_ids:
+            cursor.execute('insert into filelocations (fileid, locationid) values (?, ?)', (file_id, location_id))
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'message': 'Locations replaced for file'}), 201)
 
 
-@app.route('/api/filetags/<int:file_id>', methods=['PUT'])
-def api_set_file_tags(file_id):
-    # TODO: remove all rows in table filetags with the specified file id
-    # TODO: for each specified person id: add row in table filetags
-    return "TODO"
+# TODO: use PUT when tested
+@app.route('/api/filetags/<int:file_id>/<int_list:tag_ids>', methods=['GET'])
+def api_set_file_tags(file_id, tag_ids):
+    cursor = g.db.cursor()
+    try:
+        cursor.execute('delete from filetags where fileid = ?', (file_id,))
+        for tag_id in tag_ids:
+            cursor.execute('insert into filetags (fileid, tagid) values (?, ?)', (file_id, tag_id))
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'message': 'Tags replaced for file'}), 201)
 
 
+# TODO: change url to be /api/file so that other file properties can be changed by using the same form?
 @app.route('/api/filedescription/<int:file_id>', methods=['PUT'])
 def api_set_file_description(file_id):
-    return "TODO"
+    # TODO: how to protect for malicious input?
+    description = get_form_str('description', request.form)
+    try:
+        g.db.execute("update files set description = '" + description + "' where id = " + file_id)
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'message': 'File description updated'}), 201)
 
 
+# TODO: change url to be /api/person so that other file properties can be changed by using the same form?
 @app.route('/api/persondescription/<int:file_id>', methods=['PUT'])
 def api_set_person_description(file_id):
-    return "TODO"
+    # TODO: how to protect for malicious input?
+    description = get_form_str('description', request.form)
+    try:
+        g.db.execute("update persons set description = '" + description + "' where id = " + file_id)
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'message': 'Person description updated'}), 201)
 
 
+# TODO: change url to be /api/person so that other file properties can be changed by using the same form?
 @app.route('/api/locationdescription/<int:file_id>', methods=['PUT'])
 def api_set_location_description(file_id):
-    return "TODO"
-
-
-# TODO: remove
-@app.route('/api/add_to_file', methods=['PUT'])
-def api_add_file_person():
-    if not session.get('logged_in'):
-        abort(401)
-
-    file_id = request.args.get('fileid')
-    person_id = request.args.get('personid')
-    location_id = request.args.get('locationid')
-    tag_id = request.args.get('tagid')
-
-    if file_id is None:
-        abort(400, 'File id not specified')
-    if person_id is None and location_id is None and tag_id is None:
-        abort(400, 'Person, location or tag id not specified')
-
+    # TODO: how to protect for malicious input?
+    description = get_form_str('description', request.form)
     try:
-        # TODO: use a transaction (all or nothing!) or require that only one thing is to be added to the file
-        if person_id is not None:
-            g.db.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
-        if location_id is not None:
-            g.db.execute('insert into filelocations (fileid, locationid) values (?, ?)', (file_id, location_id))
-        if tag_id is not None:
-            g.db.execute('insert into filetags (fileid, tagid) values (?, ?)', (file_id, tag_id))
+        g.db.execute("update locations set description = '" + description + "' where id = " + file_id)
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
-
-# TODO: remove
-@app.route('/api/remove_from_file', methods=['PUT'])
-def api_remove_from_file():
-    if not session.get('logged_in'):
-        abort(401)
-    file_id = request.args.get('fileid')
-    person_id = request.args.get('personid')
-    location_id = request.args.get('locationid')
-    tag_id = request.args.get('tagid')
-
-    if file_id is None:
-        abort(400, 'File id not specified')
-    if person_id is None and location_id is None and tag_id is None:
-        abort(400, 'Person, location or tag id not specified')
-
-    try:
-        # TODO: use a transaction (all or nothing!) or require that only one thing is to be added to the file
-        if person_id is not None:
-            g.db.execute('delete from filepersons where fileid = ? and personid = ?', (file_id, person_id))
-        if location_id is not None:
-            g.db.execute('delete from filelocations where fileid = ? and locationid = ?', (file_id, location_id))
-        if tag_id is not None:
-            g.db.execute('delete from filetags where fileid = ? and tagid = ?', (file_id, tag_id))
-        g.db.commit()
-    except sqlite3.IntegrityError:
-        abort(409)
-    return 'OK'
+    return make_response(jsonify({'message': 'Location description updated'}), 201)
 
 
 #
