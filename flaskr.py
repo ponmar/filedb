@@ -66,9 +66,11 @@ def app_browse():
         return redirect(url_for('app_index'))
     return render_template('browse.html')
 
+
 @app.route('/categorize')
 def app_categorize_files():
     return render_template('categorize.html')
+
 
 @app.route('/categories')
 def app_categories():
