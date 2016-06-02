@@ -207,8 +207,13 @@ def add_file(path, file_description=None):
         if jpegfile.is_jpeg_file(file_path):
             # Read date and time from jpeg exif information
             try:
-                exif_file = jpegfile.JpegFile(file_path)
-                file_datetime = exif_file.get_date_time()
+                jpeg = jpegfile.JpegFile(file_path)
+                file_datetime = jpeg.get_date_time()
+                lat, lon = jpeg.get_gps_position()
+                if lat and lon:
+                    # TODO: what to do with this information?
+                    print 'Latitude:  ' + str(lat)
+                    print 'Longitude: ' + str(lon)
             except IOError:
                 # Note: for some reason this happens for some working JPEG files, so we should still add the file
                 print 'Could not read JPEG file for extracting date and time information: ' + path
