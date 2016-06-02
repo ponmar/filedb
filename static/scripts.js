@@ -755,11 +755,9 @@ function import_files(){
         $("#import_status").text("Importing, please wait...");
         $.post("/api/import", function(json) {
             $("#import_status").text('Imported ' + json['num_added_files'] + ' of ' + (json['num_added_files'] + json['num_not_added_files']) + ' files from the file collection');
-            alert("Import finished");
         }, "json")
         .fail(function(){
-            $("#import_status").text("");
-            alert("Import failed");
+            $("#import_status").text("Import failed");
         });
     }
 }
@@ -777,13 +775,14 @@ function consistency_check(){
         $.getJSON("/api/fileconsistency", function(result){
             missing_files = result['missing_files'];
             if (missing_files.length == 0){
-                $("#files_consistency_status").text("There are no missing files");
-                alert('File consistency check finished successfully')
+                $("#files_consistency_status").text("File consistency check finished successfully");
             }
             else{
-                // TODO: links to file pages?
-                $("#files_consistency_status").text("Missing files: " + missing_files.toString());
-                alert("Missing files detected!");
+                var result = "Identifiers for missing files:";
+                for (var i=0, missing_file; missing_file = missing_files[i]; i++){
+                    result += "<br>" + missing_file;
+                }
+                $("#files_consistency_status").html(result);
             }
         });
     }
