@@ -115,7 +115,7 @@ def api_add_file():
         abort(409, 'No file path specified')
     if not add_file(path, description):
         abort(409, 'File not added')
-    return create_files_added_response('Add file finished', 1, 0)
+    return create_files_added_response(1, 0)
 
 
 @app.route('/api/directory', methods=['POST'])
@@ -142,7 +142,7 @@ def api_add_directory():
             num_not_added_files += 1
             print 'Error'
 
-    return create_files_added_response('Add directory finished', num_added_files, num_not_added_files)
+    return create_files_added_response(num_added_files, num_not_added_files)
 
 
 @app.route('/api/import', methods=['POST'])
@@ -167,12 +167,12 @@ def api_import_files():
                 print 'Could not import file: ' + filename_with_path
                 num_not_imported_files += 1
 
-    return create_files_added_response('File import finished', num_imported_files, num_not_imported_files)
+    return create_files_added_response(num_imported_files, num_not_imported_files)
 
 
-def create_files_added_response(message, num_added_files, num_not_added_files):
+def create_files_added_response(num_added_files, num_not_added_files):
     # TODO: remove message from JSON? It is no longer used by the javascript.
-    return make_response(jsonify({'message': message,
+    return make_response(jsonify({'message': 'file(s) added',
                                   'num_added_files': num_added_files,
                                   'num_not_added_files': num_not_added_files}),
                          201)

@@ -751,9 +751,10 @@ function random_slideshow_file(){
 
 function import_files(){
     if (window.confirm("Importing all files may take several minutes. Continue?")){
+        clear_add_files_results();
         $("#import_status").text("Importing, please wait...");
         $.post("/api/import", function(json) {
-            $("#import_status").html("Number of imported files: " + json['num_added_files'] + "<br>Number of ignored files: " + json['num_not_added_files']);
+            $("#import_status").text('Imported ' + json['num_added_files'] + ' of ' + (json['num_added_files'] + json['num_not_added_files']) + ' files from the file collection');
             alert("Import finished");
         }, "json")
         .fail(function(){
@@ -763,8 +764,15 @@ function import_files(){
     }
 }
 
+function clear_add_files_results(){
+    $("#import_status").text("");
+    $("#add_files_status").text("");
+    $("#files_consistency_status").text("");
+}
+
 function consistency_check(){
     if (window.confirm("File consistency check for all file entries may take several minutes. Continue?")){
+        clear_add_files_results();
         $("#files_consistency_status").text("Running, please wait...");
         $.getJSON("/api/fileconsistency", function(result){
             missing_files = result['missing_files'];
@@ -861,22 +869,26 @@ function post_add_tag_form(){
 }
 
 function post_add_directory_form(){
+    clear_add_files_results();
+    $("#add_files_status").text("Adding files from directory, please wait...");
     $.post("/api/directory", $("#add_directory_form").serialize(), function(json){
-        alert(json['message'] + "\n\nAdded files: " + json['num_added_files'] + "\nNot added files: " + json['num_not_added_files']);
+        $("#add_files_status").html("Added " + json['num_added_files'] + " of " + (json['num_added_files'] + json['num_not_added_files']) + " files in specified directory");
         // TODO: get files for list?
     }, "json")
     .fail(function(){
-        alert("Add directory failed");
+        $("#add_files_status").text("Failed to add files from directory, please try another name.");
     });
 }
 
 function post_add_file_form(){
+    clear_add_files_results();
+    $("#add_files_status").text("Adding file, please wait...");
     $.post("/api/file", $("#add_file_form").serialize(), function(json){
-        alert(json['message']);
+        $("#add_files_status").text("File added successfully");
         // TODO: get files for list?
     }, "json")
     .fail(function(){
-        alert("Add file failed");
+        $("#add_files_status").text("Failed to add file, please try another name");
     });
 }
 
