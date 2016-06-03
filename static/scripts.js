@@ -499,7 +499,52 @@ function categorize_file_without_date(){
 
 function save_file_categorization(){
     if (categorize_files_index != -1){
-        alert("save");
+
+        var selected_persons = [];
+        for (var i=0, person; person = persons[i]; i++){
+            var id = "person_" + person['id'];
+            var checkbox = document.getElementById(id);
+            if (checkbox != null && checkbox.checked){
+                selected_persons.push(person['id']);
+            }
+        }
+
+        var selected_locations = [];
+        for (var i=0, location; location = locations[i]; i++){
+            var id = "location_" + location['id'];
+            var checkbox = document.getElementById(id);
+            if (checkbox != null && checkbox.checked){
+                selected_locations.push(location['id']);
+            }
+        }
+
+        var selected_tags = [];
+        for (var i=0, tag; tag = tags[i]; i++){
+            var id = "tag_" + tag['id'];
+            var checkbox = document.getElementById(id);
+            if (checkbox != null && checkbox.checked){
+                selected_tags.push(tag['id']);
+            }
+        }
+
+        // TODO: add file description and date
+        var jsonData = JSON.stringify(
+        {
+            "persons": selected_persons,
+            "locations": selected_locations,
+            "tags": selected_tags
+        });
+
+        $.ajax
+        ({
+            type: "PUT",
+            url: '/api/file/' + categorize_files[categorize_files_index]['id'],
+            contentType : 'application/json',
+            data: jsonData,
+            success: function(){
+                //alert("Thanks!");
+            }
+        })
     }
 }
 

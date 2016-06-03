@@ -408,6 +408,10 @@ def api_update_file(file_id):
             description = content['description']
             g.db.execute("update files set description = '" + description + "' where id = " + file_id)
 
+        if 'datetime' in content:
+            datetime = content['datetime']
+            g.db.execute("update files set datetime = '" + datetime + "' where id = " + file_id)
+
         g.db.commit()
 
     except sqlite3.IntegrityError:
@@ -424,6 +428,11 @@ def api_update_person(person_id):
             description = content['description']
             g.db.execute("update persons set description = '" + description + "' where id = " + person_id)
             g.db.commit()
+        if 'dateofbirth' in content:
+            dateofbirth = content['dateofbirth']
+            g.db.execute("update persons set dateofbirth = '" + dateofbirth + "' where id = " + person_id)
+        # TODO: rename person?
+        g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return make_response(jsonify({'message': 'Person updated'}), 201)
@@ -437,11 +446,23 @@ def api_update_location(location_id):
         if 'description' in content:
             description = content['description']
             g.db.execute("update locations set description = '" + description + "' where id = " + location_id)
-            g.db.commit()
+        # TODO: rename location?
+        g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return make_response(jsonify({'message': 'Person updated'}), 201)
+    return make_response(jsonify({'message': 'Location updated'}), 201)
 
+
+@app.route('/api/tag/<int:tag_id>', methods=['PUT'])
+def api_update_tag(tag_id):
+    content = request.get_json(silent=True)
+    cursor = g.db.cursor()
+    try:
+        # TODO: rename tag?
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'message': 'Tag updated'}), 201)
 
 #
 # API: delete data
