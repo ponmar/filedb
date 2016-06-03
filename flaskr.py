@@ -380,86 +380,67 @@ def api_add_tag():
 # API: modify data (internally rows are deleted from tables, but in the API it looks like a file item is modified)
 #
 
-# TODO: use PUT when tested
-@app.route('/api/filepersons/<int:file_id>/<int_list:person_ids>', methods=['GET'])
-def api_set_file_persons(file_id, person_ids):
+@app.route('/api/file/<int:file_id>', methods=['PUT'])
+def api_update_file(file_id):
+    content = request.get_json(silent=True)
+    cursor = g.db.cursor()
+
+    try:
+        if 'persons' in content:
+            person_ids = content['persons']
+            cursor.execute('delete from filepersons where fileid = ?', (file_id,))
+            for person_id in person_ids:
+                cursor.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
+
+        if 'locations' in content:
+            location_ids = content['locations']
+            cursor.execute('delete from filelocations where fileid = ?', (file_id,))
+            for location_id in location_ids:
+                cursor.execute('insert into filelocations (fileid, locationid) values (?, ?)', (file_id, location_id))
+
+        if 'tags' in content:
+            tag_ids = content['tags']
+            cursor.execute('delete from filetags where fileid = ?', (file_id,))
+            for tag_id in tag_ids:
+                cursor.execute('insert into filetags (fileid, tagid) values (?, ?)', (file_id, tag_id))
+
+        if 'description' in content:
+            description = content['description']
+            g.db.execute("update files set description = '" + description + "' where id = " + file_id)
+
+        g.db.commit()
+
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'message': 'File updated'}), 201)
+
+
+@app.route('/api/person/<int:person_id>', methods=['PUT'])
+def api_update_person(person_id):
+    content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
-        cursor.execute('delete from filepersons where fileid = ?', (file_id,))
-        for person_id in person_ids:
-            cursor.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
-        g.db.commit()
+        if 'description' in content:
+            description = content['description']
+            g.db.execute("update persons set description = '" + description + "' where id = " + person_id)
+            g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return make_response(jsonify({'message': 'Persons replaced for file'}), 201)
+    return make_response(jsonify({'message': 'Person updated'}), 201)
 
 
-# TODO: use PUT when tested
-# TODO: change url to be /api/file so that other file properties can be changed?
-@app.route('/api/filelocations/<int:file_id>/<int_list:location_ids>', methods=['GET'])
-def api_set_file_locations(file_id, location_ids):
+@app.route('/api/location/<int:location_id>', methods=['PUT'])
+def api_update_location(location_id):
+    content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
-        cursor.execute('delete from filelocations where fileid = ?', (file_id,))
-        for location_id in location_ids:
-            cursor.execute('insert into filelocations (fileid, locationid) values (?, ?)', (file_id, location_id))
-        g.db.commit()
+        if 'description' in content:
+            description = content['description']
+            g.db.execute("update locations set description = '" + description + "' where id = " + location_id)
+            g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return make_response(jsonify({'message': 'Locations replaced for file'}), 201)
-
-
-# TODO: use PUT when tested
-@app.route('/api/filetags/<int:file_id>/<int_list:tag_ids>', methods=['GET'])
-def api_set_file_tags(file_id, tag_ids):
-    cursor = g.db.cursor()
-    try:
-        cursor.execute('delete from filetags where fileid = ?', (file_id,))
-        for tag_id in tag_ids:
-            cursor.execute('insert into filetags (fileid, tagid) values (?, ?)', (file_id, tag_id))
-        g.db.commit()
-    except sqlite3.IntegrityError:
-        abort(409)
-    return make_response(jsonify({'message': 'Tags replaced for file'}), 201)
-
-
-# TODO: change url to be /api/file so that other file properties can be changed by using the same form?
-@app.route('/api/filedescription/<int:file_id>', methods=['PUT'])
-def api_set_file_description(file_id):
-    # TODO: how to protect for malicious input?
-    description = get_form_str('description', request.form)
-    try:
-        g.db.execute("update files set description = '" + description + "' where id = " + file_id)
-        g.db.commit()
-    except sqlite3.IntegrityError:
-        abort(409)
-    return make_response(jsonify({'message': 'File description updated'}), 201)
-
-
-# TODO: change url to be /api/person so that other file properties can be changed by using the same form?
-@app.route('/api/persondescription/<int:file_id>', methods=['PUT'])
-def api_set_person_description(file_id):
-    # TODO: how to protect for malicious input?
-    description = get_form_str('description', request.form)
-    try:
-        g.db.execute("update persons set description = '" + description + "' where id = " + file_id)
-        g.db.commit()
-    except sqlite3.IntegrityError:
-        abort(409)
-    return make_response(jsonify({'message': 'Person description updated'}), 201)
-
-
-# TODO: change url to be /api/person so that other file properties can be changed by using the same form?
-@app.route('/api/locationdescription/<int:file_id>', methods=['PUT'])
-def api_set_location_description(file_id):
-    # TODO: how to protect for malicious input?
-    description = get_form_str('description', request.form)
-    try:
-        g.db.execute("update locations set description = '" + description + "' where id = " + file_id)
-        g.db.commit()
-    except sqlite3.IntegrityError:
-        abort(409)
-    return make_response(jsonify({'message': 'Location description updated'}), 201)
+    return make_response(jsonify({'message': 'Person updated'}), 201)
 
 
 #
