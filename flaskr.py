@@ -424,15 +424,24 @@ def api_update_person(person_id):
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
+        if 'firstname' in content:
+            firstname = content['firstname']
+            g.db.execute("update persons set firstname = '" + firstname + "' where id = " + person_id)
+
+        if 'lastname' in content:
+            lastname = content['lastname']
+            g.db.execute("update persons set lastname = '" + lastname + "' where id = " + person_id)
+
         if 'description' in content:
             description = content['description']
             g.db.execute("update persons set description = '" + description + "' where id = " + person_id)
-            g.db.commit()
+
         if 'dateofbirth' in content:
             dateofbirth = content['dateofbirth']
             g.db.execute("update persons set dateofbirth = '" + dateofbirth + "' where id = " + person_id)
-        # TODO: rename person?
+
         g.db.commit()
+
     except sqlite3.IntegrityError:
         abort(409)
     return make_response(jsonify({'message': 'Person updated'}), 201)
@@ -443,11 +452,16 @@ def api_update_location(location_id):
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
+        if 'name' in content:
+            name = content['name']
+            g.db.execute("update locations set name = '" + name + "' where id = " + location_id)
+
         if 'description' in content:
             description = content['description']
             g.db.execute("update locations set description = '" + description + "' where id = " + location_id)
-        # TODO: rename location?
+
         g.db.commit()
+
     except sqlite3.IntegrityError:
         abort(409)
     return make_response(jsonify({'message': 'Location updated'}), 201)
@@ -458,8 +472,12 @@ def api_update_tag(tag_id):
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
-        # TODO: rename tag?
+        if 'name' in content:
+            name = content['name']
+            g.db.execute("update tags set name = '" + name + "' where id = " + tag_id)
+
         g.db.commit()
+
     except sqlite3.IntegrityError:
         abort(409)
     return make_response(jsonify({'message': 'Tag updated'}), 201)
