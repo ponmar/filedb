@@ -619,6 +619,8 @@ function update_search_result(files_json){
 
     // Create result message
 
+    var item_separator = ', ';
+
     var text = slideshow_files.length + " file matches for search query<br>Meta-data in result: ";
 
     if (persons.length > 0 || locations.length > 0 || tags.length > 0){
@@ -626,31 +628,42 @@ function update_search_result(files_json){
         for (var person_id in persons){
             var person = find_person(person_id);
             if (person != null){
-                text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + ', '
+                text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
             }
         }
+        text = remove_text_ending(text, item_separator);
+        alert('"' + text + '"');
 
         for (var location_id in locations){
             var location = find_location(location_id);
             if (location != null){
-                text += get_location_page_link(location_id, location['name']) + ', '
+                text += get_location_page_link(location_id, location['name']) + item_separator;
             }
         }
+        text = remove_text_ending(text, item_separator);
 
         for (var tag_id in tags){
             var tag = find_tag(tag_id);
             if (tag != null){
-                text += get_tag_page_link(tag['name']) + ', '
+                text += get_tag_page_link(tag['name']) + item_separator;
             }
         }
+        text = remove_text_ending(text, item_separator);
     }
     else{
         text += "none";
     }
 
-    // TODO: remove ', ' text at the end if any
-
     $("#search_result_text").html(text);
+
+    // TODO: remove previously loaded image
+}
+
+function remove_text_ending(text, ending){
+    if (text.endsWith(ending)){
+        text = text.slice(0, -ending.length);
+    }
+    return text;
 }
 
 function show_slideshow(){
@@ -690,15 +703,18 @@ function load_slideshow_file(){
         file_text += "<br>Description: " + file_description;
     }
 
+    var item_separator = ', ';
+
     var file_person_ids = file['persons'];
     if (file_person_ids.length > 0){
         file_text += "<br>Persons: ";
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
            var person = find_person(person_id);
            if (person != null){
-               file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + ', ';
+               file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
            }
         }
+        file_text = remove_text_ending(file_text, item_separator);
     }
 
     var file_location_ids = file['locations'];
@@ -707,9 +723,10 @@ function load_slideshow_file(){
         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
            var location = find_location(location_id);
            if (location != null){
-               file_text += get_location_page_link(location_id, location['name']) + ', ';
+               file_text += get_location_page_link(location_id, location['name']) + item_separator;
            }
         }
+        file_text = remove_text_ending(file_text, item_separator);
     }
 
     var file_tag_ids = file['tags'];
@@ -718,9 +735,10 @@ function load_slideshow_file(){
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
            var tag = find_tag(file_tag_id);
            if (tag != null){
-               file_text += get_tag_page_link(tag_id, tag['name']) + ', ';
+               file_text += get_tag_page_link(tag_id, tag['name']) + item_separator;
            }
         }
+        file_text = remove_text_ending(file_text, item_separator);
     }
 
     $("#slideshow_item_text").html(file_text);
