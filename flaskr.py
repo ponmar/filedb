@@ -574,7 +574,7 @@ def api_get_json_files():
     if len(where_statements) > 0:
         query += 'where ' + ' and '.join(where_statements)
 
-    print 'Query: ' + query
+    #print 'Query: ' + query
     cur = g.db.execute(query)
 
     files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
