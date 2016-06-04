@@ -786,7 +786,9 @@ function restart_slideshow(){
 function clear_slideshow(){
     slideshow_files = null;
     slideshow_index = -1;
-    $("#slideshow_item_text").text("No files available before search");
+    $("#slideshow_item_text").text("No search result available");
+    $('#slideshow_image').attr('src', '');
+    $('#slideshow_image').attr('alt', '');
 }
 
 function next_slideshow_file(){
