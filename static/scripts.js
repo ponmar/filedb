@@ -605,7 +605,7 @@ function update_search_result(files_json){
     var tags = {};
 
     // Store unique persons, locations and tags from search result
-    for (var i=0, file; file = files_json[i]; i++){
+    for (var i=0, file; file = slideshow_files[i]; i++){
         for (var j=0, person_id; person_id = file['persons'][j]; j++){
             persons[person_id] = person_id;
         }
@@ -621,9 +621,9 @@ function update_search_result(files_json){
 
     var item_separator = ', ';
 
-    var text = slideshow_files.length + " file matches for search query<br>Meta-data in result: ";
+    var text = slideshow_files.length + " file matches with categories:<br>";
 
-    if (persons.length > 0 || locations.length > 0 || tags.length > 0){
+    if (Object.keys(persons).length > 0 || Object.keys(locations).length > 0 || Object.keys(tags).length > 0){
         // TODO: does the following syntex for for-loops work?
         for (var person_id in persons){
             var person = find_person(person_id);
@@ -631,8 +631,6 @@ function update_search_result(files_json){
                 text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
             }
         }
-        text = remove_text_ending(text, item_separator);
-        alert('"' + text + '"');
 
         for (var location_id in locations){
             var location = find_location(location_id);
@@ -640,7 +638,6 @@ function update_search_result(files_json){
                 text += get_location_page_link(location_id, location['name']) + item_separator;
             }
         }
-        text = remove_text_ending(text, item_separator);
 
         for (var tag_id in tags){
             var tag = find_tag(tag_id);
@@ -648,6 +645,7 @@ function update_search_result(files_json){
                 text += get_tag_page_link(tag['name']) + item_separator;
             }
         }
+
         text = remove_text_ending(text, item_separator);
     }
     else{
@@ -744,7 +742,7 @@ function load_slideshow_file(){
     $("#slideshow_item_text").html(file_text);
 }
 
-// TODO: change data structures from array to hashmap to avoid this scanning?
+// TODO: change JSON data structure from array to hashmap to avoid this scanning?
 function find_person(person_id){
     if (persons != null){
         for (var i=0, person; person = persons[i]; i++){
@@ -756,7 +754,7 @@ function find_person(person_id){
     return null;
 }
 
-// TODO: change data structures from array to hashmap to avoid this scanning?
+// TODO: change JSON data structure from array to hashmap to avoid this scanning?
 function find_location(location_id){
     if (locations != null){
         for (var i=0, location; location = locations[i]; i++){
@@ -768,7 +766,7 @@ function find_location(location_id){
     return null;
 }
 
-// TODO: change data structures from array to hashmap to avoid this scanning?
+// TODO: change JSON data structure from array to hashmap to avoid this scanning?
 function find_tag(tag_id){
     if (tags != null){
         for (var i=0, tag; tag = tags[i]; i++){
