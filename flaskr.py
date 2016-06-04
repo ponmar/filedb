@@ -538,6 +538,7 @@ def api_remove_tag(id):
 # API: get JSON with many items
 #
 
+# TODO: use int_list for personids, locationids and tagids?
 @app.route('/api/files', methods=['GET'])
 def api_get_json_files():
     if not session.get('logged_in'):
