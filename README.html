@@ -9,25 +9,29 @@
 <h2>Installation</h2>
 <ol>
 <li>Install Python and pip (installation instructions depends on your OS)</li>
-<li>Install Flask (web server) and Pillow (for reading date and time from JPEG images):<br>
+<li>Install Flask (a web server for running server-side code) and Pillow (for reading date and time from JPEG images) Python packages:<br>
 &gt;pip install flask<br>
 &gt;pip install pillow</li>
-<li>Edit configuration paremeters in config.py</li>
+<li>Edit configuration paremeters in config.py. Configuration parameters are described in that file.</li>
 <li>Create the database:<br>
-Note! This command removes all existing data in the database if it already exists.<br>
+<strong>Note!</strong> This command removes all existing data in the database if it already exists (don't run when the database is populated later).<br>
 &gt;python runserver.py --initdb
 </li>
-<li>Decide how and when to backup your database (flaskr.db)</li>
+<li>Decide how and when to backup your FileDB data (flaskr.db)</li>
 </ol>
 
 <h2>Starting the server</h2>
-&gt;python runserver.py --runserver &lt;dir&gt;
+<p>&gt;python runserver.py --runserver</p>
+<p>Note that your OS can be setup to run this command at startup. How to do this depends on your OS.</p>
 
-<h2>Accessing the FileDB web app</h2>
-Open <a href="http://localhost:5000">http://localhost:5000</a> in a browser. Note that the port may vary depending on your configuration.
+<h2>Accessing the FileDB web application</h2>
+<p>Open <a href="http://localhost:5000">http://localhost:5000</a> in a browser. Note that the port may vary depending on your configuration.</p>
+<p>The web application may also be reached from the network via an external IP address if configured so.</p>
 
 
 <h2>HTTP API</h2>
+<p>This part is only of interrest for developers who wants to use data stored by FileDB in other applications. To learn the details, run the web application and look at the network traffic.</p>
+<p>Note that it is also possible to read the database file, but be aware that only one process should do this at the same time (including FileDB).</p>
 <h3>Authentication</h3>
 <pre>Request: POST /api/login?username=username&password=password
 Response: 200 (OK), 401 (Unauthorized), cookie (session=...)
@@ -162,6 +166,8 @@ Request: DELETE /api/person/&lt;id&gt;
 Request: DELETE /api/location/&lt;id&gt;
 Request: DELETE /api/tag/&lt;id&gt;
 Response: 200 (OK). 404 (Not Found), 401 (Unathorized)
+
+Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.
 </pre>
 
 </body>
