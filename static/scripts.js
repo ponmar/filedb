@@ -553,6 +553,9 @@ function save_file_categorization(){
             }
         })
     }
+    else{
+        alert('Please find a file to categorize');
+    }
 }
 
 function create_files_url(){
@@ -649,7 +652,7 @@ function update_search_result(files_json){
         for (var tag_id in tags){
             var tag = find_tag(tag_id);
             if (tag != null){
-                text += get_tag_page_link(tag['name']) + item_separator;
+                text += get_tag_page_link(tag_id, tag['name']) + item_separator;
             }
         }
 
@@ -739,7 +742,7 @@ function load_slideshow_file(){
     if (file_tag_ids.length > 0){
         file_text += "<br>Tags: ";
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
-           var tag = find_tag(file_tag_id);
+           var tag = find_tag(tag_id);
            if (tag != null){
                file_text += get_tag_page_link(tag_id, tag['name']) + item_separator;
            }
