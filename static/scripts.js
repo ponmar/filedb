@@ -60,8 +60,14 @@ $(document).ready(function(){
         });
     }
 
-    if ($('#search_files_button').length){
-        $("#search_files_button").click(function(){
+    if ($('#search_files_by_file_filter_button').length){
+        $('#search_files_by_file_filter_button').click(function(){
+            alert('TODO');
+        })
+    }
+
+    if ($('#search_files_by_category_button').length){
+        $("#search_files_by_category_button").click(function(){
             search_files();
         });
     }
@@ -409,7 +415,8 @@ function categorize_file(){
         var img = $('<img />', {
             id: 'categorize_image',
             src: file_url,
-            alt: file_url
+            alt: file_url,
+            class: 'limited_img'
         });
         img.appendTo($('#categorize_image_div'));
     }
@@ -684,7 +691,8 @@ function load_slideshow_file(){
         var img = $('<img />', {
             id: 'slideshow_image',
             src: file_url,
-            alt: file_url
+            alt: file_url,
+            class: 'limited_img'
         });
         img.appendTo($('#file_browser_image_div'));
     }

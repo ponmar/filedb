@@ -15,27 +15,20 @@
     <input type="text" class="form-control" placeholder="Path" id="file_path_filter">
     <input type="text" class="form-control" placeholder="Description" id="file_description_filter">
     <input type="text" class="form-control" placeholder="Date" id="file_date_filter">
+    <br>
+    <button type="button" class="btn btn-default" id="search_files_by_file_filter_button">Search</button>
   </div>
 </div>
 
 <div class="panel panel-default">
-  <div class="panel-heading">Person Filter</div>
-  <div class="panel-body" id="personbuttons"></div>
+  <div class="panel-heading">Category Filters</div>
+  <div class="panel-body">
+    <div class="panel-body" id="personbuttons"></div>
+    <div class="panel-body" id="locationbuttons"></div>
+    <div class="panel-body" id="tagbuttons"></div>
+    <button type="button" class="btn btn-default" id="search_files_by_category_button">Search</button>
+  </div>
 </div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Location Filter</div>
-  <div class="panel-body" id="locationbuttons"></div>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Tag Filter</div>
-  <div class="panel-body" id="tagbuttons"></div>
-</div>
-
-<button type="button" class="btn btn-default" id="search_files_button">Search</button>
-
-<br><br>
 
 <div class="panel panel-default">
   <div class="panel-heading">Search Result</div>
