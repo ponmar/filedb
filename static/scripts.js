@@ -635,7 +635,7 @@ function update_search_result(files_json){
 
     var item_separator = ', ';
 
-    var text = slideshow_files.length + " file matches with categories:<br>";
+    var text = slideshow_files.length + " file matches with categories: ";
 
     if (Object.keys(persons).length > 0 || Object.keys(locations).length > 0 || Object.keys(tags).length > 0){
         // TODO: does the following syntex for for-loops work?
@@ -663,12 +663,10 @@ function update_search_result(files_json){
         text = remove_text_ending(text, item_separator);
     }
     else{
-        text += "none";
+        text += "N/A";
     }
 
     $("#search_result_text").html(text);
-
-    // TODO: remove previously loaded image
 }
 
 function remove_text_ending(text, ending){
