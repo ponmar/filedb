@@ -36,11 +36,13 @@
 <div class="panel panel-default">
     <div class="panel-heading">File to Categorize: <span id="categorize_file_path">N/A</span></div>
     <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6"><input type="text" class="form-control" placeholder="Date" id="file_date"></div>
+            <div class="col-md-6"><input type="text" class="form-control" placeholder="Description" id="file_description"></div>
+        </div>
         <div id="person_categories">No persons loaded</div>
         <div id="location_categories">No locations loaded</div>
         <div id="tag_categories">No tags loaded</div>
-        <input type="text" class="form-control" placeholder="Description" id="file_description">
-        <input type="text" class="form-control" placeholder="Date" id="file_date">
         <br>
         <button type="button" class="btn btn-default" id="save_file_categorize_button">Save</button>
         <br><br>
