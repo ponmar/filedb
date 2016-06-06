@@ -691,6 +691,8 @@ function load_slideshow_file(){
     var file = slideshow_files[slideshow_index];
     var file_url = '/api/filecontent/' + file['id'];
 
+    $('#slideshow_file_path').text("[" + (slideshow_index + 1) + "/" + slideshow_files.length + "] " + file['path']);
+
     if ($('#slideshow_image').length){
         $('#slideshow_image').attr('src', file_url);
     }
@@ -704,54 +706,54 @@ function load_slideshow_file(){
         img.appendTo($('#file_browser_image_div'));
     }
 
-    var file_text = "Showing file: " + (slideshow_index + 1) + "/" + slideshow_files.length;
+    var file_text = "";
 
     var file_datetime = file['datetime'];
     if (file_datetime != null){
-        file_text += "<br>Date: " + file_datetime + " (" + get_age(file_datetime) + " years ago)";
+        file_text += "Date: " + file_datetime + " (" + get_age(file_datetime) + " years ago)<br>";
     }
 
     var file_description = file["description"];
     if (file_description != null){
-        file_text += "<br>Description: " + file_description;
+        file_text += "Description: " + file_description + "<br>";
     }
 
     var item_separator = ', ';
 
     var file_person_ids = file['persons'];
     if (file_person_ids.length > 0){
-        file_text += "<br>Persons: ";
+        file_text += "Persons: ";
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
            var person = find_person(person_id);
            if (person != null){
                file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
            }
         }
-        file_text = remove_text_ending(file_text, item_separator);
+        file_text = remove_text_ending(file_text, item_separator) + "<br>";
     }
 
     var file_location_ids = file['locations'];
     if (file_location_ids.length > 0){
-        file_text += "<br>Locations: ";
+        file_text += "Locations: ";
         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
            var location = find_location(location_id);
            if (location != null){
                file_text += get_location_page_link(location_id, location['name']) + item_separator;
            }
         }
-        file_text = remove_text_ending(file_text, item_separator);
+        file_text = remove_text_ending(file_text, item_separator) + "<br>";
     }
 
     var file_tag_ids = file['tags'];
     if (file_tag_ids.length > 0){
-        file_text += "<br>Tags: ";
+        file_text += "Tags: ";
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
            var tag = find_tag(tag_id);
            if (tag != null){
                file_text += get_tag_page_link(tag_id, tag['name']) + item_separator;
            }
         }
-        file_text = remove_text_ending(file_text, item_separator);
+        file_text = remove_text_ending(file_text, item_separator) + "<br>";
     }
 
     $("#slideshow_item_text").html(file_text);
@@ -801,6 +803,7 @@ function restart_slideshow(){
 function clear_slideshow(){
     slideshow_files = null;
     slideshow_index = -1;
+    $("#slideshow_file_path").text("N/A");
     $("#slideshow_item_text").text("No search result available");
     $('#slideshow_image').attr('src', '');
     $('#slideshow_image').attr('alt', '');
