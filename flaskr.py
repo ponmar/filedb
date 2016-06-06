@@ -406,11 +406,11 @@ def api_update_file(file_id):
 
         if 'description' in content:
             description = content['description']
-            g.db.execute("update files set description = '" + description + "' where id = " + file_id)
+            g.db.execute("update files set description = '" + description + "' where id = " + str(file_id))
 
         if 'datetime' in content:
             datetime = content['datetime']
-            g.db.execute("update files set datetime = '" + datetime + "' where id = " + file_id)
+            g.db.execute("update files set datetime = '" + datetime + "' where id = " + str(file_id))
 
         g.db.commit()
 

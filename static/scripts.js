@@ -534,12 +534,16 @@ function save_file_categorization(){
             }
         }
 
-        // TODO: add file description and date
+        var description = $('#file_description').val();
+        var datetime = $('#file_date').val();
+
         var jsonData = JSON.stringify(
         {
             "persons": selected_persons,
             "locations": selected_locations,
-            "tags": selected_tags
+            "tags": selected_tags,
+            "description": description,
+            "datetime": datetime
         });
 
         $.ajax
