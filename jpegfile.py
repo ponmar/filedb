@@ -31,7 +31,7 @@ class JpegFile:
                     self.__tags[decoded] = gps_data
                 else:
                     self.__tags[decoded] = value
-        print(str(self.__tags))
+        #print(str(self.__tags))
 
     def get_date_time(self):
         if DATE_TIME_TAG_NAME in self.__tags:
