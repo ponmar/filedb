@@ -270,7 +270,7 @@ def file_is_whitelisted(file_path):
     return False
 
 
-def get_form_str(param_name, form, min_length = 1, max_length = 100):
+def get_form_str(param_name, form, min_length=1, max_length=100):
     if param_name in form:
         param_value = form[param_name]
         if len(param_value) in range(min_length, max_length + 1):
