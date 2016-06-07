@@ -9,16 +9,11 @@
 <h2>Installation</h2>
 <p>Note that it is recommended to have a backup procedure for your collection of files before running FileDB (although FileDB itself does not modify your files).</p>
 <ol>
-<li>Install Python and pip (installation instructions depends on your OS)</li>
-<li>Install Flask (a web server for running server-side code) and Pillow (for reading date and time from JPEG images) Python packages:<br>
-&gt;pip install flask<br>
-&gt;pip install pillow</li>
-<li>Edit configuration paremeters in config.py. Configuration parameters are described in that file.</li>
-<li>Create the database:<br>
-<strong>Note!</strong> This command removes all existing data from the FileDB database (don't run this command when the database is populated later).<br>
-&gt;python runserver.py --initdb
-</li>
-<li>Decide how and when to backup your FileDB data (flaskr.db)</li>
+  <li>Install Python and pip (installation instructions depends on your OS)</li>
+  <li>Install Flask (a web server for running server-side code) and Pillow (for reading date and time from JPEG images) Python packages:<br>&gt;pip install flask<br>&gt;pip install pillow</li>
+  <li>Edit configuration paremeters in config.py. Configuration parameters are described in that file.</li>
+  <li>Create the database:<br><strong>Note!</strong> This command removes all existing data from the FileDB database (don't run this command when the database is populated later).<br>&gt;python runserver.py --initdb</li>
+  <li>Decide how and when to backup your FileDB data (flaskr.db)</li>
 </ol>
 
 <h2>Starting the Server</h2>
@@ -29,147 +24,8 @@
 <p>Open <a href="http://localhost:5000">http://localhost:5000</a> in a browser. Note that the port may vary depending on your configuration.</p>
 <p>The web application may also be reached from the network via an external IP address if configured so.</p>
 
-
-<h2>HTTP API</h2>
-<p>This part is only of interrest for developers who wants to use data stored by FileDB in other applications. To learn the details, run the web application and look at the network traffic.</p>
-<p>Note that it is also possible to read the database file, but be aware that only one process should do this at the same time (including FileDB).</p>
-<h3>Authentication</h3>
-<pre>Request: POST /api/login?username=username&password=password
-Response: 200 (OK), 401 (Unauthorized), cookie (session=...)
-
-Request: POST /api/logout
-Response: 200 (OK)
-</pre>
-
-<h3>Read Data: files</h3>
-<pre>Request: GET /api/file/&lt;id&gt;
-Request: GET /api/file_by_path/&lt;path&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
-{
-    "id": id,
-    "path": path,
-    "description": description,
-    "personids": [1, 2, ...],
-    "locationids": [1, 2, ...],
-    "tagids": [1, 2, ...]
-}
-
-Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids]
-Response: 200 (OK), 401 (Unathorized)
-{
-    "files" =
-    [
-        Same data here as for single file
-    ]
-}
-
-Request: GET /api/filecontent/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
-</pre>
-
-<h3>Read Data: persons</h3>
-<pre>Request: GET /api/person/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
-{
-    "id": id,
-    "name": name,
-    "description": description,
-    "dateofbirth": dateofbirth
-}
-
-Request: GET /api/persons
-Response: 200 (OK), 401 (Unathorized)
-{
-    "persons" =
-    [
-        Same data here as for single person
-    ]
-}
-</pre>
-
-<h3>Read Data: locations</h3>
-<pre>Request: GET /api/location/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
-{
-    "id": id,
-    "name": name,
-    "description": description
-}
-
-Request: GET /api/locations
-Response: 200 (OK), 401 (Unathorized)
-{
-    "locations" =
-    [
-        Same data here as for single location
-    ]
-}
-</pre>
-
-<h3>Read Data: tags</h3>
-<pre>Request: GET /tag/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
-{
-    "id": id,
-    "name": name
-}
-
-Request: GET /api/tags
-Response: 200 (OK), 401 (Unathorized)
-{
-    "tags" =
-    [
-        Same data here as for single tag
-    ]
-}
-</pre>
-
-<h3>Read Data: other</h3>
-<pre>Request: GET /api/fileconsistency
-Response: 200 (OK), 401 (Unathorized)
-{
-    "missingfiles" = [fileid, fileid, ...]
-}
-</pre>
-
-<h3>Create Data</h3>
-<pre>Request: POST /api/import
-Request: POST /api/file/?path=path&description=description
-Request: POST /api/directory/?path=path
-Request: POST /api/person/?name=name
-Request: POST /api/location/?name=name
-Response: 200 (OK), 409 (Conflict), 401 (Unathorized)
-</pre>
-
-<h3>Modify Data</h3>
-<pre>
-Request: PUT /api/file/&lt;id&gt;
-JSON data: ...
-Response: 200 (OK), ...
-
-Request: PUT /api/person/&lt;id&gt;
-JSON data: ...
-Response: 200 (OK), ...
-
-Request: PUT /api/location/&lt;id&gt;
-JSON data: ...
-Response: 200 (OK), ...
-
-Request: PUT /api/tag/&lt;id&gt;
-JSON data: ...
-Response: 200 (OK), ...
-</pre>
-
-<h3>Remove Data</h3>
-<pre>
-Request: DELETE /api/file/&lt;id&gt;
-Request: DELETE /api/person/&lt;id&gt;
-Request: DELETE /api/location/&lt;id&gt;
-Request: DELETE /api/tag/&lt;id&gt;
-Response: 200 (OK). 404 (Not Found), 401 (Unathorized)
-
-Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.
-</pre>
+<h2>Accessing the FileDB API</h2>
+See <a href="API.html">API.html</a>.
 
 </body>
 </html>
