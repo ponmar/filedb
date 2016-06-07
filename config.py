@@ -1,3 +1,8 @@
+"""
+This is the FileDB configuration file.
+No other files needs be updated for using FileDB.
+"""
+
 DATABASE = 'flaskr.db'
 SQL_SCHEMA = 'schema.sql'
 
@@ -28,4 +33,5 @@ BLACKLISTED_FILE_PATH_PATTERNS = ['TN_', 'Thumbs.db', 'nytt/', 'unsorted/', 'pri
 # not being black-listed before)
 # Note: file path is made lower-case before scan (i.e. specify the file
 #       extension in lower-case).
-WHITELISTED_FILE_EXTENSIONS = ['.jpg', '.png', '.bmp', '.gif', '.avi', '.mpg', '.mp4', '.mkv', '.mov', '.pdf']
+WHITELISTED_FILE_EXTENSIONS = ['.jpg', '.png', '.bmp', '.gif', '.avi',
+                               '.mpg', '.mp4', '.mkv', '.mov', '.pdf']
