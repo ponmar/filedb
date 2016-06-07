@@ -174,6 +174,10 @@ $(document).ready(function(){
             // 'd' pressed
             next_slideshow_file();
         }
+        else if (e.which == 114){
+            // 'r' pressed
+            random_slideshow_file();
+        }
     });
 });
 
