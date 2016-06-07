@@ -535,7 +535,14 @@ function save_file_categorization(){
         }
 
         var description = $('#file_description').val();
+        if (description == ""){
+            description = null;
+        }
+
         var datetime = $('#file_date').val();
+        if (datetime == ""){
+            datetime = null;
+        }
 
         var jsonData = JSON.stringify(
         {
