@@ -152,6 +152,12 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#find_file_by_path_button').length){
+        $('#find_file_by_path_button').click(function(){
+            categorize_file_from_path();
+        })
+    }
+
     if ($('#save_file_categorize_button').length){
         $('#save_file_categorize_button').click(function(){
             save_file_categorization();
@@ -435,7 +441,6 @@ function categorize_file_without_any(){
                 break;
             }
         }
-        // TODO: hide image and show message
     }
 }
 
@@ -448,7 +453,6 @@ function categorize_file_without_person(){
                 break;
             }
         }
-        // TODO: hide image and show message
     }
 }
 
@@ -461,7 +465,6 @@ function categorize_file_without_location(){
                 break;
             }
         }
-        // TODO: hide image and show message
     }
 }
 
@@ -474,7 +477,6 @@ function categorize_file_without_tag(){
                 break;
             }
         }
-        // TODO: hide image and show message
     }
 }
 
@@ -487,7 +489,6 @@ function categorize_file_without_description(){
                 break;
             }
         }
-        // TODO: hide image and show message
     }
 }
 
@@ -500,7 +501,22 @@ function categorize_file_without_date(){
                 break;
             }
         }
-        // TODO: hide image and show message
+    }
+}
+
+function categorize_file_from_path(){
+    // TODO
+    start_categorize_files();
+    if (categorize_files_index != -1){
+        var path = $('#find_file_by_bath_input').val();
+        if (path != null && path != ""){
+            for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
+                if (file['path'].startsWith(path)){
+                    categorize_file();
+                    break;
+                }
+            }
+        }
     }
 }
 

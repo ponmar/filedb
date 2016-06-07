@@ -733,7 +733,6 @@ def api_get_file_content(id):
     if row is None:
         abort(404)
     file_path = row[0]
-    #print 'Trying: ' + file_path
     return send_from_directory(FILES_ROOT_DIRECTORY, file_path)
 
 
