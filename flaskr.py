@@ -45,6 +45,8 @@ def init_db():
 @app.before_request
 def before_request():
     g.db = connect_db()
+    # Needed for each connection to turn on the CASCADE feature for foreign leys when removing rows from tables.
+    g.db.execute('PRAGMA foreign_keys = ON')
 
 
 @app.teardown_request
