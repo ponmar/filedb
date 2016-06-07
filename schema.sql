@@ -24,7 +24,8 @@ create table persons (
 create table locations (
     id integer primary key autoincrement not null,
     name text unique not null,
-    description text
+    description text,
+    position text /* Format: <latitude> <longitude> */
 );
 
 create table tags (

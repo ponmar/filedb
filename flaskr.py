@@ -343,13 +343,15 @@ def api_add_location():
 
     name = get_form_str('name', request.form)
     description = get_form_str('description', request.form)
+    position = get_form_str('position', request.form)
 
     if name is None:
         abort(400, 'Location name not specified')
 
     try:
         cursor = g.db.cursor()
-        cursor.execute('insert into locations (name, description) values (?, ?)', [name, description])
+        cursor.execute('insert into locations (name, description, position) values (?, ?, ?)',
+                       [name, description, position])
         g.db.commit()
         return make_response(jsonify({'message': 'Location created',
                                       'id': cursor.lastrowid}),
@@ -409,16 +411,16 @@ def api_update_file(file_id):
         if 'description' in content:
             description = content['description']
             if description is not None:
-                g.db.execute("update files set description = '" + description + "' where id = " + str(file_id))
+                cursor.execute("update files set description = '" + description + "' where id = " + str(file_id))
             else:
-                g.db.execute("update files set description = null where id = " + str(file_id))
+                cursor.execute("update files set description = null where id = " + str(file_id))
 
         if 'datetime' in content:
             datetime = content['datetime']
             if datetime is not None:
-                g.db.execute("update files set datetime = '" + datetime + "' where id = " + str(file_id))
+                cursor.execute("update files set datetime = '" + datetime + "' where id = " + str(file_id))
             else:
-                g.db.execute("update files set datetime = null where id = " + str(file_id))
+                cursor.execute("update files set datetime = null where id = " + str(file_id))
 
         g.db.commit()
 
@@ -434,19 +436,19 @@ def api_update_person(person_id):
     try:
         if 'firstname' in content:
             firstname = content['firstname']
-            g.db.execute("update persons set firstname = '" + firstname + "' where id = " + person_id)
+            cursor.execute("update persons set firstname = '" + firstname + "' where id = " + person_id)
 
         if 'lastname' in content:
             lastname = content['lastname']
-            g.db.execute("update persons set lastname = '" + lastname + "' where id = " + person_id)
+            cursor.execute("update persons set lastname = '" + lastname + "' where id = " + person_id)
 
         if 'description' in content:
             description = content['description']
-            g.db.execute("update persons set description = '" + description + "' where id = " + person_id)
+            cursor.execute("update persons set description = '" + description + "' where id = " + person_id)
 
         if 'dateofbirth' in content:
             dateofbirth = content['dateofbirth']
-            g.db.execute("update persons set dateofbirth = '" + dateofbirth + "' where id = " + person_id)
+            cursor.execute("update persons set dateofbirth = '" + dateofbirth + "' where id = " + person_id)
 
         g.db.commit()
 
@@ -462,11 +464,15 @@ def api_update_location(location_id):
     try:
         if 'name' in content:
             name = content['name']
-            g.db.execute("update locations set name = '" + name + "' where id = " + location_id)
+            cursor.execute("update locations set name = '" + name + "' where id = " + location_id)
 
         if 'description' in content:
             description = content['description']
-            g.db.execute("update locations set description = '" + description + "' where id = " + location_id)
+            cursor.execute("update locations set description = '" + description + "' where id = " + location_id)
+
+        if 'position' in content:
+            position = content['position']
+            cursor.execute("update locations set position = '" + position + "' where id = " + location_id)
 
         g.db.commit()
 
@@ -482,7 +488,7 @@ def api_update_tag(tag_id):
     try:
         if 'name' in content:
             name = content['name']
-            g.db.execute("update tags set name = '" + name + "' where id = " + tag_id)
+            cursor.execute("update tags set name = '" + name + "' where id = " + tag_id)
 
         g.db.commit()
 
@@ -622,8 +628,8 @@ def api_get_json_locations():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, name, description from locations')
-    locations = [dict(id=row[0], name=row[1], description=row[2]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, name, description, position from locations')
+    locations = [dict(id=row[0], name=row[1], description=row[2], position=row[3]) for row in cur.fetchall()]
 
     return jsonify(dict(locations=locations))
 

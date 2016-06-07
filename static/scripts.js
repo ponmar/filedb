@@ -260,7 +260,7 @@ function get_locations(){
                 //$("#locationstable").show();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_printable_value(location['position']) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_location_button").click(function(){
