@@ -7,6 +7,8 @@ var categorize_files_index = -1;
 
 var slideshow_files = null;
 var slideshow_index = -1;
+var slideshow_timer = null;
+var slideshow_interval = 3000;
 
 $(document).ready(function(){
     if (needs_persons()){
@@ -72,14 +74,6 @@ $(document).ready(function(){
         });
     }
 
-    /*
-    if ($('#start_slideshow_button').length){
-        $("#start_slideshow_button").click(function(){
-            prepare_slideshow();
-        });
-    }
-    */
-
     if ($('#slideshow_prev_file_button').length){
         $('#slideshow_prev_file_button').click(function(){
             prev_slideshow_file();
@@ -95,6 +89,12 @@ $(document).ready(function(){
     if ($('#slideshow_random_file_button').length){
         $('#slideshow_random_file_button').click(function(){
             random_slideshow_file();
+        });
+    }
+
+    if ($('#slideshow_toggle_button').length){
+        $("#slideshow_toggle_button").click(function(){
+            toggle_slideshow();
         });
     }
 
@@ -820,6 +820,27 @@ function find_tag(tag_id){
     return null;
 }
 
+function toggle_slideshow(){
+    if (slideshow_timer != null){
+        clearTimeout(slideshow_timer);
+        slideshow_timer = null;
+        $("#slideshow_toggle_button").html('Slideshow: Off');
+    }
+    else{
+        $("#slideshow_toggle_button").html('Slideshow: On');
+        slideshow_timer = setTimeout(slideshow_timer_function, slideshow_interval);
+    }
+}
+
+function slideshow_timer_function(){
+    if (slideshow_timer != null){
+        if (!next_slideshow_file()){
+            toggle_slideshow();
+        }
+        setTimeout(slideshow_timer_function, slideshow_interval);
+    }
+}
+
 function restart_slideshow(){
     slideshow_index = 0;
     load_slideshow_file();
@@ -838,7 +859,9 @@ function next_slideshow_file(){
     if (slideshow_files != null && slideshow_files.length > 0 && slideshow_index < slideshow_files.length - 1){
         slideshow_index++;
         load_slideshow_file();
+        return true;
     }
+    return false;
 }
 
 function prev_slideshow_file(){
