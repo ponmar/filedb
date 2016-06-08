@@ -11,7 +11,9 @@ def validate_root_directory():
     return config.ALLOW_MISSING_ROOT_DIRECTORY or is_dir
 
 
-if __name__ == "__main__":
+def main():
+    """Runs the FileDB server side application."""
+
     parser = argparse.ArgumentParser(description='A file database and server application.')
     parser.add_argument('--initdb', help='clean the database', action='store_true')
     args = parser.parse_args()
@@ -26,3 +28,7 @@ if __name__ == "__main__":
             #app.run(host='0.0.0.0')
             #app.debug = True
             flaskr.app.run(debug=True)
+
+
+if __name__ == "__main__":
+    main()

@@ -15,7 +15,9 @@ def is_jpeg_file(file_path):
 
 class JpegFile:
     def __init__(self, filename):
-        """May raise IOError for some JPEG files."""
+        """Parses Exif data from a JPEG image.
+        May raise IOError for broken JPEG files.
+        """
         self.__tags = {}
 
         image = Image.open(filename)
@@ -34,6 +36,7 @@ class JpegFile:
         #print(str(self.__tags))
 
     def get_date_time(self):
+        """Get the date time  in text format from the parsed Exif, or None."""
         if DATE_TIME_TAG_NAME in self.__tags:
             # TODO: use regular expressions instead?
             date_time = self.__tags[DATE_TIME_TAG_NAME]
@@ -43,7 +46,9 @@ class JpegFile:
         return None
 
     def get_gps_position(self):
-        """Returns the latitude and longitude, if available, from the provided exif_data (obtained through get_exif_data above)"""
+        """Returns the latitude and longitude, if available, from the parsed Exif data.
+        Returns (None, None) when there is no GPS data available.
+        """
         lat = None
         lon = None
 
@@ -67,7 +72,7 @@ class JpegFile:
         return lat, lon
 
     def __convert_to_degress(self, value):
-        """Helper function to convert the GPS coordinates stored in the EXIF to degress in float format"""
+        """Converts a GPS coordinate to degrees in float format."""
         deg_num, deg_denom = value[0]
         d = float(deg_num) / float(deg_denom)
 
