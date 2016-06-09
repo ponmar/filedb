@@ -263,7 +263,7 @@ function get_locations(){
                 $("#no_location_message").hide();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_map_link(location['position'], location['position']) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_printable_value(get_map_link(location['position'], location['position'])) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_location_button").click(function(){
@@ -674,7 +674,14 @@ function update_search_result(files_json){
         for (var location_id in locations){
             var location = find_location(location_id);
             if (location != null){
-                text += get_location_page_link(location_id, location['name']) + item_separator;
+                var map_link = get_map_link(location['position'], location['name']);
+                if (map_link != null){
+                    text += map_link;
+                }
+                else{
+                    text += location['name'];
+                }
+                text += item_separator;
             }
         }
 
@@ -1058,5 +1065,5 @@ function get_map_link(position, link_text){
             return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank">' + link_text + '</a>';
         }
     }
-    return 'N/A';
+    return null;
 }
