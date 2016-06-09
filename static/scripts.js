@@ -341,7 +341,7 @@ function get_files(){
 function get_all_files(){
     $.getJSON("/api/files", function(result){
         $("#filestable").empty();
-        $("#filestable").append('<tr><th>Path</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
+        $("#filestable").append('<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
         var files = result['files'];
         for (var i=0, file; file = files[i]; i++){
             var datetime = file['datetime'];
@@ -353,7 +353,7 @@ function get_all_files(){
             var numPersons = file['persons'].length;
             var numLocations = file['locations'].length;
             var numTags = file['tags'].length;
-            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a></td></tr>');
+            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a>, <a href="/api/fileexif/' + file['id'] + '">Exif</a></td></tr>');
         }
 
         $(".delete_file_button").click(function(){
