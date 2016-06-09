@@ -10,6 +10,7 @@ var slideshow_index = -1;
 var slideshow_timer = null;
 var slideshow_interval = 3000;
 
+// TODO: use different init-functions per page instead of checking if ids exist
 $(document).ready(function(){
     if (needs_persons()){
         get_persons();
@@ -100,7 +101,7 @@ $(document).ready(function(){
 
     if ($('#button_show_all_files').length){
         $("#button_show_all_files").click(function(){
-            get_all_files();
+            update_list_of_files();
         });
     }
 
@@ -213,7 +214,6 @@ function get_persons(){
 
             if (persons.length > 0){
                 $("#no_person_message").hide();
-                //$("#personstable").show();
 
                 for (var i=0, person; person = persons[i]; i++){
                     var dateofbirth = person['dateofbirth'];
@@ -232,7 +232,6 @@ function get_persons(){
             }
             else{
                 $("#no_person_message").show();
-                //$("#personstable").hide();
             }
         }
 
@@ -302,7 +301,6 @@ function get_tags(){
 
             if (tags.length > 0){
                 $("#no_tag_message").hide();
-                //$("#tagstable").show();
 
                 for (var i=0, tag; tag = tags[i]; i++){
                     $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td>' + get_tag_page_link(tag['id'], 'Edit') + ', <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
@@ -316,7 +314,6 @@ function get_tags(){
             }
             else{
                 $("#no_tag_message").show();
-                //$("#tagstable").hide();
             }
         }
 
@@ -337,8 +334,7 @@ function get_files(){
     });
 }
 
-// TODO: move code to get_files (and check if id exists)?
-function get_all_files(){
+function update_list_of_files(){
     $.getJSON("/api/files", function(result){
         $("#filestable").empty();
         $("#filestable").append('<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
@@ -349,7 +345,6 @@ function get_all_files(){
             if (datetime != null){
                 age = get_age(datetime);
             }
-            // TODO: create links to pages for person, location and tag?
             var numPersons = file['persons'].length;
             var numLocations = file['locations'].length;
             var numTags = file['tags'].length;
@@ -428,9 +423,6 @@ function categorize_file(){
         });
         img.appendTo($('#categorize_image_div'));
     }
-
-    // TODO: update meta-data for file on page
-
 }
 
 // TODO: use only one function with arguments for finding file to categorize?
@@ -933,7 +925,7 @@ function delete_file(id){
         url: '/api/file/' + id,
         type: 'DELETE',
         success: function(result){
-            get_all_files();
+            update_list_of_files();
         }
     })
     .fail(function(){
