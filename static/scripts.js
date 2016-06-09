@@ -663,7 +663,6 @@ function update_search_result(files_json){
     var text = slideshow_files.length + " file matches with categories: ";
 
     if (Object.keys(persons).length > 0 || Object.keys(locations).length > 0 || Object.keys(tags).length > 0){
-        // TODO: does the following syntex for for-loops work?
         for (var person_id in persons){
             var person = find_person(person_id);
             if (person != null){
@@ -754,10 +753,10 @@ function load_slideshow_file(){
     if (file_person_ids.length > 0){
         file_text += "Persons: ";
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
-           var person = find_person(person_id);
-           if (person != null){
-               file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
-           }
+            var person = find_person(person_id);
+            if (person != null){
+                file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
+            }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
     }
@@ -766,9 +765,16 @@ function load_slideshow_file(){
     if (file_location_ids.length > 0){
         file_text += "Locations: ";
         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
-           var location = find_location(location_id);
-           if (location != null){
-               file_text += get_location_page_link(location_id, location['name']) + item_separator;
+            var location = find_location(location_id);
+            if (location != null){
+                var map_link = get_map_link(location['position'], location['name']);
+                if (map_link != null){
+                    file_text += map_link;
+                }
+                else{
+                    file_text += location['name'];
+                }
+                file_text += item_separator;
            }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
@@ -778,10 +784,10 @@ function load_slideshow_file(){
     if (file_tag_ids.length > 0){
         file_text += "Tags: ";
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
-           var tag = find_tag(tag_id);
-           if (tag != null){
-               file_text += get_tag_page_link(tag_id, tag['name']) + item_separator;
-           }
+            var tag = find_tag(tag_id);
+            if (tag != null){
+                file_text += get_tag_page_link(tag_id, tag['name']) + item_separator;
+            }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
     }
@@ -1044,11 +1050,11 @@ function get_age(dateString){
 }
 
 function get_person_page_link(person_id, link_text){
-    return '<a href="/person/' + person_id + '">' + link_text + '</a>';
+    return '<a href="/person/' + person_id + '" alt="testing, testing">' + link_text + '</a>';
 }
 
 function get_location_page_link(location_id, link_text){
-    return '<a href="/location/' + location_id + '">' + link_text + '</a>';
+    return '<a href="/location/' + location_id + '" alt="testing, testing">' + link_text + '</a>';
 }
 
 function get_tag_page_link(tag_id, link_text){
