@@ -208,7 +208,7 @@ def add_file(path, file_description=None):
 
         file_path = FILES_ROOT_DIRECTORY + '/' + path
 
-        # TODO: check that path not already in database
+        # TODO: optimization: check that path not already in database before parsing Exif data etc.
 
         if not os.path.isfile(file_path):
             abort(400, 'No file with path "{}" within the "{}" directory'.format(path, FILES_ROOT_DIRECTORY))
@@ -217,20 +217,18 @@ def add_file(path, file_description=None):
             file_description = None
 
         file_datetime = None
+        file_latitude = None
+        file_longitude = None
 
         if jpegfile.is_jpeg_file(file_path):
             # Read date and time from jpeg exif information
             try:
                 jpeg = jpegfile.JpegFile(file_path)
                 file_datetime = jpeg.get_date_time()
-                lat, lon = jpeg.get_gps_position()
-                if lat and lon:
-                    # TODO: what to do with this information?
-                    print 'Latitude:  ' + str(lat)
-                    print 'Longitude: ' + str(lon)
+                file_latitude, file_longitude = jpeg.get_gps_position()
             except IOError:
                 # Note: for some reason this happens for some working JPEG files, so we should still add the file
-                print 'Could not read JPEG file for extracting date and time information: ' + path
+                print 'Could not read JPEG file for extracting date, time and position: ' + path
 
         if file_datetime is None:
             # Try to read date from sub-path (part of the path within the configured files directory)
@@ -239,6 +237,12 @@ def add_file(path, file_description=None):
         g.db.execute('insert into files (path, description, datetime) values (?, ?, ?)',
                      [path, file_description, file_datetime])
         g.db.commit()
+
+        if file_latitude is not None and file_longitude is not None:
+            # TODO: find nearest location and add file to filelocations table
+            print 'Latitude:  ' + str(file_latitude)
+            print 'Longitude: ' + str(file_longitude)
+
         return True
 
     except sqlite3.IntegrityError:
@@ -732,6 +736,7 @@ def api_get_json_tag(id):
 
 @app.route('/api/filecontent/<int:id>', methods=['GET'])
 def api_get_file_content(id):
+    """Note: this function reads data from files collection."""
     if not session.get('logged_in'):
         abort(401)
     cur = g.db.execute('select path from files where id = ?', (id,))
@@ -753,6 +758,20 @@ def api_fileconsistency():
         if not os.path.isfile(file_path):
             missing_files.append(file_id)
     return jsonify(dict(missing_files=missing_files))
+
+
+@app.route('/api/fileexif/<int:file_id>', methods=['GET'])
+def api_get_json_file_exif(file_id):
+    """Note: this function reads data from files collection."""
+    if not session.get('logged_in'):
+        abort(401)
+    cur = g.db.execute('select path from files where id = ?', (file_id,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+    file_path = FILES_ROOT_DIRECTORY + '/' + row[0]
+    jpeg = jpegfile.JpegFile(file_path)
+    return jsonify(jpeg.get_exif_data())
 
 
 #

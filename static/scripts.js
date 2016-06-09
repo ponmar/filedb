@@ -263,7 +263,7 @@ function get_locations(){
                 $("#no_location_message").hide();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_map_link(location['position']) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_map_link(location['position'], location['position']) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_location_button").click(function(){
@@ -1048,14 +1048,14 @@ function get_tag_page_link(tag_id, link_text){
     return '<a href="/tag/' + tag_id + '">' + link_text + '</a>';
 }
 
-function get_map_link(position){
+function get_map_link(position, link_text){
     if (position != null){
         var positionParts = position.split(" ");
         if (positionParts.length == 2){
             var latitude = positionParts[0];
             var longitude = positionParts[1];
             var zoom = 17;
-            return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank">' + position + '</a>';
+            return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank">' + link_text + '</a>';
         }
     }
     return 'N/A';

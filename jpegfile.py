@@ -35,6 +35,12 @@ class JpegFile:
                     self.__tags[decoded] = value
         #print(str(self.__tags))
 
+    def get_exif_data(self):
+        """Get all parsed Exif data.
+        Note: normally the get methods in this class should be used to get specific data.
+        """
+        return self.__tags
+
     def get_date_time(self):
         """Get the date time  in text format from the parsed Exif, or None."""
         if DATE_TIME_TAG_NAME in self.__tags:
