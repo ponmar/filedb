@@ -25,8 +25,12 @@
 <p>Read more about installation, configuration, backup and the HTTP API in the README (not available here).</p>
 <p>Note that because FileDB extracts date and time information from added JPEG images, make sure that your cameras have the correct date and time set.</p>
 
-<h2>Your Files</h2>
-<p>FileDB does not modify any files in your file collection.</p>
+<h2>Categorization</h2>
+<p>When FileDB is up and running it is time to create the categories at the <a href="{{ url_for('app_categories') }}">Edit Categories</a> page. Afterwards files can be categorized at the <a href="{{ url_for('app_categorize_files') }}">Categorize Files</a> page.</p>
+<p>It is recommended to only categorize persons in pictures that are clearly visible in the foreground.</p>
+
+<h2>Notes About Your Files Collection</h2>
+<p>FileDB does not modify any files in your file collection. Files are read when importing (adding) files, viewing files or when reading Exif-data via the API.</p>
 <p>Before importing your files, take a moment to think about the directory structure. Any directory structure can be used for sorting files in your existing collection. However, this layout has been proven to work very well:</p>
 <pre>
 root
