@@ -33,7 +33,6 @@ class JpegFile:
                     self.__tags[decoded] = gps_data
                 else:
                     self.__tags[decoded] = value
-        #print(str(self.__tags))
 
     def get_exif_data(self):
         """Get all parsed Exif data.

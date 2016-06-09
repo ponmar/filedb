@@ -154,7 +154,6 @@ def api_add_directory():
             num_added_files += 1
         else:
             num_not_added_files += 1
-            print 'Error'
 
     return create_files_added_response(num_added_files, num_not_added_files)
 
@@ -175,10 +174,10 @@ def api_import_files():
             filename_in_wanted_directory = '/'.join(filename_with_path.split('/')[1:])
 
             if add_file(filename_in_wanted_directory):
-                print 'Imported file: ' + filename_in_wanted_directory
+                app.logger.info('Imported file: ' + filename_in_wanted_directory)
                 num_imported_files += 1
             else:
-                print 'Could not import file: ' + filename_with_path
+                app.logger.info('Could not import file: ' + filename_with_path)
                 num_not_imported_files += 1
 
     return create_files_added_response(num_imported_files, num_not_imported_files)
@@ -199,11 +198,11 @@ def add_file(path, file_description=None):
     # TODO: check that path within files directory (enough to fail if ".." is included?)
     try:
         if file_is_blacklisted(path):
-            print 'Ignored blacklisted file: ' + path
+            app.logger.info('Ignored blacklisted file: ' + path)
             return False
 
         if not file_is_whitelisted(path):
-            print 'Ignored non-whitelisted file: ' + path
+            app.logger.info('Ignored non-whitelisted file: ' + path)
             return False
 
         file_path = FILES_ROOT_DIRECTORY + '/' + path
@@ -228,7 +227,7 @@ def add_file(path, file_description=None):
                 file_latitude, file_longitude = jpeg.get_gps_position()
             except IOError:
                 # Note: for some reason this happens for some working JPEG files, so we should still add the file
-                print 'Could not read JPEG file for extracting date, time and position: ' + path
+                app.logger.warning('Could not Exif data from: ' + path)
 
         if file_datetime is None:
             # Try to read date from sub-path (part of the path within the configured files directory)
@@ -240,9 +239,7 @@ def add_file(path, file_description=None):
 
         if file_latitude is not None and file_longitude is not None:
             # TODO: find nearest location and add file to filelocations table
-            print 'Latitude:  ' + str(file_latitude)
-            print 'Longitude: ' + str(file_longitude)
-
+            app.logger.info('Found GPS position: {} {}'.format(file_latitude, file_longitude))
         return True
 
     except sqlite3.IntegrityError:
@@ -593,7 +590,6 @@ def api_get_json_files():
     if len(where_statements) > 0:
         query += 'where ' + ' and '.join(where_statements)
 
-    #print 'Query: ' + query
     cur = g.db.execute(query)
 
     files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
