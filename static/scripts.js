@@ -335,6 +335,7 @@ function get_files(){
 }
 
 function update_list_of_files(){
+    $("#get_all_files_status").text("Loading files...");
     $.getJSON("/api/files", function(result){
         $("#filestable").empty();
         $("#filestable").append('<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
@@ -356,6 +357,9 @@ function update_list_of_files(){
             delete_file(id);
             return false; // do not follow link
         });
+    })
+    .always(function(){
+        $("#get_all_files_status").text("");
     });
 }
 
@@ -658,6 +662,7 @@ function update_search_result(files_json){
         for (var person_id in persons){
             var person = find_person(person_id);
             if (person != null){
+                // TODO: show person age in file
                 text += get_person_span(person) + item_separator;
             }
         }
