@@ -215,11 +215,13 @@ function get_persons(){
             if (persons.length > 0){
                 $("#no_person_message").hide();
 
+                var now = new Date();
+
                 for (var i=0, person; person = persons[i]; i++){
                     var dateofbirth = person['dateofbirth'];
                     var age = null;
                     if (dateofbirth != null){
-                        age = get_age(dateofbirth, new Date());
+                        age = get_age(dateofbirth, now);
                     }
                     $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td>Edit, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
@@ -339,12 +341,13 @@ function update_list_of_files(){
     $.getJSON("/api/files", function(result){
         $("#filestable").empty();
         $("#filestable").append('<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
+        var now = new Date();
         var files = result['files'];
         for (var i=0, file; file = files[i]; i++){
             var datetime = file['datetime'];
             var age = null;
             if (datetime != null){
-                age = get_age(datetime, new Date());
+                age = get_age(datetime, now);
             }
             var numPersons = file['persons'].length;
             var numLocations = file['locations'].length;
@@ -739,14 +742,14 @@ function load_slideshow_file(){
 
     var file_person_ids = file['persons'];
     if (file_person_ids.length > 0){
+        var file_datetime_object = new Date(file_datetime);
         file_text += "Persons: ";
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
             var person = find_person(person_id);
             if (person != null){
-                // TODO: show person age in file
                 var person_age_in_file;
                 if (file_datetime != null){
-                    person_age_in_file = " (" + get_age(person['dateofbirth'], new Date(file_datetime)) + ")";
+                    person_age_in_file = " (" + get_age(person['dateofbirth'], file_datetime_object) + ")";
                 }
                 else{
                     person_age_in_file = "";
