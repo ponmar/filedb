@@ -219,7 +219,7 @@ function get_persons(){
                     var dateofbirth = person['dateofbirth'];
                     var age = null;
                     if (dateofbirth != null){
-                        age = get_age(dateofbirth);
+                        age = get_age(dateofbirth, new Date());
                     }
                     $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td>Edit, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
@@ -344,7 +344,7 @@ function update_list_of_files(){
             var datetime = file['datetime'];
             var age = null;
             if (datetime != null){
-                age = get_age(datetime);
+                age = get_age(datetime, new Date());
             }
             var numPersons = file['persons'].length;
             var numLocations = file['locations'].length;
@@ -503,7 +503,6 @@ function categorize_file_without_date(){
 }
 
 function categorize_file_from_path(){
-    // TODO
     start_categorize_files();
     if (categorize_files_index != -1){
         var path = $('#find_file_by_bath_input').val();
@@ -662,7 +661,6 @@ function update_search_result(files_json){
         for (var person_id in persons){
             var person = find_person(person_id);
             if (person != null){
-                // TODO: show person age in file
                 text += get_person_span(person) + item_separator;
             }
         }
@@ -729,7 +727,7 @@ function load_slideshow_file(){
 
     var file_datetime = file['datetime'];
     if (file_datetime != null){
-        file_text += "Date: " + file_datetime + " (" + get_age(file_datetime) + " years ago)<br>";
+        file_text += "Date: " + file_datetime + " (" + get_age(file_datetime, new Date()) + " years ago)<br>";
     }
 
     var file_description = file["description"];
@@ -745,7 +743,15 @@ function load_slideshow_file(){
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
             var person = find_person(person_id);
             if (person != null){
-                file_text += get_person_span(person) + item_separator;
+                // TODO: show person age in file
+                var person_age_in_file;
+                if (file_datetime != null){
+                    person_age_in_file = " (" + get_age(person['dateofbirth'], new Date(file_datetime)) + ")";
+                }
+                else{
+                    person_age_in_file = "";
+                }
+                file_text += get_person_span(person) + person_age_in_file + item_separator;
             }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
@@ -1021,12 +1027,11 @@ function get_printable_value(value){
     return 'N/A';
 }
 
-function get_age(dateString){
-    var today = new Date();
-    var birthDate = new Date(dateString);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
+function get_age(date_of_birth_str, at_date){
+    var birthDate = new Date(date_of_birth_str);
+    var age = at_date.getFullYear() - birthDate.getFullYear();
+    var m = at_date.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && at_date.getDate() < birthDate.getDate())){
         age--;
     }
     return age;
@@ -1035,10 +1040,13 @@ function get_age(dateString){
 function get_person_span(person){
     var text = person['firstname'] + ' ' + person['lastname'];
 
+    /*
+    // Testing to show person age, but it should probably not be shown because eventually all persons will be very old...
     var dateofbirth = person['dateofbirth'];
     if (dateofbirth != null){
-        text += ' (' + get_age(dateofbirth) + ')';
+        text += ' (' + get_age(dateofbirth, new Date()) + ')';
     }
+    */
 
     var description = person['description'];
     if (description != null){
