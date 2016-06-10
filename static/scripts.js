@@ -262,7 +262,7 @@ function get_locations(){
                 $("#no_location_message").hide();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_printable_value(get_map_link(location['position'], location['position'])) + '</td><td>' + get_location_page_link(location['id'], 'Edit') + ', <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td>Edit, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_location_button").click(function(){
@@ -665,14 +665,7 @@ function update_search_result(files_json){
         for (var location_id in locations){
             var location = find_location(location_id);
             if (location != null){
-                var map_link = get_map_link(location['position'], location['name']);
-                if (map_link != null){
-                    text += map_link;
-                }
-                else{
-                    text += location['name'];
-                }
-                text += item_separator;
+                text += get_location_map_link(location) + item_separator;
             }
         }
 
@@ -759,14 +752,7 @@ function load_slideshow_file(){
         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
             var location = find_location(location_id);
             if (location != null){
-                var map_link = get_map_link(location['position'], location['name']);
-                if (map_link != null){
-                    file_text += map_link;
-                }
-                else{
-                    file_text += location['name'];
-                }
-                file_text += item_separator;
+                file_text += get_location_map_link(location) + item_separator;
            }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
@@ -1066,15 +1052,34 @@ function get_tag_page_link(tag_id, link_text){
     return '<a href="/tag/' + tag_id + '">' + link_text + '</a>';
 }
 
-function get_map_link(position, link_text){
+function get_location_map_link(location){
+    var title = location['description'];
+    if (title == null){
+        title = "";
+    }
+    var position = location['position'];
     if (position != null){
         var positionParts = position.split(" ");
         if (positionParts.length == 2){
             var latitude = positionParts[0];
             var longitude = positionParts[1];
             var zoom = 17;
-            return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank">' + link_text + '</a>';
+            return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank" title="' + title + '">' + location['name'] + '</a>';
         }
     }
-    return null;
+    return '<span title="' + title  +'">' + location['name'] + '</span>';
+}
+
+function get_position_map_link(location){
+    var position = location['position'];
+    if (position != null){
+        var positionParts = position.split(" ");
+        if (positionParts.length == 2){
+            var latitude = positionParts[0];
+            var longitude = positionParts[1];
+            var zoom = 17;
+            return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank">' + position + '</a>';
+        }
+    }
+    return "N/A";
 }
