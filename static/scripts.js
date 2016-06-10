@@ -221,7 +221,7 @@ function get_persons(){
                     if (dateofbirth != null){
                         age = get_age(dateofbirth);
                     }
-                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td>' + get_person_page_link(person['id'], 'Edit') + ', <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td>Edit, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_person_button").click(function(evt){
@@ -658,7 +658,7 @@ function update_search_result(files_json){
         for (var person_id in persons){
             var person = find_person(person_id);
             if (person != null){
-                text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
+                text += get_person_span(person) + item_separator;
             }
         }
 
@@ -747,7 +747,7 @@ function load_slideshow_file(){
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
             var person = find_person(person_id);
             if (person != null){
-                file_text += get_person_page_link(person_id, person['firstname'] + ' ' + person['lastname']) + item_separator;
+                file_text += get_person_span(person) + item_separator;
             }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
@@ -1041,8 +1041,21 @@ function get_age(dateString){
     return age;
 }
 
-function get_person_page_link(person_id, link_text){
-    return '<a href="/person/' + person_id + '" alt="testing, testing">' + link_text + '</a>';
+function get_person_span(person){
+    var text = person['firstname'] + ' ' + person['lastname'];
+
+    var dateofbirth = person['dateofbirth'];
+    if (dateofbirth != null){
+        text += ' (' + get_age(dateofbirth) + ')';
+    }
+
+    var description = person['description'];
+    if (description != null){
+        return '<span title="' + description + '">' + text + '</span>';
+    }
+    else {
+        return text;
+    }
 }
 
 function get_location_page_link(location_id, link_text){
