@@ -303,7 +303,7 @@ function get_tags(){
                 $("#no_tag_message").hide();
 
                 for (var i=0, tag; tag = tags[i]; i++){
-                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td>' + get_tag_page_link(tag['id'], 'Edit') + ', <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td>Edit' + ', <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".delete_tag_button").click(function(){
@@ -672,7 +672,7 @@ function update_search_result(files_json){
         for (var tag_id in tags){
             var tag = find_tag(tag_id);
             if (tag != null){
-                text += get_tag_page_link(tag_id, tag['name']) + item_separator;
+                text += tag['name'] + item_separator;
             }
         }
 
@@ -764,7 +764,7 @@ function load_slideshow_file(){
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
             var tag = find_tag(tag_id);
             if (tag != null){
-                file_text += get_tag_page_link(tag_id, tag['name']) + item_separator;
+                file_text += tag['name'] + item_separator;
             }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
@@ -1042,14 +1042,6 @@ function get_person_span(person){
     else {
         return text;
     }
-}
-
-function get_location_page_link(location_id, link_text){
-    return '<a href="/location/' + location_id + '" alt="testing, testing">' + link_text + '</a>';
-}
-
-function get_tag_page_link(tag_id, link_text){
-    return '<a href="/tag/' + tag_id + '">' + link_text + '</a>';
 }
 
 function get_location_map_link(location){
