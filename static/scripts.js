@@ -417,6 +417,8 @@ function categorize_file(){
         $('#tag_' + tag['id']).prop('checked', file_has_tag);
     }
 
+    $("#save_categorization_status").html("");
+
     if ($('#categorize_image').length){
         $('#categorize_image').attr('src', file_url);
     }
@@ -569,6 +571,7 @@ function save_file_categorization(){
             "datetime": datetime
         });
 
+        $("#save_categorization_status").html("<p>Saving...</p>");
         $.ajax
         ({
             type: "PUT",
@@ -576,7 +579,10 @@ function save_file_categorization(){
             contentType : 'application/json',
             data: jsonData,
             success: function(){
-                //alert("Thanks!");
+                $("#save_categorization_status").html("<p>Saved successfully</p>");
+            },
+            error: function(){
+                $("#save_categorization_status").html("<p>An error occured</p>");
             }
         })
     }
@@ -748,8 +754,9 @@ function load_slideshow_file(){
             var person = find_person(person_id);
             if (person != null){
                 var person_age_in_file;
-                if (file_datetime != null){
-                    person_age_in_file = " (" + get_age(person['dateofbirth'], file_datetime_object) + ")";
+                var peson_dateofbirth = person['dateofbirth'];
+                if (file_datetime != null && peson_dateofbirth != null){
+                    person_age_in_file = " (" + get_age(peson_dateofbirth, file_datetime_object) + ")";
                 }
                 else{
                     person_age_in_file = "";

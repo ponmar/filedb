@@ -14,13 +14,13 @@ SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'admin'
 
-#FILES_ROOT_DIRECTORY = 'x:/'
-FILES_ROOT_DIRECTORY = 'files'
+FILES_ROOT_DIRECTORY = 'x:/'
+#FILES_ROOT_DIRECTORY = 'files'
 
 # The root directory can be a mounted samba network share. Set this to True to
 # make it possible to start before the network share is mounted.
-# Note: it will not be possible to get file content when the root directory is
-#       missing
+# Note: it will not be possible to get file content or Exif data from JPEG images
+# when the root directory is missing.
 ALLOW_MISSING_ROOT_DIRECTORY = True
 
 # Files are ignored when any of the blacklisted file patterns can be found in the file path.
