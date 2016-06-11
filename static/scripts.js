@@ -508,7 +508,7 @@ function categorize_file_without_date(){
 function categorize_file_from_path(){
     start_categorize_files();
     if (categorize_files_index != -1){
-        var path = $('#find_file_by_bath_input').val();
+        var path = $('#find_file_by_path_input').val();
         if (path != null && path != ""){
             for (var file; file = categorize_files[categorize_files_index]; categorize_files_index++){
                 if (file['path'].startsWith(path)){

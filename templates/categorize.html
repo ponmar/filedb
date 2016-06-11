@@ -25,9 +25,16 @@
     <div class="panel-heading">Find Files by Path</div>
     <div class="panel-body">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="File path examples: '2016', '2016/2016-05-03'" title="File path examples: '2016', '2016/2016-05-03'" id="find_file_by_bath_input">
+            <input type="text" class="form-control" placeholder="Path prefix (examples: '2016', '2016/2016-05-03')" title="Path prefix (examples: '2016', '2016/2016-05-03')" id="find_file_by_path_input">
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" id="find_file_by_path_button">Search</button>
+            </span>
+        </div>
+        <br>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Path regular expression" title="Path regular expression" id="find_file_by_path_regexp_input">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" id="find_file_by_path_regexp_button">Search</button>
             </span>
         </div>
     </div>
