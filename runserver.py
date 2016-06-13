@@ -7,7 +7,7 @@ import config
 def validate_root_directory():
     is_dir = os.path.isdir(config.FILES_ROOT_DIRECTORY)
     if not is_dir:
-        print 'Warning: configured root directory is not a directory'
+        print('Warning: configured root directory is not a directory')
     return config.ALLOW_MISSING_ROOT_DIRECTORY or is_dir
 
 
