@@ -747,7 +747,7 @@ function load_slideshow_file(){
 
     var file_datetime = file['datetime'];
     if (file_datetime != null){
-        file_text += "Date: " + file_datetime + " (" + get_age(file_datetime, new Date()) + " years ago)<br>";
+        file_text += file_datetime + " (" + get_age(file_datetime, new Date()) + " years ago)<br>";
     }
 
     var file_description = file["description"];
@@ -756,11 +756,28 @@ function load_slideshow_file(){
     }
 
     var item_separator = ', ';
+    var found_location = false;
+    var found_person = false;
+
+    var file_location_ids = file['locations'];
+    if (file_location_ids.length > 0){
+        for (var i=0, location_id; location_id = file_location_ids[i]; i++){
+            var location = find_location(location_id);
+            if (location != null){
+                file_text += get_location_map_link(location) + item_separator;
+                found_location = true;
+           }
+        }
+        file_text = remove_text_ending(file_text, item_separator);
+    }
 
     var file_person_ids = file['persons'];
     if (file_person_ids.length > 0){
+        if (found_location){
+            file_text += ": ";
+        }
+
         var file_datetime_object = new Date(file_datetime);
-        file_text += "Persons: ";
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
             var person = find_person(person_id);
             if (person != null){
@@ -773,25 +790,18 @@ function load_slideshow_file(){
                     person_age_in_file = "";
                 }
                 file_text += get_person_span(person) + person_age_in_file + item_separator;
+                found_person = true;
             }
         }
-        file_text = remove_text_ending(file_text, item_separator) + "<br>";
-    }
-
-    var file_location_ids = file['locations'];
-    if (file_location_ids.length > 0){
-        file_text += "Locations: ";
-        for (var i=0, location_id; location_id = file_location_ids[i]; i++){
-            var location = find_location(location_id);
-            if (location != null){
-                file_text += get_location_map_link(location) + item_separator;
-           }
-        }
-        file_text = remove_text_ending(file_text, item_separator) + "<br>";
+        file_text = remove_text_ending(file_text, item_separator);
     }
 
     var file_tag_ids = file['tags'];
     if (file_tag_ids.length > 0){
+        if (found_location || found_person){
+            file_text += "<br>";
+        }
+
         file_text += "Tags: ";
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
             var tag = find_tag(tag_id);
