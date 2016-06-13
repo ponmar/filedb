@@ -13,13 +13,39 @@
   <div class="panel-heading">File Filters</div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-md-3"><input type="text" class="form-control" placeholder="Path" id="file_path_filter"></div>
-      <div class="col-md-3"><input type="text" class="form-control" placeholder="Path regular expression" id="file_path_regexp_filter"></div>
-      <div class="col-md-3"><input type="text" class="form-control" placeholder="Description" id="file_description_filter"></div>
-      <div class="col-md-3"><input type="text" class="form-control" placeholder="Date" id="file_date_filter"></div>
+      <div class="col-md-3">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Path" id="file_path_filter">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" id="">Search</button>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Path regexp" id="file_path_regexp_filter">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" id="">Search</button>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Description" id="file_description_filter">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" id="">Search</button>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Date" id="file_date_filter">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" id="">Search</button>
+          </span>
+        </div>
+      </div>
     </div>
-    <br>
-    <button type="button" class="btn btn-default" id="search_files_by_file_filter_button">Search</button>
   </div>
 </div>
 
@@ -44,6 +70,7 @@
     <button type="button" class="btn btn-default" id="slideshow_prev_file_button">&lt;&lt; Previous</button>
     <button type="button" class="btn btn-default" id="slideshow_next_file_button">Next &gt;&gt;</button>
     <button type="button" class="btn btn-default" id="slideshow_random_file_button">Next Random</button>
+    <button type="button" class="btn btn-default" id="slideshow_restart_button">Restart</button>
     <button type="button" class="btn btn-default" id="slideshow_toggle_button">Slideshow: Off</button>
     <br><br>
     <span id="slideshow_item_text">No search result available</span>

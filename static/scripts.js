@@ -63,15 +63,15 @@ $(document).ready(function(){
         });
     }
 
-    if ($('#search_files_by_file_filter_button').length){
-        $('#search_files_by_file_filter_button').click(function(){
-            alert('TODO');
-        })
-    }
-
     if ($('#search_files_by_category_button').length){
         $("#search_files_by_category_button").click(function(){
             search_files();
+        });
+    }
+
+    if ($('#slideshow_restart_button').length){
+        $('#slideshow_restart_button').click(function(){
+            restart_slideshow();
         });
     }
 
