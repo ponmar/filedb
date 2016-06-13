@@ -420,7 +420,7 @@ function categorize_file(){
         $('#tag_' + tag['id']).prop('checked', file_has_tag);
     }
 
-    $("#save_categorization_status").html("");
+    $("#save_categorization_status").text("");
 
     if ($('#categorize_image').length){
         $('#categorize_image').attr('src', file_url);
@@ -584,7 +584,7 @@ function save_file_categorization(){
             "datetime": datetime
         });
 
-        $("#save_categorization_status").html("<p>Saving...</p>");
+        $("#save_categorization_status").text("Saving...");
         $.ajax
         ({
             type: "PUT",
@@ -592,10 +592,10 @@ function save_file_categorization(){
             contentType : 'application/json',
             data: jsonData,
             success: function(){
-                $("#save_categorization_status").html("<p>Saved successfully</p>");
+                $("#save_categorization_status").text("Saved successfully");
             },
             error: function(){
-                $("#save_categorization_status").html("<p>An error occured</p>");
+                $("#save_categorization_status").text("An error occured");
             }
         })
     }
