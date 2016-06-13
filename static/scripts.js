@@ -203,6 +203,7 @@ function get_persons(){
         persons = result['persons'];
 
         if ($('#personbuttons').length){
+            $('#personbuttons').text("");
             for (var i=0, person; person = persons[i]; i++){
                 var name = person['firstname'] + ' ' + person['lastname'];
                 $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label>');
@@ -252,6 +253,7 @@ function get_locations(){
         locations = result['locations'];
 
         if ($('#locationbuttons').length){
+            $('#locationbuttons').text("");
             for (var i=0, location; location = locations[i]; i++){
                 $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label>');
             }
@@ -293,6 +295,7 @@ function get_tags(){
         tags = result['tags'];
 
         if ($('#tagbuttons').length){
+            $('#tagbuttons').text("");
             for (var i=0, tag; tag = tags[i]; i++){
                 $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label>');
             }
