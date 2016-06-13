@@ -432,6 +432,16 @@ function categorize_file(){
         });
         img.appendTo($('#categorize_image_div'));
     }
+    update_image_div_height('#categorize_image_div');
+}
+
+function update_image_div_height(selector){
+    set_div_height(selector, 0.75);
+}
+
+function set_div_height(selector, factor){
+    var height = $(selector).width() * factor;
+    $(selector).css({'height': height + 'px'});
 }
 
 // TODO: use only one function with arguments for finding file to categorize?
@@ -731,6 +741,7 @@ function load_slideshow_file(){
         });
         img.appendTo($('#file_browser_image_div'));
     }
+    update_image_div_height('#file_browser_image_div');
 
     var file_text = "";
 
