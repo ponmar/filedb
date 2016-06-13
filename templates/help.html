@@ -11,22 +11,23 @@
 
 <h2>About</h2>
 <p>This web application is used for storing and presenting meta data for your multimedia files (such as images or movies).</p>
-<p>The following meta data can be added to each file from the file collection:</p>
+<p>The following meta data can be added to each file from your file collection:</p>
 <ul>
-    <li>File description</li>
-    <li>File date and time</li>
-    <li>Persons</li>
-    <li>Locations</li>
+    <li>File description, date and time</li>
+    <li>Persons - including description and date of birth</li>
+    <li>Locations - including description and GPS position</li>
     <li>Tags</li>
 </ul>
 <p>The meta data above, called categories, can be used when searching for files or to document historic events represented by the files.</p>
 
-<h2>Installation</h2>
-<p>Read more about installation, configuration, backup and the HTTP API in the README (not available here).</p>
+<h2>Initial Setup</h2>
+<p>Read more about installation, configuration, backup and the HTTP API in the README included in the FileDB release (not available here).</p>
 <p>Note that because FileDB extracts date and time information from added JPEG images, make sure that your cameras have the correct date and time set.</p>
+<p>When you start with an empty file database you probably want to import all your files at the <a href="{{ url_for('app_files') }}">Add File</a> page. Later, when adding new directories, specific directories can be added to improve performance.</p>
 
 <h2>Categorization</h2>
-<p>When FileDB is up and running it is time to create the categories at the <a href="{{ url_for('app_categories') }}">Edit Categories</a> page. Afterwards files can be categorized at the <a href="{{ url_for('app_categorize_files') }}">Categorize Files</a> page.</p>
+<p>When FileDB is up and running it is time to create the categories at the <a href="{{ url_for('app_categories') }}">Edit Categories</a> page.</p>
+<p>Afterwards files can be categorized at the <a href="{{ url_for('app_categorize_files') }}">Categorize Files</a> page.</p>
 <p>It is recommended to only categorize persons in pictures that are clearly visible in the foreground.</p>
 
 <h2>Notes About Your Files Collection</h2>
@@ -59,7 +60,7 @@ root
 </ul>
 
 <h2>Application Programming Interface (API)</h2>
-<p>Read about the FileDB API in the API documentation (not available here).</p>
+<p>Read about the FileDB API in the API documentation included in the FileDB release (not available here).</p>
 
 {% endif %}
 {% endblock %}
