@@ -242,7 +242,7 @@ function get_persons(){
             $('#person_categories').empty();
             for (var i=0, person; person = persons[i]; i++){
                 var name = person['firstname'] + ' ' + person['lastname'];
-                $("#person_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label>');
+                $("#person_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label><br>');
             }
         }
     });
@@ -283,7 +283,7 @@ function get_locations(){
         if ($('#location_categories').length){
             $('#location_categories').empty();
             for (var i=0, location; location = locations[i]; i++){
-                $("#location_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label>');
+                $("#location_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label><br>');
             }
 
         }
@@ -325,7 +325,7 @@ function get_tags(){
         if ($('#tag_categories').length){
             $('#tag_categories').empty();
             for (var i=0, tag; tag = tags[i]; i++){
-                $("#tag_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label>');
+                $("#tag_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label><br>');
             }
         }
     });
