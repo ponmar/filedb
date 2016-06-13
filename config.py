@@ -8,6 +8,11 @@ SQL_SCHEMA = 'schema.sql'
 
 DEBUG = True
 
+# Specify the network interface to be used by the FileDB web server:
+# - '0.0.0.0': accessible via the FileDB connected network
+# - None: only accessible via localhost
+HOST = None
+
 SECRET_KEY = 'development key'
 
 # These are the credentials needed to access the web application (and API).

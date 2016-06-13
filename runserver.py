@@ -25,9 +25,7 @@ def main():
     else:
         if validate_root_directory():
             print('Starting the FileDB server...')
-            #app.run(host='0.0.0.0')
-            #app.debug = True
-            flaskr.app.run(debug=True)
+            flaskr.app.run(debug=config.DEBUG, host=config.HOST)
 
 
 if __name__ == "__main__":
