@@ -302,13 +302,8 @@ def api_add_person():
     if lastname is None:
         abort(400, 'Person lastname not specified')
 
-    if date_of_birth is not None:
-        try:
-            # Required format: YYYY-MM-DD
-            # This is just to verify the format of the string, so the returned datetime object is ignored
-            datetime.datetime.strptime(date_of_birth, '%Y-%m-%d')
-        except ValueError:
-            abort(400, 'Invalid date of birth format')
+    if date_of_birth is not None and not is_date_format(date_of_birth):
+        abort(400, 'Invalid date of birth format')
 
     try:
         cursor = g.db.cursor()
@@ -320,6 +315,24 @@ def api_add_person():
                              201)
     except sqlite3.IntegrityError:
         abort(409)
+
+
+def is_date_format(text):
+    # Required format: YYYY-MM-DD
+    try:
+        datetime.datetime.strptime(text, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+
+def is_date_and_time_format(text):
+    # Required format: YYYY-MM-DDTHH:MM:SS
+    try:
+        datetime.datetime.strptime(text, '%Y-%m-%dT%H:%M:%S')
+        return True
+    except ValueError:
+        return False
 
 
 @app.route('/api/location', methods=['POST'])
@@ -404,6 +417,8 @@ def api_update_file(file_id):
         if 'datetime' in content:
             datetime = content['datetime']
             if datetime is not None:
+                if not is_date_format(datetime) and not is_date_and_time_format(datetime):
+                    abort(400, 'Invalid datetime format')
                 cursor.execute("update files set datetime = '" + datetime + "' where id = " + str(file_id))
             else:
                 cursor.execute("update files set datetime = null where id = " + str(file_id))
@@ -430,11 +445,19 @@ def api_update_person(person_id):
 
         if 'description' in content:
             description = content['description']
-            cursor.execute("update persons set description = '" + description + "' where id = " + person_id)
+            if description is not None:
+                cursor.execute("update persons set description = '" + description + "' where id = " + person_id)
+            else:
+                cursor.execute("update persons set description = null where id = " + str(person_id))
 
         if 'dateofbirth' in content:
             dateofbirth = content['dateofbirth']
-            cursor.execute("update persons set dateofbirth = '" + dateofbirth + "' where id = " + person_id)
+            if dateofbirth is not None:
+                if not is_date_format(dateofbirth):
+                    abort(400, 'Invalid date of birth format')
+                cursor.execute("update persons set dateofbirth = '" + dateofbirth + "' where id = " + person_id)
+            else:
+                cursor.execute("update persons set dateofbirth = null where id = " + str(person_id))
 
         g.db.commit()
 
@@ -454,11 +477,17 @@ def api_update_location(location_id):
 
         if 'description' in content:
             description = content['description']
-            cursor.execute("update locations set description = '" + description + "' where id = " + location_id)
+            if description is not None:
+                cursor.execute("update locations set description = '" + description + "' where id = " + location_id)
+            else:
+                cursor.execute("update locations set description = null where id = " + str(location_id))
 
         if 'position' in content:
             position = content['position']
-            cursor.execute("update locations set position = '" + position + "' where id = " + location_id)
+            if position is not None:
+                cursor.execute("update locations set position = '" + position + "' where id = " + location_id)
+            else:
+                cursor.execute("update locations set position = null where id = " + str(location_id))
 
         g.db.commit()
 
