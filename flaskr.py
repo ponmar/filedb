@@ -437,27 +437,21 @@ def api_update_person(person_id):
     try:
         if 'firstname' in content:
             firstname = content['firstname']
-            cursor.execute("update persons set firstname = '" + firstname + "' where id = " + person_id)
+            cursor.execute("update persons set firstname = ? where id = ?", (firstname, person_id))
 
         if 'lastname' in content:
             lastname = content['lastname']
-            cursor.execute("update persons set lastname = '" + lastname + "' where id = " + person_id)
+            cursor.execute("update persons set lastname = ? where id = ?", (lastname, person_id))
 
         if 'description' in content:
             description = content['description']
-            if description is not None:
-                cursor.execute("update persons set description = '" + description + "' where id = " + person_id)
-            else:
-                cursor.execute("update persons set description = null where id = " + str(person_id))
+            cursor.execute("update persons set description = ? where id = ?", (description, person_id))
 
         if 'dateofbirth' in content:
             dateofbirth = content['dateofbirth']
-            if dateofbirth is not None:
-                if not is_date_format(dateofbirth):
-                    abort(400, 'Invalid date of birth format')
-                cursor.execute("update persons set dateofbirth = '" + dateofbirth + "' where id = " + person_id)
-            else:
-                cursor.execute("update persons set dateofbirth = null where id = " + str(person_id))
+            if dateofbirth is not None and not is_date_format(dateofbirth):
+                abort(400, 'Invalid date of birth format')
+            cursor.execute("update persons set dateofbirth = ? where id = ?", (dateofbirth, person_id))
 
         g.db.commit()
 
@@ -473,21 +467,15 @@ def api_update_location(location_id):
     try:
         if 'name' in content:
             name = content['name']
-            cursor.execute("update locations set name = '" + name + "' where id = " + location_id)
+            cursor.execute("update locations set name = ? where id = ?", (name, location_id))
 
         if 'description' in content:
             description = content['description']
-            if description is not None:
-                cursor.execute("update locations set description = '" + description + "' where id = " + location_id)
-            else:
-                cursor.execute("update locations set description = null where id = " + str(location_id))
+            cursor.execute("update locations set description = ? where id = ?", (description, location_id))
 
         if 'position' in content:
             position = content['position']
-            if position is not None:
-                cursor.execute("update locations set position = '" + position + "' where id = " + location_id)
-            else:
-                cursor.execute("update locations set position = null where id = " + str(location_id))
+            cursor.execute("update locations set position = ? where id = ?", (position, location_id))
 
         g.db.commit()
 
@@ -503,7 +491,7 @@ def api_update_tag(tag_id):
     try:
         if 'name' in content:
             name = content['name']
-            cursor.execute("update tags set name = '" + name + "' where id = " + tag_id)
+            cursor.execute("update tags set name = ? where id = ?", (name, tag_id))
 
         g.db.commit()
 
