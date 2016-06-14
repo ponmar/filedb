@@ -239,11 +239,13 @@ function get_persons(){
         }
 
         if ($('#person_categories').length){
-            $('#person_categories').empty();
+            var labels = '';
             for (var i=0, person; person = persons[i]; i++){
                 var name = person['firstname'] + ' ' + person['lastname'];
-                $("#person_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label><br>');
+                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label><br>';
             }
+            labels = remove_text_ending(labels, '<br>');
+            $('#person_categories').html(labels);
         }
     });
 }
@@ -281,11 +283,12 @@ function get_locations(){
         }
 
         if ($('#location_categories').length){
-            $('#location_categories').empty();
+            var labels = '';
             for (var i=0, location; location = locations[i]; i++){
-                $("#location_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label><br>');
+                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label><br>';
             }
-
+            labels = remove_text_ending(labels, '<br>');
+            $('#location_categories').html(labels);
         }
     });
 }
@@ -323,10 +326,13 @@ function get_tags(){
         }
 
         if ($('#tag_categories').length){
+            var labels = '';
             $('#tag_categories').empty();
             for (var i=0, tag; tag = tags[i]; i++){
-                $("#tag_categories").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label><br>');
+                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label><br>';
             }
+            labels = remove_text_ending(labels, '<br>');
+            $("#tag_categories").html(labels);
         }
     });
 }
@@ -355,6 +361,7 @@ function update_list_of_files(){
             var numPersons = file['persons'].length;
             var numLocations = file['locations'].length;
             var numTags = file['tags'].length;
+            // TODO: optimize: create one long string and then set it with one call to not change the DOM many times
             $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a>, <a href="/api/fileexif/' + file['id'] + '">Exif</a></td></tr>');
         }
 
