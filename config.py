@@ -9,8 +9,8 @@ SQL_SCHEMA = 'schema.sql'
 DEBUG = True
 
 # Specify the network interface to be used by the FileDB web server:
-# - '0.0.0.0': accessible via the FileDB connected network
-# - None: only accessible via localhost
+# - '0.0.0.0': accessible via network
+# - None: only accessible via localhost only
 HOST = None
 
 SECRET_KEY = 'development key'
@@ -19,8 +19,8 @@ SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'admin'
 
-FILES_ROOT_DIRECTORY = 'x:/'
-#FILES_ROOT_DIRECTORY = 'files'
+#FILES_ROOT_DIRECTORY = 'x:/'
+FILES_ROOT_DIRECTORY = 'files'
 
 # The root directory can be a mounted samba network share. Set this to True to
 # make it possible to start before the network share is mounted.
