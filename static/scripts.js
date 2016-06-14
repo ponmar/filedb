@@ -918,7 +918,12 @@ function prev_slideshow_file(){
 
 function random_slideshow_file(){
     if (slideshow_files != null && slideshow_files.length > 1){
-        slideshow_index = parseInt(Math.random() * slideshow_files.length, 10);
+        var random_index;
+        do{
+            random_index = Math.floor((Math.random() * slideshow_files.length));
+        }
+        while (slideshow_index == random_index);
+        slideshow_index = random_index;
         load_slideshow_file();
     }
 }
