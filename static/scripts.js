@@ -165,6 +165,7 @@ $(document).ready(function(){
         })
     }
 
+    // TODO: only register on browse page
     // Register slideshow control keys
     $(document).keypress(function(e){
         if (e.which == 97){
@@ -178,10 +179,6 @@ $(document).ready(function(){
         else if (e.which == 114){
             // 'r' pressed
             random_slideshow_file();
-        }
-        else if (e.which == 115){
-            // 's' pressed
-            save_file_categorization();
         }
     });
 });
@@ -431,6 +428,7 @@ function categorize_file(){
 
     $("#save_categorization_status").text("");
 
+    // TODO: create link to file (and remove previous img if any) if selected file is not an image
     if ($('#categorize_image').length){
         $('#categorize_image').attr('src', file_url);
     }
@@ -741,6 +739,7 @@ function load_slideshow_file(){
 
     $('#slideshow_file_path').text("[" + (slideshow_index + 1) + "/" + slideshow_files.length + "] " + file['path']);
 
+    // TODO: create link to file (and remove previous img if any) if selected file is not an image
     if ($('#slideshow_image').length){
         $('#slideshow_image').attr('src', file_url);
     }
