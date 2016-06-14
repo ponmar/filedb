@@ -1,4 +1,8 @@
-"""Python example code for fetching data from FileDB."""
+"""Python example code for fetching data from FileDB.
+Notes:
+    - It requires that FileDB is configured for authentication disabled.
+    - Install requests with "pip install requests" if needed.
+"""
 import requests
 
 BASE_URL = 'http://localhost:5000/'
@@ -6,6 +10,7 @@ BASE_URL = 'http://localhost:5000/'
 
 def get_json(url):
     r = requests.get(url)
+    print(r.status_code)
     return r.json()
 
 
