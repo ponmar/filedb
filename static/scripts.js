@@ -179,6 +179,10 @@ $(document).ready(function(){
             // 'r' pressed
             random_slideshow_file();
         }
+        else if (e.which == 115){
+            // 's' pressed
+            save_file_categorization();
+        }
     });
 });
 
