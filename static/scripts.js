@@ -209,8 +209,7 @@ function get_persons(){
         if ($('#personbuttons').length){
             $('#personbuttons').text("");
             for (var i=0, person; person = persons[i]; i++){
-                var name = person['firstname'] + ' ' + person['lastname'];
-                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label>');
+                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + get_person_span(person) + '</label>');
             }
         }
 
@@ -245,8 +244,7 @@ function get_persons(){
         if ($('#person_categories').length){
             var labels = '';
             for (var i=0, person; person = persons[i]; i++){
-                var name = person['firstname'] + ' ' + person['lastname'];
-                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + name + '</label><br>';
+                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + get_person_span(person) + '</label><br>';
             }
             labels = remove_text_ending(labels, '<br>');
             $('#person_categories').html(labels);
@@ -261,7 +259,7 @@ function get_locations(){
         if ($('#locationbuttons').length){
             $('#locationbuttons').text("");
             for (var i=0, location; location = locations[i]; i++){
-                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label>');
+                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + get_location_span(location) + '</label>');
             }
         }
 
@@ -289,7 +287,7 @@ function get_locations(){
         if ($('#location_categories').length){
             var labels = '';
             for (var i=0, location; location = locations[i]; i++){
-                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + location['name'] + '</label><br>';
+                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + get_location_span(location) + '</label><br>';
             }
             labels = remove_text_ending(labels, '<br>');
             $('#location_categories').html(labels);
@@ -1089,16 +1087,18 @@ function get_age(date_of_birth_str, at_date){
 
 function get_person_span(person){
     var text = person['firstname'] + ' ' + person['lastname'];
-
-    /*
-    // Testing to show person age, but it should probably not be shown because eventually all persons will be very old...
-    var dateofbirth = person['dateofbirth'];
-    if (dateofbirth != null){
-        text += ' (' + get_age(dateofbirth, new Date()) + ')';
-    }
-    */
-
     var description = person['description'];
+    if (description != null){
+        return '<span title="' + description + '">' + text + '</span>';
+    }
+    else {
+        return text;
+    }
+}
+
+function get_location_span(location){
+    var text = location['name'];
+    var description = location['description'];
     if (description != null){
         return '<span title="' + description + '">' + text + '</span>';
     }
