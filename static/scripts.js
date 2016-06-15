@@ -229,7 +229,7 @@ function get_persons(){
                         age = get_age(dateofbirth, now);
                     }
                     // TODO: set id for tr so that bg color can be changed by setting class="success" when editing?
-                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+                    $("#personstable").append('<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".edit_person_button").click(function(evt){
@@ -283,7 +283,7 @@ function get_locations(){
                 $("#no_location_message").hide();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".edit_location_button").click(function(){
@@ -337,7 +337,7 @@ function get_tags(){
                 $("#no_tag_message").hide();
 
                 for (var i=0, tag; tag = tags[i]; i++){
-                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+                    $("#tagstable").append('<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".edit_tag_button").click(function(){
@@ -1003,7 +1003,6 @@ function consistency_check(){
 }
 
 function prepare_edit_person(id){
-    // TODO: indicate what row is being edited
     var person = find_person(id);
     if (person != null){
         edited_person_id = id;
@@ -1011,11 +1010,15 @@ function prepare_edit_person(id){
         $('#person_lastname_input').val(person['lastname']);
         $('#person_description_input').val(person['description']);
         $('#person_dateofbirth_input').val(person['dateofbirth']);
+        $('#tr_person_' + id).attr("class", "success");
     }
 }
 
 function clear_edit_person(){
-    edited_person_id = -1;
+    if (edited_person_id != -1){
+        $('#tr_person_' + edited_person_id).attr("class", "");
+        edited_person_id = -1;
+    }
     $('#person_firstname_input').val("");
     $('#person_lastname_input').val("");
     $('#person_description_input').val("");
@@ -1023,34 +1026,40 @@ function clear_edit_person(){
 }
 
 function prepare_edit_location(id){
-    // TODO: indicate what row is being edited
     var location = find_location(id);
     if (location != null){
         edited_location_id = id;
         $('#location_name_input').val(location['name']);
         $('#location_description_input').val(location['description']);
         $('#location_position_input').val(location['position']);
+        $('#tr_location_' + id).attr("class", "success");
     }
 }
 
 function clear_edit_location(){
-    edited_location_id = -1;
+    if (edited_location_id != -1){
+        $('#tr_location_' + edited_location_id).attr("class", "");
+        edited_location_id = -1;
+    }
     $('#location_name_input').val("");
     $('#location_description_input').val("");
     $('#location_position_input').val("");
 }
 
 function prepare_edit_tag(id){
-    // TODO: indicate what row is being edited
     tag = find_tag(id);
     if (tag != null){
         edited_tag_id = id;
         $('#tag_name_input').val(tag['name']);
+        $('#tr_tag_' + id).attr("class", "success");
     }
 }
 
 function clear_edit_tag(){
-    edited_tag_id = -1;
+    if (edited_tag_id != -1){
+        $('#tr_tag_' + edited_tag_id).attr("class", "");
+        edited_tag_id = -1;
+    }
     $('#tag_name_input').val("");
 }
 
