@@ -468,6 +468,7 @@ function categorize_file(){
     // TODO: create link to file (and remove previous img if any) if selected file is not an image
     if ($('#categorize_image').length){
         $('#categorize_image').attr('src', file_url);
+        $('#categorize_image').attr('alt', file_url);
     }
     else{
         $('#categorize_image_div').empty();
