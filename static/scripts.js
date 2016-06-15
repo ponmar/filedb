@@ -1077,42 +1077,48 @@ function delete_file(id){
 }
 
 function delete_person(id){
-    $.ajax({
-        url: '/api/person/' + id,
-        type: 'DELETE',
-        success: function(result){
-            get_persons();
-        }
-    })
-    .fail(function(){
-        alert('Delete person failed');
-    });
+    if (window.confirm("Are you sure?")){
+        $.ajax({
+            url: '/api/person/' + id,
+            type: 'DELETE',
+            success: function(result){
+                get_persons();
+            }
+        })
+        .fail(function(){
+            alert('Delete person failed');
+        });
+    }
 }
 
 function delete_location(id){
-    $.ajax({
-        url: '/api/location/' + id,
-        type: 'DELETE',
-        success: function(result){
-            get_locations();
-        }
-    })
-    .fail(function(){
-        alert('Delete location failed');
-    });
+    if (window.confirm("Are you sure?")){
+        $.ajax({
+            url: '/api/location/' + id,
+            type: 'DELETE',
+            success: function(result){
+                get_locations();
+            }
+        })
+        .fail(function(){
+            alert('Delete location failed');
+        });
+    }
 }
 
 function delete_tag(id){
-    $.ajax({
-        url: '/api/tag/' + id,
-        type: 'DELETE',
-        success: function(result){
-            get_tags();
-        }
-    })
-    .fail(function(){
-        alert('Delete tag failed');
-    });
+    if (window.confirm("Are you sure?")){
+        $.ajax({
+            url: '/api/tag/' + id,
+            type: 'DELETE',
+            success: function(result){
+                get_tags();
+            }
+        })
+        .fail(function(){
+            alert('Delete tag failed');
+        });
+    }
 }
 
 function get_input(input_id){
