@@ -228,12 +228,18 @@ function get_persons(){
                     if (dateofbirth != null){
                         age = get_age(dateofbirth, now);
                     }
+                    // TODO: set id for tr so that bg color can be changed by setting class="success" when editing?
                     $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".edit_person_button").click(function(evt){
                     var id = $(this).attr('id').replace('edit_person_', '');
-                    prepare_edit_person(id);
+                    if (id == edited_person_id){
+                        clear_edit_person();
+                    }
+                    else{
+                        prepare_edit_person(id);
+                    }
                     return false; // do not follow link
                 });
 
@@ -282,7 +288,12 @@ function get_locations(){
 
                 $(".edit_location_button").click(function(){
                     var id = $(this).attr('id').replace('edit_location_', '');
-                    prepare_edit_location(id);
+                    if (id == edited_location_id){
+                        clear_edit_location();
+                    }
+                    else{
+                        prepare_edit_location(id);
+                    }
                     return false; // do not follow link
                 });
 
@@ -331,7 +342,12 @@ function get_tags(){
 
                 $(".edit_tag_button").click(function(){
                     var id = $(this).attr('id').replace('edit_tag_', '');
-                    prepare_edit_tag(id);
+                    if (id == edited_tag_id){
+                        clear_edit_tag();
+                    }
+                    else{
+                        prepare_edit_tag(id);
+                    }
                     return false; // do not follow link
                 });
 
