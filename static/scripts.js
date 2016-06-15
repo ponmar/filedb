@@ -998,6 +998,14 @@ function prepare_edit_person(id){
     }
 }
 
+function clear_edit_person(){
+    edited_person_id = -1;
+    $('#person_firstname_input').val("");
+    $('#person_lastname_input').val("");
+    $('#person_description_input').val("");
+    $('#person_dateofbirth_input').val("");
+}
+
 function prepare_edit_location(id){
     // TODO: indicate what row is being edited
     var location = find_location(id);
@@ -1009,6 +1017,13 @@ function prepare_edit_location(id){
     }
 }
 
+function clear_edit_location(){
+    edited_location_id = -1;
+    $('#location_name_input').val("");
+    $('#location_description_input').val("");
+    $('#location_position_input').val("");
+}
+
 function prepare_edit_tag(id){
     // TODO: indicate what row is being edited
     tag = find_tag(id);
@@ -1016,6 +1031,11 @@ function prepare_edit_tag(id){
         edited_tag_id = id;
         $('#tag_name_input').val(tag['name']);
     }
+}
+
+function clear_edit_tag(){
+    edited_tag_id = -1;
+    $('#tag_name_input').val("");
 }
 
 function delete_file(id){
@@ -1108,7 +1128,7 @@ function modify_person(){
         data: jsonData,
         success: function(){
             // TODO: hide edit indicator
-            edited_person_id = -1;
+            clear_edit_person();
             get_persons();
         },
         error: function(){
@@ -1146,7 +1166,7 @@ function modify_location(){
         data: jsonData,
         success: function(){
             // TODO: hide edit indicator
-            edited_location_id = -1;
+            clear_edit_location();
             get_locations();
         },
         error: function(){
@@ -1156,11 +1176,38 @@ function modify_location(){
 }
 
 function modify_tag(){
-    $.post("/api/tag", $("#add_tag_form").serialize(), function(json){
-        get_tags();
-    }, "json")
-    .fail(function(){
-        alert("Add tag failed");
+var jsonData = JSON.stringify(
+    {
+        "name": get_input('tag_name_input')
+    });
+
+    var method;
+    var url;
+    if (edited_tag_id == -1){
+        method = 'POST';
+        url = '/api/tag';
+    }
+    else{
+        // TODO: show edit indicator
+        method = 'PUT';
+        url = '/api/tag/' + edited_tag_id;
+    }
+
+    // Add or update location
+    $.ajax
+    ({
+        type: method,
+        url: url,
+        contentType : 'application/json',
+        data: jsonData,
+        success: function(){
+            // TODO: hide edit indicator
+            clear_edit_tag();
+            get_tags();
+        },
+        error: function(){
+            alert("Save location failed");
+        }
     });
 }
 

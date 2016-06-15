@@ -362,13 +362,14 @@ def api_add_location():
         abort(409)
 
 
-# TODO: use JSON
 @app.route('/api/tag', methods=['POST'])
 def api_add_tag():
     if not session.get('logged_in'):
         abort(401)
 
-    name = get_form_str('name', request.form)
+    content = request.get_json(silent=True)
+    name = content['name']
+
     if name is None:
         abort(400, 'Tag name not specified')
 
