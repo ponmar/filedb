@@ -1118,11 +1118,40 @@ function modify_person(){
 }
 
 function modify_location(){
-    $.post("/api/location", $("#add_location_form").serialize(), function(json){
-        get_locations();
-    }, "json")
-    .fail(function(){
-        alert("Add location failed");
+    var jsonData = JSON.stringify(
+    {
+        "name": get_input('location_name_input'),
+        "description": get_input('location_description_input'),
+        "position": get_input('location_position_input')
+    });
+
+    var method;
+    var url;
+    if (edited_location_id == -1){
+        method = 'POST';
+        url = '/api/location';
+    }
+    else{
+        // TODO: show edit indicator
+        method = 'PUT';
+        url = '/api/location/' + edited_location_id;
+    }
+
+    // Add or update location
+    $.ajax
+    ({
+        type: method,
+        url: url,
+        contentType : 'application/json',
+        data: jsonData,
+        success: function(){
+            // TODO: hide edit indicator
+            edited_location_id = -1;
+            get_locations();
+        },
+        error: function(){
+            alert("Save location failed");
+        }
     });
 }
 

@@ -335,18 +335,20 @@ def is_date_and_time_format(text):
         return False
 
 
-# TODO: use JSON
 @app.route('/api/location', methods=['POST'])
 def api_add_location():
     if not session.get('logged_in'):
         abort(401)
 
-    name = get_form_str('name', request.form)
-    description = get_form_str('description', request.form)
-    position = get_form_str('position', request.form)
+    content = request.get_json(silent=True)
+    name = content['name']
+    description = content['description']
+    position = content['position']
 
     if name is None:
         abort(400, 'Location name not specified')
+
+    # TODO: validate position format if specified
 
     try:
         cursor = g.db.cursor()
@@ -486,6 +488,7 @@ def api_update_location(location_id):
 
         if 'position' in content:
             position = content['position']
+            # TODO: validate position format if specified
             cursor.execute("update locations set position = ? where id = ?", (position, location_id))
 
         g.db.commit()
