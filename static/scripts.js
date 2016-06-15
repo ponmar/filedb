@@ -10,6 +10,10 @@ var slideshow_index = -1;
 var slideshow_timer = null;
 var slideshow_interval = 3000;
 
+var edited_person_id = -1;
+var edited_location_id = -1;
+var edited_tag_id = -1;
+
 // TODO: use different init-functions per page instead of checking if ids exist
 $(document).ready(function(){
     if (needs_persons()){
@@ -31,21 +35,21 @@ $(document).ready(function(){
     if ($('#add_person_form').length){
         $("#add_person_form").submit(function(evt){
             evt.preventDefault();
-            post_add_person_form();
+            modify_person();
         });
     }
 
     if ($('#add_location_form').length){
         $("#add_location_form").submit(function(evt){
             evt.preventDefault();
-            post_add_location_form();
+            modify_location();
         });
     }
 
     if ($('#add_tag_form').length){
         $("#add_tag_form").submit(function(evt){
             evt.preventDefault();
-            post_add_tag_form();
+            modify_tag();
         });
     }
 
@@ -224,8 +228,14 @@ function get_persons(){
                     if (dateofbirth != null){
                         age = get_age(dateofbirth, now);
                     }
-                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td>Edit, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+                    $("#personstable").append('<tr><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
+
+                $(".edit_person_button").click(function(evt){
+                    var id = $(this).attr('id').replace('edit_person_', '');
+                    prepare_edit_person(id);
+                    return false; // do not follow link
+                });
 
                 $(".delete_person_button").click(function(evt){
                     var id = $(this).attr('id').replace('delete_person_', '');
@@ -267,6 +277,7 @@ function get_locations(){
                 $("#no_location_message").hide();
 
                 for (var i=0, location; location = locations[i]; i++){
+                    // TODO: fill input fields when edit is pressed
                     $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td>Edit, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
@@ -310,6 +321,7 @@ function get_tags(){
                 $("#no_tag_message").hide();
 
                 for (var i=0, tag; tag = tags[i]; i++){
+                    // TODO: fill input fields when edit is pressed
                     $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td>Edit' + ', <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
                 }
 
@@ -964,6 +976,18 @@ function consistency_check(){
     }
 }
 
+function prepare_edit_person(id){
+    // TODO: indicate what row is being edited
+    person = find_person(id);
+    if (person != null){
+        edited_person_id = id;
+        $('#person_firstname_input').val(person['firstname']);
+        $('#person_lastname_input').val(person['lastname']);
+        $('#person_description_input').val(person['description']);
+        $('#person_dateofbirth_input').val(person['dateofbirth']);
+    }
+}
+
 function delete_file(id){
     $.ajax({
         url: '/api/file/' + id,
@@ -1016,16 +1040,54 @@ function delete_tag(id){
     });
 }
 
-function post_add_person_form(){
-    $.post("/api/person", $("#add_person_form").serialize(), function(json){
-        get_persons();
-    }, "json")
-    .fail(function(){
-        alert("Add person failed");
+function get_input(input_id){
+    var value = $('#' + input_id).val();
+    if (value == ""){
+        return null;
+    }
+    return value;
+}
+
+function modify_person(){
+    var jsonData = JSON.stringify(
+    {
+        "firstname": get_input('person_firstname_input'),
+        "lastname": get_input('person_lastname_input'),
+        "description": get_input('person_description_input'),
+        "dateofbirth": get_input('person_dateofbirth_input')
+    });
+
+    var method;
+    var url;
+    if (edited_person_id == -1){
+        method = 'POST';
+        url = '/api/person';
+    }
+    else{
+        // TODO: show edit indicator
+        method = 'PUT';
+        url = '/api/person/' + edited_person_id;
+    }
+
+    // Add or update person
+    $.ajax
+    ({
+        type: method,
+        url: url,
+        contentType : 'application/json',
+        data: jsonData,
+        success: function(){
+            // TODO: hide edit indicator
+            edited_person_id = -1;
+            get_persons();
+        },
+        error: function(){
+            alert("Save person failed");
+        }
     });
 }
 
-function post_add_location_form(){
+function modify_location(){
     $.post("/api/location", $("#add_location_form").serialize(), function(json){
         get_locations();
     }, "json")
@@ -1034,7 +1096,7 @@ function post_add_location_form(){
     });
 }
 
-function post_add_tag_form(){
+function modify_tag(){
     $.post("/api/tag", $("#add_tag_form").serialize(), function(json){
         get_tags();
     }, "json")

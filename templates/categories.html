@@ -12,12 +12,12 @@
 <h2>Persons</h2>
 <form action="{{ url_for('api_add_person') }}" method=post class="navbar-form navbar-left" role="search" id="add_person_form">
     <div class="form-group">
-        <input type="text" class="form-control" placeholder="First name" name="firstname" title="First name" required>
-        <input type="text" class="form-control" placeholder="Last name" name="lastname" title="Last name" required>
-        <input type="text" class="form-control" placeholder="Description" name="description" title="Description">
-        <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="dateofbirth" pattern="[1-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" title="YYYY-MM-DD">
+        <input type="text" class="form-control" placeholder="First name" name="firstname" id="person_firstname_input" title="First name" required>
+        <input type="text" class="form-control" placeholder="Last name" name="lastname" id="person_lastname_input" title="Last name" required>
+        <input type="text" class="form-control" placeholder="Description" name="description" id="person_description_input" title="Description">
+        <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="dateofbirth" id="person_dateofbirth_input" pattern="[1-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" title="YYYY-MM-DD">
     </div>
-    <button type="submit" class="btn btn-default">Add</button>
+    <button type="submit" class="btn btn-default">Save</button>
 </form>
 <table class="table" id="personstable">
     <tr><th>First Name</th><th>Last Name</th><th>Description</th><th>Age</th><th>Date of Birth</th><th>Actions</th></tr>
@@ -31,7 +31,7 @@
         <input type="text" class="form-control" placeholder="Description" name="description" title="Description">
         <input type="text" class="form-control" placeholder="Position" name="position" pattern="[0-9]*\.[0-9]*\s[0-9]*\.[0-9]*" title="Latitude longitude (can be found in the URL at Google Maps for your location)">
     </div>
-    <button type="submit" class="btn btn-default">Add</button>
+    <button type="submit" class="btn btn-default">Save</button>
 </form>
 <table class="table" id="locationstable">
     <tr><th>Name</th><th>Description</th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr>
@@ -43,7 +43,7 @@
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Name" name="name" title="Name" required>
     </div>
-    <button type="submit" class="btn btn-default">Add</button>
+    <button type="submit" class="btn btn-default">Save</button>
 </form>
 <table class="table" id="tagstable">
     <tr><th>Name</th><th>Actions</th></tr>

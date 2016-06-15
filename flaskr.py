@@ -291,24 +291,24 @@ def api_add_person():
     if not session.get('logged_in'):
         abort(401)
 
-    firstname = get_form_str('firstname', request.form)
-    lastname = get_form_str('lastname', request.form)
-    description = get_form_str('description', request.form)
-    date_of_birth = get_form_str('dateofbirth', request.form)
+    content = request.get_json(silent=True)
+    firstname = content['firstname']
+    lastname = content['lastname']
+    description = content['description']
+    dateofbirth = content['dateofbirth']
 
     if firstname is None:
         abort(400, 'Person firstname not specified')
-
     if lastname is None:
         abort(400, 'Person lastname not specified')
-
-    if date_of_birth is not None and not is_date_format(date_of_birth):
+    # Note: description is optional
+    if dateofbirth is not None and not is_date_format(dateofbirth):
         abort(400, 'Invalid date of birth format')
 
     try:
         cursor = g.db.cursor()
         cursor.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
-                     [firstname, lastname, description, date_of_birth])
+                       [firstname, lastname, description, dateofbirth])
         g.db.commit()
         return make_response(jsonify({'message': 'Person created',
                                       'id': cursor.lastrowid}),
@@ -335,6 +335,7 @@ def is_date_and_time_format(text):
         return False
 
 
+# TODO: use JSON
 @app.route('/api/location', methods=['POST'])
 def api_add_location():
     if not session.get('logged_in'):
@@ -359,6 +360,7 @@ def api_add_location():
         abort(409)
 
 
+# TODO: use JSON
 @app.route('/api/tag', methods=['POST'])
 def api_add_tag():
     if not session.get('logged_in'):
@@ -385,6 +387,9 @@ def api_add_tag():
 
 @app.route('/api/file/<int:file_id>', methods=['PUT'])
 def api_update_file(file_id):
+    if not session.get('logged_in'):
+        abort(401)
+
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
 
@@ -432,6 +437,9 @@ def api_update_file(file_id):
 
 @app.route('/api/person/<int:person_id>', methods=['PUT'])
 def api_update_person(person_id):
+    if not session.get('logged_in'):
+        abort(401)
+
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
@@ -462,6 +470,9 @@ def api_update_person(person_id):
 
 @app.route('/api/location/<int:location_id>', methods=['PUT'])
 def api_update_location(location_id):
+    if not session.get('logged_in'):
+        abort(401)
+
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
@@ -486,6 +497,9 @@ def api_update_location(location_id):
 
 @app.route('/api/tag/<int:tag_id>', methods=['PUT'])
 def api_update_tag(tag_id):
+    if not session.get('logged_in'):
+        abort(401)
+
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
