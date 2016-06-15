@@ -228,7 +228,6 @@ function get_persons(){
                     if (dateofbirth != null){
                         age = get_age(dateofbirth, now);
                     }
-                    // TODO: set id for tr so that bg color can be changed by setting class="success" when editing?
                     $("#personstable").append('<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
 
@@ -1145,7 +1144,6 @@ function modify_person(){
         url = '/api/person';
     }
     else{
-        // TODO: show edit indicator
         method = 'PUT';
         url = '/api/person/' + edited_person_id;
     }
@@ -1158,7 +1156,6 @@ function modify_person(){
         contentType : 'application/json',
         data: jsonData,
         success: function(){
-            // TODO: hide edit indicator
             clear_edit_person();
             get_persons();
         },
@@ -1183,7 +1180,6 @@ function modify_location(){
         url = '/api/location';
     }
     else{
-        // TODO: show edit indicator
         method = 'PUT';
         url = '/api/location/' + edited_location_id;
     }
@@ -1196,7 +1192,6 @@ function modify_location(){
         contentType : 'application/json',
         data: jsonData,
         success: function(){
-            // TODO: hide edit indicator
             clear_edit_location();
             get_locations();
         },
@@ -1207,7 +1202,7 @@ function modify_location(){
 }
 
 function modify_tag(){
-var jsonData = JSON.stringify(
+    var jsonData = JSON.stringify(
     {
         "name": get_input('tag_name_input')
     });
@@ -1219,7 +1214,6 @@ var jsonData = JSON.stringify(
         url = '/api/tag';
     }
     else{
-        // TODO: show edit indicator
         method = 'PUT';
         url = '/api/tag/' + edited_tag_id;
     }
@@ -1232,7 +1226,6 @@ var jsonData = JSON.stringify(
         contentType : 'application/json',
         data: jsonData,
         success: function(){
-            // TODO: hide edit indicator
             clear_edit_tag();
             get_tags();
         },
@@ -1242,6 +1235,7 @@ var jsonData = JSON.stringify(
     });
 }
 
+// TODO: replace with json?
 function post_add_directory_form(){
     clear_add_files_results();
     $("#add_files_status").text("Adding files from directory, please wait...");
@@ -1254,6 +1248,7 @@ function post_add_directory_form(){
     });
 }
 
+// TODO: replace with json?
 function post_add_file_form(){
     clear_add_files_results();
     $("#add_files_status").text("Adding file, please wait...");
