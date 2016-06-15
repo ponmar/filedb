@@ -277,9 +277,14 @@ function get_locations(){
                 $("#no_location_message").hide();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    // TODO: fill input fields when edit is pressed
-                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td>Edit, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
+
+                $(".edit_location_button").click(function(){
+                    var id = $(this).attr('id').replace('edit_location_', '');
+                    prepare_edit_location(id);
+                    return false; // do not follow link
+                });
 
                 $(".delete_location_button").click(function(){
                     var id = $(this).attr('id').replace('delete_location_', '');
@@ -321,9 +326,14 @@ function get_tags(){
                 $("#no_tag_message").hide();
 
                 for (var i=0, tag; tag = tags[i]; i++){
-                    // TODO: fill input fields when edit is pressed
-                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td>Edit' + ', <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+                    $("#tagstable").append('<tr><td>' + tag['name'] + '</td><td><a href="" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
                 }
+
+                $(".edit_tag_button").click(function(){
+                    var id = $(this).attr('id').replace('edit_tag_', '');
+                    prepare_edit_tag(id);
+                    return false; // do not follow link
+                });
 
                 $(".delete_tag_button").click(function(){
                     var id = $(this).attr('id').replace('delete_tag_', '');
@@ -978,13 +988,33 @@ function consistency_check(){
 
 function prepare_edit_person(id){
     // TODO: indicate what row is being edited
-    person = find_person(id);
+    var person = find_person(id);
     if (person != null){
         edited_person_id = id;
         $('#person_firstname_input').val(person['firstname']);
         $('#person_lastname_input').val(person['lastname']);
         $('#person_description_input').val(person['description']);
         $('#person_dateofbirth_input').val(person['dateofbirth']);
+    }
+}
+
+function prepare_edit_location(id){
+    // TODO: indicate what row is being edited
+    var location = find_location(id);
+    if (location != null){
+        edited_location_id = id;
+        $('#location_name_input').val(location['name']);
+        $('#location_description_input').val(location['description']);
+        $('#location_position_input').val(location['position']);
+    }
+}
+
+function prepare_edit_tag(id){
+    // TODO: indicate what row is being edited
+    tag = find_tag(id);
+    if (tag != null){
+        edited_tag_id = id;
+        $('#tag_name_input').val(tag['name']);
     }
 }
 
