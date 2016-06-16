@@ -221,7 +221,7 @@ def add_file(path, file_description=None):
 
         cursor = g.db.cursor()
         cursor.execute('insert into files (path, description, datetime) values (?, ?, ?)',
-                     [path, file_description, file_datetime])
+                       [path, file_description, file_datetime])
         g.db.commit()
 
         if file_latitude is not None and file_longitude is not None:
@@ -240,17 +240,17 @@ def add_file_location(file_id, file_latitude, file_longitude):
         location_id = row[0]
         location_position = row[1]
         if location_position is not None:
-            #print('Found location position' + str(location_position))
             location_position_parts = location_position.split(' ')
             location_latitude = float(location_position_parts[0])
             location_longitude = float(location_position_parts[1])
             distance = get_gps_distance(file_latitude, file_longitude, location_latitude, location_longitude)
-            #print('Distance: ' + str(distance))
-            if distance < 300: # TODO: create config param
+            if distance < FILE_TO_LOCATION_MAX_DISTANCE:
                 try:
                     g.db.execute('insert into filelocations (fileid, locationid) values (?, ?)',
                                  (file_id, location_id))
                     g.db.commit()
+                    app.logger.info('Nearby location set for file')
+
                 except sqlite3.IntegrityError:
                     # File already connected to specified location
                     pass
