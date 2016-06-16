@@ -1,4 +1,5 @@
 import datetime
+import math
 import re
 import os
 from contextlib import closing
@@ -218,17 +219,46 @@ def add_file(path, file_description=None):
             # Try to read date from sub-path (part of the path within the configured files directory)
             file_datetime = get_date_from_path(path)
 
-        g.db.execute('insert into files (path, description, datetime) values (?, ?, ?)',
+        cursor = g.db.cursor()
+        cursor.execute('insert into files (path, description, datetime) values (?, ?, ?)',
                      [path, file_description, file_datetime])
         g.db.commit()
 
         if file_latitude is not None and file_longitude is not None:
-            # TODO: find nearest location and add file to filelocations table
-            app.logger.info('Found GPS position: {} {}'.format(file_latitude, file_longitude))
+            app.logger.info('Found GPS position in file: {} {}'.format(file_latitude, file_longitude))
+            file_id = cursor.lastrowid
+            add_file_location(file_id, float(file_latitude), float(file_longitude))
         return True
 
     except sqlite3.IntegrityError:
         return False
+
+
+def add_file_location(file_id, file_latitude, file_longitude):
+    cursor = g.db.execute('select id, position from locations')
+    for row in cursor.fetchall():
+        location_id = row[0]
+        location_position = row[1]
+        if location_position is not None:
+            #print('Found location position' + str(location_position))
+            location_position_parts = location_position.split(' ')
+            location_latitude = float(location_position_parts[0])
+            location_longitude = float(location_position_parts[1])
+            distance = get_gps_distance(file_latitude, file_longitude, location_latitude, location_longitude)
+            #print('Distance: ' + str(distance))
+            if distance < 300: # TODO: create config param
+                try:
+                    g.db.execute('insert into filelocations (fileid, locationid) values (?, ?)',
+                                 (file_id, location_id))
+                    g.db.commit()
+                except sqlite3.IntegrityError:
+                    # File already connected to specified location
+                    pass
+
+
+def get_gps_distance(lat1, lon1, lat2, lon2):
+    """Returns an approximated distance in meters between two GPS positions specified in longitude and latitude."""
+    return math.sqrt(pow(lat1 - lat2, 2) + pow(lon1 - lon2, 2)) / 0.000008998719243599958
 
 
 def get_date_from_path(path):
