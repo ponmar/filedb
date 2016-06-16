@@ -22,7 +22,12 @@
 
 <h2>Initial Setup</h2>
 <p>Read more about installation, configuration, backup and the HTTP API in the README included in the FileDB release (not available here).</p>
-<p>Note that because FileDB extracts date and time information from added JPEG images, make sure that your cameras have the correct date and time set.</p>
+<p>How to prepare your cameras to simplify future categorization:</p>
+<ul>
+    <li>Make sure that your cameras have the correct date and time set, because this information will be stored by FileDB</li>
+    <li>Enable location saving in images to make FileDB automatically connect known locations when adding files</li>
+</ul>
+<p></p>
 <p>When you start with an empty file database you probably want to import all your files at the <a href="{{ url_for('app_files') }}">Add File</a> page. Later, when adding new directories, specific directories can be added to improve performance.</p>
 
 <h2>Categorization</h2>
