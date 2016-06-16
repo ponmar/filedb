@@ -212,8 +212,8 @@ def add_file(path, file_description=None):
                 file_datetime = jpeg.get_date_time()
                 file_latitude, file_longitude = jpeg.get_gps_position()
             except IOError:
-                # Note: for some reason this happens for some working JPEG files, so we should still add the file
-                app.logger.warning('Could not Exif data from: ' + path)
+                # Note: for some reason this happens for some working JPEG files, so the file should still be added
+                app.logger.warning('Could not read Exif data from: ' + path)
 
         if file_datetime is None:
             # Try to read date from sub-path (part of the path within the configured files directory)
