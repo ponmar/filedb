@@ -25,11 +25,12 @@
 <div class="alert alert-info" role="alert" id="no_person_message"><strong>Note:</strong> No persons added yet</div>
 
 <h2>Locations</h2>
+<div class="alert alert-info" role="alert"><strong>Note:</strong> Set a position for the location to automatically set nearby locations when adding files. The position can, for example, be found in the URL at <a href="https://maps.google.com">Google Maps</a>.</div>
 <form action="{{ url_for('api_add_location') }}" method=post class="navbar-form navbar-left" role="search" id="add_location_form">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Name" name="name" id="location_name_input" title="Name" required>
         <input type="text" class="form-control" placeholder="Description" name="description" id="location_description_input" title="Description">
-        <input type="text" class="form-control" placeholder="Position" name="position" id="location_position_input" pattern="[0-9]*\.[0-9]*\s[0-9]*\.[0-9]*" title="Latitude longitude (can be found in the URL at Google Maps for your location)">
+        <input type="text" class="form-control" placeholder="Position" name="position" id="location_position_input" pattern="[0-9]*\.[0-9]*\s[0-9]*\.[0-9]*" title="latitude longitude">
     </div>
     <button type="submit" class="btn btn-default">Save</button>
 </form>
