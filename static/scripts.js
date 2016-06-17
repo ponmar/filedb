@@ -5,6 +5,8 @@ var tags = null;
 var categorize_files = null;
 var categorize_files_index = -1;
 
+var categorize_result = [];
+
 var slideshow_files = null;
 var slideshow_index = -1;
 var slideshow_timer = null;
@@ -493,6 +495,7 @@ function set_div_height(selector, factor){
 }
 
 // TODO: use only one function with arguments for finding file to categorize?
+// TODO: store list of categorization result
 function categorize_file_without_any(){
     start_categorize_files();
     if (categorize_files_index != -1){
