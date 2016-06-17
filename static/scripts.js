@@ -236,7 +236,7 @@ function get_persons(){
                     if (id == edited_person_id){
                         clear_edit_person();
                     }
-                    else{
+                    else if (edited_person_id == -1){
                         prepare_edit_person(id);
                     }
                     return false; // do not follow link
@@ -290,7 +290,7 @@ function get_locations(){
                     if (id == edited_location_id){
                         clear_edit_location();
                     }
-                    else{
+                    else if (edited_location_id == -1){
                         prepare_edit_location(id);
                     }
                     return false; // do not follow link
@@ -344,7 +344,7 @@ function get_tags(){
                     if (id == edited_tag_id){
                         clear_edit_tag();
                     }
-                    else{
+                    else if (edited_tag_id == -1){
                         prepare_edit_tag(id);
                     }
                     return false; // do not follow link
