@@ -598,6 +598,16 @@ function update_categorize_result(){
         categorize_files_index = 0;
         categorize_file();
     }
+    else{
+        // TODO: also clear checkboxes for persons, locations and tags
+        $('#categorize_file_path').text("N/A");
+        $('#file_description').val("");
+        $('#file_date').val("");
+        if ($('#categorize_image').length){
+            $('#categorize_image').attr('src', '');
+            $('#categorize_image').attr('alt', '');
+        }
+    }
 }
 
 function save_file_categorization(){
