@@ -586,9 +586,9 @@ function categorize_file_without_date(){
 
 function categorize_file_from_path(){
     if (categorize_files != null){
-        categorize_result = [];
         var path = $('#find_file_by_path_input').val();
         if (path != null && path != ""){
+            categorize_result = [];
             for (var file, i=0; file = categorize_files[i]; i++){
                 if (file['path'].startsWith(path)){
                     categorize_result.push(i);
@@ -601,11 +601,10 @@ function categorize_file_from_path(){
 
 function categorize_file_from_path_regexp(){
     if (categorize_files != null){
-        categorize_result = [];
         var pattern = $('#find_file_by_path_regexp_input').val();
         if (pattern != null && pattern != ""){
-            // TODO: popup error if invalid pattern?
             var regexp = new RegExp(pattern);
+            categorize_result = [];
             for (var file, i=0; file = categorize_files[i]; i++){
                 if (regexp.test(file['path'])){
                     categorize_result.push(i);
