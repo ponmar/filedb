@@ -164,6 +164,12 @@ $(document).ready(function(){
         })
     }
 
+    if ($('#find_file_by_path_regexp_button').length){
+        $('#find_file_by_path_regexp_button').click(function(){
+            categorize_file_from_path_regexp();
+        })
+    }
+
     if ($('#prev_file_categorize_button').length){
         $('#prev_file_categorize_button').click(function(){
             prev_categorize_file();
@@ -582,9 +588,26 @@ function categorize_file_from_path(){
     if (categorize_files != null){
         categorize_result = [];
         var path = $('#find_file_by_path_input').val();
-            if (path != null && path != ""){
+        if (path != null && path != ""){
             for (var file, i=0; file = categorize_files[i]; i++){
                 if (file['path'].startsWith(path)){
+                    categorize_result.push(i);
+                }
+            }
+            update_categorize_result();
+        }
+    }
+}
+
+function categorize_file_from_path_regexp(){
+    if (categorize_files != null){
+        categorize_result = [];
+        var pattern = $('#find_file_by_path_regexp_input').val();
+        if (pattern != null && pattern != ""){
+            // TODO: popup error if invalid pattern?
+            var regexp = new RegExp(pattern);
+            for (var file, i=0; file = categorize_files[i]; i++){
+                if (regexp.test(file['path'])){
                     categorize_result.push(i);
                 }
             }

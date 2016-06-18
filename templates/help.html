@@ -34,6 +34,7 @@
 <p>When FileDB is up and running it is time to create the categories at the <a href="{{ url_for('app_categories') }}">Edit Categories</a> page.</p>
 <p>Afterwards files can be categorized at the <a href="{{ url_for('app_categorize_files') }}">Categorize Files</a> page.</p>
 <p>It is recommended to only categorize persons in pictures that are clearly visible in the foreground.</p>
+<p>Regular expressions can be used to find files to categorize. The path is then matched with the specified regular expression pattern. An introduction to such patterns can be found <a href="http://www.w3schools.com/js/js_regexp.asp" target="_blank">here</a>.</p>
 
 <h2>Notes About Your Files Collection</h2>
 <p>FileDB does not modify any files in your file collection. Files are read when importing (adding) files, viewing files or when reading Exif-data via the API.</p>
