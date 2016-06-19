@@ -849,12 +849,19 @@ function load_slideshow_file(){
 
     var file_datetime = file['datetime'];
     if (file_datetime != null){
-        file_text += file_datetime + " (" + get_age(file_datetime, new Date()) + " years ago)<br>";
+        file_text += file_datetime + " (" + get_age(file_datetime, new Date()) + " years ago)";
     }
 
     var file_description = file["description"];
     if (file_description != null){
-        file_text += "Description: " + file_description + "<br>";
+        if (file_text.length > 0){
+            file_text += ": ";
+        }
+        file_text += file_description;
+    }
+
+    if (file_text.length > 0){
+        file_text += "<br>";
     }
 
     var item_separator = ', ';
