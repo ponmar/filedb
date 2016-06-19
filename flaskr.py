@@ -118,6 +118,12 @@ def api_add_file():
     return create_files_added_response(1, 0)
 
 
+def listdir(path):
+    for f in os.listdir(path):
+        if INCLUDE_HIDDEN_DIRECTORIES or not f.startswith('.'):
+            yield f
+
+
 @app.route('/api/directory', methods=['POST'])
 def api_add_directory():
     if not session.get('logged_in'):
@@ -135,7 +141,7 @@ def api_add_directory():
     num_added_files = 0
     num_not_added_files = 0
 
-    for new_file in os.listdir(directory_path):
+    for new_file in listdir(directory_path):
         if add_file(path + '/' + new_file):
             num_added_files += 1
         else:

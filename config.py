@@ -31,6 +31,10 @@ FILES_ROOT_DIRECTORY = 'x:/'
 # images when the root directory is missing.
 ALLOW_MISSING_ROOT_DIRECTORY = True
 
+# Set this option to True to be able to add files that begins with a dot.
+# Note that the hidden directory property in Windows is not used.
+INCLUDE_HIDDEN_DIRECTORIES = False
+
 # Files are ignored when any of the blacklisted file patterns can be found in
 # the file path. Black-listed file patterns are case sensitive.
 BLACKLISTED_FILE_PATH_PATTERNS = ['TN_', 'Thumbs.db', 'nytt/', 'unsorted/',
@@ -47,6 +51,6 @@ WHITELISTED_FILE_EXTENSIONS = ['.jpg', '.png', '.bmp', '.gif', '.avi',
                                '.mpg', '.mp4', '.mkv', '.mov', '.pdf']
 
 # The maximum distance, in meters, between a JPEG GPS position and a FileDB
-# location GPS position for automatically setting file nearby locations when
-# adding files.
+# location GPS position for automatically setting file locations when adding
+# files.
 FILE_TO_LOCATION_MAX_DISTANCE = 300
