@@ -416,8 +416,9 @@ function update_list_of_files(){
             var numPersons = file['persons'].length;
             var numLocations = file['locations'].length;
             var numTags = file['tags'].length;
+            var fileId = file['id']
             // TODO: optimize: create one long string and then set it with one call to not change the DOM many times
-            $("#filestable").append('<tr><td><a href="/api/filecontent/' + file['id'] + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + file['id'] + '">Delete</a>, <a href="/api/fileexif/' + file['id'] + '">Exif</a></td></tr>');
+            $("#filestable").append('<tr id="filerow_' + fileId + '"><td><a href="/api/filecontent/' + fileId + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + fileId + '">Delete</a>, <a href="/api/fileexif/' + fileId + '">Exif</a></td></tr>');
         }
 
         $(".delete_file_button").click(function(){
@@ -1120,7 +1121,7 @@ function delete_file(id){
         url: '/api/file/' + id,
         type: 'DELETE',
         success: function(result){
-            update_list_of_files();
+            $("#filerow_" + id).remove();
         }
     })
     .fail(function(){
