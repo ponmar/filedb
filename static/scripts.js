@@ -229,7 +229,7 @@ function get_persons(){
         if ($('#personbuttons').length){
             $('#personbuttons').text("");
             for (var i=0, person; person = persons[i]; i++){
-                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + get_person_span(person) + '</label>');
+                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + get_person_span(person) + '</label><br>');
             }
         }
 
@@ -290,7 +290,7 @@ function get_locations(){
         if ($('#locationbuttons').length){
             $('#locationbuttons').text("");
             for (var i=0, location; location = locations[i]; i++){
-                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + get_location_span(location) + '</label>');
+                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + get_location_span(location) + '</label><br>');
             }
         }
 
@@ -344,7 +344,7 @@ function get_tags(){
         if ($('#tagbuttons').length){
             $('#tagbuttons').text("");
             for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label>');
+                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label><br>');
             }
         }
 
@@ -416,7 +416,7 @@ function update_list_of_files(){
             var numPersons = file['persons'].length;
             var numLocations = file['locations'].length;
             var numTags = file['tags'].length;
-            var fileId = file['id']
+            var fileId = file['id'];
             // TODO: optimize: create one long string and then set it with one call to not change the DOM many times
             $("#filestable").append('<tr id="filerow_' + fileId + '"><td><a href="/api/filecontent/' + fileId + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + fileId + '">Delete</a>, <a href="/api/fileexif/' + fileId + '">Exif</a></td></tr>');
         }
