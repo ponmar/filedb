@@ -37,8 +37,7 @@ INCLUDE_HIDDEN_DIRECTORIES = False
 
 # Files are ignored when any of the blacklisted file patterns can be found in
 # the file path. Black-listed file patterns are case sensitive.
-BLACKLISTED_FILE_PATH_PATTERNS = ['TN_', 'Thumbs.db', 'nytt/', 'unsorted/',
-                                  'privat/']
+BLACKLISTED_FILE_PATH_PATTERNS = ['TN_', 'Thumbs.db', 'nytt/', 'unsorted/']
 
 # If a file is not blacklisted a whitelisted test will be done. A file will be
 # added, during an import action, if its path ends with any of the specified
