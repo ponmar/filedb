@@ -9,14 +9,13 @@
 
 <h1>Add Files</h1>
 
-<div class="alert alert-info" role="alert"><strong>Note:</strong> Date, time and GPS position are automatically extracted from JPEG files, but can be edited later. Nearby locations are set for files when possible.</div>
-
-<div class="alert alert-info" role="alert"><strong>Note:</strong> GPS position (latitude and longitude) is automatically extracted from JPEG files.</div>
+<div class="alert alert-info" role="alert"><strong>Note:</strong> What is imported/added depends on the FileDB configuration.</div>
+<div class="alert alert-info" role="alert"><strong>Note:</strong> Date and time are automatically extracted from JPEG files, but can be edited later.</div>
+<div class="alert alert-info" role="alert"><strong>Note:</strong> GPS position is automatically extracted from JPEG files for automatically setting file location. Set the location GPS position at the <a href="{{ url_for('app_categories') }}">Edit Categories</a> page</div>
 
 <div class="panel panel-default">
     <div class="panel-heading">Import Files</div>
     <div class="panel-body">
-        <div class="alert alert-info" role="alert"><strong>Note:</strong> What is imported depends on the configuration for file root directory and white/black-listed file extensions.</div>
         <p><button type="submit" class="btn btn-default" id="import_button">Import...</button></p>
         <p id="import_status"></p>
     </div>
