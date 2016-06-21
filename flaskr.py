@@ -322,6 +322,7 @@ def update_path(path):
     return path
 
 
+# TODO: create json for created person?
 @app.route('/api/person', methods=['POST'])
 def api_add_person():
     if not session.get('logged_in'):
@@ -371,6 +372,7 @@ def is_date_and_time_format(text):
         return False
 
 
+# TODO: return json for created location?
 @app.route('/api/location', methods=['POST'])
 def api_add_location():
     if not session.get('logged_in'):
@@ -398,6 +400,7 @@ def api_add_location():
         abort(409)
 
 
+# TODO: return json for created tag?
 @app.route('/api/tag', methods=['POST'])
 def api_add_tag():
     if not session.get('logged_in'):
@@ -474,7 +477,6 @@ def api_update_file(file_id):
     return make_response(get_file_json(file_id), 201)
 
 
-# TODO: return json data for modified person
 @app.route('/api/person/<int:person_id>', methods=['PUT'])
 def api_update_person(person_id):
     if not session.get('logged_in'):
@@ -505,10 +507,14 @@ def api_update_person(person_id):
 
     except sqlite3.IntegrityError:
         abort(409)
-    return make_response(jsonify({'message': 'Person updated'}), 201)
+
+    person_dict = get_person_dict(person_id)
+    if person_dict is None:
+        abort(404)
+
+    return make_response(jsonify(person_dict), 201)
 
 
-# TODO: return json data for modified location
 @app.route('/api/location/<int:location_id>', methods=['PUT'])
 def api_update_location(location_id):
     if not session.get('logged_in'):
@@ -534,10 +540,14 @@ def api_update_location(location_id):
 
     except sqlite3.IntegrityError:
         abort(409)
-    return make_response(jsonify({'message': 'Location updated'}), 201)
+
+    location_dict = get_location_dict(location_id)
+    if location_dict is None:
+        abort(404)
+
+    return make_response(jsonify(location_dict), 201)
 
 
-# TODO: return json data for modified tag
 @app.route('/api/tag/<int:tag_id>', methods=['PUT'])
 def api_update_tag(tag_id):
     if not session.get('logged_in'):
@@ -554,7 +564,12 @@ def api_update_tag(tag_id):
 
     except sqlite3.IntegrityError:
         abort(409)
-    return make_response(jsonify({'message': 'Tag updated'}), 201)
+
+    tag_dict = get_tag_dict(tag_id)
+    if tag_dict is None:
+        abort(404)
+    return make_response(jsonify(tag_dict), 201)
+
 
 #
 # API: delete data
@@ -752,33 +767,59 @@ def api_json_file_by_id(id):
 def api_get_json_person(id):
     if not session.get('logged_in'):
         abort(401)
-    cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons where id = ?', (id,))
-    row = cur.fetchone()
-    if row is None:
+    person_dict = get_person_dict(id)
+    if person_dict is None:
         abort(404)
-    return jsonify( dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) )
+    return jsonify(person_dict)
+
+
+def get_person_dict(person_id):
+    cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons where id = ?', (person_id,))
+    row = cur.fetchone()
+    if row is not None:
+        return dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4])
+    else:
+        return None
 
 
 @app.route('/api/location/<int:id>', methods=['GET'])
 def api_get_json_location(id):
     if not session.get('logged_in'):
         abort(401)
-    cur = g.db.execute('select id, name, description from locations where id = ?', (id,))
-    row = cur.fetchone()
-    if row is None:
+
+    location_dict = get_location_dict(id)
+    if location_dict is None:
         abort(404)
-    return jsonify( dict(id=row[0], name=row[1], description=row[2]) )
+
+    return jsonify(location_dict)
+
+
+def get_location_dict(location_id):
+    cur = g.db.execute('select id, name, description from locations where id = ?', (location_id,))
+    row = cur.fetchone()
+    if row is not None:
+        return dict(id=row[0], name=row[1], description=row[2])
+    else:
+        return None
 
 
 @app.route('/api/tag/<int:id>', methods=['GET'])
 def api_get_json_tag(id):
     if not session.get('logged_in'):
         abort(401)
-    cur = g.db.execute('select id, name from tags where id = ?', (id,))
-    row = cur.fetchone()
-    if row is None:
+    tag_dict = get_tag_dict(id)
+    if tag_dict is None:
         abort(404)
-    return jsonify( dict(id=row[0], name=row[1]) )
+    return jsonify(tag_dict)
+
+
+def get_tag_dict(tag_id):
+    cur = g.db.execute('select id, name from tags where id = ?', (tag_id,))
+    row = cur.fetchone()
+    if row is not None:
+        return dict(id=row[0], name=row[1])
+    else:
+        return None
 
 
 @app.route('/api/filecontent/<int:id>', methods=['GET'])
