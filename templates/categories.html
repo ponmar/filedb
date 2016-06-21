@@ -10,6 +10,7 @@
 <h1>Edit Categories</h1>
 
 <h2>Persons</h2>
+<div class="alert alert-info" role="alert"><strong>Note:</strong> Set date of birth to see age in specific files at the <a href="{{ url_for('app_browse') }}">Browse Files</a> page.</div>
 <form action="{{ url_for('api_add_person') }}" method=post class="navbar-form navbar-left" role="search" id="add_person_form">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="First name" name="firstname" id="person_firstname_input" title="First name" required>
