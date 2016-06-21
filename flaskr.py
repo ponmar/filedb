@@ -474,6 +474,7 @@ def api_update_file(file_id):
     return make_response(get_file_json(file_id), 201)
 
 
+# TODO: return json data for modified person
 @app.route('/api/person/<int:person_id>', methods=['PUT'])
 def api_update_person(person_id):
     if not session.get('logged_in'):
@@ -507,6 +508,7 @@ def api_update_person(person_id):
     return make_response(jsonify({'message': 'Person updated'}), 201)
 
 
+# TODO: return json data for modified location
 @app.route('/api/location/<int:location_id>', methods=['PUT'])
 def api_update_location(location_id):
     if not session.get('logged_in'):
@@ -535,6 +537,7 @@ def api_update_location(location_id):
     return make_response(jsonify({'message': 'Location updated'}), 201)
 
 
+# TODO: return json data for modified tag
 @app.route('/api/tag/<int:tag_id>', methods=['PUT'])
 def api_update_tag(tag_id):
     if not session.get('logged_in'):
