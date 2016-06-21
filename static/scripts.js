@@ -3,8 +3,8 @@ var locations = null;
 var tags = null;
 
 var categorize_files = null;
-var categorize_files_index = -1; // TODO: rename
-var categorize_result = null;
+var categorize_result = null; // An array of indexes from a categorize search to be used in categorize_files
+var categorize_result_index = -1;
 
 var slideshow_files = null;
 var slideshow_index = -1;
@@ -433,26 +433,26 @@ function update_list_of_files(){
 }
 
 function prev_categorize_file(){
-    if (categorize_files_index > 0){
-        categorize_files_index--;
+    if (categorize_result_index > 0){
+        categorize_result_index--;
         categorize_file();
     }
 }
 
 function next_categorize_file(){
-    if (categorize_files_index != -1 && categorize_files_index < categorize_result.length - 1){
-        categorize_files_index++;
+    if (categorize_result_index != -1 && categorize_result_index < categorize_result.length - 1){
+        categorize_result_index++;
         categorize_file();
     }
 }
 
 function categorize_file(){
-    var file = categorize_files[categorize_result[categorize_files_index]];
+    var file = categorize_files[categorize_result[categorize_result_index]];
     var file_description = file['description'];
     var file_date = file['datetime'];
     var file_url = '/api/filecontent/' + file['id'];
 
-    $('#categorize_file_path').text("[" + (categorize_files_index+1) + "/" + categorize_result.length + "] " + file['path']);
+    $('#categorize_file_path').text("[" + (categorize_result_index+1) + "/" + categorize_result.length + "] " + file['path']);
 
     if (file_description != null){
         $('#file_description').val(file_description);
@@ -618,7 +618,7 @@ function categorize_file_from_path_regexp(){
 
 function update_categorize_result(){
     if (categorize_result.length > 0){
-        categorize_files_index = 0;
+        categorize_result_index = 0;
         categorize_file();
     }
     else{
@@ -634,7 +634,7 @@ function update_categorize_result(){
 }
 
 function save_file_categorization(){
-    if (categorize_files_index != -1){
+    if (categorize_result_index != -1){
 
         var selected_persons = [];
         for (var i=0, person; person = persons[i]; i++){
@@ -686,11 +686,13 @@ function save_file_categorization(){
         $.ajax
         ({
             type: "PUT",
-            url: '/api/file/' + categorize_files[categorize_result[categorize_files_index]]['id'],
+            url: '/api/file/' + categorize_files[categorize_result[categorize_result_index]]['id'],
             contentType : 'application/json',
             data: jsonData,
-            success: function(){
+            dataType: "json",
+            success: function(responseData){
                 $("#save_categorization_status").text("Saved successfully");
+                categorize_files[categorize_result[categorize_result_index]] = responseData;
             },
             error: function(){
                 $("#save_categorization_status").text("An error occured");
@@ -1279,7 +1281,7 @@ function modify_tag(){
         url = '/api/tag/' + edited_tag_id;
     }
 
-    // Add or update location
+    // Add or update tag
     $.ajax
     ({
         type: method,

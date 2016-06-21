@@ -471,7 +471,7 @@ def api_update_file(file_id):
 
     except sqlite3.IntegrityError:
         abort(409)
-    return make_response(jsonify({'message': 'File updated'}), 201)
+    return make_response(get_file_json(file_id), 201)
 
 
 @app.route('/api/person/<int:person_id>', methods=['PUT'])
@@ -627,7 +627,7 @@ def api_get_json_files():
     if tag_ids is None:
         tag_ids = ""
 
-    query = 'select id, path, description, datetime from files '
+    query = 'select id from files '
     if person_ids:
         query += 'inner join filepersons on files.id = filepersons.fileid '
     if location_ids:
@@ -646,24 +646,12 @@ def api_get_json_files():
     if len(where_statements) > 0:
         query += 'where ' + ' and '.join(where_statements)
 
-    cur = g.db.execute(query)
+    cursor = g.db.execute(query)
 
-    files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
-
-    for file in files:
-        file_id = file['id']
-
-        cur = g.db.execute('select personid from filepersons where fileid = ?', (file_id,))
-        persons = [filepersons_row[0] for filepersons_row in cur.fetchall()]
-        file['persons'] = persons
-
-        cur = g.db.execute('select locationid from filelocations where fileid = ?', (file_id,))
-        locations = [filelocations_row[0] for filelocations_row in cur.fetchall()]
-        file['locations'] = locations
-
-        cur = g.db.execute('select tagid from filetags where fileid = ?', (file_id,))
-        tags = [filetags_row[0] for filetags_row in cur.fetchall()]
-        file['tags'] = tags
+    files = []
+    for row in cursor.fetchall():
+        file_json = get_file_dict(row[0])
+        files.append(file_json)
 
     return jsonify(dict(files=files))
 
@@ -705,7 +693,7 @@ def api_get_json_tags():
 # API: get JSON with one specific item
 #
 
-def get_file_json(file_id = None, file_path = None):
+def get_file_dict(file_id = None, file_path = None):
     row = None
     if file_id is not None:
         cur = g.db.execute('select id, path, description, datetime from files where id = ?', (file_id,))
@@ -730,7 +718,11 @@ def get_file_json(file_id = None, file_path = None):
     cur = g.db.execute('select tagid from filetags where fileid = ?', (file_id,))
     tag_ids = [filetags_row[0] for filetags_row in cur.fetchall()]
 
-    return jsonify( dict(id=row[0], path=row[1], description=row[2], datetime=row[3], personsids=person_ids, locationids=location_ids, tagids=tag_ids) )
+    return dict(id=row[0], path=row[1], description=row[2], datetime=row[3], persons=person_ids, locations=location_ids, tags=tag_ids)
+
+
+def get_file_json(file_id = None, file_path = None):
+    return jsonify(get_file_dict(file_id, file_path))
 
 
 @app.route('/api/file_by_path/<path>', methods=['GET'])
