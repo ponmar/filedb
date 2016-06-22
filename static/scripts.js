@@ -227,10 +227,11 @@ function get_persons(){
         persons = result['persons'];
 
         if ($('#personbuttons').length){
-            $('#personbuttons').text("");
+            var personLabels = "";
             for (var i=0, person; person = persons[i]; i++){
-                $("#personbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + get_person_span(person) + '</label><br>');
+                personLabels += '<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + get_person_span(person) + '</label><br>';
             }
+            $("#personbuttons").html(personLabels);
         }
 
         if ($('#personstable').length){
@@ -256,14 +257,16 @@ function reload_persons_table(){
 
         var now = new Date();
 
+        var personRows = '';
         for (var i=0, person; person = persons[i]; i++){
             var dateofbirth = person['dateofbirth'];
             var age = null;
             if (dateofbirth != null){
                 age = get_age(dateofbirth, now);
             }
-            $("#personstable").append('<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="#persons_header" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+            personRows += '<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="#persons_header" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>';
         }
+        $("#personstable").append(personRows);
 
         $(".edit_person_button").click(function(evt){
             var id = $(this).attr('id').replace('edit_person_', '');
@@ -292,10 +295,11 @@ function get_locations(){
         locations = result['locations'];
 
         if ($('#locationbuttons').length){
-            $('#locationbuttons').text("");
+            var labels = "";
             for (var i=0, location; location = locations[i]; i++){
-                $("#locationbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + get_location_span(location) + '</label><br>');
+                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + get_location_span(location) + '</label><br>';
             }
+            $('#locationbuttons').html(labels);
         }
 
         if ($('#locationstable').length){
@@ -319,9 +323,11 @@ function reload_locations_table(){
     if (locations.length > 0){
         $("#no_location_message").hide();
 
+        var locationRows = "";
         for (var i=0, location; location = locations[i]; i++){
-            $("#locationstable").append('<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="#locations_header" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+            locationRows += '<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="#locations_header" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>';
         }
+        $("#locationstable").append(locationRows);
 
         $(".edit_location_button").click(function(){
             var id = $(this).attr('id').replace('edit_location_', '');
@@ -350,10 +356,11 @@ function get_tags(){
         tags = result['tags'];
 
         if ($('#tagbuttons').length){
-            $('#tagbuttons').text("");
+            var labels = "";
             for (var i=0, tag; tag = tags[i]; i++){
-                $("#tagbuttons").append('<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label><br>');
+                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label><br>';
             }
+            $('#tagbuttons').html(labels);
         }
 
         if ($('#tagstable').length){
@@ -378,9 +385,11 @@ function reload_tags_table(){
     if (tags.length > 0){
         $("#no_tag_message").hide();
 
+        var tagRows = "";
         for (var i=0, tag; tag = tags[i]; i++){
-            $("#tagstable").append('<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="#tags_header" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+            tagRows += '<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="#tags_header" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>';
         }
+        $("#tagstable").append(tagRows);
 
         $(".edit_tag_button").click(function(){
             var id = $(this).attr('id').replace('edit_tag_', '');
@@ -942,11 +951,9 @@ function load_slideshow_file(){
 }
 
 function find_person(person_id){
-    if (persons != null){
-        var person_index = find_person_index();
-        if (person_index != -1){
-            return persons[person_index];
-        }
+    var person_index = find_person_index(person_id);
+    if (person_index != -1){
+        return persons[person_index];
     }
     return null;
 }
@@ -1328,17 +1335,23 @@ function modify_tag(){
         data: jsonData,
         dataType: "json",
         success: function(){
-            // TODO: use returned json data (but POST must be changed to return json first)
             clear_edit_tag();
-            //get_tags();
+            var tagIndex = find_tag_index(responseData['id']);
+            if (tagIndex == -1){
+                tags.push(responseData);
+            }
+            else{
+                tags[tagIndex] = responseData;
+            }
+            reload_tags_table();
         },
         error: function(){
-            alert("Save location failed");
+            alert("Save tag failed");
         }
     });
 }
 
-// TODO: replace with json?
+// TODO: replace with posting json?
 function post_add_directory_form(){
     clear_add_files_results();
     $("#add_files_status").text("Adding files from directory, please wait...");
@@ -1350,7 +1363,7 @@ function post_add_directory_form(){
     });
 }
 
-// TODO: replace with json?
+// TODO: replace with posting json?
 function post_add_file_form(){
     clear_add_files_results();
     $("#add_files_status").text("Adding file, please wait...");
