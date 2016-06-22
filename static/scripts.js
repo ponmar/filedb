@@ -247,7 +247,7 @@ function get_persons(){
                     if (dateofbirth != null){
                         age = get_age(dateofbirth, now);
                     }
-                    $("#personstable").append('<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+                    $("#personstable").append('<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="#persons_header" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".edit_person_button").click(function(evt){
@@ -258,7 +258,7 @@ function get_persons(){
                     else if (edited_person_id == -1){
                         prepare_edit_person(id);
                     }
-                    return false; // do not follow link
+                    return true; // do follow link
                 });
 
                 $(".delete_person_button").click(function(evt){
@@ -301,7 +301,7 @@ function get_locations(){
                 $("#no_location_message").hide();
 
                 for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+                    $("#locationstable").append('<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="#locations_header" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".edit_location_button").click(function(){
@@ -312,7 +312,7 @@ function get_locations(){
                     else if (edited_location_id == -1){
                         prepare_edit_location(id);
                     }
-                    return false; // do not follow link
+                    return true; // do follow link
                 });
 
                 $(".delete_location_button").click(function(){
@@ -355,7 +355,7 @@ function get_tags(){
                 $("#no_tag_message").hide();
 
                 for (var i=0, tag; tag = tags[i]; i++){
-                    $("#tagstable").append('<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+                    $("#tagstable").append('<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="#tags_header" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
                 }
 
                 $(".edit_tag_button").click(function(){
@@ -366,7 +366,7 @@ function get_tags(){
                     else if (edited_tag_id == -1){
                         prepare_edit_tag(id);
                     }
-                    return false; // do not follow link
+                    return true; // do follow link
                 });
 
                 $(".delete_tag_button").click(function(){
