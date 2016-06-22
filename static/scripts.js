@@ -403,8 +403,7 @@ function get_files(){
 function update_list_of_files(){
     $("#get_all_files_status").text("Loading files...");
     $.getJSON("/api/files", function(result){
-        $("#filestable").empty();
-        $("#filestable").append('<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>');
+        var tableRows = '<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>';
         var now = new Date();
         var files = result['files'];
         for (var i=0, file; file = files[i]; i++){
@@ -417,9 +416,11 @@ function update_list_of_files(){
             var numLocations = file['locations'].length;
             var numTags = file['tags'].length;
             var fileId = file['id'];
-            // TODO: optimize: create one long string and then set it with one call to not change the DOM many times
-            $("#filestable").append('<tr id="filerow_' + fileId + '"><td><a href="/api/filecontent/' + fileId + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + fileId + '">Delete</a>, <a href="/api/fileexif/' + fileId + '">Exif</a></td></tr>');
+            tableRows += '<tr id="filerow_' + fileId + '"><td><a href="/api/filecontent/' + fileId + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + fileId + '">Delete</a>, <a href="/api/fileexif/' + fileId + '">Exif</a></td></tr>';
         }
+
+        $("#filestable").empty();
+        $("#filestable").append(tableRows);
 
         $(".delete_file_button").click(function(){
             var id = $(this).attr('id').replace('delete_file_', '');
