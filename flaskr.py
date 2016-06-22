@@ -322,7 +322,6 @@ def update_path(path):
     return path
 
 
-# TODO: create json for created person?
 @app.route('/api/person', methods=['POST'])
 def api_add_person():
     if not session.get('logged_in'):
@@ -347,9 +346,8 @@ def api_add_person():
         cursor.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
                        [firstname, lastname, description, dateofbirth])
         g.db.commit()
-        return make_response(jsonify({'message': 'Person created',
-                                      'id': cursor.lastrowid}),
-                             201)
+        return make_response(get_person_json(cursor.lastrowid), 201)
+
     except sqlite3.IntegrityError:
         abort(409)
 
@@ -393,14 +391,11 @@ def api_add_location():
         cursor.execute('insert into locations (name, description, position) values (?, ?, ?)',
                        [name, description, position])
         g.db.commit()
-        return make_response(jsonify({'message': 'Location created',
-                                      'id': cursor.lastrowid}),
-                             201)
+        return make_response(get_location_json(cursor.lastrowid), 201)
     except sqlite3.IntegrityError:
         abort(409)
 
 
-# TODO: return json for created tag?
 @app.route('/api/tag', methods=['POST'])
 def api_add_tag():
     if not session.get('logged_in'):
@@ -416,9 +411,7 @@ def api_add_tag():
         cursor = g.db.cursor()
         cursor.execute('insert into tags (name) values (?)', [name])
         g.db.commit()
-        return make_response(jsonify({'message': 'Tag created',
-                                      'id': cursor.lastrowid}),
-                             201)
+        return make_response(get_tag_json(cursor.lastrowid), 201)
     except sqlite3.IntegrityError:
         abort(409)
 
@@ -782,6 +775,10 @@ def get_person_dict(person_id):
         return None
 
 
+def get_person_json(person_id):
+    return jsonify(get_person_dict(person_id))
+
+
 @app.route('/api/location/<int:id>', methods=['GET'])
 def api_get_json_location(id):
     if not session.get('logged_in'):
@@ -803,6 +800,10 @@ def get_location_dict(location_id):
         return None
 
 
+def get_location_json(location_id):
+    return jsonify(get_location_dict(location_id))
+
+
 @app.route('/api/tag/<int:id>', methods=['GET'])
 def api_get_json_tag(id):
     if not session.get('logged_in'):
@@ -820,6 +821,10 @@ def get_tag_dict(tag_id):
         return dict(id=row[0], name=row[1])
     else:
         return None
+
+
+def get_tag_json(tag_id):
+    return jsonify(get_tag_dict(tag_id))
 
 
 @app.route('/api/filecontent/<int:id>', methods=['GET'])

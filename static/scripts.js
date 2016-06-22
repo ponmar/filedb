@@ -234,42 +234,7 @@ function get_persons(){
         }
 
         if ($('#personstable').length){
-            $('#personstable tbody tr:not(:first)').remove();
-
-            if (persons.length > 0){
-                $("#no_person_message").hide();
-
-                var now = new Date();
-
-                for (var i=0, person; person = persons[i]; i++){
-                    var dateofbirth = person['dateofbirth'];
-                    var age = null;
-                    if (dateofbirth != null){
-                        age = get_age(dateofbirth, now);
-                    }
-                    $("#personstable").append('<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="#persons_header" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
-                }
-
-                $(".edit_person_button").click(function(evt){
-                    var id = $(this).attr('id').replace('edit_person_', '');
-                    if (id == edited_person_id){
-                        clear_edit_person();
-                    }
-                    else if (edited_person_id == -1){
-                        prepare_edit_person(id);
-                    }
-                    return true; // do follow link
-                });
-
-                $(".delete_person_button").click(function(evt){
-                    var id = $(this).attr('id').replace('delete_person_', '');
-                    delete_person(id);
-                    return false; // do not follow link
-                });
-            }
-            else{
-                $("#no_person_message").show();
-            }
+            reload_persons_table();
         }
 
         if ($('#person_categories').length){
@@ -281,6 +246,45 @@ function get_persons(){
             $('#person_categories').html(labels);
         }
     });
+}
+
+function reload_persons_table(){
+    $('#personstable tbody tr:not(:first)').remove();
+
+    if (persons.length > 0){
+        $("#no_person_message").hide();
+
+        var now = new Date();
+
+        for (var i=0, person; person = persons[i]; i++){
+            var dateofbirth = person['dateofbirth'];
+            var age = null;
+            if (dateofbirth != null){
+                age = get_age(dateofbirth, now);
+            }
+            $("#personstable").append('<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="#persons_header" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>');
+        }
+
+        $(".edit_person_button").click(function(evt){
+            var id = $(this).attr('id').replace('edit_person_', '');
+            if (id == edited_person_id){
+                clear_edit_person();
+            }
+            else if (edited_person_id == -1){
+                prepare_edit_person(id);
+            }
+            return true; // do follow link
+        });
+
+        $(".delete_person_button").click(function(evt){
+            var id = $(this).attr('id').replace('delete_person_', '');
+            delete_person(id);
+            return false; // do not follow link
+        });
+    }
+    else{
+        $("#no_person_message").show();
+    }
 }
 
 function get_locations(){
@@ -295,35 +299,7 @@ function get_locations(){
         }
 
         if ($('#locationstable').length){
-            $('#locationstable tbody tr:not(:first)').remove();
-
-            if (locations.length > 0){
-                $("#no_location_message").hide();
-
-                for (var i=0, location; location = locations[i]; i++){
-                    $("#locationstable").append('<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="#locations_header" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
-                }
-
-                $(".edit_location_button").click(function(){
-                    var id = $(this).attr('id').replace('edit_location_', '');
-                    if (id == edited_location_id){
-                        clear_edit_location();
-                    }
-                    else if (edited_location_id == -1){
-                        prepare_edit_location(id);
-                    }
-                    return true; // do follow link
-                });
-
-                $(".delete_location_button").click(function(){
-                    var id = $(this).attr('id').replace('delete_location_', '');
-                    delete_location(id);
-                    return false; // do not follow link
-                });
-            }
-            else{
-                $("#no_location_message").show();
-            }
+            reload_locations_table();
         }
 
         if ($('#location_categories').length){
@@ -335,6 +311,38 @@ function get_locations(){
             $('#location_categories').html(labels);
         }
     });
+}
+
+function reload_locations_table(){
+    $('#locationstable tbody tr:not(:first)').remove();
+
+    if (locations.length > 0){
+        $("#no_location_message").hide();
+
+        for (var i=0, location; location = locations[i]; i++){
+            $("#locationstable").append('<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="#locations_header" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>');
+        }
+
+        $(".edit_location_button").click(function(){
+            var id = $(this).attr('id').replace('edit_location_', '');
+            if (id == edited_location_id){
+                clear_edit_location();
+            }
+            else if (edited_location_id == -1){
+                prepare_edit_location(id);
+            }
+            return true; // do follow link
+        });
+
+        $(".delete_location_button").click(function(){
+            var id = $(this).attr('id').replace('delete_location_', '');
+            delete_location(id);
+            return false; // do not follow link
+        });
+    }
+    else{
+        $("#no_location_message").show();
+    }
 }
 
 function get_tags(){
@@ -349,35 +357,7 @@ function get_tags(){
         }
 
         if ($('#tagstable').length){
-            $('#tagstable tbody tr:not(:first)').remove();
-
-            if (tags.length > 0){
-                $("#no_tag_message").hide();
-
-                for (var i=0, tag; tag = tags[i]; i++){
-                    $("#tagstable").append('<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="#tags_header" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
-                }
-
-                $(".edit_tag_button").click(function(){
-                    var id = $(this).attr('id').replace('edit_tag_', '');
-                    if (id == edited_tag_id){
-                        clear_edit_tag();
-                    }
-                    else if (edited_tag_id == -1){
-                        prepare_edit_tag(id);
-                    }
-                    return true; // do follow link
-                });
-
-                $(".delete_tag_button").click(function(){
-                    var id = $(this).attr('id').replace('delete_tag_', '');
-                    delete_tag(id);
-                    return false; // do not follow link
-                });
-            }
-            else{
-                $("#no_tag_message").show();
-            }
+            reload_tags_table();
         }
 
         if ($('#tag_categories').length){
@@ -390,6 +370,38 @@ function get_tags(){
             $("#tag_categories").html(labels);
         }
     });
+}
+
+function reload_tags_table(){
+    $('#tagstable tbody tr:not(:first)').remove();
+
+    if (tags.length > 0){
+        $("#no_tag_message").hide();
+
+        for (var i=0, tag; tag = tags[i]; i++){
+            $("#tagstable").append('<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="#tags_header" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>');
+        }
+
+        $(".edit_tag_button").click(function(){
+            var id = $(this).attr('id').replace('edit_tag_', '');
+            if (id == edited_tag_id){
+                clear_edit_tag();
+            }
+            else if (edited_tag_id == -1){
+                prepare_edit_tag(id);
+            }
+            return true; // do follow link
+        });
+
+        $(".delete_tag_button").click(function(){
+            var id = $(this).attr('id').replace('delete_tag_', '');
+            delete_tag(id);
+            return false; // do not follow link
+        });
+    }
+    else{
+        $("#no_tag_message").show();
+    }
 }
 
 function get_files(){
@@ -487,6 +499,7 @@ function categorize_file(){
     $("#save_categorization_status").text("");
 
     // TODO: create link to file (and remove previous img if any) if selected file is not an image
+    //       easiest is to always remove previous img/video/div/span (if it uses the same id) and re-create appropriate tag
     if ($('#categorize_image').length){
         $('#categorize_image').attr('src', file_url);
         $('#categorize_image').attr('alt', file_url);
@@ -834,6 +847,7 @@ function load_slideshow_file(){
     $('#slideshow_file_path').text("[" + (slideshow_index + 1) + "/" + slideshow_files.length + "] " + file['path']);
 
     // TODO: create link to file (and remove previous img if any) if selected file is not an image
+    //       easiest is to always remove previous img/video/div/span (if it uses the same id) and re-create appropriate tag
     if ($('#slideshow_image').length){
         $('#slideshow_image').attr('src', file_url);
     }
@@ -927,19 +941,27 @@ function load_slideshow_file(){
     $("#slideshow_item_text").html(file_text);
 }
 
-// TODO: change JSON data structure from array to hashmap to avoid this scanning?
 function find_person(person_id){
     if (persons != null){
-        for (var i=0, person; person = persons[i]; i++){
-            if (person['id'] == person_id){
-                return person;
-            }
+        var person_index = find_person_index();
+        if (person_index != -1){
+            return persons[person_index];
         }
     }
     return null;
 }
 
-// TODO: change JSON data structure from array to hashmap to avoid this scanning?
+function find_person_index(person_id){
+    if (persons != null){
+        for (var i=0, person; person = persons[i]; i++){
+            if (person['id'] == person_id){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 function find_location(location_id){
     if (locations != null){
         for (var i=0, location; location = locations[i]; i++){
@@ -951,7 +973,6 @@ function find_location(location_id){
     return null;
 }
 
-// TODO: change JSON data structure from array to hashmap to avoid this scanning?
 function find_tag(tag_id){
     if (tags != null){
         for (var i=0, tag; tag = tags[i]; i++){
@@ -1217,11 +1238,19 @@ function modify_person(){
     ({
         type: method,
         url: url,
-        contentType : 'application/json',
+        contentType: 'application/json',
         data: jsonData,
-        success: function(){
+        dataType: "json",
+        success: function(responseData){
             clear_edit_person();
-            get_persons();
+            var personIndex = find_person_index(responseData['id']);
+            if (personIndex == -1){
+                persons.push(responseData);
+            }
+            else{
+                persons[personIndex] = responseData;
+            }
+            reload_persons_table();
         },
         error: function(){
             alert("Save person failed");
@@ -1253,11 +1282,19 @@ function modify_location(){
     ({
         type: method,
         url: url,
-        contentType : 'application/json',
+        contentType: 'application/json',
         data: jsonData,
+        dataType: "json",
         success: function(){
             clear_edit_location();
-            get_locations();
+            var locationIndex = find_location_index(responseData['id']);
+            if (locationIndex == -1){
+                locations.push(responseData);
+            }
+            else{
+                locations[locationIndex] = responseData;
+            }
+            reload_locations_table();
         },
         error: function(){
             alert("Save location failed");
@@ -1287,11 +1324,13 @@ function modify_tag(){
     ({
         type: method,
         url: url,
-        contentType : 'application/json',
+        contentType: 'application/json',
         data: jsonData,
+        dataType: "json",
         success: function(){
+            // TODO: use returned json data (but POST must be changed to return json first)
             clear_edit_tag();
-            get_tags();
+            //get_tags();
         },
         error: function(){
             alert("Save location failed");
@@ -1305,7 +1344,6 @@ function post_add_directory_form(){
     $("#add_files_status").text("Adding files from directory, please wait...");
     $.post("/api/directory", $("#add_directory_form").serialize(), function(json){
         $("#add_files_status").html("Added " + json['num_added_files'] + " of " + (json['num_added_files'] + json['num_not_added_files']) + " files in specified directory");
-        // TODO: get files for list?
     }, "json")
     .fail(function(){
         $("#add_files_status").text("Failed to add files from directory, please try another name.");
@@ -1318,7 +1356,6 @@ function post_add_file_form(){
     $("#add_files_status").text("Adding file, please wait...");
     $.post("/api/file", $("#add_file_form").serialize(), function(json){
         $("#add_files_status").text("File added successfully");
-        // TODO: get files for list?
     }, "json")
     .fail(function(){
         $("#add_files_status").text("Failed to add file, please try another name");

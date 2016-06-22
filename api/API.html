@@ -110,36 +110,52 @@ Response: 200 (OK), 401 (Unathorized)
 <pre>Request: POST /api/import
 Request: POST /api/file/?path=path&description=description
 Request: POST /api/directory/?path=path
-Request: POST /api/person/?name=name
-Request: POST /api/location/?name=name
 Response: 200 (OK), 409 (Conflict), 401 (Unathorized)
+
+Request: POST /api/person/?name=name
+Response:
+{
+    Same data here as for a single person
+}
+
+Request: POST /api/location/?name=name
+Response:
+{
+    Same data here as for a single location
+}
+
+Request: POST /api/tag/?name=name
+Response:
+{
+    Same data here as for a single tag
+}
 </pre>
 
 <h2>Modify Data</h2>
 <pre>
 Request: PUT /api/file/&lt;id&gt;
+Response: 201 (OK), ...
 {
     Same data here as for a single file
 }
-Response: 201 (OK), ...
 
 Request: PUT /api/person/&lt;id&gt;
+Response: 201 (OK), ...
 {
     Same data here as for single person
 }
-Response: 201 (OK), ...
 
 Request: PUT /api/location/&lt;id&gt;
+Response: 201 (OK), ...
 {
     Same data here as for single location
 }
-Response: 201 (OK), ...
 
 Request: PUT /api/tag/&lt;id&gt;
+Response: 201 (OK), ...
 {
     Same data here as for single tag
 }
-Response: 201 (OK), ...
 </pre>
 
 <h2>Remove Data</h2>
