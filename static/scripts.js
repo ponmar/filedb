@@ -958,7 +958,7 @@ function find_location_index(location_id){
 }
 
 function find_tag(tag_id){
-    var tag_index = find_tag_index();
+    var tag_index = find_tag_index(tag_id);
     if (tag_index != -1){
         return tags[tag_index];
     }
@@ -1125,7 +1125,6 @@ function clear_edit_location(){
 function prepare_edit_tag(id){
     tag = find_tag(id);
     if (tag != null){
-        alert("prepare edit tag");
         edited_tag_id = id;
         $('#tag_name_input').val(tag['name']);
         $('#tr_tag_' + id).attr("class", "success");
