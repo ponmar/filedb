@@ -939,25 +939,41 @@ function find_person_index(person_id){
 }
 
 function find_location(location_id){
-    if (locations != null){
-        for (var i=0, location; location = locations[i]; i++){
-            if (location['id'] == location_id){
-                return location;
-            }
-        }
+    var location_index = find_location_index(location_id);
+    if (location_index != -1){
+        return locations[location_index];
     }
     return null;
 }
 
-function find_tag(tag_id){
-    if (tags != null){
-        for (var i=0, tag; tag = tags[i]; i++){
-            if (tag['id'] == tag_id){
-                return tag;
+function find_location_index(location_id){
+    if (locations != null){
+        for (var i=0, location; location = locations[i]; i++){
+            if (location['id'] == location_id){
+                return i;
             }
         }
     }
+    return -1;
+}
+
+function find_tag(tag_id){
+    var tag_index = find_tag_index();
+    if (tag_index != -1){
+        return tags[tag_index];
+    }
     return null;
+}
+
+function find_tag_index(tag_id){
+    if (tags != null){
+        for (var i=0, tag; tag = tags[i]; i++){
+            if (tag['id'] == tag_id){
+                return i;
+            }
+        }
+    }
+    return -1;
 }
 
 function toggle_slideshow(){
@@ -1109,6 +1125,7 @@ function clear_edit_location(){
 function prepare_edit_tag(id){
     tag = find_tag(id);
     if (tag != null){
+        alert("prepare edit tag");
         edited_tag_id = id;
         $('#tag_name_input').val(tag['name']);
         $('#tr_tag_' + id).attr("class", "success");
@@ -1261,7 +1278,7 @@ function modify_location(){
         contentType: 'application/json',
         data: jsonData,
         dataType: "json",
-        success: function(){
+        success: function(responseData){
             clear_edit_location();
             var locationIndex = find_location_index(responseData['id']);
             if (locationIndex == -1){
@@ -1303,7 +1320,7 @@ function modify_tag(){
         contentType: 'application/json',
         data: jsonData,
         dataType: "json",
-        success: function(){
+        success: function(responseData){
             clear_edit_tag();
             var tagIndex = find_tag_index(responseData['id']);
             if (tagIndex == -1){
