@@ -124,37 +124,37 @@ $(document).ready(function(){
 
     if ($('#find_file_wo_any_button').length){
         $('#find_file_wo_any_button').click(function(){
-            categorize_file_without_any();
+            search_categorize_files(no_meta_data_comparator);
         });
     }
 
     if ($('#find_file_wo_person_button').length){
         $('#find_file_wo_person_button').click(function(){
-            categorize_file_without_person();
+            search_categorize_files(no_person_comparator);
         });
     }
 
     if ($('#find_file_wo_location_button').length){
         $('#find_file_wo_location_button').click(function(){
-            categorize_file_without_location();
+            search_categorize_files(no_location_comparator);
         });
     }
 
     if ($('#find_file_wo_tag_button').length){
         $('#find_file_wo_tag_button').click(function(){
-            categorize_file_without_tag();
+            search_categorize_files(no_tag_comparator);
         });
     }
 
     if ($('#find_file_wo_description_button').length){
         $('#find_file_wo_description_button').click(function(){
-            categorize_file_without_description();
+            search_categorize_files(no_description_comparator);
         });
     }
 
     if ($('#find_file_wo_date_button').length){
         $('#find_file_wo_date_button').click(function(){
-            categorize_file_without_date();
+            search_categorize_files(no_date_comparator);
         });
     }
 
@@ -535,12 +535,11 @@ function set_div_height(selector, factor){
     $(selector).css({'height': height + 'px'});
 }
 
-// TODO: use only one function with arguments for finding file to categorize?
-function categorize_file_without_any(){
+function search_categorize_files(comparator){
     if (categorize_files != null){
         categorize_result = [];
         for (var file, i=0; file = categorize_files[i]; i++){
-            if (file['persons'].length == 0 && file['locations'].length == 0 && file['tags'].length == 0 && file['description'] == null){
+            if (comparator(file)){
                 categorize_result.push(i);
             }
         }
@@ -548,64 +547,31 @@ function categorize_file_without_any(){
     }
 }
 
-function categorize_file_without_person(){
-    if (categorize_files != null){
-        categorize_result = [];
-        for (var file, i=0; file = categorize_files[i]; i++){
-            if (file['persons'].length == 0){
-                categorize_result.push(i);
-            }
-        }
-        update_categorize_result();
-    }
+function no_meta_data_comparator(file){
+    return file['persons'].length == 0 &&
+           file['locations'].length == 0 &&
+           file['tags'].length == 0 &&
+           file['description'] == null;
 }
 
-function categorize_file_without_location(){
-    if (categorize_files != null){
-        categorize_result = [];
-        for (var file, i=0; file = categorize_files[i]; i++){
-            if (file['locations'].length == 0){
-                categorize_result.push(i);
-            }
-        }
-        update_categorize_result();
-    }
+function no_person_comparator(file){
+    return file['persons'].length == 0;
 }
 
-function categorize_file_without_tag(){
-    if (categorize_files != null){
-        categorize_result = [];
-        for (var file, i=0; file = categorize_files[i]; i++){
-            if (file['tags'].length == 0){
-                categorize_result.push(i);
-            }
-        }
-        update_categorize_result();
-    }
+function no_location_comparator(file){
+    return file['locations'].length == 0;
 }
 
-function categorize_file_without_description(){
-    if (categorize_files != null){
-        categorize_result = [];
-        for (var file, i=0; file = categorize_files[i]; i++){
-            if (file['description'] == null){
-                categorize_result.push(i);
-            }
-        }
-        update_categorize_result();
-    }
+function no_tag_comparator(file){
+    return file['tags'].length == 0;
 }
 
-function categorize_file_without_date(){
-    if (categorize_files != null){
-        categorize_result = [];
-        for (var file, i=0; file = categorize_files[i]; i++){
-            if (file['datetime'] == null){
-                categorize_result.push(i);
-            }
-        }
-        update_categorize_result();
-    }
+function no_description_comparator(file){
+    return file['description'] == null;
+}
+
+function no_date_comparator(file){
+    return file['datetime'] == null;
 }
 
 function categorize_file_from_path(){
