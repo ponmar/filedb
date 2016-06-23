@@ -272,11 +272,12 @@ function reload_persons_table(){
             var id = $(this).attr('id').replace('edit_person_', '');
             if (id == edited_person_id){
                 clear_edit_person();
+                return false; // do not follow link
             }
             else if (edited_person_id == -1){
                 prepare_edit_person(id);
+                return true; // do follow link
             }
-            return true; // do follow link
         });
 
         $(".delete_person_button").click(function(evt){
@@ -333,11 +334,12 @@ function reload_locations_table(){
             var id = $(this).attr('id').replace('edit_location_', '');
             if (id == edited_location_id){
                 clear_edit_location();
+                return false; // do not follow link
             }
             else if (edited_location_id == -1){
                 prepare_edit_location(id);
+                return true; // do follow link
             }
-            return true; // do follow link
         });
 
         $(".delete_location_button").click(function(){
@@ -395,11 +397,12 @@ function reload_tags_table(){
             var id = $(this).attr('id').replace('edit_tag_', '');
             if (id == edited_tag_id){
                 clear_edit_tag();
+                return false; // do not follow link
             }
             else if (edited_tag_id == -1){
                 prepare_edit_tag(id);
+                return true; // do follow link
             }
-            return true; // do follow link
         });
 
         $(".delete_tag_button").click(function(){
