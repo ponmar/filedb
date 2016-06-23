@@ -370,7 +370,6 @@ def is_date_and_time_format(text):
         return False
 
 
-# TODO: return json for created location?
 @app.route('/api/location', methods=['POST'])
 def api_add_location():
     if not session.get('logged_in'):
