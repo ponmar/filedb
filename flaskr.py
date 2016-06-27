@@ -791,10 +791,10 @@ def api_get_json_location(id):
 
 
 def get_location_dict(location_id):
-    cur = g.db.execute('select id, name, description from locations where id = ?', (location_id,))
+    cur = g.db.execute('select id, name, description, position from locations where id = ?', (location_id,))
     row = cur.fetchone()
     if row is not None:
-        return dict(id=row[0], name=row[1], description=row[2])
+        return dict(id=row[0], name=row[1], description=row[2], position=row[3])
     else:
         return None
 
