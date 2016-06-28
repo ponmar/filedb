@@ -207,15 +207,15 @@ $(document).ready(function(){
 });
 
 function needs_persons(){
-    return $('#personbuttons').length || $('#personstable').length || $('#person_categories').length;
+    return $('#personbuttons').length || $('#personsdiv').length || $('#person_categories').length;
 }
 
 function needs_locations(){
-    return $('#locationbuttons').length || $('#locationstable').length || $('#location_categories').length;
+    return $('#locationbuttons').length || $('#locationsdiv').length || $('#location_categories').length;
 }
 
 function needs_tags(){
-    return $('#tagbuttons').length || $('#tagstable').length || $('#tag_categories').length;
+    return $('#tagbuttons').length || $('#tagsdiv').length || $('#tag_categories').length;
 }
 
 function needs_files(){
@@ -234,7 +234,7 @@ function get_persons(){
             $("#personbuttons").html(personLabels);
         }
 
-        if ($('#personstable').length){
+        if ($('#personsdiv').length){
             reload_persons_table();
         }
 
@@ -250,10 +250,9 @@ function get_persons(){
 }
 
 function reload_persons_table(){
-    $('#personstable tbody tr:not(:first)').remove();
-
     if (persons.length > 0){
-        $("#no_person_message").hide();
+        // TODO: do not set table id? istead search for the table inside personsdiv below?
+        $('#personsdiv').html('<table class="table" id="personstable"><tr><th>First Name</th><th>Last Name</th><th>Description</th><th>Age</th><th>Date of Birth</th><th>Actions</th></tr></table>');
 
         var now = new Date();
 
@@ -287,7 +286,7 @@ function reload_persons_table(){
         });
     }
     else{
-        $("#no_person_message").show();
+        $('#personsdiv').html('<div class="alert alert-info" role="alert"><strong>Note:</strong> No persons added yet</div>');
     }
 }
 
@@ -303,7 +302,7 @@ function get_locations(){
             $('#locationbuttons').html(labels);
         }
 
-        if ($('#locationstable').length){
+        if ($('#locationsdiv').length){
             reload_locations_table();
         }
 
@@ -319,10 +318,9 @@ function get_locations(){
 }
 
 function reload_locations_table(){
-    $('#locationstable tbody tr:not(:first)').remove();
-
     if (locations.length > 0){
-        $("#no_location_message").hide();
+        // TODO: do not set table id? istead search for the table inside locationsdiv below?
+        $('#locationsdiv').html('<table class="table" id="locationstable"><tr><th>Name</th><th>Description</th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr></table>');
 
         var locationRows = "";
         for (var i=0, location; location = locations[i]; i++){
@@ -349,7 +347,7 @@ function reload_locations_table(){
         });
     }
     else{
-        $("#no_location_message").show();
+        $('#personsdiv').html('<div class="alert alert-info" role="alert"><strong>Note:</strong> No locations added yet</div>');
     }
 }
 
@@ -365,7 +363,7 @@ function get_tags(){
             $('#tagbuttons').html(labels);
         }
 
-        if ($('#tagstable').length){
+        if ($('#tagsdiv').length){
             reload_tags_table();
         }
 
@@ -382,10 +380,9 @@ function get_tags(){
 }
 
 function reload_tags_table(){
-    $('#tagstable tbody tr:not(:first)').remove();
-
     if (tags.length > 0){
-        $("#no_tag_message").hide();
+        // TODO: do not set table id? istead search for the table inside tagsdiv below?
+        $('#tagsdiv').html('<table class="table" id="tagstable"><tr><th>Name</th><th>Actions</th></tr></table>');
 
         var tagRows = "";
         for (var i=0, tag; tag = tags[i]; i++){
@@ -412,7 +409,7 @@ function reload_tags_table(){
         });
     }
     else{
-        $("#no_tag_message").show();
+        $('#tagsdiv').html('<div class="alert alert-info" role="alert"><strong>Note:</strong> No tags added yet</div>');
     }
 }
 

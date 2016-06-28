@@ -20,10 +20,7 @@
     </div>
     <button type="submit" class="btn btn-default">Save</button>
 </form>
-<table class="table" id="personstable">
-    <tr><th>First Name</th><th>Last Name</th><th>Description</th><th>Age</th><th>Date of Birth</th><th>Actions</th></tr>
-</table>
-<div class="alert alert-info" role="alert" id="no_person_message"><strong>Note:</strong> No persons added yet</div>
+<div id="personsdiv">Loading persons...</div>
 
 <h2 id="locations_header">Locations</h2>
 <div class="alert alert-info" role="alert"><strong>Note:</strong> Set a position for the location to automatically set nearby locations when adding files. The position can, for example, be found in the URL at <a href="https://maps.google.com">Google Maps</a>.</div>
@@ -35,10 +32,7 @@
     </div>
     <button type="submit" class="btn btn-default">Save</button>
 </form>
-<table class="table" id="locationstable">
-    <tr><th>Name</th><th>Description</th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr>
-</table>
-<div class="alert alert-info" role="alert" id="no_location_message"><strong>Note:</strong> No locations added yet</div>
+<div id="locationsdiv">Loading locations...</div>
 
 <h2 id="tags_header">Tags</h2>
 <form action="{{ url_for('api_add_tag') }}" method=post class="navbar-form navbar-left" role="search" id="add_tag_form">
@@ -47,10 +41,7 @@
     </div>
     <button type="submit" class="btn btn-default">Save</button>
 </form>
-<table class="table" id="tagstable">
-    <tr><th>Name</th><th>Actions</th></tr>
-</table>
-<div class="alert alert-info" role="alert" id="no_tag_message"><strong>Note:</strong> No tags added yet</div>
+<div id="tagsdiv">Loading tags...</div>
 
 {% endif %}
 {% endblock %}
