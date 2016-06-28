@@ -68,6 +68,12 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#clear_category_button').length){
+        $("#clear_category_button").click(function(){
+            clear_search();
+        });
+    }
+
     if ($('#search_files_by_category_button').length){
         $("#search_files_by_category_button").click(function(){
             search_files();
@@ -731,6 +737,18 @@ function create_files_url(){
     }
 
     return '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
+}
+
+function clear_search(){
+    for (var i=0, person; person = persons[i]; i++){
+        $('#person_' + person['id']).prop("checked", false);
+    }
+    for (var i=0, location; location = locations[i]; i++){
+        $('#location_' + location['id']).prop("checked", false);
+    }
+    for (var i=0, tag; tag = tags[i]; i++){
+        $('#tag_' + tag['id']).prop("checked", false);
+    }
 }
 
 function search_files(){
