@@ -1179,7 +1179,9 @@ function delete_file(id){
         type: 'DELETE',
         success: function(result){
             $("#filerow_" + id).remove();
-            // TODO: remove th if last tr removed?
+            if ($('#filestable tr').length == 1){
+                clear_files_table();
+            }
         }
     })
     .fail(function(){
