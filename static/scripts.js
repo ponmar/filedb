@@ -626,14 +626,26 @@ function update_categorize_result(){
         categorize_file();
     }
     else{
-        // TODO: also clear checkboxes for persons, locations and tags
-        $('#categorize_file_path').text("N/A");
-        $('#file_description').val("");
-        $('#file_date').val("");
-        if ($('#categorize_image').length){
-            $('#categorize_image').attr('src', '');
-            $('#categorize_image').attr('alt', '');
-        }
+        clear_categorize_result();
+    }
+}
+
+function clear_categorize_result(){
+    $('#categorize_file_path').text("N/A");
+    $('#file_description').val("");
+    $('#file_date').val("");
+    if ($('#categorize_image').length){
+        $('#categorize_image').attr('src', '');
+        $('#categorize_image').attr('alt', '');
+    }
+    for (var i=0, person; person = persons[i]; i++){
+        $('#person_' + person['id']).prop('checked', false);
+    }
+    for (var i=0, location; location = locations[i]; i++){
+        $('#location_' + location['id']).prop('checked', false);
+    }
+    for (var i=0, tag; tag = tags[i]; i++){
+        $('#tag_' + tag['id']).prop('checked', false);
     }
 }
 
