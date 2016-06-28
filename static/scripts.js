@@ -428,35 +428,44 @@ function get_files(){
 }
 
 function update_list_of_files(){
-    $("#get_all_files_status").text("Loading files...");
-    $.getJSON("/api/files", function(result){
-        var tableRows = '<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>';
-        var now = new Date();
-        var files = result['files'];
-        for (var i=0, file; file = files[i]; i++){
-            var datetime = file['datetime'];
-            var age = null;
-            if (datetime != null){
-                age = get_age(datetime, now);
-            }
-            var numPersons = file['persons'].length;
-            var numLocations = file['locations'].length;
-            var numTags = file['tags'].length;
-            var fileId = file['id'];
-            tableRows += '<tr id="filerow_' + fileId + '"><td><a href="/api/filecontent/' + fileId + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + fileId + '">Delete</a>, <a href="/api/fileexif/' + fileId + '">Exif</a></td></tr>';
-        }
-
-        $("#filestable").empty();
-        $("#filestable").append(tableRows);
-
-        $(".delete_file_button").click(function(){
-            var id = $(this).attr('id').replace('delete_file_', '');
-            delete_file(id);
-            return false; // do not follow link
+    if (window.confirm("Download all file information may take a while. Continue?")){
+        $("#files_status").text("Loading files...");
+        $.getJSON("/api/files", function(result){
+            update_files_table(result['files']);
+        })
+        .always(function(){
+            $("#files_status").text("");
         });
-    })
-    .always(function(){
-        $("#get_all_files_status").text("");
+    }
+}
+
+function clear_files_table(){
+    $("#filestable").empty();
+}
+
+function update_files_table(files_json){
+    var tableRows = '<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>';
+    var now = new Date();
+    for (var i=0, file; file = files_json[i]; i++){
+        var datetime = file['datetime'];
+        var age = null;
+        if (datetime != null){
+            age = get_age(datetime, now);
+        }
+        var numPersons = file['persons'].length;
+        var numLocations = file['locations'].length;
+        var numTags = file['tags'].length;
+        var fileId = file['id'];
+        tableRows += '<tr id="filerow_' + fileId + '"><td><a href="/api/filecontent/' + fileId + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + fileId + '">Delete</a>, <a href="/api/fileexif/' + fileId + '">Exif</a></td></tr>';
+    }
+
+    $("#filestable").empty();
+    $("#filestable").append(tableRows);
+
+    $(".delete_file_button").click(function(){
+        var id = $(this).attr('id').replace('delete_file_', '');
+        delete_file(id);
+        return false; // do not follow link
     });
 }
 
@@ -1070,24 +1079,22 @@ function import_files(){
 function clear_add_files_results(){
     $("#import_status").text("");
     $("#add_files_status").text("");
-    $("#files_consistency_status").text("");
+    $("#files_status").text("");
 }
 
 function consistency_check(){
     if (window.confirm("File consistency check for all file entries may take several minutes. Continue?")){
         clear_add_files_results();
-        $("#files_consistency_status").text("Running, please wait...");
+        $("#files_status").text("Running, please wait...");
         $.getJSON("/api/fileconsistency", function(result){
             missing_files = result['missing_files'];
             if (missing_files.length == 0){
-                $("#files_consistency_status").text("File consistency check finished successfully");
+                $("#files_status").text("File consistency check finished successfully");
+                clear_files_table();
             }
             else{
-                var result = "Identifiers for missing files:";
-                for (var i=0, missing_file; missing_file = missing_files[i]; i++){
-                    result += "<br>" + missing_file;
-                }
-                $("#files_consistency_status").html(result);
+                $("#files_status").text("Found " + missing_files.length + " missing files:");
+                update_files_table(missing_files);
             }
         });
     }
@@ -1160,6 +1167,7 @@ function delete_file(id){
         type: 'DELETE',
         success: function(result){
             $("#filerow_" + id).remove();
+            // TODO: remove th if last tr removed?
         }
     })
     .fail(function(){

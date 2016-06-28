@@ -848,7 +848,8 @@ def api_fileconsistency():
     for file_path, file_id in cur.fetchall():
         file_path = FILES_ROOT_DIRECTORY + '/' + file_path
         if not os.path.isfile(file_path):
-            missing_files.append(file_id)
+            missing_files.append(get_file_dict(file_id))
+
     return jsonify(dict(missing_files=missing_files))
 
 
