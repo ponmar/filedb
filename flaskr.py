@@ -9,16 +9,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 import jpegfile
 from config import *
 from werkzeug.routing import BaseConverter
-
-import sys
-if sys.version_info < (3,):
-    import codecs
-
-    def convert_to_unicode(x):
-        return codecs.unicode_escape_decode(x)[0]
-else:
-    def convert_to_unicode(x):
-        return x
+from makeunicode import u
 
 
 class IntListConverter(BaseConverter):
@@ -169,7 +160,7 @@ def api_import_files():
     num_imported_files = 0
     num_not_imported_files = 0
 
-    for root, directories, filenames in os.walk(convert_to_unicode(FILES_ROOT_DIRECTORY)):
+    for root, directories, filenames in os.walk(u(FILES_ROOT_DIRECTORY)):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
