@@ -194,6 +194,12 @@ $(document).ready(function(){
         })
     }
 
+    if ($('#save_for_all_files_button').length){
+        $('#save_for_all_files_button').click(function(){
+            save_categorization_for_all();
+        })
+    }
+
     // TODO: only register on browse page
     // Register slideshow control keys
     $(document).keypress(function(e){
@@ -649,54 +655,70 @@ function clear_categorize_result(){
     }
 }
 
+function createJsonDataForFileCategorization(){
+    var selected_persons = [];
+    for (var i=0, person; person = persons[i]; i++){
+        var id = "person_" + person['id'];
+        var checkbox = document.getElementById(id);
+        if (checkbox != null && checkbox.checked){
+            selected_persons.push(person['id']);
+        }
+    }
+
+    var selected_locations = [];
+    for (var i=0, location; location = locations[i]; i++){
+        var id = "location_" + location['id'];
+        var checkbox = document.getElementById(id);
+        if (checkbox != null && checkbox.checked){
+            selected_locations.push(location['id']);
+        }
+    }
+
+    var selected_tags = [];
+    for (var i=0, tag; tag = tags[i]; i++){
+        var id = "tag_" + tag['id'];
+        var checkbox = document.getElementById(id);
+        if (checkbox != null && checkbox.checked){
+            selected_tags.push(tag['id']);
+        }
+    }
+
+    var description = $('#file_description').val();
+    if (description == ""){
+        description = null;
+    }
+
+    var datetime = $('#file_date').val();
+    if (datetime == ""){
+        datetime = null;
+    }
+
+    var jsonData = JSON.stringify(
+    {
+        "persons": selected_persons,
+        "locations": selected_locations,
+        "tags": selected_tags,
+        "description": description,
+        "datetime": datetime
+    });
+
+    return jsonData;
+}
+
+function find_categorize_file_index_from_id(file_id){
+    if (categorize_result_index != -1){
+        for (var i=0; i<categorize_result.length; i++){
+            if (categorize_files[categorize_result[i]]['id'] == file_id){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 function save_file_categorization(){
     if (categorize_result_index != -1){
-
-        var selected_persons = [];
-        for (var i=0, person; person = persons[i]; i++){
-            var id = "person_" + person['id'];
-            var checkbox = document.getElementById(id);
-            if (checkbox != null && checkbox.checked){
-                selected_persons.push(person['id']);
-            }
-        }
-
-        var selected_locations = [];
-        for (var i=0, location; location = locations[i]; i++){
-            var id = "location_" + location['id'];
-            var checkbox = document.getElementById(id);
-            if (checkbox != null && checkbox.checked){
-                selected_locations.push(location['id']);
-            }
-        }
-
-        var selected_tags = [];
-        for (var i=0, tag; tag = tags[i]; i++){
-            var id = "tag_" + tag['id'];
-            var checkbox = document.getElementById(id);
-            if (checkbox != null && checkbox.checked){
-                selected_tags.push(tag['id']);
-            }
-        }
-
-        var description = $('#file_description').val();
-        if (description == ""){
-            description = null;
-        }
-
-        var datetime = $('#file_date').val();
-        if (datetime == ""){
-            datetime = null;
-        }
-
-        var jsonData = JSON.stringify(
-        {
-            "persons": selected_persons,
-            "locations": selected_locations,
-            "tags": selected_tags,
-            "description": description,
-            "datetime": datetime
-        });
+        var jsonData = createJsonDataForFileCategorization();
 
         $("#save_categorization_status").text("Saving...");
         $.ajax
@@ -713,11 +735,49 @@ function save_file_categorization(){
             error: function(){
                 $("#save_categorization_status").text("An error occured");
             }
-        })
+        });
     }
     else{
-        alert('Please find a file to categorize');
+        show_no_categorize_result();
     }
+}
+
+function save_categorization_for_all(){
+    if (categorize_result_index != -1){
+        if (window.confirm("Replace all meta-data for " + categorize_result.length + " files?")){
+            for (var i=0; i<categorize_result.length; i++){
+                var file_index = categorize_result[i];
+                var jsonData = createJsonDataForFileCategorization();
+                // TODO: will the success functions from ajax requests be performed in the called order? If so, add a countdown text to page?
+                // TODO: why does it not work to write description to all files? It is returned in JSON for each file...
+                $.ajax
+                ({
+                    type: "PUT",
+                    url: '/api/file/' + categorize_files[file_index]['id'],
+                    contentType : 'application/json',
+                    data: jsonData,
+                    dataType: "json",
+                    success: function(responseData){
+                        alert("Storing data for file with id " + responseData['id']);
+                        var file_index_to_update = find_categorize_file_index_from_id(responseData['id']);
+                        if (file_index_to_update != -1){
+                            categorize_files[file_index_to_update] = responseData;
+                        }
+                    },
+                    error: function(){
+                        $("#save_categorization_status").text("An error occured");
+                    }
+                });
+            }
+        }
+    }
+    else{
+        show_no_categorize_result();
+    }
+}
+
+function show_no_categorize_result(){
+    alert('Please find a file to categorize');
 }
 
 function create_files_url(){
