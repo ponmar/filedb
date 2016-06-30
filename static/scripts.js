@@ -706,12 +706,16 @@ function createJsonDataForFileCategorization(){
 }
 
 function find_categorize_file_index_from_id(file_id){
+    alert("Checking id: " + file_id);
     if (categorize_result_index != -1){
-        for (var i=0; i<categorize_result.length; i++){
-            if (categorize_files[categorize_result[i]]['id'] == file_id){
-                return i;
+        for (var j=0; j<categorize_result.length; j++){
+            if (categorize_files[categorize_result[j]]['id'] == file_id){
+                return j;
             }
         }
+    }
+    else{
+        alert("categorize_result_index == -1");
     }
     return -1;
 }
@@ -746,26 +750,27 @@ function save_categorization_for_all(){
     if (categorize_result_index != -1){
         if (window.confirm("Replace all meta-data for " + categorize_result.length + " files?")){
             for (var i=0; i<categorize_result.length; i++){
-                var file_index = categorize_result[i];
                 var jsonData = createJsonDataForFileCategorization();
-                // TODO: will the success functions from ajax requests be performed in the called order? If so, add a countdown text to page?
-                // TODO: why does it not work to write description to all files? It is returned in JSON for each file...
+                // TODO: add a countdown text or progress bar to page?
                 $.ajax
                 ({
                     type: "PUT",
-                    url: '/api/file/' + categorize_files[file_index]['id'],
+                    url: '/api/file/' + categorize_files[categorize_result[i]]['id'],
                     contentType : 'application/json',
                     data: jsonData,
                     dataType: "json",
                     success: function(responseData){
-                        alert("Storing data for file with id " + responseData['id']);
                         var file_index_to_update = find_categorize_file_index_from_id(responseData['id']);
                         if (file_index_to_update != -1){
                             categorize_files[file_index_to_update] = responseData;
                         }
+                        else{
+                            // TODO: why does this happen sometimes?
+                            alert("Could not find returned entry for id " + responseData['id'] + ". Searched data: " + JSON.stringify(categorize_files));
+                        }
                     },
                     error: function(){
-                        $("#save_categorization_status").text("An error occured");
+                        alert("Error");
                     }
                 });
             }
