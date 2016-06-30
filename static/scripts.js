@@ -298,7 +298,7 @@ function reload_persons_table(){
         });
     }
     else{
-        $('#personsdiv').html('<div class="alert alert-info" role="alert"><strong>Note:</strong> No persons added yet</div>');
+        $('#personsdiv').text('No persons added yet.');
     }
 }
 
@@ -359,7 +359,7 @@ function reload_locations_table(){
         });
     }
     else{
-        $('#personsdiv').html('<div class="alert alert-info" role="alert"><strong>Note:</strong> No locations added yet</div>');
+        $('#locationsdiv').text('No locations added yet.');
     }
 }
 
@@ -421,7 +421,7 @@ function reload_tags_table(){
         });
     }
     else{
-        $('#tagsdiv').html('<div class="alert alert-info" role="alert"><strong>Note:</strong> No tags added yet</div>');
+        $('#tagsdiv').text('No tags added yet.');
     }
 }
 
