@@ -31,6 +31,8 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
 }
 
 Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids]
+Request: GET /api/files_by_path/&lt;path_regexp&gt;
+Request: GET /api/files_by_description/&lt;description_regexp&gt;
 Response: 200 (OK), 401 (Unauthorized), 401 (Unathorized)
 {
     "files" =
