@@ -919,27 +919,46 @@ function show_slideshow(){
     }
 }
 
+function is_content_type_image(content_type){
+    return content_type.startsWith('image/');
+}
+
 function load_slideshow_file(){
     var file = slideshow_files[slideshow_index];
     var file_url = '/api/filecontent/' + file['id'];
 
     $('#slideshow_file_path').text("[" + (slideshow_index + 1) + "/" + slideshow_files.length + "] " + file['path']);
 
-    // TODO: create link to file (and remove previous img if any) if selected file is not an image
-    //       easiest is to always remove previous img/video/div/span (if it uses the same id) and re-create appropriate tag
-    if ($('#slideshow_image').length){
-        $('#slideshow_image').attr('src', file_url);
-    }
-    else{
-        var img = $('<img />', {
-            id: 'slideshow_image',
-            src: file_url,
-            alt: file_url,
-            class: 'limited_img'
-        });
-        img.appendTo($('#file_browser_image_div'));
-    }
+    $('#file_browser_image_div').empty();
     update_image_div_height('#file_browser_image_div');
+
+    // Make a HEAD request to find out file type (it is not known from the URL)
+    $.ajax({
+        type: "HEAD",
+        url: file_url,
+        success: function(data, textStatus, xhr){
+            var content_type = xhr.getResponseHeader("content-type") || "";
+            if (is_content_type_image(content_type)){
+                var img = $('<img />', {
+                    id: 'slideshow_image',
+                    src: file_url,
+                    alt: file_url,
+                    class: 'limited_img'
+                });
+                img.appendTo($('#file_browser_image_div'));
+            }
+            else{
+                // Note: target blank to not clear search result
+                $('#file_browser_image_div').html('<a href="' + file_url + '" target="_blank">Open file of type ' + content_type + '</a>');
+            }
+            update_image_div_height('#file_browser_image_div');
+        },
+        error: function(){
+            // TODO: show a bootstrap error div and add a link
+            $('#file_browser_image_div').html("Unable to load file, please run a File Consistency Check!");
+            update_image_div_height('#file_browser_image_div');
+        }
+    });
 
     var file_text = "";
 
