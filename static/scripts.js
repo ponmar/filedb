@@ -527,24 +527,36 @@ function categorize_file(){
     }
 
     $("#save_categorization_status").text("");
-
-    // TODO: create link to file (and remove previous img if any) if selected file is not an image
-    //       easiest is to always remove previous img/video/div/span (if it uses the same id) and re-create appropriate tag
-    if ($('#categorize_image').length){
-        $('#categorize_image').attr('src', file_url);
-        $('#categorize_image').attr('alt', file_url);
-    }
-    else{
-        $('#categorize_image_div').empty();
-        var img = $('<img />', {
-            id: 'categorize_image',
-            src: file_url,
-            alt: file_url,
-            class: 'limited_img'
-        });
-        img.appendTo($('#categorize_image_div'));
-    }
-    update_image_div_height('#categorize_image_div');
+    $('#categorize_image_div').empty();
+    
+    // Make a HEAD request to find out file type (it is not known from the URL)
+    // TODO: this code is duplicated from the browse page part
+    $.ajax({
+        type: "HEAD",
+        url: file_url,
+        success: function(data, textStatus, xhr){
+            var content_type = xhr.getResponseHeader("content-type") || "";
+            if (is_content_type_image(content_type)){
+                var img = $('<img />', {
+                    id: 'categorize_image',
+                    src: file_url,
+                    alt: file_url,
+                    class: 'limited_img'
+                });
+                img.appendTo($('#categorize_image_div'));
+            }
+            else{
+                // Note: target blank to not clear search result
+                $('#categorize_image_div').html('<a href="' + file_url + '" target="_blank">Open file of type ' + content_type + '</a>');
+            }
+            update_image_div_height('#categorize_image_div');
+        },
+        error: function(){
+            // TODO: show a bootstrap error div and add a link
+            $('#categorize_image_div').html("Unable to load file, please run a File Consistency Check!");
+            update_image_div_height('#categorize_image_div');
+        }
+    });
 }
 
 function update_image_div_height(selector){
