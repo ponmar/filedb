@@ -167,37 +167,55 @@ $(document).ready(function(){
     if ($('#find_file_by_path_button').length){
         $('#find_file_by_path_button').click(function(){
             categorize_file_from_path();
-        })
+        });
     }
 
     if ($('#find_file_by_path_regexp_button').length){
         $('#find_file_by_path_regexp_button').click(function(){
             categorize_file_from_path_regexp();
-        })
+        });
     }
 
     if ($('#prev_file_categorize_button').length){
         $('#prev_file_categorize_button').click(function(){
             prev_categorize_file();
-        })
+        });
     }
 
     if ($('#next_file_categorize_button').length){
         $('#next_file_categorize_button').click(function(){
             next_categorize_file();
-        })
+        });
     }
 
     if ($('#save_file_categorize_button').length){
         $('#save_file_categorize_button').click(function(){
             save_file_categorization();
-        })
+        });
     }
 
     if ($('#save_for_all_files_button').length){
         $('#save_for_all_files_button').click(function(){
             save_categorization_for_all();
-        })
+        });
+    }
+    
+    if ($('#file_path_regexp_button').length){
+        $('#file_path_regexp_button').click(function(){
+            alert("file_path_regexp_button");
+        });
+    }
+
+    if ($('#file_description_regexp_button').length){
+        $('#file_description_regexp_button').click(function(){
+            alert("file_description_regexp_button");
+        });
+    }
+
+    if ($('#file_date_regexp_button').length){
+        $('#file_date_regexp_button').click(function(){
+            alert("file_date_regexp_button");
+        });
     }
 
     // TODO: only register on browse page
