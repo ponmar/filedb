@@ -253,7 +253,7 @@ function needs_files(){
 }
 
 function get_persons(){
-    $.getJSON("/api/persons", function(result){
+    $.getJSON("/api/persons?orderby=firstname,lastname", function(result){
         persons = result['persons'];
 
         if ($('#personbuttons').length){
@@ -321,7 +321,7 @@ function reload_persons_table(){
 }
 
 function get_locations(){
-    $.getJSON("/api/locations", function(result){
+    $.getJSON("/api/locations?orderby=name", function(result){
         locations = result['locations'];
 
         if ($('#locationbuttons').length){
@@ -382,7 +382,7 @@ function reload_locations_table(){
 }
 
 function get_tags(){
-    $.getJSON("/api/tags", function(result){
+    $.getJSON("/api/tags?orderby=name", function(result){
         tags = result['tags'];
 
         if ($('#tagbuttons').length){
