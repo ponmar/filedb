@@ -672,14 +672,16 @@ def api_get_json_files_by_path(path_regexp):
     if not session.get('logged_in'):
         abort(401)
 
-    prog = re.compile(path_regexp, re.IGNORECASE)
     files = []
-    cur = g.db.execute('select id, path from files')
-    
-    for row in cur.fetchall():
-        if prog.search(row[1]):
-            files.append(get_file_dict(row[0]))
-    
+    try:
+        prog = re.compile(path_regexp, re.IGNORECASE)
+        cur = g.db.execute('select id, path from files')
+        for row in cur.fetchall():
+            if prog.search(row[1]):
+                files.append(get_file_dict(row[0]))
+    except re.error:
+        pass
+
     return jsonify(dict(files=files))
 
 
@@ -688,15 +690,18 @@ def api_get_json_files_by_description(description_regexp):
     if not session.get('logged_in'):
         abort(401)
 
-    prog = re.compile(description_regexp, re.IGNORECASE)
     files = []
-    cur = g.db.execute('select id, description from files')
-    
-    for row in cur.fetchall():
-        file_description = row[1]
-        if file_description is not None and prog.search(file_description):
-            files.append(get_file_dict(row[0]))
-    
+    try:
+        prog = re.compile(description_regexp, re.IGNORECASE)
+        cur = g.db.execute('select id, description from files')
+        
+        for row in cur.fetchall():
+            file_description = row[1]
+            if file_description is not None and prog.search(file_description):
+                files.append(get_file_dict(row[0]))
+    except re.error:
+        pass
+
     return jsonify(dict(files=files))
 
 
@@ -705,15 +710,17 @@ def api_get_json_files_by_datetime(datetime_regexp):
     if not session.get('logged_in'):
         abort(401)
 
-    prog = re.compile(datetime_regexp, re.IGNORECASE)
     files = []
-    cur = g.db.execute('select id, datetime from files')
-    
-    for row in cur.fetchall():
-        file_datetime = row[1]
-        if file_datetime is not None and prog.search(file_datetime):
-            files.append(get_file_dict(row[0]))
-    
+    try:
+        prog = re.compile(datetime_regexp, re.IGNORECASE)
+        cur = g.db.execute('select id, datetime from files')
+        for row in cur.fetchall():
+            file_datetime = row[1]
+            if file_datetime is not None and prog.search(file_datetime):
+                files.append(get_file_dict(row[0]))
+    except re.error:
+        pass
+
     return jsonify(dict(files=files))
     
 @app.route('/api/persons', methods=['GET'])
