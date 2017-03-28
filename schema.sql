@@ -6,14 +6,14 @@ drop table if exists persons;
 drop table if exists locations;
 drop table if exists tags;
 
-create table files (
+create table files(
     id integer primary key autoincrement not null,
     path text unique not null, /* Path directories should use the unix style separator */
     description text,
     datetime varchar(19) /* Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS */
 );
 
-create table persons (
+create table persons(
     id integer primary key autoincrement not null,
     firstname text not null,
     lastname text not null,
@@ -21,14 +21,14 @@ create table persons (
     dateofbirth varchar(10) /* Format: YYYY-MM-DD */
 );
 
-create table locations (
+create table locations(
     id integer primary key autoincrement not null,
     name text unique not null,
     description text,
     position text /* Format: <latitude> <longitude> */
 );
 
-create table tags (
+create table tags(
     id integer primary key autoincrement not null,
     name text unique not null
 );
