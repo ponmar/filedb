@@ -728,7 +728,12 @@ def api_get_json_persons():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons')
+    query = 'select id, firstname, lastname, description, dateofbirth from persons'
+    if 'orderby' in request.args:
+        # TODO: validate argument
+        query += ' order by {} asc'.format(request.args['orderby'])
+
+    cur = g.db.execute(query)
     persons = [dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) for row in cur.fetchall()]
 
     return jsonify(dict(persons=persons))
@@ -739,7 +744,12 @@ def api_get_json_locations():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, name, description, position from locations')
+    query = 'select id, name, description, position from locations'
+    if 'orderby' in request.args:
+        # TODO: validate argument
+        query += ' order by {} asc'.format(request.args['orderby'])
+        
+    cur = g.db.execute(query)
     locations = [dict(id=row[0], name=row[1], description=row[2], position=row[3]) for row in cur.fetchall()]
 
     return jsonify(dict(locations=locations))
@@ -750,7 +760,12 @@ def api_get_json_tags():
     if not session.get('logged_in'):
         abort(401)
 
-    cur = g.db.execute('select id, name from tags')
+    query = 'select id, name from tags'
+    if 'orderby' in request.args:
+        # TODO: validate argument
+        query += ' order by {} asc'.format(request.args['orderby'])
+        
+    cur = g.db.execute(query)
     tags = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
 
     return jsonify(dict(tags=tags))
