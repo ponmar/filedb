@@ -666,12 +666,13 @@ def api_get_json_files():
 
     return jsonify(dict(files=files))
 
+
 @app.route('/api/files_by_path/<path_regexp>', methods=['GET'])
 def api_get_json_files_by_path(path_regexp):
     if not session.get('logged_in'):
         abort(401)
 
-    prog = re.compile(path_regexp)
+    prog = re.compile(path_regexp, re.IGNORECASE)
     files = []
     cur = g.db.execute('select id, path from files')
     
@@ -681,12 +682,13 @@ def api_get_json_files_by_path(path_regexp):
     
     return jsonify(dict(files=files))
 
+
 @app.route('/api/files_by_description/<description_regexp>', methods=['GET'])
 def api_get_json_files_by_description(description_regexp):
     if not session.get('logged_in'):
         abort(401)
 
-    prog = re.compile(description_regexp)
+    prog = re.compile(description_regexp, re.IGNORECASE)
     files = []
     cur = g.db.execute('select id, description from files')
     
@@ -697,12 +699,13 @@ def api_get_json_files_by_description(description_regexp):
     
     return jsonify(dict(files=files))
 
+
 @app.route('/api/files_by_datetime/<datetime_regexp>', methods=['GET'])
 def api_get_json_files_by_datetime(datetime_regexp):
     if not session.get('logged_in'):
         abort(401)
 
-    prog = re.compile(datetime_regexp)
+    prog = re.compile(datetime_regexp, re.IGNORECASE)
     files = []
     cur = g.db.execute('select id, datetime from files')
     
