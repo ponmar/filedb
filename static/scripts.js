@@ -68,6 +68,24 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#file_path_regexp_button').length){
+        $('#file_path_regexp_button').click(function(){
+            search_files_by_path();
+        });
+    }
+
+    if ($('#file_description_regexp_button').length){
+        $('#file_description_regexp_button').click(function(){
+            search_files_by_description();
+        });
+    }
+
+    if ($('#file_date_regexp_button').length){
+        $('#file_date_regexp_button').click(function(){
+            search_files_by_datetime();
+        });
+    }
+    
     if ($('#clear_category_button').length){
         $("#clear_category_button").click(function(){
             clear_search();
@@ -197,24 +215,6 @@ $(document).ready(function(){
     if ($('#save_for_all_files_button').length){
         $('#save_for_all_files_button').click(function(){
             save_categorization_for_all();
-        });
-    }
-    
-    if ($('#file_path_regexp_button').length){
-        $('#file_path_regexp_button').click(function(){
-            alert("file_path_regexp_button");
-        });
-    }
-
-    if ($('#file_description_regexp_button').length){
-        $('#file_description_regexp_button').click(function(){
-            alert("file_description_regexp_button");
-        });
-    }
-
-    if ($('#file_date_regexp_button').length){
-        $('#file_date_regexp_button').click(function(){
-            alert("file_date_regexp_button");
         });
     }
 
@@ -873,6 +873,39 @@ function search_files(){
         update_search_result(result);
         show_slideshow();
     });
+}
+
+function search_files_by_path(){
+    var regexp = $('#file_path_regexp_filter').val();
+    if (regexp.length > 0){
+        var url = '/api/files_by_path/' + regexp;
+        $.getJSON(url, function(result){
+            update_search_result(result);
+            show_slideshow();
+        });
+    }
+}
+
+function search_files_by_description(){
+    var regexp = $('#file_description_regexp_filter').val();
+    if (regexp.length > 0){
+        var url = '/api/files_by_description/' + regexp;
+        $.getJSON(url, function(result){
+            update_search_result(result);
+            show_slideshow();
+        });
+    }
+}
+
+function search_files_by_datetime(){
+    var regexp = $('#file_date_regexp_filter').val();
+    if (regexp.length > 0){
+        var url = '/api/files_by_datetime/' + regexp;
+        $.getJSON(url, function(result){
+            update_search_result(result);
+            show_slideshow();
+        });
+    }
 }
 
 function update_search_result(files_json){
