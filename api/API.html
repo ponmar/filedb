@@ -34,7 +34,7 @@ Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids
 Request: GET /api/files_by_path/&lt;path_regexp&gt;
 Request: GET /api/files_by_description/&lt;description_regexp&gt;
 Request: GET /api/files_by_datetime/&lt;datetime_regexp&gt;
-Response: 200 (OK), 401 (Unauthorized), 401 (Unathorized)
+Response: 200 (OK), 401 (Unauthorized)
 {
     "files" =
     [
@@ -50,6 +50,19 @@ Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type 
 
 Request: GET /api/fileexif/&lt;file_id&gt;
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
+</pre>
+
+<h2>Read Data: directories</h2>
+<pre>Request: GET /api/directories
+Response: 200 (OK), 401 (Unauthorized)
+{
+    "directories" =
+    [
+        "first_dir",
+        "second_dir",
+        ...
+    ]
+}
 </pre>
 
 <h2>Read Data: persons</h2>

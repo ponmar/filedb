@@ -629,6 +629,21 @@ def api_remove_tag(id):
 # API: get JSON with many items
 #
 
+@app.route('/api/directories', methods=['GET'])
+def api_get_json_directories():
+    if not session.get('logged_in'):
+        abort(401)
+    
+    directories = set()
+    cur = g.db.execute('select path from files')
+    for row in cur.fetchall():
+        path_parts = row[0].rsplit('/', 1)
+        if len(path_parts) > 1:
+            directories.add(path_parts[0])
+                
+    return jsonify(dict(directories=sorted(directories)))
+
+
 # TODO: use int_list for personids, locationids and tagids?
 @app.route('/api/files', methods=['GET'])
 def api_get_json_files():
