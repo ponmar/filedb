@@ -353,6 +353,15 @@ def api_add_person():
         abort(409)
 
 
+def is_year_format(text):
+    # Required format: YYYY
+    try:
+        datetime.datetime.strptime(text, '%Y')
+        return True
+    except ValueError:
+        return False
+
+
 def is_date_format(text):
     # Required format: YYYY-MM-DD
     try:
@@ -457,7 +466,7 @@ def api_update_file(file_id):
         if 'datetime' in content:
             datetime = content['datetime']
             if datetime is not None:
-                if not is_date_format(datetime) and not is_date_and_time_format(datetime):
+                if not is_year_format(datetime) and not is_date_format(datetime) and not is_date_and_time_format(datetime):
                     abort(400, 'Invalid datetime format')
                 cursor.execute("update files set datetime = '" + datetime + "' where id = " + str(file_id))
             else:

@@ -10,7 +10,7 @@ create table files(
     id integer primary key autoincrement not null,
     path text unique not null, /* Path directories should use the unix style separator */
     description text,
-    datetime varchar(19) /* Format: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS */
+    datetime varchar(19) /* Format: YYYY (requested by a user), YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS */
 );
 
 create table persons(

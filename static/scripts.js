@@ -1069,9 +1069,9 @@ function load_slideshow_file(){
             var person = find_person(person_id);
             if (person != null){
                 var person_age_in_file;
-                var peson_dateofbirth = person['dateofbirth'];
-                if (file_datetime != null && peson_dateofbirth != null){
-                    person_age_in_file = " (" + get_age(peson_dateofbirth, file_datetime_object) + ")";
+                var person_dateofbirth = person['dateofbirth'];
+                if (file_datetime != null && person_dateofbirth != null){
+                    person_age_in_file = " (" + get_age(person_dateofbirth, file_datetime_object) + ")";
                 }
                 else{
                     person_age_in_file = "";
@@ -1551,11 +1551,11 @@ function get_printable_value(value){
     return 'N/A';
 }
 
-function get_age(date_of_birth_str, at_date){
-    var birthDate = new Date(date_of_birth_str);
-    var age = at_date.getFullYear() - birthDate.getFullYear();
-    var m = at_date.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && at_date.getDate() < birthDate.getDate())){
+function get_age(date_start_str, date_end){
+    var birthDate = new Date(date_start_str);
+    var age = date_end.getFullYear() - birthDate.getFullYear();
+    var m = date_end.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && date_end.getDate() < birthDate.getDate())){
         age--;
     }
     return age;
