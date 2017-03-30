@@ -1558,7 +1558,10 @@ function get_age(date_start_str, date_end){
     if (m < 0 || (m === 0 && date_end.getDate() < birthDate.getDate())){
         age--;
     }
-    return age;
+    // This is a fix for if a person is tagged in a file with a date and time before the person was born.
+    // This happens especially if a file uses the YYYY date format.
+    // In that case 0 looks better than a negative number.
+    return Math.max(0, age); 
 }
 
 function get_person_span(person){
