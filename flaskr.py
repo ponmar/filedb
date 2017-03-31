@@ -691,11 +691,15 @@ def api_get_json_files():
     return jsonify(dict(files=files))
 
 
-@app.route('/api/files_by_path/<path_regexp>', methods=['GET'])
-def api_get_json_files_by_path(path_regexp):
+@app.route('/api/files_by_path', methods=['GET'])
+def api_get_json_files_by_path():
     if not session.get('logged_in'):
         abort(401)
 
+    path_regexp = request.args['regexp']
+    if path_regexp is None:
+        abort(400)
+        
     files = []
     try:
         prog = re.compile(path_regexp, re.IGNORECASE)
@@ -709,10 +713,14 @@ def api_get_json_files_by_path(path_regexp):
     return jsonify(dict(files=files))
 
 
-@app.route('/api/files_by_description/<description_regexp>', methods=['GET'])
-def api_get_json_files_by_description(description_regexp):
+@app.route('/api/files_by_description', methods=['GET'])
+def api_get_json_files_by_description():
     if not session.get('logged_in'):
         abort(401)
+
+    description_regexp = request.args['regexp']
+    if description_regexp is None:
+        abort(400)
 
     files = []
     try:
@@ -729,10 +737,14 @@ def api_get_json_files_by_description(description_regexp):
     return jsonify(dict(files=files))
 
 
-@app.route('/api/files_by_datetime/<datetime_regexp>', methods=['GET'])
-def api_get_json_files_by_datetime(datetime_regexp):
+@app.route('/api/files_by_datetime', methods=['GET'])
+def api_get_json_files_by_datetime():
     if not session.get('logged_in'):
         abort(401)
+
+    datetime_regexp = request.args['regexp']
+    if datetime_regexp is None:
+        abort(400)
 
     files = []
     try:
@@ -831,11 +843,16 @@ def get_file_json(file_id = None, file_path = None):
     return jsonify(get_file_dict(file_id, file_path))
 
 
-@app.route('/api/file_by_path/<path>', methods=['GET'])
-def api_json_file_by_path(path):
+@app.route('/api/file_by_path', methods=['GET'])
+def api_json_file_by_path():
     if not session.get('logged_in'):
         abort(401)
-    file_json = get_file_json(file_path=path)
+
+    file_path = request.args['path']
+    if file_path is None:
+        abort(400)
+
+    file_json = get_file_json(file_path=file_path)
     if file_json is None:
         abort(404)
     return file_json
