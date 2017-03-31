@@ -30,10 +30,7 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
     "tags": [1, 2, ...]
 }
 
-Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids]
-Request: GET /api/files_by_path?regexp=&lt;path_regexp&gt;
-Request: GET /api/files_by_description?regexp=&lt;description_regexp&gt;
-Request: GET /api/files_by_datetime?regexp=&lt;datetime_regexp&gt;
+Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids][&pathregexp=pathregexp][&descriptionregexp=descriptionregexp][&datetimeregexp=datetimeregexp]
 Response: 200 (OK), 401 (Unauthorized)
 {
     "files" =

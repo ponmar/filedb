@@ -647,6 +647,7 @@ def api_get_json_directories():
 # TODO: use int_list for personids, locationids and tagids?
 @app.route('/api/files', methods=['GET'])
 def api_get_json_files():
+    """All specified arguments must match to return a specific file."""
     if not session.get('logged_in'):
         abort(401)
 
@@ -654,6 +655,10 @@ def api_get_json_files():
     person_ids = request.args.get('personids')
     location_ids = request.args.get('locationids')
     tag_ids = request.args.get('tagids')
+    
+    path_regexp = request.args['pathregexp']
+    description_regexp = request.args['descriptionregexp']
+    datetime_regexp = request.args['datetimeregexp']
 
     if person_ids is None:
         person_ids = ""
@@ -662,7 +667,20 @@ def api_get_json_files():
     if tag_ids is None:
         tag_ids = ""
 
-    query = 'select id from files '
+    path_prog = None
+    if path_regexp is not None:
+        path_prog = re.compile(path_regexp, re.IGNORECASE)
+        
+    description_prog = None
+    if description_regexp is not None:
+        description_prog = re.compile(description_regexp, re.IGNORECASE)
+        
+    datetime_prog = None
+    if datetime_regexp is not None:
+        datetime_prog = re.compile(datetime_regexp, re.IGNORECASE)
+    
+    # TODO: optimize needed data depending on specified arguments?
+    query = 'select id, path, description, datetime from files '
     if person_ids:
         query += 'inner join filepersons on files.id = filepersons.fileid '
     if location_ids:
@@ -685,80 +703,19 @@ def api_get_json_files():
 
     files = []
     for row in cursor.fetchall():
+        if path_prog is not None and not path_prog.search(row[1]):
+            continue
+        if description_prog is not None and not description_prog.search(row[2]):
+            continue
+        if datetime_prog is not None and not datetime_prog.search(row[3]):
+            continue
+
         file_json = get_file_dict(row[0])
         files.append(file_json)
 
     return jsonify(dict(files=files))
 
 
-@app.route('/api/files_by_path', methods=['GET'])
-def api_get_json_files_by_path():
-    if not session.get('logged_in'):
-        abort(401)
-
-    path_regexp = request.args['regexp']
-    if path_regexp is None:
-        abort(400)
-        
-    files = []
-    try:
-        prog = re.compile(path_regexp, re.IGNORECASE)
-        cur = g.db.execute('select id, path from files')
-        for row in cur.fetchall():
-            if prog.search(row[1]):
-                files.append(get_file_dict(row[0]))
-    except re.error:
-        pass
-
-    return jsonify(dict(files=files))
-
-
-@app.route('/api/files_by_description', methods=['GET'])
-def api_get_json_files_by_description():
-    if not session.get('logged_in'):
-        abort(401)
-
-    description_regexp = request.args['regexp']
-    if description_regexp is None:
-        abort(400)
-
-    files = []
-    try:
-        prog = re.compile(description_regexp, re.IGNORECASE)
-        cur = g.db.execute('select id, description from files')
-        
-        for row in cur.fetchall():
-            file_description = row[1]
-            if file_description is not None and prog.search(file_description):
-                files.append(get_file_dict(row[0]))
-    except re.error:
-        pass
-
-    return jsonify(dict(files=files))
-
-
-@app.route('/api/files_by_datetime', methods=['GET'])
-def api_get_json_files_by_datetime():
-    if not session.get('logged_in'):
-        abort(401)
-
-    datetime_regexp = request.args['regexp']
-    if datetime_regexp is None:
-        abort(400)
-
-    files = []
-    try:
-        prog = re.compile(datetime_regexp, re.IGNORECASE)
-        cur = g.db.execute('select id, datetime from files')
-        for row in cur.fetchall():
-            file_datetime = row[1]
-            if file_datetime is not None and prog.search(file_datetime):
-                files.append(get_file_dict(row[0]))
-    except re.error:
-        pass
-
-    return jsonify(dict(files=files))
-    
 @app.route('/api/persons', methods=['GET'])
 def api_get_json_persons():
     if not session.get('logged_in'):
