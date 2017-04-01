@@ -164,7 +164,7 @@ def api_import_files():
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
-            filename_in_wanted_directory = '/'.join(filename_with_path.split('/')[1:])
+            filename_in_wanted_directory = filename_with_path.split('/', 1)[1]
 
             if add_file(filename_in_wanted_directory):
                 app.logger.info('Imported file: ' + filename_in_wanted_directory)
@@ -177,9 +177,7 @@ def api_import_files():
 
 
 def create_files_added_response(num_added_files, num_not_added_files):
-    # TODO: remove message from JSON? It is no longer used by the javascript.
-    return make_response(jsonify({'message': 'file(s) added',
-                                  'num_added_files': num_added_files,
+    return make_response(jsonify({'num_added_files': num_added_files,
                                   'num_not_added_files': num_not_added_files}),
                          201)
 
@@ -190,7 +188,7 @@ def add_file(path, file_description=None):
     """
     # TODO: check that path within files directory (enough to fail if ".." is included?)
     try:
-        if file_is_blacklisted(path):
+        if path_is_blacklisted(path):
             app.logger.info('Ignored blacklisted file: ' + path)
             return False
 
@@ -275,9 +273,9 @@ def get_date_from_path(path):
     return None
 
 
-def file_is_blacklisted(file_path):
+def path_is_blacklisted(path):
     for pattern in BLACKLISTED_FILE_PATH_PATTERNS:
-        if file_path.find(pattern) != -1:
+        if path.find(pattern) != -1:
             return True
     return False
 
@@ -631,6 +629,7 @@ def api_remove_tag(id):
 
 @app.route('/api/directories', methods=['GET'])
 def api_get_json_directories():
+    """Returns the directories that files have been added from."""
     if not session.get('logged_in'):
         abort(401)
     
@@ -642,9 +641,25 @@ def api_get_json_directories():
             directories.add(path_parts[0])
                 
     return jsonify(dict(directories=sorted(directories)))
-    
 
-# TODO: use int_list for personids, locationids and tagids?
+
+@app.route('/api/fs_directories', methods=['GET'])
+def api_get_json_fs_directories():
+    """Returns all non-blacklisted directories within the configured root directory."""
+    if not session.get('logged_in'):
+        abort(401)
+
+    directories = []
+    for root, _, _ in os.walk(u(FILES_ROOT_DIRECTORY)):
+        path = update_path(root)
+        # Remove root dir prefix from path
+        path = path.split('/', 1)[1]
+        if not path_is_blacklisted(path):
+            directories.append(path)
+
+    return jsonify(dict(directories=directories))
+
+
 @app.route('/api/files', methods=['GET'])
 def api_get_json_files():
     """All specified arguments must match to return a specific file.
