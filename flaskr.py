@@ -711,10 +711,12 @@ def api_get_json_files():
     for row in cursor.fetchall():
         if path_prog is not None and not path_prog.search(row[1]):
             continue
-        if description_prog is not None and not description_prog.search(row[2]):
-            continue
-        if datetime_prog is not None and not datetime_prog.search(row[3]):
-            continue
+        if description_prog is not None:
+            if row[2] is None or not description_prog.search(row[2]):
+                continue
+        if datetime_prog is not None:
+            if row[3] is None or not datetime_prog.search(row[3]):
+                continue
 
         file_json = get_file_dict(row[0])
         files.append(file_json)
