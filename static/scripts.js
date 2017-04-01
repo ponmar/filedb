@@ -834,7 +834,7 @@ function show_no_categorize_result(){
     alert('Please find a file to categorize');
 }
 
-function create_files_url(include_persons, include_locations, include_tags){
+function create_files_url(include_persons, include_locations, include_tags, include_path_regexp, include_description_regexp, include_datetime_regexp){
     var checked_persons = '';
     if (include_persons){
         var selected_person_values = $('#multiplepersonselect').val();
@@ -873,8 +873,32 @@ function create_files_url(include_persons, include_locations, include_tags){
             checked_tags = checked_tags.slice(0, -1);
         }
     }
+    
+    var path_regexp = '';
+    if (include_path_regexp){
+        var regexp = $('#file_path_regexp_filter').val();
+        if (regexp.length > 0){
+            path_regexp = encodeURIComponent(regexp);
+        }
+    }
+    
+    var description_regexp = '';
+    if (include_description_regexp){
+        var regexp = $('#file_description_regexp_filter').val();
+        if (regexp.length > 0){
+            description_regexp = encodeURIComponent(regexp);
+        }
+    }
+    
+    var datetime_regexp = '';
+    if (include_datetime_regexp){
+        var regexp = $('#file_date_regexp_filter').val();
+        if (regexp.length > 0){
+            datetime_regexp = encodeURIComponent(regexp);
+        }
+    }
 
-    return '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
+    return '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags + '&pathregexp=' + path_regexp + '&descriptionregexp=' + description_regexp + '&datetimeregexp=' + datetime_regexp;
 }
 
 function clear_all_search(){
@@ -887,7 +911,7 @@ function clear_all_search(){
 }
 
 function search_files_by_persons(){
-    var url = create_files_url(true, false, false);
+    var url = create_files_url(true, false, false, false, false, false);
     $.getJSON(url, function(result){
         update_search_result(result);
         show_slideshow();
@@ -895,7 +919,7 @@ function search_files_by_persons(){
 }
 
 function search_files_by_locations(){
-    var url = create_files_url(false, true, false);
+    var url = create_files_url(false, true, false, false, false, false);
     $.getJSON(url, function(result){
         update_search_result(result);
         show_slideshow();
@@ -903,7 +927,7 @@ function search_files_by_locations(){
 }
 
 function search_files_by_tags(){
-    var url = create_files_url(false, false, true);
+    var url = create_files_url(false, false, true, false, false, false);
     $.getJSON(url, function(result){
         update_search_result(result);
         show_slideshow();
@@ -911,8 +935,8 @@ function search_files_by_tags(){
 }
 
 function search_files_by_all(){
-    // TODO: include possibility to use specified regexps. Pass more args to create_files_url?
-    var url = create_files_url(true, true, true);
+    // TODO: check that something has been marked/filled in to not match all files?
+    var url = create_files_url(true, true, true, true, true, true);
     $.getJSON(url, function(result){
         update_search_result(result);
         show_slideshow();
@@ -922,7 +946,7 @@ function search_files_by_all(){
 function search_files_by_path(){
     var regexp = $('#file_path_regexp_filter').val();
     if (regexp.length > 0){
-        var url = '/api/files?pathregexp=' + encodeURIComponent(regexp);
+        var url = create_files_url(false, false, false, true, false, false);
         $.getJSON(url, function(result){
             update_search_result(result);
             show_slideshow();
@@ -933,7 +957,7 @@ function search_files_by_path(){
 function search_files_by_description(){
     var regexp = $('#file_description_regexp_filter').val();
     if (regexp.length > 0){
-        var url = '/api/files?descriptionregexp=' + encodeURIComponent(regexp);
+        var url = create_files_url(false, false, false, false, true, false);
         $.getJSON(url, function(result){
             update_search_result(result);
             show_slideshow();
@@ -944,7 +968,7 @@ function search_files_by_description(){
 function search_files_by_datetime(){
     var regexp = $('#file_date_regexp_filter').val();
     if (regexp.length > 0){
-        var url = '/api/files?datetimeregexp=' + encodeURIComponent(regexp);
+        var url = create_files_url(false, false, false, false, false, true);
         $.getJSON(url, function(result){
             update_search_result(result);
             show_slideshow();

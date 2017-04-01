@@ -679,6 +679,7 @@ def api_get_json_files():
     datetime_regexp = None
         
     # TODO: input validation needed?
+    # Note that request.args.get(...) returns an empty string if the value is empty in the URL
     if 'personids' in request.args:
         person_ids = request.args.get('personids')
     if 'locationids' in request.args:
@@ -693,15 +694,16 @@ def api_get_json_files():
         datetime_regexp = request.args['datetimeregexp']
 
     path_prog = None
-    if path_regexp is not None:
+    if path_regexp:
         path_prog = re.compile(path_regexp, re.IGNORECASE)
-        
+
     description_prog = None
-    if description_regexp is not None:
+    if description_regexp:
         description_prog = re.compile(description_regexp, re.IGNORECASE)
-        
+
     datetime_prog = None
-    if datetime_regexp is not None:
+    if datetime_regexp:
+        print 'received datetime_regexp'
         datetime_prog = re.compile(datetime_regexp, re.IGNORECASE)
     
     # TODO: optimize needed data depending on specified arguments?
