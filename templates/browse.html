@@ -15,24 +15,27 @@
     <div class="alert alert-info" role="alert"><strong>Note:</strong> Read about regular expressions at the <a href="{{ url_for('app_help') }}#regexp">Help</a> page.</div>
     <div class="row">
       <div class="col-md-4">
+        <label for="file_path_regexp_filter">File path regexp</label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Path regexp" id="file_path_regexp_filter">
+          <input type="text" class="form-control" placeholder="" id="file_path_regexp_filter">
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" id="file_path_regexp_button">Search</button>
           </span>
         </div>
       </div>
       <div class="col-md-4">
+        <label for="file_description_regexp_filter">File description regexp</label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Description regexp" id="file_description_regexp_filter">
+          <input type="text" class="form-control" placeholder="" id="file_description_regexp_filter">
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" id="file_description_regexp_button">Search</button>
           </span>
         </div>
       </div>
       <div class="col-md-4">
+        <label for="file_date_regexp_filter">File date and time regexp</label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Date regexp" id="file_date_regexp_filter">
+          <input type="text" class="form-control" placeholder="" id="file_date_regexp_filter">
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" id="file_date_regexp_button">Search</button>
           </span>
@@ -40,9 +43,18 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4"><div class="form-group">Persons:<br><div id="personbuttons">Loading...</div></div></div>
-      <div class="col-md-4"><div class="form-group">Locations:<br><div id="locationbuttons">Loading...</div></div></div>
-      <div class="col-md-4"><div class="form-group">Tags:<br><div id="tagbuttons">Loading...</div></div></div>
+      <div class="col-md-4">
+        <label for="multiplepersonselect">Persons available in file</label>
+        <select multiple class="form-control" id="multiplepersonselect"></select>
+      </div>
+      <div class="col-md-4">
+        <label for="multiplelocationselect">File location</label>
+        <select multiple class="form-control" id="multiplelocationselect"></select>
+      </div>
+      <div class="col-md-4">
+        <label for="multipletagselect">File tags</label>
+        <select multiple class="form-control" id="multipletagselect"></select>
+      </div>
     </div>
     <button type="button" class="btn btn-default" id="clear_category_button">Clear</button>
     <button type="button" class="btn btn-default" id="search_files_by_category_button">Search</button>

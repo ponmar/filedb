@@ -237,15 +237,15 @@ $(document).ready(function(){
 });
 
 function needs_persons(){
-    return $('#personbuttons').length || $('#personsdiv').length || $('#person_categories').length;
+    return $('#multiplepersonselect').length || $('#personsdiv').length || $('#person_categories').length;
 }
 
 function needs_locations(){
-    return $('#locationbuttons').length || $('#locationsdiv').length || $('#location_categories').length;
+    return $('#multiplelocationselect').length || $('#locationsdiv').length || $('#location_categories').length;
 }
 
 function needs_tags(){
-    return $('#tagbuttons').length || $('#tagsdiv').length || $('#tag_categories').length;
+    return $('#multipletagselect').length || $('#tagsdiv').length || $('#tag_categories').length;
 }
 
 function needs_files(){
@@ -256,12 +256,12 @@ function get_persons(){
     $.getJSON("/api/persons?orderby=firstname,lastname", function(result){
         persons = result['persons'];
 
-        if ($('#personbuttons').length){
-            var personLabels = "";
+        if ($('#multiplepersonselect').length){
+            var personOptions = "";
             for (var i=0, person; person = persons[i]; i++){
-                personLabels += '<label class="checkbox-inline"><input type="checkbox" value="" id="person_' + person['id'] + '">' + get_person_span(person) + '</label><br>';
+                personOptions += '<option value="' + person['id'] + '">' + get_person_span(person) + '</option>';
             }
-            $("#personbuttons").html(personLabels);
+            $("#multiplepersonselect").html(personOptions);
         }
 
         if ($('#personsdiv').length){
@@ -324,12 +324,12 @@ function get_locations(){
     $.getJSON("/api/locations?orderby=name", function(result){
         locations = result['locations'];
 
-        if ($('#locationbuttons').length){
-            var labels = "";
+        if ($('#multiplelocationselect').length){
+            var options = "";
             for (var i=0, location; location = locations[i]; i++){
-                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="location_' + location['id'] + '">' + get_location_span(location) + '</label><br>';
+                options += '<option value="' + location['id'] + '">' + get_location_span(location) + '</option>';
             }
-            $('#locationbuttons').html(labels);
+            $('#multiplelocationselect').html(options);
         }
 
         if ($('#locationsdiv').length){
@@ -385,12 +385,12 @@ function get_tags(){
     $.getJSON("/api/tags?orderby=name", function(result){
         tags = result['tags'];
 
-        if ($('#tagbuttons').length){
-            var labels = "";
+        if ($('#multipletagselect').length){
+            var options = "";
             for (var i=0, tag; tag = tags[i]; i++){
-                labels += '<label class="checkbox-inline"><input type="checkbox" value="" id="tag_' + tag['id'] + '">' + tag['name'] + '</label><br>';
+                options += '<option value="' + tag['id'] + '">' + tag['name'] + '</option>';
             }
-            $('#tagbuttons').html(labels);
+            $('#multipletagselect').html(options);
         }
 
         if ($('#tagsdiv').length){
@@ -817,38 +817,35 @@ function show_no_categorize_result(){
 
 function create_files_url(){
     var checked_persons = '';
-    for (var i=0, person; person = persons[i]; i++){
-        var id = 'person_' + person['id'];
-        var checkbox = document.getElementById(id);
-        if (checkbox != null && checkbox.checked){
-            checked_persons += person['id'] + ',';
+    var selected_person_values = $('#multiplepersonselect').val();
+    if (selected_person_values != null){
+        for (var i=0, value; value = selected_person_values[i]; i++){
+            checked_persons += value + ',';
         }
     }
-    if (checked_persons != ""){
+    if (checked_persons != ''){
         checked_persons = checked_persons.slice(0, -1);
     }
 
     var checked_tags = '';
-    for (var i=0, tag; tag = tags[i]; i++){
-        var id = 'tag_' + tag['id'];
-        var checkbox = document.getElementById(id);
-        if (checkbox != null && checkbox.checked) {
-            checked_tags += tag['id'] + ',';
+    var selected_tag_values = $('#multipletagselect').val();
+    if (selected_tag_values != null){
+        for (var i=0, value; value = selected_tag_values[i]; i++){
+            checked_tags += value + ',';
         }
     }
-    if (checked_tags != ""){
+    if (checked_tags != ''){
         checked_tags = checked_tags.slice(0, -1);
     }
 
     var checked_locations = '';
-    for (var i=0, location; location = locations[i]; i++){
-        var id = 'location_' + location['id'];
-        var checkbox = document.getElementById(id);
-        if (checkbox != null && checkbox.checked) {
-            checked_locations += location['id'] + ',';
+    var selected_location_values = $('#multiplelocationselect').val();
+    if (selected_location_values != null){
+        for (var i=0, value; value = selected_location_values[i]; i++){
+            checked_locations += value + ',';
         }
     }
-    if (checked_locations != ""){
+    if (checked_locations != ''){
         checked_locations = checked_locations.slice(0, -1);
     }
 
