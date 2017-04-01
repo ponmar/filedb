@@ -878,7 +878,7 @@ function search_files(){
 function search_files_by_path(){
     var regexp = $('#file_path_regexp_filter').val();
     if (regexp.length > 0){
-        var url = '/api/files&pathregexp=' + encodeURIConponent(regexp);
+        var url = '/api/files?pathregexp=' + encodeURIComponent(regexp);
         $.getJSON(url, function(result){
             update_search_result(result);
             show_slideshow();
@@ -889,7 +889,7 @@ function search_files_by_path(){
 function search_files_by_description(){
     var regexp = $('#file_description_regexp_filter').val();
     if (regexp.length > 0){
-        var url = '/api/files&descriptionregexp=' + encodeURIConponent(regexp);
+        var url = '/api/files?descriptionregexp=' + encodeURIComponent(regexp);
         $.getJSON(url, function(result){
             update_search_result(result);
             show_slideshow();
@@ -900,7 +900,7 @@ function search_files_by_description(){
 function search_files_by_datetime(){
     var regexp = $('#file_date_regexp_filter').val();
     if (regexp.length > 0){
-        var url = '/api/files&datetimeregexp=' + encodeURIConponent(regexp);
+        var url = '/api/files?datetimeregexp=' + encodeURIComponent(regexp);
         $.getJSON(url, function(result){
             update_search_result(result);
             show_slideshow();

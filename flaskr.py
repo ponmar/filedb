@@ -642,7 +642,7 @@ def api_get_json_directories():
             directories.add(path_parts[0])
                 
     return jsonify(dict(directories=sorted(directories)))
-
+    
 
 # TODO: use int_list for personids, locationids and tagids?
 @app.route('/api/files', methods=['GET'])
@@ -651,21 +651,27 @@ def api_get_json_files():
     if not session.get('logged_in'):
         abort(401)
 
+    # All arguments are optional
+    person_ids = None
+    location_ids = None
+    tag_ids = None
+    path_regexp = None
+    description_regexp = None
+    datetime_regexp = None
+        
     # TODO: input validation needed?
-    person_ids = request.args.get('personids')
-    location_ids = request.args.get('locationids')
-    tag_ids = request.args.get('tagids')
-    
-    path_regexp = request.args['pathregexp']
-    description_regexp = request.args['descriptionregexp']
-    datetime_regexp = request.args['datetimeregexp']
-
-    if person_ids is None:
-        person_ids = ""
-    if location_ids is None:
-        location_ids = ""
-    if tag_ids is None:
-        tag_ids = ""
+    if 'personids' in request.args:
+        person_ids = request.args.get('personids')
+    if 'locationids' in request.args:
+        location_ids = request.args.get('locationids')
+    if 'tagids' in request.args:
+        tag_ids = request.args.get('tagids')    
+    if 'pathregexp' in request.args:
+        path_regexp = request.args['pathregexp']
+    if 'descriptionregexp' in request.args:
+        description_regexp = request.args['descriptionregexp']
+    if 'datetimeregexp' in request.args:
+        datetime_regexp = request.args['datetimeregexp']
 
     path_prog = None
     if path_regexp is not None:
@@ -698,7 +704,7 @@ def api_get_json_files():
 
     if len(where_statements) > 0:
         query += 'where ' + ' and '.join(where_statements)
-
+        
     cursor = g.db.execute(query)
 
     files = []
