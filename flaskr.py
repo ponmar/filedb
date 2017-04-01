@@ -647,7 +647,11 @@ def api_get_json_directories():
 # TODO: use int_list for personids, locationids and tagids?
 @app.route('/api/files', methods=['GET'])
 def api_get_json_files():
-    """All specified arguments must match to return a specific file."""
+    """All specified arguments must match to return a specific file.
+
+    To find files with either, for example, one specific person or one
+    specific location; use two request to this API call and merge the result.
+    """
     if not session.get('logged_in'):
         abort(401)
 
@@ -776,6 +780,7 @@ def api_get_json_tags():
 # API: get JSON with one specific item
 #
 
+# TODO: file_path arg is not used, remove?
 def get_file_dict(file_id = None, file_path = None):
     row = None
     if file_id is not None:
@@ -806,21 +811,6 @@ def get_file_dict(file_id = None, file_path = None):
 
 def get_file_json(file_id = None, file_path = None):
     return jsonify(get_file_dict(file_id, file_path))
-
-
-@app.route('/api/file_by_path', methods=['GET'])
-def api_json_file_by_path():
-    if not session.get('logged_in'):
-        abort(401)
-
-    file_path = request.args['path']
-    if file_path is None:
-        abort(400)
-
-    file_json = get_file_json(file_path=file_path)
-    if file_json is None:
-        abort(404)
-    return file_json
 
 
 @app.route('/api/file/<int:id>', methods=['GET'])
