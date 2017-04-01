@@ -86,15 +86,34 @@ $(document).ready(function(){
         });
     }
     
-    if ($('#clear_category_button').length){
-        $("#clear_category_button").click(function(){
-            clear_search();
+    if ($('#clear_all_button').length){
+        $("#clear_all_button").click(function(){
+            clear_all_search();
         });
     }
 
-    if ($('#search_files_by_category_button').length){
-        $("#search_files_by_category_button").click(function(){
-            search_files();
+    if ($('#search_files_by_persons_button').length){
+        $("#search_files_by_persons_button").click(function(){
+            search_files_by_persons();
+        });
+    }
+
+    if ($('#search_files_by_locations_button').length){
+        $("#search_files_by_locations_button").click(function(){
+            search_files_by_locations();
+        });
+    }
+
+    if ($('#search_files_by_tags_button').length){
+        $("#search_files_by_tags_button").click(function(){
+            search_files_by_tags();
+        });
+    }
+
+    
+    if ($('#search_files_by_all_button').length){
+        $("#search_files_by_all_button").click(function(){
+            search_files_by_all();
         });
     }
 
@@ -815,57 +834,85 @@ function show_no_categorize_result(){
     alert('Please find a file to categorize');
 }
 
-function create_files_url(){
+function create_files_url(include_persons, include_locations, include_tags){
     var checked_persons = '';
-    var selected_person_values = $('#multiplepersonselect').val();
-    if (selected_person_values != null){
-        for (var i=0, value; value = selected_person_values[i]; i++){
-            checked_persons += value + ',';
+    if (include_persons){
+        var selected_person_values = $('#multiplepersonselect').val();
+        if (selected_person_values != null){
+            for (var i=0, value; value = selected_person_values[i]; i++){
+                checked_persons += value + ',';
+            }
         }
-    }
-    if (checked_persons != ''){
-        checked_persons = checked_persons.slice(0, -1);
-    }
-
-    var checked_tags = '';
-    var selected_tag_values = $('#multipletagselect').val();
-    if (selected_tag_values != null){
-        for (var i=0, value; value = selected_tag_values[i]; i++){
-            checked_tags += value + ',';
+        if (checked_persons != ''){
+            checked_persons = checked_persons.slice(0, -1);
         }
-    }
-    if (checked_tags != ''){
-        checked_tags = checked_tags.slice(0, -1);
     }
 
     var checked_locations = '';
-    var selected_location_values = $('#multiplelocationselect').val();
-    if (selected_location_values != null){
-        for (var i=0, value; value = selected_location_values[i]; i++){
-            checked_locations += value + ',';
+    if (include_locations){
+        var selected_location_values = $('#multiplelocationselect').val();
+        if (selected_location_values != null){
+            for (var i=0, value; value = selected_location_values[i]; i++){
+                checked_locations += value + ',';
+            }
+        }
+        if (checked_locations != ''){
+            checked_locations = checked_locations.slice(0, -1);
         }
     }
-    if (checked_locations != ''){
-        checked_locations = checked_locations.slice(0, -1);
+
+    var checked_tags = '';
+    if (include_tags){
+        var selected_tag_values = $('#multipletagselect').val();
+        if (selected_tag_values != null){
+            for (var i=0, value; value = selected_tag_values[i]; i++){
+                checked_tags += value + ',';
+            }
+        }
+        if (checked_tags != ''){
+            checked_tags = checked_tags.slice(0, -1);
+        }
     }
 
     return '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags;
 }
 
-function clear_search(){
-    for (var i=0, person; person = persons[i]; i++){
-        $('#person_' + person['id']).prop("checked", false);
-    }
-    for (var i=0, location; location = locations[i]; i++){
-        $('#location_' + location['id']).prop("checked", false);
-    }
-    for (var i=0, tag; tag = tags[i]; i++){
-        $('#tag_' + tag['id']).prop("checked", false);
-    }
+function clear_all_search(){
+    $("#multiplepersonselect option:selected").prop("selected", false);
+    $("#multiplelocationselect option:selected").prop("selected", false);
+    $("#multipletagselect option:selected").prop("selected", false);
+    $('#file_path_regexp_filter').val('');
+    $('#file_description_regexp_filter').val('');
+    $('#file_date_regexp_filter').val('');
 }
 
-function search_files(){
-    var url = create_files_url();
+function search_files_by_persons(){
+    var url = create_files_url(true, false, false);
+    $.getJSON(url, function(result){
+        update_search_result(result);
+        show_slideshow();
+    });
+}
+
+function search_files_by_locations(){
+    var url = create_files_url(false, true, false);
+    $.getJSON(url, function(result){
+        update_search_result(result);
+        show_slideshow();
+    });
+}
+
+function search_files_by_tags(){
+    var url = create_files_url(false, false, true);
+    $.getJSON(url, function(result){
+        update_search_result(result);
+        show_slideshow();
+    });
+}
+
+function search_files_by_all(){
+    // TODO: include possibility to use specified regexps. Pass more args to create_files_url?
+    var url = create_files_url(true, true, true);
     $.getJSON(url, function(result){
         update_search_result(result);
         show_slideshow();
