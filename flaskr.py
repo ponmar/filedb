@@ -652,10 +652,12 @@ def api_get_json_fs_directories():
     directories = []
     for root, _, _ in os.walk(u(FILES_ROOT_DIRECTORY)):
         path = update_path(root)
-        # Remove root dir prefix from path
-        path = path.split('/', 1)[1]
-        if not path_is_blacklisted(path):
-            directories.append(path)
+        if path != FILES_ROOT_DIRECTORY:
+            if '/' in path:
+                # Remove root dir prefix from path
+                path = path.split('/', 1)[1]
+            if not path_is_blacklisted(path):
+                directories.append(path)
 
     return jsonify(dict(directories=directories))
 

@@ -159,6 +159,12 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#button_show_directories').length){
+        $('#button_show_directories').click(function(){
+            update_list_of_directories();
+        });
+    }
+    
     if ($('#consistency_check_button').length){
         $("#consistency_check_button").click(function(){
             consistency_check();
@@ -470,6 +476,18 @@ function get_files(){
     });
 }
 
+function update_list_of_directories(){
+    if (window.confirm("Listing all remote directories from the filesystem may take a while. Continue?")){
+        $("#files_status").text("Loading directories...");
+        $.getJSON("/api/fs_directories", function(result){
+            update_directories_table(result['directories']);
+        })
+        .always(function(){
+            $("#files_status").text("");
+        });
+    }
+}
+
 function update_list_of_files(){
     if (window.confirm("Download all file information may take a while. Continue?")){
         $("#files_status").text("Loading files...");
@@ -510,6 +528,16 @@ function update_files_table(files_json){
         delete_file(id);
         return false; // do not follow link
     });
+}
+
+function update_directories_table(directories_json){
+    var tableRows = '<tr><th>Directory</th></tr>';
+    for (var i=0, directory; directory = directories_json[i]; i++){
+        tableRows += '<tr><td>' + directory + '</td></tr>';
+    }
+
+    $("#directoriestable").empty();
+    $("#directoriestable").append(tableRows);
 }
 
 function prev_categorize_file(){
