@@ -703,7 +703,7 @@ def api_get_json_files():
 
     datetime_prog = None
     if datetime_regexp:
-        print 'received datetime_regexp'
+        print('received datetime_regexp')
         datetime_prog = re.compile(datetime_regexp, re.IGNORECASE)
     
     # TODO: optimize needed data depending on specified arguments?

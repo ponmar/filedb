@@ -911,6 +911,7 @@ function clear_all_search(){
 }
 
 function search_files_by_persons(){
+    // TODO: alert if no person was selected
     var url = create_files_url(true, false, false, false, false, false);
     $.getJSON(url, function(result){
         update_search_result(result);
@@ -919,6 +920,7 @@ function search_files_by_persons(){
 }
 
 function search_files_by_locations(){
+    // TODO: alert if no location was selected
     var url = create_files_url(false, true, false, false, false, false);
     $.getJSON(url, function(result){
         update_search_result(result);
@@ -927,6 +929,7 @@ function search_files_by_locations(){
 }
 
 function search_files_by_tags(){
+    // TODO: alert if no tag was selected
     var url = create_files_url(false, false, true, false, false, false);
     $.getJSON(url, function(result){
         update_search_result(result);
@@ -952,6 +955,9 @@ function search_files_by_path(){
             show_slideshow();
         });
     }
+    else{
+        alert("Specify a file path regexp");
+    }
 }
 
 function search_files_by_description(){
@@ -963,6 +969,9 @@ function search_files_by_description(){
             show_slideshow();
         });
     }
+    else{
+        alert("Specify a file description regexp");
+    }
 }
 
 function search_files_by_datetime(){
@@ -973,6 +982,9 @@ function search_files_by_datetime(){
             update_search_result(result);
             show_slideshow();
         });
+    }
+    else{
+        alert("Specify a file date and time regexp");
     }
 }
 
