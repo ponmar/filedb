@@ -938,7 +938,13 @@ function clear_all_search(){
     $('#file_date_regexp_filter').val('');
 }
 
+function clear_previous_search(){
+    // Clear any previous search result (error message or image)
+    $('#file_browser_image_div').html('');
+}
+
 function search_files_by_persons(){
+    clear_previous_search();
     // TODO: alert if no person was selected
     var url = create_files_url(true, false, false, false, false, false);
     $.getJSON(url, function(result){
@@ -948,6 +954,7 @@ function search_files_by_persons(){
 }
 
 function search_files_by_locations(){
+    clear_previous_search();
     // TODO: alert if no location was selected
     var url = create_files_url(false, true, false, false, false, false);
     $.getJSON(url, function(result){
@@ -957,6 +964,7 @@ function search_files_by_locations(){
 }
 
 function search_files_by_tags(){
+    clear_previous_search();
     // TODO: alert if no tag was selected
     var url = create_files_url(false, false, true, false, false, false);
     $.getJSON(url, function(result){
@@ -966,6 +974,7 @@ function search_files_by_tags(){
 }
 
 function search_files_by_all(){
+    clear_previous_search();
     // TODO: check that something has been marked/filled in to not match all files?
     var url = create_files_url(true, true, true, true, true, true);
     $.getJSON(url, function(result){
@@ -975,6 +984,7 @@ function search_files_by_all(){
 }
 
 function search_files_by_path(){
+    clear_previous_search();
     var regexp = $('#file_path_regexp_filter').val();
     if (regexp.length > 0){
         var url = create_files_url(false, false, false, true, false, false);
@@ -989,6 +999,7 @@ function search_files_by_path(){
 }
 
 function search_files_by_description(){
+    clear_previous_search();
     var regexp = $('#file_description_regexp_filter').val();
     if (regexp.length > 0){
         var url = create_files_url(false, false, false, false, true, false);
@@ -1003,6 +1014,7 @@ function search_files_by_description(){
 }
 
 function search_files_by_datetime(){
+    clear_previous_search();
     var regexp = $('#file_date_regexp_filter').val();
     if (regexp.length > 0){
         var url = create_files_url(false, false, false, false, false, true);

@@ -709,24 +709,21 @@ def api_get_json_files():
         datetime_prog = re.compile(datetime_regexp, re.IGNORECASE)
     
     # TODO: optimize needed data depending on specified arguments?
-    query = 'select id, path, description, datetime from files '
+    sub_queries = []
     if person_ids:
-        query += 'inner join filepersons on files.id = filepersons.fileid '
+        sub_queries.append('select id, path, description, datetime from files inner join filepersons on files.id = filepersons.fileid where filepersons.personid in (' + person_ids + ')')
     if location_ids:
-        query += 'inner join filelocations on files.id = filelocations.fileid '
+        sub_queries.append('select id, path, description, datetime from files inner join filelocations on files.id = filelocations.fileid where filelocations.locationid in (' + location_ids + ')')
     if tag_ids:
-        query += 'inner join filetags on files.id = filetags.fileid '
-
-    where_statements = []
-    if person_ids:
-        where_statements.append('filepersons.personid in (' + person_ids + ')')
-    if location_ids:
-        where_statements.append('filelocations.locationid in (' + location_ids + ')')
-    if tag_ids:
-        where_statements.append('filetags.tagid in (' + tag_ids + ')')
-
-    if len(where_statements) > 0:
-        query += 'where ' + ' and '.join(where_statements)
+        sub_queries.append('select id, path, description, datetime from files inner join filetags on files.id = filetags.fileid where filetags.tagid in (' + tag_ids + ')')
+       
+    query = None
+    if len(sub_queries) == 0:
+        query = 'select id, path, description, datetime from files'
+    else:
+        query = ' intersect '.join(sub_queries)
+    
+    print(query)
         
     cursor = g.db.execute(query)
 
