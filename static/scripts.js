@@ -533,11 +533,15 @@ function update_files_table(files_json){
 function update_directories_table(directories_json){
     var tableRows = '<tr><th>Directory</th></tr>';
     for (var i=0, directory; directory = directories_json[i]; i++){
-        tableRows += '<tr><td>' + directory + '</td></tr>';
+        tableRows += '<tr><td class="clickabletext">' + directory + '</td></tr>';
     }
 
     $("#directoriestable").empty();
     $("#directoriestable").append(tableRows);
+    $(".clickabletext").click(function() {
+        // Copy directory to form input
+        $('#add_directory_form :input[name=path]').val(this.innerHTML);
+    });
 }
 
 function prev_categorize_file(){
