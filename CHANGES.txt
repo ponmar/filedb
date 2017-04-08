@@ -1,0 +1,7 @@
+0.6:
+* Added this changelog
+* Webapp: Added posibility to list directories from within the configured root directory
+* Webapp: Added some alert messages for when form input is missing
+* API: /api/files now matches all search categories
+* API: /api/fs_directories added
+* API: /api/directories added
