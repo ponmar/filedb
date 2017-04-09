@@ -46,21 +46,23 @@
       <div class="col-md-4">
         <label for="multiplepersonselect">Persons available in file</label>
         <select multiple class="form-control" id="multiplepersonselect" size="15"></select>
+        <button type="button" class="btn btn-default" id="search_files_by_persons_button">Search file persons</button>
       </div>
       <div class="col-md-4">
         <label for="multiplelocationselect">File location</label>
         <select multiple class="form-control" id="multiplelocationselect" size="15"></select>
+        <button type="button" class="btn btn-default" id="search_files_by_locations_button">Search file locations</button>
       </div>
       <div class="col-md-4">
         <label for="multipletagselect">File tags</label>
         <select multiple class="form-control" id="multipletagselect" size="15"></select>
+        <button type="button" class="btn btn-default" id="search_files_by_tags_button">Search file tags</button>
       </div>
     </div>
-    <button type="button" class="btn btn-default" id="search_files_by_persons_button">Search file persons</button>
-    <button type="button" class="btn btn-default" id="search_files_by_locations_button">Search file locations</button>
-    <button type="button" class="btn btn-default" id="search_files_by_tags_button">Search file tags</button>
-    <button type="button" class="btn btn-default" id="search_files_by_all_button">Search all</button>
-    <button type="button" class="btn btn-default" id="clear_all_button">Clear all</button>
+    
+    <br>
+    <button type="button" class="btn btn-default" id="clear_all_button">Clear</button>
+    <button type="button" class="btn btn-default" id="search_files_by_all_button">Search</button>
   </div>
 </div>
 
@@ -86,7 +88,11 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">Export</div>
-  <div class="panel-body"></div>
+  <div class="panel-body">
+    <button type="button" class="btn btn-default" id="export_absolute_paths">Absolute file paths</button>
+    <button type="button" class="btn btn-default" id="export_absolute_paths">Relative file paths</button>
+    <button type="button" class="btn btn-default" id="export_zip_file">Zip file</button>
+  </div>
 </div>
 
 {% endif %}
