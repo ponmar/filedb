@@ -5,3 +5,4 @@
 * API: /api/files now matches all search categories
 * API: /api/fs_directories added
 * API: /api/directories added
+* Added Ant build script to simplify making new releases
