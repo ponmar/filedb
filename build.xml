@@ -1,0 +1,25 @@
+﻿<project default="release">
+
+    <property name="version" value="0.6"/>
+    <property name="builddir" location="release"/>
+    <property name="zipfile" location="${builddir}/filedb-${version}.zip"/>
+
+    <target name="clean">
+        <delete file="${zipfile}" failonerror="false"/>
+    </target>
+    
+    <target name="release" depends="clean">
+        <property name="zipprefix" value="filedb-${version}"/>
+
+        <zip destfile="${zipfile}" basedir="${builddir}" excludes="**">
+            <zipfileset file="*.py" prefix="${zipprefix}"/>
+            <zipfileset file="schema.sql" prefix="${zipprefix}"/>
+            <zipfileset file="CHANGES.txt" prefix="${zipprefix}"/>
+            <zipfileset file="README.html" prefix="${zipprefix}"/>
+            <zipfileset file="static/*" prefix="${zipprefix}/static"/>
+            <zipfileset file="templates/*.html" prefix="${zipprefix}/templates"/>
+            <zipfileset file="api/*" prefix="${zipprefix}/api"/>
+        </zip>
+    </target>
+
+</project>
