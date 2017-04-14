@@ -990,3 +990,22 @@ def api_login():
 def api_logout():
     logout()
     return "OK"
+
+    
+#
+# Documentation outside the Flask static directory
+#
+
+@app.route('/README.html')
+def doc_readme():
+    return send_from_directory('.', 'README.html')
+
+
+@app.route('/API.html')
+def doc_api():
+    return send_from_directory('.', 'API.html')
+
+
+@app.route('/CHANGES.txt')
+def doc_changes():
+    return send_from_directory('.', 'CHANGES.txt')
