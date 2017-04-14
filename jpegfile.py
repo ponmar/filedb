@@ -1,3 +1,4 @@
+import StringIO
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
@@ -88,3 +89,16 @@ class JpegFile:
         s = float(sec_num) / float(sec_denom)
 
         return d + (m / 60.0) + (s / 3600.0)
+
+
+class JpegThumbnail:
+    def __init__(self, filename, size=(128, 128)):
+        image = Image.open(filename)
+        img_io = StringIO.StringIO()
+        image.thumbnail(size)
+        image.save(img_io, 'JPEG')
+        img_io.seek(0)
+        self.__data = img_io
+
+    def get_data(self):
+        return self.__data

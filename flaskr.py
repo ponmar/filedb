@@ -5,7 +5,8 @@ import os
 from contextlib import closing
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-     abort, render_template, jsonify, send_from_directory, make_response
+     abort, render_template, jsonify, send_from_directory, make_response, \
+     send_file
 import jpegfile
 from config import MY_CONFIG
 from werkzeug.routing import BaseConverter
@@ -920,6 +921,31 @@ def api_get_file_content(id):
         abort(404)
     file_path = row[0]
     return send_from_directory(MY_CONFIG.FILES_ROOT_DIRECTORY, file_path)
+
+
+@app.route('/api/thumbnail/<int:id>', methods=['GET'])
+def api_create_file_thumbnail(id):
+    """Note: this function reads data from files collection."""
+    #if not session.get('logged_in'):
+    #    abort(401)
+    cur = g.db.execute('select path from files where id = ?', (id,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+
+    size = MY_CONFIG.DEFAULT_THUMBNAIL_SIZE
+        
+    if 'width' in request.args:
+        size = int(request.args.get('width')), size[1]
+
+    if 'height' in request.args:
+        size = size[0], int(request.args.get('height'))
+
+
+    # TODO: duplicated code for creating path
+    file_path = MY_CONFIG.FILES_ROOT_DIRECTORY + '/' + row[0]
+    thumbnail = jpegfile.JpegThumbnail(file_path, size)
+    return send_file(thumbnail.get_data(), mimetype='image/jpeg')
 
 
 @app.route('/api/fileconsistency', methods=['GET'])

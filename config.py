@@ -28,8 +28,8 @@ class DefaultConfig(object):
     # This is the root directory for where to add files from. Only files from
     # within this directory will be accessible via the web application and API.
     # A Samba network share can be mounted and be specified here.
-    #FILES_ROOT_DIRECTORY = 'x:/'
-    FILES_ROOT_DIRECTORY = 'files'
+    FILES_ROOT_DIRECTORY = 'x:/'
+    #FILES_ROOT_DIRECTORY = 'files'
 
     # Set this option to True to make it possible to start FileDB before the root
     # directory is available. This may be the case when mounting a Samba network
@@ -62,6 +62,11 @@ class DefaultConfig(object):
     # files.
     FILE_TO_LOCATION_MAX_DISTANCE = 300
 
+    # The thumbnail size used when no size is specified to the API.
+    # The aspect ratio is kept, so the width or height may be less than what
+    # is specified.
+    DEFAULT_THUMBNAIL_SIZE = (196, 196)
+    
 
 class DevelopmentConfig(DefaultConfig):
     """Use this configuration when troubleshooting FileDB."""

@@ -43,9 +43,18 @@ Response: 200 (OK), 401 (Unauthorized)
 <pre>
 Request: GET /api/filecontent/&lt;id&gt;
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type depending on file extension
+</pre>
 
+<h2>Read Data: Exif (from JPEG images)</h2>
+<pre>
 Request: GET /api/fileexif/&lt;file_id&gt;
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
+</pre>
+
+<h2>Read Data: thumbnail</h2>
+<pre>
+Request: GET /api/thumbnail/&lt;id&gt;
+Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type depending on file extension
 </pre>
 
 <h2>Read Data: directories</h2>
