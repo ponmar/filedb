@@ -1,14 +1,20 @@
 """
 This is the FileDB configuration file.
 No other files needs be updated for using FileDB.
+Select which configuration class to use at the bottom of this file.
 """
 
 
 class DefaultConfig(object):
+    """The default FileDB configuration. Modify the values below for your needs."""
+
     SQL_SCHEMA = 'schema.sql'
     DATABASE = 'flaskr.db'
     DEBUG = False
-    SECRET_KEY = 'development key'
+    
+    # The key used for signing cookies. This can for example be generated with:
+    # os.urandom(24)
+    SECRET_KEY = 'my random key'
 
     # Specify the network interface to be used by the FileDB web server:
     # - '0.0.0.0': accessible via network
@@ -58,7 +64,9 @@ class DefaultConfig(object):
 
 
 class DevelopmentConfig(DefaultConfig):
+    """Use this configuration when troubleshooting FileDB."""
     DEBUG = True
+    SECRET_KEY = 'development key'
 
-
+# The configuration class to use. Specify any of the above classes.
 MY_CONFIG = DevelopmentConfig
