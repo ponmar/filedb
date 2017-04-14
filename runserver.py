@@ -1,14 +1,14 @@
 import os
 import argparse
 import flaskr
-import config
+from config import MY_CONFIG
 
 
 def validate_root_directory():
-    is_dir = os.path.isdir(config.FILES_ROOT_DIRECTORY)
+    is_dir = os.path.isdir(MY_CONFIG.FILES_ROOT_DIRECTORY)
     if not is_dir:
         print('Warning: configured root directory is not a directory')
-    return config.ALLOW_MISSING_ROOT_DIRECTORY or is_dir
+    return MY_CONFIG.ALLOW_MISSING_ROOT_DIRECTORY or is_dir
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
     else:
         if validate_root_directory():
             print('Starting the FileDB server...')
-            flaskr.app.run(debug=config.DEBUG, host=config.HOST)
+            flaskr.app.run(debug=MY_CONFIG.DEBUG, host=MY_CONFIG.HOST)
 
 
 if __name__ == "__main__":
