@@ -1,6 +1,6 @@
 import os
 import argparse
-import flaskr
+import filedb
 from config import MY_CONFIG
 
 
@@ -20,12 +20,12 @@ def main():
 
     if args.initdb:
         print('Cleaning database...')
-        flaskr.init_db()
+        filedb.init_db()
         print('Done.')
     else:
         if validate_root_directory():
             print('Starting the FileDB server...')
-            flaskr.app.run(debug=MY_CONFIG.DEBUG, host=MY_CONFIG.HOST)
+            filedb.app.run(debug=MY_CONFIG.DEBUG, host=MY_CONFIG.HOST)
 
 
 if __name__ == "__main__":

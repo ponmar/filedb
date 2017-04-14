@@ -1,7 +1,8 @@
 0.7:
-* Changed configuration format to use classes to simplify changing configurations
-* README, INSTALL and API documentation is now available from the help page
-* API: /api/thumbnail added
+* Configuration: Format changed to use classes to simplify changing configurations
+* Configuration: Default database name changed from flaskr.db to filedb.db (rename your old database file when upgrading)
+* Documentation: README, INSTALL and API documentation is now available from the help page
+* API: /api/thumbnail added.
 
 0.6:
 * Added this changelog

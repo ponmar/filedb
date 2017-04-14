@@ -9,7 +9,7 @@ class DefaultConfig(object):
     """The default FileDB configuration. Modify the values below for your needs."""
 
     SQL_SCHEMA = 'schema.sql'
-    DATABASE = 'flaskr.db'
+    DATABASE = 'filedb.db'
     DEBUG = False
     
     # The key used for signing cookies. This can for example be generated with:
@@ -18,7 +18,7 @@ class DefaultConfig(object):
 
     # Specify the network interface to be used by the FileDB web server:
     # - '0.0.0.0': accessible via network
-    # - None: only accessible via localhost only
+    # - None: only accessible via localhost
     HOST = None
 
     # These are the credentials needed to access the web application (and API).
@@ -62,7 +62,7 @@ class DefaultConfig(object):
     # files.
     FILE_TO_LOCATION_MAX_DISTANCE = 300
 
-    # The thumbnail size used when no size is specified to the API.
+    # The thumbnail size used when no size is specified via the API.
     # The aspect ratio is kept, so the width or height may be less than what
     # is specified.
     DEFAULT_THUMBNAIL_SIZE = (196, 196)
