@@ -7,7 +7,8 @@ The SQL table setup is available in filedb.sql.
 
 API
 ===
-
+It is not possible to modify files from within the file collection. Only the
+database file is modified when modifying file meta-data.
 
 Webapp
 ======
