@@ -8,7 +8,7 @@ Select which configuration class to use at the bottom of this file.
 class DefaultConfig(object):
     """The default FileDB configuration. Modify the values below for your needs."""
 
-    SQL_SCHEMA = 'schema.sql'
+    SQL_SCHEMA = 'filedb.sql'
     DATABASE = 'filedb.db'
     DEBUG = False
     
