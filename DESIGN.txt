@@ -1,0 +1,15 @@
+Database
+========
+All information is stored in a sqlite database. The Python-based Flask web
+framework is used to provide the HTTP API and the webapp.
+
+The SQL table setup is available in filedb.sql.
+
+API
+===
+
+
+Webapp
+======
+The webapp is a set of dynamic HTML pages with Javascript code that uses the
+API to get and modify FileDB data.

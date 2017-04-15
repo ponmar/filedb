@@ -35,7 +35,7 @@ def connect_db():
 
 def init_db():
     with closing(connect_db()) as db:
-        with app.open_resource(SQL_SCHEMA, mode='r') as f:
+        with app.open_resource(app.config['SQL_SCHEMA'], mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
 
@@ -121,7 +121,7 @@ def api_add_file():
 
 def listdir(path):
     for f in os.listdir(path):
-        if MY_CONFIG.INCLUDE_HIDDEN_DIRECTORIES or not f.startswith('.'):
+        if app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not f.startswith('.'):
             yield f
 
 
@@ -134,10 +134,10 @@ def api_add_directory():
     if path is None:
         abort(409, 'No directory path specified')
 
-    directory_path = MY_CONFIG.FILES_ROOT_DIRECTORY + '/' + path
+    directory_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + path
 
     if path == '' or path == '.' or path == './' or not os.path.isdir(directory_path):
-        abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, MY_CONFIG.FILES_ROOT_DIRECTORY))
+        abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, app.config['FILES_ROOT_DIRECTORY]))
 
     num_added_files = 0
     num_not_added_files = 0
@@ -160,7 +160,7 @@ def api_import_files():
     num_imported_files = 0
     num_not_imported_files = 0
 
-    for root, directories, filenames in os.walk(u(MY_CONFIG.FILES_ROOT_DIRECTORY)):
+    for root, directories, filenames in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
@@ -196,12 +196,13 @@ def add_file(path, file_description=None):
             app.logger.info('Ignored non-whitelisted file: ' + path)
             return False
 
-        file_path = MY_CONFIG.FILES_ROOT_DIRECTORY + '/' + path
+        # TODO: duplicated code for building path
+        file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + path
 
         # TODO: optimization: check that path not already in database before parsing Exif data etc.
 
         if not os.path.isfile(file_path):
-            abort(400, 'No file with path "{}" within the "{}" directory'.format(path, MY_CONFIG.FILES_ROOT_DIRECTORY))
+            abort(400, 'No file with path "{}" within the "{}" directory'.format(path, app.config['FILES_ROOT_DIRECTORY']))
 
         if file_description == '':
             file_description = None
@@ -249,7 +250,7 @@ def add_file_location(file_id, file_latitude, file_longitude):
             location_latitude = float(location_position_parts[0])
             location_longitude = float(location_position_parts[1])
             distance = get_gps_distance(file_latitude, file_longitude, location_latitude, location_longitude)
-            if distance < MY_CONFIG.FILE_TO_LOCATION_MAX_DISTANCE:
+            if distance < app.config['FILE_TO_LOCATION_MAX_DISTANCE']:
                 try:
                     g.db.execute('insert into filelocations (fileid, locationid) values (?, ?)',
                                  (file_id, location_id))
@@ -274,19 +275,19 @@ def get_date_from_path(path):
 
 
 def path_is_blacklisted(path):
-    for pattern in MY_CONFIG.BLACKLISTED_FILE_PATH_PATTERNS:
+    for pattern in app.config['BLACKLISTED_FILE_PATH_PATTERNS']:
         if path.find(pattern) != -1:
             return True
     return False
 
 
 def file_is_whitelisted(file_path):
-    if not MY_CONFIG.WHITELISTED_FILE_EXTENSIONS:
+    if not app.config['WHITELISTED_FILE_EXTENSIONS']:
         return True
 
     file_path = file_path.lower()
 
-    for pattern in MY_CONFIG.WHITELISTED_FILE_EXTENSIONS:
+    for pattern in app.config['WHITELISTED_FILE_EXTENSIONS']:
         if file_path.endswith(pattern):
             return True
 
@@ -650,9 +651,9 @@ def api_get_json_fs_directories():
         abort(401)
 
     directories = []
-    for root, _, _ in os.walk(u(MY_CONFIG.FILES_ROOT_DIRECTORY)):
+    for root, _, _ in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
         path = update_path(root)
-        if path != MY_CONFIG.FILES_ROOT_DIRECTORY:
+        if path != app.config['FILES_ROOT_DIRECTORY']:
             if '/' in path:
                 # Remove root dir prefix from path
                 path = path.split('/', 1)[1]
@@ -920,7 +921,7 @@ def api_get_file_content(id):
     if row is None:
         abort(404)
     file_path = row[0]
-    return send_from_directory(MY_CONFIG.FILES_ROOT_DIRECTORY, file_path)
+    return send_from_directory(app.config['FILES_ROOT_DIRECTORY'], file_path)
 
 
 @app.route('/api/thumbnail/<int:id>', methods=['GET'])
@@ -933,7 +934,7 @@ def api_create_file_thumbnail(id):
     if row is None:
         abort(404)
 
-    size = MY_CONFIG.DEFAULT_THUMBNAIL_SIZE
+    size = app.config['DEFAULT_THUMBNAIL_SIZE']
         
     if 'width' in request.args:
         size = int(request.args.get('width')), size[1]
@@ -943,7 +944,7 @@ def api_create_file_thumbnail(id):
 
 
     # TODO: duplicated code for creating path
-    file_path = MY_CONFIG.FILES_ROOT_DIRECTORY + '/' + row[0]
+    file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + row[0]
     thumbnail = jpegfile.JpegThumbnail(file_path, size)
     return send_file(thumbnail.get_data(), mimetype='image/jpeg')
 
@@ -955,7 +956,8 @@ def api_fileconsistency():
     missing_files = []
     cur = g.db.execute('select path, id from files')
     for file_path, file_id in cur.fetchall():
-        file_path = MY_CONFIG.FILES_ROOT_DIRECTORY + '/' + file_path
+        # TODO: duplicated code for building path
+        file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + file_path
         if not os.path.isfile(file_path):
             missing_files.append(get_file_dict(file_id))
 
@@ -971,7 +973,8 @@ def api_get_json_file_exif(file_id):
     row = cur.fetchone()
     if row is None:
         abort(404)
-    file_path = MY_CONFIG.FILES_ROOT_DIRECTORY + '/' + row[0]
+    # TODO: duplicated code for building path
+    file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + row[0]
     jpeg = jpegfile.JpegFile(file_path)
     return jsonify(jpeg.get_exif_data())
 
