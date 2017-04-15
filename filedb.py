@@ -137,7 +137,7 @@ def api_add_directory():
     directory_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + path
 
     if path == '' or path == '.' or path == './' or not os.path.isdir(directory_path):
-        abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, app.config['FILES_ROOT_DIRECTORY]))
+        abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, app.config['FILES_ROOT_DIRECTORY']))
 
     num_added_files = 0
     num_not_added_files = 0
@@ -1035,6 +1035,6 @@ def doc_api():
     return send_from_directory('.', 'API.html')
 
 
-@app.route('/CHANGES.txt')
+@app.route('/CHANGES.html')
 def doc_changes():
-    return send_from_directory('.', 'CHANGES.txt')
+    return send_from_directory('.', 'CHANGES.html')
