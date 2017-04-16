@@ -1149,9 +1149,10 @@ function load_slideshow_file(){
 
     var file_text = "";
 
+    // TODO: remove 'T' in datetime text
     var file_datetime = file['datetime'];
     if (file_datetime != null){
-        file_text += file_datetime + " (" + get_age(file_datetime, new Date()) + " years ago)";
+        file_text += file_datetime.replace('T', ' ') + " (" + get_age(file_datetime, new Date()) + " years ago)";
     }
 
     var file_description = file["description"];
