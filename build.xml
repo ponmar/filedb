@@ -15,6 +15,7 @@
             <zipfileset file="CHANGES.txt" prefix="${zipprefix}"/>
             <zipfileset file="README.html" prefix="${zipprefix}"/>
             <zipfileset file="API.html" prefix="${zipprefix}"/>
+            <zipfileset file="VERSION.txt" prefix="${zipprefix}"/>
             <zipfileset file="static/*" prefix="${zipprefix}/static"/>
             <zipfileset file="templates/*.html" prefix="${zipprefix}/templates"/>
             <zipfileset file="utils/*" prefix="${zipprefix}/utils"/>
