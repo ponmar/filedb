@@ -1,22 +1,31 @@
 <html>
 <head>
   <title>FileDB API</title>
+  <style>
+pre {
+    background-color: lightgray;
+    padding: 10;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+  </style>
 </head>
 <body>
 
 <h1>FileDB API</h1>
-<p>The FileDB API is only of interest for developers who wants to use data stored by FileDB in other applications.</p>
+<p>The FileDB webapp uses this API. This documentation is mostly of interest for developers who wants to use data stored by FileDB in other applications.</p>
 <p>Note that it is also possible to read the database file, but be aware that only one process should do this at the same time (including FileDB).</p>
 
 <h2>Authentication</h2>
 <pre>Request: POST /api/login?username=username&password=password
 Response: 200 (OK), 401 (Unauthorized), cookie (session=...)
+</pre>
 
-Request: POST /api/logout
+<pre>Request: POST /api/logout
 Response: 200 (OK)
 </pre>
 
-<h2>Read Data: files</h2>
+<h2>Fetch Data: file info</h2>
 <pre>Request: GET /api/file/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
 {
@@ -28,8 +37,9 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
     "locations": [1, 2, ...],
     "tags": [1, 2, ...]
 }
+</pre>
 
-Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids][&pathregexp=pathregexp][&descriptionregexp=descriptionregexp][&datetimeregexp=datetimeregexp]
+<pre>Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids][&pathregexp=pathregexp][&descriptionregexp=descriptionregexp][&datetimeregexp=datetimeregexp]
 Response: 200 (OK), 401 (Unauthorized)
 {
     "files" =
@@ -39,25 +49,25 @@ Response: 200 (OK), 401 (Unauthorized)
 }
 </pre>
 
-<h2>Read Data: file content</h2>
+<h2>Fetch Data: file content</h2>
 <pre>
 Request: GET /api/filecontent/&lt;id&gt;
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type depending on file extension
 </pre>
 
-<h2>Read Data: Exif (from JPEG images)</h2>
+<h2>Fetch Data: Exif (from JPEG images)</h2>
 <pre>
 Request: GET /api/fileexif/&lt;file_id&gt;
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
 </pre>
 
-<h2>Read Data: thumbnail</h2>
+<h2>Fetch Data: thumbnail</h2>
 <pre>
 Request: GET /api/thumbnail/&lt;id&gt;?[width=width][&height=height]
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type depending on file extension
 </pre>
 
-<h2>Read Data: directories</h2>
+<h2>Fetch Data: directories</h2>
 <pre>Request: GET /api/directories
 Request: GET /api/fs_directories
 Response: 200 (OK), 401 (Unauthorized)
@@ -71,7 +81,7 @@ Response: 200 (OK), 401 (Unauthorized)
 }
 </pre>
 
-<h2>Read Data: persons</h2>
+<h2>Fetch Data: persons</h2>
 <pre>Request: GET /api/person/&lt;id&gt;
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
 {
@@ -80,8 +90,9 @@ Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
     "description": description,
     "dateofbirth": dateofbirth
 }
+</pre>
 
-Request: GET /api/persons
+<pre>Request: GET /api/persons
 Request: GET /api/persons?orderby=&lt;column&gt;
 Response: 200 (OK), 401 (Unathorized)
 {
@@ -92,7 +103,7 @@ Response: 200 (OK), 401 (Unathorized)
 }
 </pre>
 
-<h2>Read Data: locations</h2>
+<h2>Fetch Data: locations</h2>
 <pre>Request: GET /api/location/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 {
@@ -100,7 +111,9 @@ Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
     "name": name,
     "description": description
 }
+</pre>
 
+<pre>
 Request: GET /api/locations
 Request: GET /api/locations?orderby=&lt;column&gt;
 Response: 200 (OK), 401 (Unathorized)
@@ -112,14 +125,16 @@ Response: 200 (OK), 401 (Unathorized)
 }
 </pre>
 
-<h2>Read Data: tags</h2>
+<h2>Fetch Data: tags</h2>
 <pre>Request: GET /tag/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 {
     "id": id,
     "name": name
 }
+</pre>
 
+<pre>
 Request: GET /api/tags
 Request: GET /api/tags?orderby=&lt;column&gt;
 Response: 200 (OK), 401 (Unathorized)
@@ -136,20 +151,23 @@ Response: 200 (OK), 401 (Unathorized)
 Request: POST /api/file/?path=path&description=description
 Request: POST /api/directory/?path=path
 Response: 200 (OK), 409 (Conflict), 401 (Unathorized)
+</pre>
 
-Request: POST /api/person/?name=name
+<pre>Request: POST /api/person/?name=name
 Response:
 {
     Same data here as for a single person
 }
+</pre>
 
-Request: POST /api/location/?name=name
+<pre>Request: POST /api/location/?name=name
 Response:
 {
     Same data here as for a single location
 }
+</pre>
 
-Request: POST /api/tag/?name=name
+<pre>Request: POST /api/tag/?name=name
 Response:
 {
     Same data here as for a single tag
@@ -163,20 +181,23 @@ Response: 201 (OK), ...
 {
     Same data here as for a single file
 }
+</pre>
 
-Request: PUT /api/person/&lt;id&gt;
+<pre>Request: PUT /api/person/&lt;id&gt;
 Response: 201 (OK), ...
 {
     Same data here as for single person
 }
+</pre>
 
-Request: PUT /api/location/&lt;id&gt;
+<pre>Request: PUT /api/location/&lt;id&gt;
 Response: 201 (OK), ...
 {
     Same data here as for single location
 }
+</pre>
 
-Request: PUT /api/tag/&lt;id&gt;
+<pre>Request: PUT /api/tag/&lt;id&gt;
 Response: 201 (OK), ...
 {
     Same data here as for single tag
@@ -190,9 +211,8 @@ Request: DELETE /api/person/&lt;id&gt;
 Request: DELETE /api/location/&lt;id&gt;
 Request: DELETE /api/tag/&lt;id&gt;
 Response: 200 (OK). 404 (Not Found), 401 (Unathorized)
-
-Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.
 </pre>
+<p>Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.</p>
 
 <h2>Check File Consistency</h2>
 <pre>Request: GET /api/fileconsistency
