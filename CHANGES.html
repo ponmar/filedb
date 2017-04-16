@@ -1,6 +1,15 @@
 <html>
 <head>
   <title>FileDB CHANGES</title>
+  <style>
+ul, h2 {
+    margin: 0;
+    span: 0;
+}
+h2 {
+    margin-top: 0.5em;
+}
+  </style>
 </head>
 <body>
 
@@ -8,9 +17,9 @@
 
 <h2>0.7</h2>
 <ul>
-<li>Configuration: Format changed to use classes to simplify changing configurations</li>
+<li>Configuration: Format changed to use classes to simplify upgrading and changing configurations</li>
 <li>Configuration: Default database name changed from flaskr.db to filedb.db (rename your old database file when upgrading)</li>
-<li>Configuration: Added TITLE option for setting the webapp title and heading</li>
+<li>Configuration: Added TITLE option for setting the webapp title and heading, with a default value that shows the FileDB version</li>
 <li>Configuration: Added PORT option for setting the TCP port to run the webserver at</li>
 <li>Documentation: README, CHANGES and API documentation is now available from the webapp</li>
 <li>API: /api/thumbnail added</li>
