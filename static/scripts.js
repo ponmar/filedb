@@ -843,6 +843,8 @@ function save_categorization_for_all(){
                     success: function(responseData){
                         var file_index_to_update = find_categorize_file_index_from_id(responseData['id']);
                         if (file_index_to_update != -1){
+                            // TODO: need this to avoid duplicates?
+                            // delete categorize_files[file_index_to_update];
                             categorize_files[file_index_to_update] = responseData;
                         }
                         else{
