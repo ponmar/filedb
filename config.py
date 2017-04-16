@@ -92,7 +92,7 @@ class DevelopmentConfig(DefaultConfig):
 
 
 class PontusConfig(DevelopmentConfig):
-    """My own configuration"""
+    """My own configuration."""
     FILES_ROOT_DIRECTORY = 'x:/'
     PORT = 80
 

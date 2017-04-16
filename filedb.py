@@ -8,7 +8,6 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, send_from_directory, make_response, \
      send_file
 import jpegfile
-from config import MY_CONFIG
 from werkzeug.routing import BaseConverter
 from makeunicode import u
 
@@ -26,7 +25,6 @@ class IntListConverter(BaseConverter):
 # Create the application
 app = Flask(__name__)
 app.url_map.converters['int_list'] = IntListConverter
-app.config.from_object('config.' + MY_CONFIG.__name__)
 
 
 def connect_db():
