@@ -28,11 +28,11 @@
     <li>Enable location saving in images to make FileDB automatically connect known locations when adding files</li>
 </ul>
 <p></p>
-<p>When you start with an empty file database you probably want to import all your files at the <a href="{{ url_for('app_files') }}">Add File</a> page. Later, when adding new directories, specific directories can be added to improve performance.</p>
+<p>When you start with an empty file database you probably want to import all your files at the <a href="{{ url_for('app_files') }}">Add File page</a>. Later, when adding new directories, specific directories can be added to improve performance.</p>
 
 <h2>Categorization</h2>
-<p>When FileDB is up and running it is time to create the categories at the <a href="{{ url_for('app_categories') }}">Edit Categories</a> page.</p>
-<p>Afterwards files can be categorized at the <a href="{{ url_for('app_categorize_files') }}">Categorize Files</a> page.</p>
+<p>When FileDB is up and running it is time to create the categories at the <a href="{{ url_for('app_categories') }}">Edit Categories page</a>.</p>
+<p>Afterwards files can be categorized at the <a href="{{ url_for('app_categorize_files') }}">Categorize Files page</a>.</p>
 <p>It is recommended to only categorize persons in pictures that are clearly visible in the foreground.</p>
 <p>Regular expressions can be used to find files to categorize. The path is then matched with the specified regular expression pattern. An introduction to such patterns can be found <a href="http://www.w3schools.com/js/js_regexp.asp" target="_blank">here</a>.</p>
 
@@ -56,10 +56,10 @@ root
 </pre>
 <p>Files can have the same name in different directories.</p>
 <p>File paths in FileDB uses UNIX style directory separators ('/'), mostly because that is how FileDB stores the paths internally.</p>
-<p>If you rename or delete files that has been added to FileDB you need to remove them in FileDB as well (and possibly add them again). There is a tool for finding such files at the <a href="{{ url_for('app_files') }}">Add Files</a> page</p>
+<p>If you rename or delete files that has been added to FileDB you need to remove them in FileDB as well (and possibly add them again). There is a tool for finding such files at the <a href="{{ url_for('app_files') }}">Add Files page</a></p>
 
 <h2>Hot Keys</h2>
-<p>Hot keys at the <a href="{{ url_for('app_browse') }}">Browse Files</a> page:</p>
+<p>Hot keys at the <a href="{{ url_for('app_browse') }}">Browse Files page</a>:</p>
 <ul>
     <li>Previous file: a</li>
     <li>Next file: d</li>
