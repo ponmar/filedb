@@ -8,6 +8,9 @@ Select which configuration class to use at the bottom of this file.
 class DefaultConfig(object):
     """The default FileDB configuration. Modify the values below for your needs."""
 
+    # This name is the title and heading for all webapp pages.
+    TITLE = 'FileDB'
+    
     SQL_SCHEMA = 'filedb.sql'
     DATABASE = 'filedb.db'
     DEBUG = False
