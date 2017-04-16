@@ -9,7 +9,7 @@ class DefaultConfig(object):
     """The default FileDB configuration. Modify the values below for your needs."""
 
     # This name is the title and heading for all webapp pages.
-    TITLE = 'FileDB'
+    TITLE = 'FileDB-' + open('VERSION.txt').read()
     
     SQL_SCHEMA = 'filedb.sql'
     DATABASE = 'filedb.db'

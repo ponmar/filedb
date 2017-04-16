@@ -1,16 +1,14 @@
 ﻿<project default="release">
 
-    <property name="version" value="0.6"/>
     <property name="builddir" location="release"/>
-    <property name="zipfile" location="${builddir}/filedb-${version}.zip"/>
-
-    <target name="clean">
-        <delete file="${zipfile}" failonerror="false"/>
-    </target>
     
-    <target name="release" depends="clean">
-        <property name="zipprefix" value="filedb-${version}"/>
-
+    <target name="release" depends="">
+        <loadfile srcfile="VERSION.txt" property="release.version"/>
+        <property name="zipfile" location="${builddir}/filedb-${release.version}.zip"/>
+        
+        <delete file="${zipfile}" failonerror="false"/>
+        
+        <property name="zipprefix" value="filedb-${release.version}"/>
         <zip destfile="${zipfile}" basedir="${builddir}" excludes="**">
             <zipfileset file="*.py" prefix="${zipprefix}"/>
             <zipfileset file="filedb.sql" prefix="${zipprefix}"/>
