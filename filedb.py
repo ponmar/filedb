@@ -39,6 +39,10 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
+        
+def get_abs_path(internal_path):
+    return app.config['FILES_ROOT_DIRECTORY'] + '/' + internal_path
+
 
 #
 # Database handle for every request
@@ -134,7 +138,7 @@ def api_add_directory():
     if path is None:
         abort(409, 'No directory path specified')
 
-    directory_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + path
+    directory_path = get_abs_path(path)
 
     if path == '' or path == '.' or path == './' or not os.path.isdir(directory_path):
         abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, app.config['FILES_ROOT_DIRECTORY']))
@@ -196,8 +200,7 @@ def add_file(path, file_description=None):
             app.logger.info('Ignored non-whitelisted file: ' + path)
             return False
 
-        # TODO: duplicated code for building path
-        file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + path
+        file_path = get_abs_path(path)
 
         # TODO: optimization: check that path not already in database before parsing Exif data etc.
 
@@ -797,22 +800,11 @@ def api_get_json_tags():
 # API: get JSON with one specific item
 #
 
-# TODO: file_path arg is not used, remove?
-def get_file_dict(file_id = None, file_path = None):
-    row = None
-    if file_id is not None:
-        cur = g.db.execute('select id, path, description, datetime from files where id = ?', (file_id,))
-        row = cur.fetchone()
-    elif file_path is not None:
-        cur = g.db.execute('select id, path, description, datetime from files where path = ?', (file_path,))
-        row = cur.fetchone()
-
+def get_file_dict(file_id):
+    cur = g.db.execute('select id, path, description, datetime from files where id = ?', (file_id,))
+    row = cur.fetchone()
     if row is None:
         return None
-
-    if file_id is None:
-        # Needed if the path argument was used in the URL
-        file_id = row[0]
 
     cur = g.db.execute('select personid from filepersons where fileid = ?', (file_id,))
     person_ids = [filepersons_row[0] for filepersons_row in cur.fetchall()]
@@ -826,15 +818,15 @@ def get_file_dict(file_id = None, file_path = None):
     return dict(id=row[0], path=row[1], description=row[2], datetime=row[3], persons=person_ids, locations=location_ids, tags=tag_ids)
 
 
-def get_file_json(file_id = None, file_path = None):
-    return jsonify(get_file_dict(file_id, file_path))
+def get_file_json(file_id):
+    return jsonify(get_file_dict(file_id))
 
 
 @app.route('/api/file/<int:id>', methods=['GET'])
 def api_json_file_by_id(id):
     if not session.get('logged_in'):
         abort(401)
-    file_json = get_file_json(file_id=id)
+    file_json = get_file_json(id)
     if file_json is None:
         abort(404)
     return file_json
@@ -927,8 +919,8 @@ def api_get_file_content(id):
 @app.route('/api/thumbnail/<int:id>', methods=['GET'])
 def api_create_file_thumbnail(id):
     """Note: this function reads data from files collection."""
-    #if not session.get('logged_in'):
-    #    abort(401)
+    if not session.get('logged_in'):
+        abort(401)
     cur = g.db.execute('select path from files where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
@@ -942,9 +934,7 @@ def api_create_file_thumbnail(id):
     if 'height' in request.args:
         size = size[0], int(request.args.get('height'))
 
-
-    # TODO: duplicated code for creating path
-    file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + row[0]
+    file_path = get_abs_path(row[0])
     thumbnail = jpegfile.JpegThumbnail(file_path, size)
     return send_file(thumbnail.get_data(), mimetype='image/jpeg')
 
@@ -956,8 +946,7 @@ def api_fileconsistency():
     missing_files = []
     cur = g.db.execute('select path, id from files')
     for file_path, file_id in cur.fetchall():
-        # TODO: duplicated code for building path
-        file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + file_path
+        file_path = get_abs_path(file_path)
         if not os.path.isfile(file_path):
             missing_files.append(get_file_dict(file_id))
 
@@ -973,9 +962,7 @@ def api_get_json_file_exif(file_id):
     row = cur.fetchone()
     if row is None:
         abort(404)
-    # TODO: duplicated code for building path
-    file_path = app.config['FILES_ROOT_DIRECTORY'] + '/' + row[0]
-    jpeg = jpegfile.JpegFile(file_path)
+    jpeg = jpegfile.JpegFile(get_abs_path(row[0]))
     return jsonify(jpeg.get_exif_data())
 
 
