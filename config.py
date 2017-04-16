@@ -6,16 +6,24 @@ Select which configuration class to use at the bottom of this file.
 
 
 class DefaultConfig(object):
-    """The default FileDB configuration. Modify the values below for your needs."""
+    """The default FileDB configuration. Create your own configuration by
+    inheriting from this class. See examples at the end of this file.
+    
+    To simplify upgrading FileDB releases:
+    DO NOT EDIT SETTINGS IN THIS CLASS!
+    """
 
     SQL_SCHEMA = 'filedb.sql'
     DATABASE = 'filedb.db'
-    DEBUG = False
     VERSION = open('VERSION.txt').read()
 
-    # This name is the title and heading for all webapp pages.
-    TITLE = 'FileDB-' + VERSION
+    # Set to True to restart webserver when files have been changed and change
+    # the behavior of unhandled exceptions.
+    DEBUG = False
 
+    # This name is the title and heading for all webapp pages. Example:
+    #TITLE = 'My Pictures'
+    TITLE = 'FileDB-' + VERSION
     
     # The key used for signing cookies. This can for example be generated with:
     # os.urandom(24)
@@ -36,8 +44,7 @@ class DefaultConfig(object):
     # This is the root directory for where to add files from. Only files from
     # within this directory will be accessible via the web application and API.
     # A Samba network share can be mounted and be specified here.
-    FILES_ROOT_DIRECTORY = 'x:/'
-    #FILES_ROOT_DIRECTORY = 'files'
+    FILES_ROOT_DIRECTORY = 'files'
 
     # Set this option to True to make it possible to start FileDB before the root
     # directory is available. This may be the case when mounting a Samba network
@@ -81,5 +88,11 @@ class DevelopmentConfig(DefaultConfig):
     DEBUG = True
     SECRET_KEY = 'development key'
 
+
+class PontusConfig(DevelopmentConfig):
+    """My own configuration"""
+    FILES_ROOT_DIRECTORY = 'x:/'
+
+
 # The configuration class to use. Specify any of the above classes.
-MY_CONFIG = DevelopmentConfig
+MY_CONFIG = PontusConfig
