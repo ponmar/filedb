@@ -14,3 +14,7 @@ Webapp
 ======
 The webapp is a set of dynamic HTML pages with Javascript code that uses the
 API to get and modify FileDB data.
+
+The categorize page fetches all files, which is a bit slow, and then does the
+searches within the fetched data. The browse page instead uses the API search
+functionality.
