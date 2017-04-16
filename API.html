@@ -2,9 +2,13 @@
 <head>
   <title>FileDB API</title>
   <style>
+h2 {
+    margin-top: 30px;
+}
 pre {
     background-color: lightgray;
-    padding: 10;
+    margin-left: 10px;
+    padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
 }
@@ -14,7 +18,6 @@ pre {
 
 <h1>FileDB API</h1>
 <p>The FileDB webapp uses this API. This documentation is mostly of interest for developers who wants to use data stored by FileDB in other applications.</p>
-<p>Note that it is also possible to read the database file, but be aware that only one process should do this at the same time (including FileDB).</p>
 
 <h2>Authentication</h2>
 <pre>Request: POST /api/login?username=username&password=password
@@ -62,12 +65,14 @@ Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
 </pre>
 
 <h2>Fetch Data: thumbnail</h2>
+<p>Generates and returns a small version of the specified image file. Note that the image is generated for each request. The image aspect ratio is kept.</p>
 <pre>
 Request: GET /api/thumbnail/&lt;id&gt;?[width=width][&height=height]
 Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type depending on file extension
 </pre>
 
 <h2>Fetch Data: directories</h2>
+<p>Returns a list of directories available from imported/added files or directories on the filesystem within the configured root directory.</p>
 <pre>Request: GET /api/directories
 Request: GET /api/fs_directories
 Response: 200 (OK), 401 (Unauthorized)
@@ -146,7 +151,7 @@ Response: 200 (OK), 401 (Unathorized)
 }
 </pre>
 
-<h2>Create Data</h2>
+<h2>Add Data</h2>
 <pre>Request: POST /api/import
 Request: POST /api/file/?path=path&description=description
 Request: POST /api/directory/?path=path
@@ -205,16 +210,17 @@ Response: 201 (OK), ...
 </pre>
 
 <h2>Remove Data</h2>
+<p>Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.</p>
 <pre>
 Request: DELETE /api/file/&lt;id&gt;
 Request: DELETE /api/person/&lt;id&gt;
 Request: DELETE /api/location/&lt;id&gt;
 Request: DELETE /api/tag/&lt;id&gt;
-Response: 200 (OK). 404 (Not Found), 401 (Unathorized)
+Response: 200 (OK), 404 (Not Found), 401 (Unathorized)
 </pre>
-<p>Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.</p>
 
 <h2>Check File Consistency</h2>
+<p>Checks that all imported/added files is available. Returns the list of missing files.</p>
 <pre>Request: GET /api/fileconsistency
 Response: 200 (OK), 401 (Unathorized)
 {
