@@ -25,7 +25,7 @@ def main():
     else:
         if validate_root_directory():
             print('Starting the FileDB server...')
-            filedb.app.run(debug=MY_CONFIG.DEBUG, host=MY_CONFIG.HOST)
+            filedb.app.run(debug=MY_CONFIG.DEBUG, host=MY_CONFIG.HOST, port=MY_CONFIG.PORT)
 
 
 if __name__ == "__main__":

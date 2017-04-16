@@ -8,12 +8,14 @@ Select which configuration class to use at the bottom of this file.
 class DefaultConfig(object):
     """The default FileDB configuration. Modify the values below for your needs."""
 
-    # This name is the title and heading for all webapp pages.
-    TITLE = 'FileDB-' + open('VERSION.txt').read()
-    
     SQL_SCHEMA = 'filedb.sql'
     DATABASE = 'filedb.db'
     DEBUG = False
+    VERSION = open('VERSION.txt').read()
+
+    # This name is the title and heading for all webapp pages.
+    TITLE = 'FileDB-' + VERSION
+
     
     # The key used for signing cookies. This can for example be generated with:
     # os.urandom(24)
@@ -23,6 +25,9 @@ class DefaultConfig(object):
     # - '0.0.0.0': accessible via network
     # - None: only accessible via localhost
     HOST = None
+    
+    # Specify the TCP port to run the webserver at
+    PORT = 5000
 
     # These are the credentials needed to access the web application (and API).
     USERNAME = 'admin'

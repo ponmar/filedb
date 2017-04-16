@@ -19,7 +19,7 @@
 <ol>
   <li>Edit configuration parameters in config.py. Configuration parameters are described in that file.</li>
   <li>Create the database:<br><strong>Note!</strong> This command removes all existing data from the FileDB database (don't run this command when the database is populated later).<br>&gt;python runserver.py --initdb</li>
-  <li>Decide how and when to backup your FileDB data (flaskr.db)</li>
+  <li>Decide how and when to backup your FileDB data (filedb.db)</li>
 </ol>
 
 <h2>Upgrading</h2>
@@ -27,9 +27,9 @@
 <ol>
   <li>Download the latest FileDB version from <a href="http://pihack.no-ip.org/pontus/projects/filedb/">here</a></li>
   <li>Follow the installation chapter for the new FileDB (including updating the configuration parameters)</li>
-  <li>Copy flaskr.db from the old installation to the new installation</li>
+  <li>Copy filedb.db from the old installation to the new installation</li>
 </ol>
-<p>Note that the database format (flaskr.db) should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.</p>
+<p>Note that the database format should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.</p>
 
 <h2>Starting the Server</h2>
 <p>&gt;python runserver.py</p>
