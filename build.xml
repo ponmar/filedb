@@ -14,7 +14,7 @@
         <zip destfile="${zipfile}" basedir="${builddir}" excludes="**">
             <zipfileset file="*.py" prefix="${zipprefix}"/>
             <zipfileset file="filedb.sql" prefix="${zipprefix}"/>
-            <zipfileset file="CHANGES.txt" prefix="${zipprefix}"/>
+            <zipfileset file="CHANGES.html" prefix="${zipprefix}"/>
             <zipfileset file="README.html" prefix="${zipprefix}"/>
             <zipfileset file="API.html" prefix="${zipprefix}"/>
             <zipfileset file="VERSION.txt" prefix="${zipprefix}"/>
