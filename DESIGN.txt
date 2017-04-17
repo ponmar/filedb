@@ -19,9 +19,8 @@ The categorize page fetches all files, which is a bit slow, and then does the
 searches within the fetched data. The browse page instead uses the API search
 functionality.
 
-Release
-=====
-1. Revert configuration
-2. Update VERSION.txt
-3. Run ant
-4. Upload zip-file
+How to release
+==============
+1. Update VERSION.txt
+2. Run ant
+3. Upload zip-file
