@@ -18,7 +18,7 @@
 <p>When the pre-requisites are fulfilled, do the following:</p>
 <ol>
   <li>Edit configuration parameters in config.py. Configuration parameters are described in that file.</li>
-  <li>Create the database:<br><strong>Note!</strong> This command removes all existing data from the FileDB database (don't run this command when the database is populated later).<br>&gt;python runserver.py --initdb</li>
+  <li>Create the database:<br><strong>Warning!</strong> This command removes all existing data from the FileDB database (don't run this command when the database is populated later).<p>&gt;python runserver.py --initdb</p></li>
   <li>Decide how and when to backup your FileDB data (filedb.db)</li>
 </ol>
 
@@ -32,7 +32,8 @@
 <p>Note that the database format should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.</p>
 
 <h2>Starting the Server</h2>
-<p>&gt;python runserver.py</p>
+<p>Print help:<br>&gt;python runserver.py --help</p>
+<p>Start the server:<br>&gt;python runserver.py</p>
 <p>Note that your OS can be setup to run this command at startup. How to do this depends on your OS.</p>
 
 <h2>Accessing the FileDB Web Application</h2>

@@ -35,7 +35,8 @@ class DefaultConfig(object):
     # - None: only accessible via localhost
     HOST = None
     
-    # Specify the TCP port to run the webserver at
+    # Specify the TCP port to run the webserver at. Port 80 is not selected
+    # because it is quite often occupied by another web server.
     PORT = 5000
 
     # These are the credentials needed to access the web application (and API).
