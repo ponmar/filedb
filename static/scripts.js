@@ -242,6 +242,24 @@ $(document).ready(function(){
             save_categorization_for_all();
         });
     }
+    
+    if ($('#export_absolute_paths').length){
+        $('#export_absolute_paths').click(function(){
+            alert("Not implemented");
+        });
+    }
+
+    if ($('#export_relative_paths').length){
+        $('#export_relative_paths').click(function(){
+            alert("Not implemented");
+        });
+    }
+
+    if ($('#export_zip_file').length){
+        $('#export_zip_file').click(function(){
+            alert("Not implemented");
+        });
+    }
 
     // TODO: only register on browse page
     // Register slideshow control keys

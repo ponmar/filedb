@@ -99,4 +99,4 @@ class PontusConfig(DevelopmentConfig):
 
 
 # The configuration class to use. Specify any of the above classes.
-MY_CONFIG = PontusConfig
+MY_CONFIG = DefaultConfig

@@ -3,6 +3,8 @@
     <property name="builddir" location="release"/>
     
     <target name="release" depends="">
+        <replace file="config.py" token="MY_CONFIG = PontusConfig" value="MY_CONFIG = DefaultConfig" failOnNoReplacements="true"/>
+        
         <loadfile srcfile="VERSION.txt" property="release.version"/>
         <property name="zipfile" location="${builddir}/filedb-${release.version}.zip"/>
         
