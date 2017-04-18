@@ -548,7 +548,8 @@ def api_update_location(location_id):
 
         if 'position' in content:
             position = content['position']
-            # TODO: validate position format if specified
+            if not is_position(position):
+                abort(400, 'Invalid position specified')
             cursor.execute("update locations set position = ? where id = ?", (position, location_id))
 
         g.db.commit()
