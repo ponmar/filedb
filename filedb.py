@@ -459,18 +459,18 @@ def api_update_file(file_id):
         if 'description' in content:
             description = content['description']
             if description is not None:
-                cursor.execute("update files set description = '" + description + "' where id = " + str(file_id))
+                cursor.execute("update files set description = ? where id = ?", (description, file_id))
             else:
-                cursor.execute("update files set description = null where id = " + str(file_id))
+                cursor.execute("update files set description = null where id = ?", (file_id,))
 
         if 'datetime' in content:
             datetime = content['datetime']
             if datetime is not None:
                 if not is_year_format(datetime) and not is_date_format(datetime) and not is_date_and_time_format(datetime):
                     abort(400, 'Invalid datetime format')
-                cursor.execute("update files set datetime = '" + datetime + "' where id = " + str(file_id))
+                cursor.execute("update files set datetime = ? where id = ?", (datetime, file_id))
             else:
-                cursor.execute("update files set datetime = null where id = " + str(file_id))
+                cursor.execute("update files set datetime = null where id = ?", (file_id,))
 
         g.db.commit()
 
@@ -751,12 +751,13 @@ def api_get_json_persons():
     if not session.get('logged_in'):
         abort(401)
 
-    query = 'select id, firstname, lastname, description, dateofbirth from persons'
+    cur = None
     if 'orderby' in request.args:
-        # TODO: validate argument
-        query += ' order by {} asc'.format(request.args['orderby'])
+        orderby = request.args['orderby']
+        cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons order by ? asc', (orderby,))
+    else:
+        cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons')
 
-    cur = g.db.execute(query)
     persons = [dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) for row in cur.fetchall()]
 
     return jsonify(dict(persons=persons))
@@ -767,12 +768,13 @@ def api_get_json_locations():
     if not session.get('logged_in'):
         abort(401)
 
-    query = 'select id, name, description, position from locations'
+    cur = None
     if 'orderby' in request.args:
-        # TODO: validate argument
-        query += ' order by {} asc'.format(request.args['orderby'])
-        
-    cur = g.db.execute(query)
+        orderby = request.args['orderby']
+        cur = g.db.execute('select id, name, description, position from locations order by ? asc', (orderby,))
+    else:
+        cur = g.db.execute('select id, name, description, position from locations')
+    
     locations = [dict(id=row[0], name=row[1], description=row[2], position=row[3]) for row in cur.fetchall()]
 
     return jsonify(dict(locations=locations))
@@ -783,12 +785,13 @@ def api_get_json_tags():
     if not session.get('logged_in'):
         abort(401)
 
-    query = 'select id, name from tags'
+    cur = None
     if 'orderby' in request.args:
-        # TODO: validate argument
-        query += ' order by {} asc'.format(request.args['orderby'])
-        
-    cur = g.db.execute(query)
+        orderby = request.args['orderby']
+        cur = g.db.execute('select id, name from tags order by ? asc', (orderby,))
+    else:
+        cur = g.db.execute('select id, name from tags')
+
     tags = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
 
     return jsonify(dict(tags=tags))

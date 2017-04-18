@@ -5,6 +5,9 @@ framework is used to provide the HTTP API and the webapp.
 
 The SQL table setup is available in filedb.sql.
 
+To avoid SQL injection, use ? in query strings and pass the arguments instead
+of using Python string interpolation.
+
 API
 ===
 It is not possible to modify files from within the file collection. Only the
