@@ -379,6 +379,18 @@ def is_date_and_time_format(text):
     except ValueError:
         return False
 
+def is_position(text):
+    # Required format: <latitude> <longitude>
+    position_parts = text.split(' ')
+    if len(position_parts) != 2:
+        return False
+    try:
+        latitude = float(position_parts[0])
+        longitude = float(position_parts[1])
+        return True
+    except ValueError:
+        return False
+        
 
 @app.route('/api/location', methods=['POST'])
 def api_add_location():
@@ -393,7 +405,8 @@ def api_add_location():
     if name is None:
         abort(400, 'Location name not specified')
 
-    # TODO: validate position format if specified
+    if position is not None and not is_position(position):
+        abort(400, 'Invalid position specified')
 
     try:
         cursor = g.db.cursor()
