@@ -10,6 +10,10 @@ def validate_root_directory():
     return filedb.app.config['ALLOW_MISSING_ROOT_DIRECTORY'] or is_dir
 
 
+def database_exists():
+    return os.path.isfile(filedb.app.config['DATABASE'])
+    
+
 def main():
     """Runs the FileDB server side application."""
 
@@ -32,10 +36,13 @@ def main():
             
         print('Loading configuration ' + configuration_name)
         filedb.app.config.from_object(configuration_name)
-    
-        if validate_root_directory():
-            print('Starting the FileDB server...')
-            filedb.app.run(debug=filedb.app.config['DEBUG'], host=filedb.app.config['HOST'], port=filedb.app.config['PORT'])
+
+        if database_exists():
+            if validate_root_directory():
+                print('Starting the FileDB server...')
+                filedb.app.run(debug=filedb.app.config['DEBUG'], host=filedb.app.config['HOST'], port=filedb.app.config['PORT'])
+        else:
+            print('Database not created: ' + filedb.app.config['DATABASE'])
 
 
 if __name__ == "__main__":
