@@ -247,9 +247,7 @@ def add_file_location(file_id, file_latitude, file_longitude):
         location_id = row[0]
         location_position = row[1]
         if location_position is not None:
-            location_position_parts = location_position.split(' ')
-            location_latitude = float(location_position_parts[0])
-            location_longitude = float(location_position_parts[1])
+            location_latitude, location_longitude = parse_position(location_position)
             distance = get_gps_distance(file_latitude, file_longitude, location_latitude, location_longitude)
             if distance < app.config['FILE_TO_LOCATION_MAX_DISTANCE']:
                 try:
@@ -379,18 +377,22 @@ def is_date_and_time_format(text):
     except ValueError:
         return False
 
+
 def is_position(text):
     # Required format: <latitude> <longitude>
-    position_parts = text.split(' ')
-    if len(position_parts) != 2:
-        return False
-    try:
-        latitude = float(position_parts[0])
-        longitude = float(position_parts[1])
-        return True
-    except ValueError:
-        return False
+    return parse_position(text) is not None
+
         
+def parse_position(text):
+    # Required format: <latitude> <longitude>
+    parts = text.split(' ')
+    if len(parts) == 2:
+        try:
+            return float(parts[0]), float(parts[1])
+        except ValueError:
+            pass
+    return None
+
 
 @app.route('/api/location', methods=['POST'])
 def api_add_location():
