@@ -30,6 +30,10 @@ class DefaultConfig(object):
     # Set to a string no longer than 65535 bytes
     EXPORTED_ZIP_COMMENT = 'Exported by FileDB-' + VERSION
     
+    # The maximum number of files in a Zip archive. Zip archives are created in
+    # memory (not on disk), so a limit is needed. Set to None to ignore.
+    EXPORTED_ZIP_MAX_NUM_FILES = 100
+    
     # The key used for signing cookies. This can for example be generated with:
     # os.urandom(24)
     SECRET_KEY = 'my random key'

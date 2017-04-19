@@ -334,6 +334,9 @@ def api_export_zip():
     file_ids = content['files']
     #file_ids = [1, 2, 3]
     
+    if app.config['EXPORTED_ZIP_MAX_NUM_FILES'] is not None and len(file_ids) > app.config['EXPORTED_ZIP_MAX_NUM_FILES']:
+        abort(400, 'Too many files specified')
+    
     cursor = g.db.cursor()
     cursor.execute('select path from files where id in (' + ','.join(str(x) for x in file_ids) + ')') # TODO: make separate argument to avoid sql injection
 
