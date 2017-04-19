@@ -157,6 +157,16 @@ Response: 200 (OK), 400 (Bad Request), 401 (Unauthorized)
 Zip archive
 </pre>
 
+<h2>Fetch Data: File paths</h2>
+<pre>Request: POST /api/exportpaths JSON: { "files"=[ fileid1, fileid2, ...] }
+Request: POST /api/exportabspaths JSON: { "files"=[ fileid1, fileid2, ...] }
+Response: 200 (OK), 400 (Bad Request), 401 (Unauthorized)
+Text:
+first/path/to/file
+second/path/to/file
+...
+</pre>
+
 <h2>Add Data</h2>
 <pre>Request: POST /api/import
 Request: POST /api/file/?path=path&description=description

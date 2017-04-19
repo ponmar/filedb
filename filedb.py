@@ -343,7 +343,6 @@ def api_export_zip():
     file_paths = []
     for row in cursor.fetchall():
         file_path = row[0]
-        print("Zip:" + file_path)
         file_paths.append(file_path)
     
     if len(file_paths) != len(file_ids):
@@ -368,7 +367,41 @@ def api_export_zip():
     memory_file.seek(0)
     return send_file(memory_file, attachment_filename='files.zip', as_attachment=True)
 
+
+@app.route('/api/exportabspaths', methods=['POST'])
+def api_export_absolute_paths():
+    if not session.get('logged_in'):
+        abort(401)
+
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    #file_ids = [1, 2, 3]
+    return export_paths(file_ids, True)
+
     
+@app.route('/api/exportpaths', methods=['POST'])
+def api_export_paths():
+    if not session.get('logged_in'):
+        abort(401)
+
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    #file_ids = [1, 2, 3]
+    return export_paths(file_ids, False)
+
+
+def export_paths(file_ids, absolute):
+    cursor = g.db.cursor()
+    cursor.execute('select path from files where id in (' + ','.join(str(x) for x in file_ids) + ')') # TODO: make separate argument to avoid sql injection
+    file_paths = []
+    for row in cursor.fetchall():
+        if absolute:
+            file_paths.append(get_abs_path(row[0]))
+        else:
+            file_paths.append(row[0])
+    return '\n'.join(file_paths)
+
+
 @app.route('/api/person', methods=['POST'])
 def api_add_person():
     if not session.get('logged_in'):
