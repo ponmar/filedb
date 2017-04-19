@@ -164,21 +164,21 @@ Request: POST /api/directory/?path=path
 Response: 200 (OK), 409 (Conflict), 401 (Unauthorized)
 </pre>
 
-<pre>Request: POST /api/person/?name=name
+<pre>Request: POST /api/person JSON: { "firstname" = ..., "lastname"=..., "description"=..., "dateofbirth"=... }
 Response:
 {
     Same data here as for a single person
 }
 </pre>
 
-<pre>Request: POST /api/location/?name=name
+<pre>Request: POST /api/location JSON: { "name" = ..., "description"=..., "position"=... }
 Response:
 {
     Same data here as for a single location
 }
 </pre>
 
-<pre>Request: POST /api/tag/?name=name
+<pre>Request: POST /api/tag JSON: { "name" = ... }
 Response:
 {
     Same data here as for a single tag
@@ -187,28 +187,28 @@ Response:
 
 <h2>Modify Data</h2>
 <pre>
-Request: PUT /api/file/&lt;id&gt;
+Request: PUT /api/file/&lt;id&gt; JSON: see add file (but here all fields are optional)
 Response: 201 (OK), ...
 {
     Same data here as for a single file
 }
 </pre>
 
-<pre>Request: PUT /api/person/&lt;id&gt;
+<pre>Request: PUT /api/person/&lt;id&gt; JSON: see add person (but here all fields are optional)
 Response: 201 (OK), ...
 {
     Same data here as for single person
 }
 </pre>
 
-<pre>Request: PUT /api/location/&lt;id&gt;
+<pre>Request: PUT /api/location/&lt;id&gt; JSON: see add location (but here all fields are optional)
 Response: 201 (OK), ...
 {
     Same data here as for single location
 }
 </pre>
 
-<pre>Request: PUT /api/tag/&lt;id&gt;
+<pre>Request: PUT /api/tag/&lt;id&gt; JSON: see add tag (but here all fields are optional)
 Response: 201 (OK), ...
 {
     Same data here as for single tag
