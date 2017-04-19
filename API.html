@@ -120,8 +120,7 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
 }
 </pre>
 
-<pre>
-Request: GET /api/locations
+<pre>Request: GET /api/locations
 Request: GET /api/locations?orderby=&lt;column&gt;
 Response: 200 (OK), 401 (Unauthorized)
 {
@@ -141,8 +140,7 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
 }
 </pre>
 
-<pre>
-Request: GET /api/tags
+<pre>Request: GET /api/tags
 Request: GET /api/tags?orderby=&lt;column&gt;
 Response: 200 (OK), 401 (Unauthorized)
 {
@@ -151,6 +149,12 @@ Response: 200 (OK), 401 (Unauthorized)
         Same data here as for single tag
     ]
 }
+</pre>
+
+<h2>Fetch Data: File content in zip archive</h2>
+<pre>Request: POST /api/exportzip JSON: { "files"=[ fileid1, fileid2, ...] }
+Response: 200 (OK), 400 (Bad Request), 401 (Unauthorized)
+Zip archive
 </pre>
 
 <h2>Add Data</h2>

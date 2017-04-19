@@ -2,6 +2,9 @@ import datetime
 import math
 import re
 import os
+import io
+import zipfile
+import time
 from contextlib import closing
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
@@ -321,6 +324,48 @@ def update_path(path):
     return path
 
 
+#@app.route('/api/exportzip', methods=['GET'])
+@app.route('/api/exportzip', methods=['POST'])
+def api_export_zip():
+    if not session.get('logged_in'):
+        abort(401)
+
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    #file_ids = [1, 2, 3]
+    
+    cursor = g.db.cursor()
+    cursor.execute('select path from files where id in (' + ','.join(str(x) for x in file_ids) + ')') # TODO: make separate argument to avoid sql injection
+
+    file_paths = []
+    for row in cursor.fetchall():
+        file_path = row[0]
+        print("Zip:" + file_path)
+        file_paths.append(file_path)
+    
+    if len(file_paths) != len(file_ids):
+        abort(400, 'Specified file ids not in database')
+    
+    memory_file = io.BytesIO()
+    with zipfile.ZipFile(memory_file, 'w') as zf:
+        zf.comment = app.config['EXPORTED_ZIP_COMMENT']
+        for file_path in file_paths:
+            file_abs_path = get_abs_path(file_path)
+            try:
+                data = open(file_abs_path, 'rb').read()
+                file_datetime = os.path.getmtime(file_abs_path)
+                
+                zip_info = zipfile.ZipInfo(file_path)
+                zip_info.date_time = time.localtime(file_datetime)[:6]
+                zip_info.compress_type = zipfile.ZIP_DEFLATED
+                zf.writestr(zip_info, data)
+            except IOError:
+                abort(404, 'File not found: ' + file_abs_path)
+
+    memory_file.seek(0)
+    return send_file(memory_file, attachment_filename='files.zip', as_attachment=True)
+
+    
 @app.route('/api/person', methods=['POST'])
 def api_add_person():
     if not session.get('logged_in'):

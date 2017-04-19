@@ -26,6 +26,9 @@ class DefaultConfig(object):
     # This name is the title and heading for all webapp pages. Example:
     #TITLE = 'My Pictures'
     TITLE = 'FileDB-' + VERSION
+     
+    # Set to a string no longer than 65535 bytes
+    EXPORTED_ZIP_COMMENT = 'Exported by FileDB-' + VERSION
     
     # The key used for signing cookies. This can for example be generated with:
     # os.urandom(24)
@@ -85,7 +88,7 @@ class DefaultConfig(object):
     # The aspect ratio is kept, so the width or height may be less than what
     # is specified.
     DEFAULT_THUMBNAIL_SIZE = (196, 196)
-    
+
 
 class DevelopmentConfig(DefaultConfig):
     """Use this configuration when troubleshooting FileDB."""
