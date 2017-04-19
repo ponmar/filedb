@@ -245,19 +245,19 @@ $(document).ready(function(){
     
     if ($('#export_absolute_paths').length){
         $('#export_absolute_paths').click(function(){
-            alert("Not implemented");
+            export_absolute_paths();
         });
     }
 
     if ($('#export_relative_paths').length){
         $('#export_relative_paths').click(function(){
-            alert("Not implemented");
+            export_relative_paths();
         });
     }
 
     if ($('#export_zip_file').length){
         $('#export_zip_file').click(function(){
-            alert("Not implemented");
+            export_zip_file();
         });
     }
 
@@ -1761,4 +1761,52 @@ function get_position_map_link(location){
         }
     }
     return "N/A";
+}
+
+function show_exported_data(data){
+    $('#exportresult').html('<pre>' + data + '</pre>');
+}
+
+function download_exported_data(data){
+    // TODO: how to trigger download dialog?
+}
+
+function export_absolute_paths(){
+    export_data('/api/exportabspaths', show_exported_data);
+}
+
+function export_relative_paths(){
+    export_data('/api/exportpaths', show_exported_data);
+}
+
+function export_data(url, success_function){
+    if (slideshow_files == null || slideshow_files.length == 0){
+        $('#exportresult').html('Nothing to export');
+        return;
+    }
+    
+    $('#exportresult').html('');
+    
+    var file_ids = [];
+    for (var i=0, file; file = slideshow_files[i]; i++){
+        file_ids.push(file['id']);
+    }
+
+    var json = {"files": file_ids};
+    
+    $.ajax
+    ({
+        type: 'POST',
+        url: url,
+        contentType: 'application/json',
+        data: JSON.stringify(json),
+        success: function(data) { success_function(data); },
+        error: function(xhr, desc, err){
+            $('#exportresult').html('Export failed: ' + desc);
+        }
+    });
+}
+
+function export_zip_file(){
+    export_data('/api/exportzip', download_exported_data);
 }

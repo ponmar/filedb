@@ -374,6 +374,7 @@ def api_export_absolute_paths():
         abort(401)
 
     content = request.get_json(silent=True)
+    print('JSON: ' + str(content))
     file_ids = content['files']
     #file_ids = [1, 2, 3]
     return export_paths(file_ids, True)
