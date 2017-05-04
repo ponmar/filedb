@@ -1,4 +1,7 @@
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO # for Python 3.6
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
@@ -94,7 +97,7 @@ class JpegFile:
 class JpegThumbnail:
     def __init__(self, filename, size=(128, 128)):
         image = Image.open(filename)
-        img_io = StringIO.StringIO()
+        img_io = StringIO()
         image.thumbnail(size)
         image.save(img_io, 'JPEG')
         img_io.seek(0)
