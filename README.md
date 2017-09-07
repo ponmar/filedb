@@ -15,8 +15,3 @@ All categorization data is stored in an internal database which is accessed via 
 ### Documentation ###
 
 The release contains a readme, with installation details, and API documentation. When up and running, see the web application help page.
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
