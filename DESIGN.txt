@@ -24,6 +24,5 @@ functionality.
 
 How to release
 ==============
-1. Update VERSION.txt
-2. Run ant
-3. Upload zip-file
+1. Update CHANGES.html
+2. Add a tag (which then will be available as a zip-file at the Bitbucket project download page)
