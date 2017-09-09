@@ -8,7 +8,7 @@ A Flask application provides user friendly web pages and a HTTP API for doing ta
 
 Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can example be used to link to Google Maps or indicate person age in an image.
 
-Exif data is parsed from JPEG images to automatically set available categorization data. No file or Exif data is modified via FileDB.
+Exif data is parsed from JPEG images to automatically set available categorization data. Files are not modified via FileDB.
 
 ## Documentation ##
 
