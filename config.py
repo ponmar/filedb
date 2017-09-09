@@ -16,7 +16,7 @@ class DefaultConfig(object):
     # Do not change
     SQL_SCHEMA = 'filedb.sql'
     DATABASE = 'filedb.db'
-    PROJECT_HOME = 'http://pihack.no-ip.org/pontus/projects/filedb/'
+    PROJECT_HOME = 'https://bitbucket.org/pontusmarkstrom/filedb'
 
     # Set to True to restart webserver when files have been changed and change
     # the behavior of unhandled exceptions.
