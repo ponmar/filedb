@@ -19,18 +19,9 @@ pre {
 <h1>FileDB API</h1>
 <p>The FileDB webapp uses this API. This documentation is mostly of interest for developers who wants to use data stored by FileDB in other applications.</p>
 
-<h2>Authentication</h2>
-<pre>Request: POST /api/login?username=username&password=password
-Response: 200 (OK), 401 (Unauthorized), cookie (session=...)
-</pre>
-
-<pre>Request: POST /api/logout
-Response: 200 (OK)
-</pre>
-
 <h2>Fetch Data: file info</h2>
 <pre>Request: GET /api/file/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
+Response: 200 (OK), 404 (Not Found)
 {
     "id": id,
     "path": path,
@@ -43,7 +34,7 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
 </pre>
 
 <pre>Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids][&pathregexp=pathregexp][&descriptionregexp=descriptionregexp][&datetimeregexp=datetimeregexp]
-Response: 200 (OK), 401 (Unauthorized)
+Response: 200 (OK)
 {
     "files" =
     [
@@ -55,14 +46,14 @@ Response: 200 (OK), 401 (Unauthorized)
 <h2>Fetch Data: file content</h2>
 <pre>
 Request: GET /api/filecontent/&lt;id&gt;
-Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type depending on file extension
+Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
 </pre>
 
 <h2>Fetch Data: Exif</h2>
 <p>Parses Exif data from the specified JPEG file and returns it in JSON format.</p>
 <pre>
 Request: GET /api/fileexif/&lt;file_id&gt;
-Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
+Response: 200 (OK), 404 (Not Found)
 JSON data
 </pre>
 
@@ -70,14 +61,14 @@ JSON data
 <p>Generates and returns a small version of the specified image file. Note that the image is generated for each request. The image aspect ratio is kept.</p>
 <pre>
 Request: GET /api/thumbnail/&lt;id&gt;?[width=width][&height=height]
-Response: 200 (OK), 401 (Unauthorized), 404 (Not Found), data with content-type depending on file extension
+Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
 </pre>
 
 <h2>Fetch Data: directories</h2>
 <p>Returns a list of directories available from imported/added files or directories on the filesystem within the configured root directory.</p>
 <pre>Request: GET /api/directories
 Request: GET /api/fs_directories
-Response: 200 (OK), 401 (Unauthorized)
+Response: 200 (OK)
 {
     "directories" =
     [
@@ -90,7 +81,7 @@ Response: 200 (OK), 401 (Unauthorized)
 
 <h2>Fetch Data: persons</h2>
 <pre>Request: GET /api/person/&lt;id&gt;
-Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
+Response: 200 (OK), 404 (Not Found)
 {
     "id": id,
     "name": name,
@@ -101,7 +92,7 @@ Response: 200 (OK), 401 (Unauthorized), 404 (Not Found)
 
 <pre>Request: GET /api/persons
 Request: GET /api/persons?orderby=&lt;column&gt;
-Response: 200 (OK), 401 (Unauthorized)
+Response: 200 (OK)
 {
     "persons" =
     [
@@ -112,7 +103,7 @@ Response: 200 (OK), 401 (Unauthorized)
 
 <h2>Fetch Data: locations</h2>
 <pre>Request: GET /api/location/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
+Response: 200 (OK), 404 (Not Found)
 {
     "id": id,
     "name": name,
@@ -122,7 +113,7 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
 
 <pre>Request: GET /api/locations
 Request: GET /api/locations?orderby=&lt;column&gt;
-Response: 200 (OK), 401 (Unauthorized)
+Response: 200 (OK)
 {
     "locations" =
     [
@@ -133,7 +124,7 @@ Response: 200 (OK), 401 (Unauthorized)
 
 <h2>Fetch Data: tags</h2>
 <pre>Request: GET /tag/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
+Response: 200 (OK), 404 (Not Found)
 {
     "id": id,
     "name": name
@@ -142,7 +133,7 @@ Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
 
 <pre>Request: GET /api/tags
 Request: GET /api/tags?orderby=&lt;column&gt;
-Response: 200 (OK), 401 (Unauthorized)
+Response: 200 (OK)
 {
     "tags" =
     [
@@ -153,14 +144,14 @@ Response: 200 (OK), 401 (Unauthorized)
 
 <h2>Fetch Data: File content in zip archive</h2>
 <pre>Request: POST /api/exportzip JSON: { "files"=[ fileid1, fileid2, ...] }
-Response: 200 (OK), 400 (Bad Request), 401 (Unauthorized)
+Response: 200 (OK), 400 (Bad Request)
 Zip archive
 </pre>
 
 <h2>Fetch Data: File paths</h2>
 <pre>Request: POST /api/exportpaths JSON: { "files"=[ fileid1, fileid2, ...] }
 Request: POST /api/exportabspaths JSON: { "files"=[ fileid1, fileid2, ...] }
-Response: 200 (OK), 400 (Bad Request), 401 (Unauthorized)
+Response: 200 (OK), 400 (Bad Request)
 Text:
 first/path/to/file
 second/path/to/file
@@ -171,7 +162,7 @@ second/path/to/file
 <pre>Request: POST /api/import
 Request: POST /api/file/?path=path&description=description
 Request: POST /api/directory/?path=path
-Response: 200 (OK), 409 (Conflict), 401 (Unauthorized)
+Response: 200 (OK), 409 (Conflict)
 </pre>
 
 <pre>Request: POST /api/person JSON: { "firstname" = ..., "lastname"=..., "description"=..., "dateofbirth"=... }
@@ -232,13 +223,13 @@ Request: DELETE /api/file/&lt;id&gt;
 Request: DELETE /api/person/&lt;id&gt;
 Request: DELETE /api/location/&lt;id&gt;
 Request: DELETE /api/tag/&lt;id&gt;
-Response: 200 (OK), 404 (Not Found), 401 (Unauthorized)
+Response: 200 (OK), 404 (Not Found)
 </pre>
 
 <h2>Check File Consistency</h2>
 <p>Checks that all imported/added files is available. Returns the list of missing files.</p>
 <pre>Request: GET /api/fileconsistency
-Response: 200 (OK), 401 (Unauthorized)
+Response: 200 (OK)
 {
     "missingfiles" = [fileid, fileid, ...]
 }

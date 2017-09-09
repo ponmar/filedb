@@ -7,7 +7,7 @@ import zipfile
 import time
 from contextlib import closing
 import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, \
+from flask import Flask, request, session, g, url_for, \
      abort, render_template, jsonify, send_from_directory, make_response, \
      send_file
 import jpegfile
@@ -74,8 +74,6 @@ def app_index():
 
 @app.route('/files')
 def app_files():
-    if not session.get('logged_in'):
-        return redirect(url_for('app_index'))
     cur = g.db.execute('select id, path, description, datetime from files order by path')
     files = [dict(id=row[0], path=row[1], description=row[2], datetime=row[3]) for row in cur.fetchall()]
     return render_template('files.html', files=files)
@@ -83,8 +81,6 @@ def app_files():
 
 @app.route('/browse')
 def app_browse():
-    if not session.get('logged_in'):
-        return redirect(url_for('app_index'))
     return render_template('browse.html')
 
 
@@ -95,15 +91,11 @@ def app_categorize_files():
 
 @app.route('/categories')
 def app_categories():
-    if not session.get('logged_in'):
-        return redirect(url_for('app_index'))
     return render_template('categories.html')
 
 
 @app.route('/help')
 def app_help():
-    if not session.get('logged_in'):
-        return redirect(url_for('app_index'))
     return render_template('help.html')
 
 
@@ -113,8 +105,6 @@ def app_help():
 
 @app.route('/api/file', methods=['POST'])
 def api_add_file():
-    if not session.get('logged_in'):
-        abort(401)
     path = get_path_from_form(request.form)
     description = get_form_str('description', request.form)
     if path is None:
@@ -132,9 +122,6 @@ def listdir(path):
 
 @app.route('/api/directory', methods=['POST'])
 def api_add_directory():
-    if not session.get('logged_in'):
-        abort(401)
-
     path = get_path_from_form(request.form)
     if path is None:
         abort(409, 'No directory path specified')
@@ -158,8 +145,6 @@ def api_add_directory():
 
 @app.route('/api/import', methods=['POST'])
 def api_import_files():
-    if not session.get('logged_in'):
-        abort(401)
     # Note: unicode is required to get unicode filename paths
 
     num_imported_files = 0
@@ -327,9 +312,6 @@ def update_path(path):
 #@app.route('/api/exportzip', methods=['GET'])
 @app.route('/api/exportzip', methods=['POST'])
 def api_export_zip():
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     file_ids = content['files']
     #file_ids = [1, 2, 3]
@@ -370,9 +352,6 @@ def api_export_zip():
 
 @app.route('/api/exportabspaths', methods=['POST'])
 def api_export_absolute_paths():
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     print('JSON: ' + str(content))
     file_ids = content['files']
@@ -382,9 +361,6 @@ def api_export_absolute_paths():
     
 @app.route('/api/exportpaths', methods=['POST'])
 def api_export_paths():
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     file_ids = content['files']
     #file_ids = [1, 2, 3]
@@ -405,9 +381,6 @@ def export_paths(file_ids, absolute):
 
 @app.route('/api/person', methods=['POST'])
 def api_add_person():
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     firstname = content['firstname']
     lastname = content['lastname']
@@ -478,9 +451,6 @@ def parse_position(text):
 
 @app.route('/api/location', methods=['POST'])
 def api_add_location():
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     name = content['name']
     description = content['description']
@@ -504,9 +474,6 @@ def api_add_location():
 
 @app.route('/api/tag', methods=['POST'])
 def api_add_tag():
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     name = content['name']
 
@@ -528,9 +495,6 @@ def api_add_tag():
 
 @app.route('/api/file/<int:file_id>', methods=['PUT'])
 def api_update_file(file_id):
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
 
@@ -578,9 +542,6 @@ def api_update_file(file_id):
 
 @app.route('/api/person/<int:person_id>', methods=['PUT'])
 def api_update_person(person_id):
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
@@ -616,9 +577,6 @@ def api_update_person(person_id):
 
 @app.route('/api/location/<int:location_id>', methods=['PUT'])
 def api_update_location(location_id):
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
@@ -650,9 +608,6 @@ def api_update_location(location_id):
 
 @app.route('/api/tag/<int:tag_id>', methods=['PUT'])
 def api_update_tag(tag_id):
-    if not session.get('logged_in'):
-        abort(401)
-
     content = request.get_json(silent=True)
     cursor = g.db.cursor()
     try:
@@ -677,8 +632,6 @@ def api_update_tag(tag_id):
 
 @app.route('/api/file/<int:id>', methods=['DELETE'])
 def api_remove_file(id):
-    if not session.get('logged_in'):
-        abort(401)
     try:
         g.db.execute('delete from files where id = ?', (id,))
         g.db.commit()
@@ -689,8 +642,6 @@ def api_remove_file(id):
 
 @app.route('/api/person/<int:id>', methods=['DELETE'])
 def api_remove_person(id):
-    if not session.get('logged_in'):
-        abort(401)
     try:
         g.db.execute('delete from persons where id = ?', (id,))
         g.db.commit()
@@ -701,8 +652,6 @@ def api_remove_person(id):
 
 @app.route('/api/location/<int:id>', methods=['DELETE'])
 def api_remove_location(id):
-    if not session.get('logged_in'):
-        abort(401)
     try:
         g.db.execute('delete from locations where id = ?', (id,))
         g.db.commit()
@@ -713,8 +662,6 @@ def api_remove_location(id):
 
 @app.route('/api/tag/<int:id>', methods=['DELETE'])
 def api_remove_tag(id):
-    if not session.get('logged_in'):
-        abort(401)
     try:
         g.db.execute('delete from tags where id = ?', (id,))
         g.db.commit()
@@ -730,9 +677,6 @@ def api_remove_tag(id):
 @app.route('/api/directories', methods=['GET'])
 def api_get_json_directories():
     """Returns the directories that files have been added from."""
-    if not session.get('logged_in'):
-        abort(401)
-    
     directories = set()
     cur = g.db.execute('select path from files')
     for row in cur.fetchall():
@@ -746,9 +690,6 @@ def api_get_json_directories():
 @app.route('/api/fs_directories', methods=['GET'])
 def api_get_json_fs_directories():
     """Returns all non-blacklisted directories within the configured root directory."""
-    if not session.get('logged_in'):
-        abort(401)
-
     directories = []
     for root, _, _ in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
         path = update_path(root)
@@ -769,9 +710,6 @@ def api_get_json_files():
     To find files with either, for example, one specific person or one
     specific location; use two request to this API call and merge the result.
     """
-    if not session.get('logged_in'):
-        abort(401)
-
     # All arguments are optional
     person_ids = None
     location_ids = None
@@ -846,9 +784,6 @@ def api_get_json_files():
 
 @app.route('/api/persons', methods=['GET'])
 def api_get_json_persons():
-    if not session.get('logged_in'):
-        abort(401)
-
     cur = None
     if 'orderby' in request.args:
         orderby = request.args['orderby']
@@ -863,9 +798,6 @@ def api_get_json_persons():
 
 @app.route('/api/locations', methods=['GET'])
 def api_get_json_locations():
-    if not session.get('logged_in'):
-        abort(401)
-
     cur = None
     if 'orderby' in request.args:
         orderby = request.args['orderby']
@@ -880,9 +812,6 @@ def api_get_json_locations():
 
 @app.route('/api/tags', methods=['GET'])
 def api_get_json_tags():
-    if not session.get('logged_in'):
-        abort(401)
-
     cur = None
     if 'orderby' in request.args:
         orderby = request.args['orderby']
@@ -923,8 +852,6 @@ def get_file_json(file_id):
 
 @app.route('/api/file/<int:id>', methods=['GET'])
 def api_json_file_by_id(id):
-    if not session.get('logged_in'):
-        abort(401)
     file_json = get_file_json(id)
     if file_json is None:
         abort(404)
@@ -933,8 +860,6 @@ def api_json_file_by_id(id):
 
 @app.route('/api/person/<int:id>', methods=['GET'])
 def api_get_json_person(id):
-    if not session.get('logged_in'):
-        abort(401)
     person_dict = get_person_dict(id)
     if person_dict is None:
         abort(404)
@@ -956,9 +881,6 @@ def get_person_json(person_id):
 
 @app.route('/api/location/<int:id>', methods=['GET'])
 def api_get_json_location(id):
-    if not session.get('logged_in'):
-        abort(401)
-
     location_dict = get_location_dict(id)
     if location_dict is None:
         abort(404)
@@ -981,8 +903,6 @@ def get_location_json(location_id):
 
 @app.route('/api/tag/<int:id>', methods=['GET'])
 def api_get_json_tag(id):
-    if not session.get('logged_in'):
-        abort(401)
     tag_dict = get_tag_dict(id)
     if tag_dict is None:
         abort(404)
@@ -1005,8 +925,6 @@ def get_tag_json(tag_id):
 @app.route('/api/filecontent/<int:id>', methods=['GET'])
 def api_get_file_content(id):
     """Note: this function reads data from files collection."""
-    if not session.get('logged_in'):
-        abort(401)
     cur = g.db.execute('select path from files where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
@@ -1018,8 +936,6 @@ def api_get_file_content(id):
 @app.route('/api/thumbnail/<int:id>', methods=['GET'])
 def api_create_file_thumbnail(id):
     """Note: this function reads data from files collection."""
-    if not session.get('logged_in'):
-        abort(401)
     cur = g.db.execute('select path from files where id = ?', (id,))
     row = cur.fetchone()
     if row is None:
@@ -1040,8 +956,6 @@ def api_create_file_thumbnail(id):
 
 @app.route('/api/fileconsistency', methods=['GET'])
 def api_fileconsistency():
-    if not session.get('logged_in'):
-        abort(401)
     missing_files = []
     cur = g.db.execute('select path, id from files')
     for file_path, file_id in cur.fetchall():
@@ -1055,8 +969,6 @@ def api_fileconsistency():
 @app.route('/api/fileexif/<int:file_id>', methods=['GET'])
 def api_get_json_file_exif(file_id):
     """Note: this function reads data from files collection."""
-    if not session.get('logged_in'):
-        abort(401)
     cur = g.db.execute('select path from files where id = ?', (file_id,))
     row = cur.fetchone()
     if row is None:
@@ -1065,48 +977,6 @@ def api_get_json_file_exif(file_id):
     return jsonify(jpeg.get_exif_data())
 
 
-#
-# Auth
-#
-
-def login(username, password):
-    logged_in = app.config['USERNAME'] and password == app.config['PASSWORD']
-    if logged_in:
-        session['logged_in'] = True
-    return logged_in
-
-
-def logout():
-    session.pop('logged_in', None)
-
-
-@app.route('/app_login', methods=['POST'])
-def app_login():
-    login(request.form['username'],
-          request.form['password'])
-    return redirect(url_for('app_index'))
-
-
-@app.route('/app_logout', methods=['GET'])
-def app_logout():
-    logout()
-    return redirect(url_for('app_index'))
-
-
-@app.route('/api/login', methods=['POST'])
-def api_login():
-    if not login(request.form['username'],
-                 request.form['password']):
-        abort(401)
-    return "OK"
-
-
-@app.route('/api/logout')
-def api_logout():
-    logout()
-    return "OK"
-
-    
 #
 # Documentation outside the Flask static directory
 #

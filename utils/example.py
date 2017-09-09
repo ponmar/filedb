@@ -1,6 +1,5 @@
 """Python example code for fetching data from FileDB.
 Notes:
-    - It requires that FileDB is configured for authentication disabled.
     - Install requests with "pip install requests" if needed.
 """
 import requests

@@ -16,7 +16,6 @@ class DefaultConfig(object):
     # Do not change
     SQL_SCHEMA = 'filedb.sql'
     DATABASE = 'filedb.db'
-    VERSION = open('VERSION.txt').read()
     PROJECT_HOME = 'http://pihack.no-ip.org/pontus/projects/filedb/'
 
     # Set to True to restart webserver when files have been changed and change
@@ -25,10 +24,10 @@ class DefaultConfig(object):
 
     # This name is the title and heading for all webapp pages. Example:
     #TITLE = 'My Pictures'
-    TITLE = 'FileDB-' + VERSION
+    TITLE = 'FileDB'
      
     # Set to a string no longer than 65535 bytes
-    EXPORTED_ZIP_COMMENT = 'Exported by FileDB-' + VERSION
+    EXPORTED_ZIP_COMMENT = 'Exported by FileDB'
     
     # The maximum number of files in a Zip archive. Zip archives are created in
     # memory (not on disk), so a limit is needed. Set to None to ignore.
@@ -46,10 +45,6 @@ class DefaultConfig(object):
     # Specify the TCP port to run the webserver at. Port 80 is not selected
     # because it is quite often occupied by another web server.
     PORT = 5000
-
-    # These are the credentials needed to access the web application (and API).
-    USERNAME = 'admin'
-    PASSWORD = 'admin'
 
     # This is the root directory for where to add files from. Only files from
     # within this directory will be accessible via the web application and API.
@@ -107,4 +102,4 @@ class PontusConfig(DevelopmentConfig):
 
 
 # The configuration class to use. Specify any of the above classes.
-MY_CONFIG = DefaultConfig
+MY_CONFIG = PontusConfig
