@@ -14,4 +14,7 @@ All categorization data is stored in an internal database which is accessed via 
 
 ### Documentation ###
 
-The release contains a readme, with installation details, and API documentation. When up and running, see the web application help page.
+The release contains the following documentation:
+* README with installation/upgrade notes and instructions for how to run the web application
+* API documentation.
+* Web application help page
