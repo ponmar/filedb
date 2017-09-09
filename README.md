@@ -1,14 +1,14 @@
 # README #
 
+## About ##
+
 This is a project for storing meta-data for files. This is used at home for making my image and video collection searchable and for running slideshows.
 
-Files are imported to a database via a web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can example be used to link to Google Maps or indicate person age in an image.
+A Flask application provides user friendly web pages and a HTTP API for doing tasks from other applications. The web pages uses the API from its Javascript code to fetch information and perform other tasks.
+
+Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can example be used to link to Google Maps or indicate person age in an image.
 
 Exif data is parsed from JPEG images to automatically set available categorization data. No file or Exif data is modified via FileDB.
-
-## Interfaces ##
-
-A Flask application provides user friendly web pages and a HTTP API for doing tasks from other applications. The web pages uses the API from its Javascript code to fetch information and perform other tasks.
 
 ## Documentation ##
 
