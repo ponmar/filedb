@@ -640,7 +640,7 @@ function categorize_file(){
         },
         error: function(){
             // TODO: show a bootstrap error div and add a link
-            $('#categorize_image_div').html("Unable to load file, please run a File Consistency Check!");
+            $('#categorize_image_div').html('Unable to load file, see <a href="/help#troubleshooting">troubleshooting</a>!');
             update_image_div_height('#categorize_image_div');
         }
     });
@@ -1162,7 +1162,7 @@ function load_slideshow_file(){
         },
         error: function(){
             // TODO: show a bootstrap error div and add a link
-            $('#file_browser_image_div').html("Unable to load file, please run a File Consistency Check!");
+            $('#file_browser_image_div').html('Unable to load file, see <a href="/help#troubleshooting">troubleshooting</a>!');
             update_image_div_height('#file_browser_image_div');
         }
     });

@@ -74,6 +74,10 @@ root
 </p>
 <p>See this <a href="https://docs.python.org/2/howto/regex.html">Regular Expression HOWTO</a> for how to write regular expressions.</p>
 
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Problem: Unable to load files<br>
+Answer: The file is probably not available for the server-side application. Did you rename the file or directory? Did you forget to mount a network share? The consistency check tool can help you find unavailable files.</p>
+
 <h2>Application Programming Interface (API)</h2>
 <p>This webapp uses the <a href="{{ url_for('doc_api') }}">FileDB API</a> which is also intended to be used by other applications.</p>
 
