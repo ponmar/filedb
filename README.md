@@ -4,7 +4,7 @@
 
 This is a project for storing meta-data for files. This is used at home for making my image and video collection searchable and for running slideshows.
 
-A Flask application provides user friendly web pages and a HTTP API for doing tasks from other applications. The web pages uses the API from its Javascript code to fetch information and perform other tasks.
+A Flask application provides user friendly web pages and a HTTP API for doing tasks from other applications. The web pages uses the API from its Javascript code to fetch and to modify data.
 
 Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can example be used to link to Google Maps or indicate person age in an image.
 
