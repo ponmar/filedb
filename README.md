@@ -4,17 +4,20 @@
 
 This is a project for storing meta-data for files. This is used at home for making my image and video collection searchable and for running slideshows.
 
-A Flask application provides user friendly web pages and a HTTP API for doing tasks from other applications. The web pages uses the API from its Javascript code to fetch information and perform other tasks.
+A Flask application provides user friendly web pages and a HTTP API for doing tasks from other applications. The web pages uses the API from its Javascript code to fetch and to modify data.
 
 Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can example be used to link to Google Maps or indicate person age in an image.
 
 Exif data is parsed from JPEG images to automatically set available categorization data. Files are not modified via FileDB.
 
-## Documentation ##
+## Download ##
+
+Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or clone the repository.
 
 The release contains the following documentation:
 
 * This README
+* Changelog
 * API documentation
 * Web application help page
 
@@ -32,9 +35,10 @@ The first time you install FileDB the pre-requisites needs to be setup:
 
 When the pre-requisites are fulfilled, do the following:
 
-- Edit configuration parameters in config.py. Configuration parameters are described in that file.
+- Edit configuration for your needs (see config.py)
 - Create the database:
-  Warning! This command removes all existing data from the FileDB database (don't run this command when the database is populated later).
+
+  **Warning!** This command removes all existing data from the FileDB database (don't run this command when the database is populated later).
 
         python runserver.py --initdb
 
@@ -44,9 +48,9 @@ When the pre-requisites are fulfilled, do the following:
 
 This chapter describes how to upgrade from an earlier version of FileDB.
 
-- Download the latest FileDB version from here
-- Follow the installation chapter for the new FileDB (including updating the configuration parameters)
-- Copy filedb.db from the old installation to the new installation
+- Download a new FileDB version
+- Follow the installation chapter for the new FileDB version
+- Copy your data (filedb.db) from the old FileDB directory to the new one
 
 Note that the database format should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.
 
