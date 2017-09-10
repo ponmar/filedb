@@ -35,9 +35,10 @@ The first time you install FileDB the pre-requisites needs to be setup:
 
 When the pre-requisites are fulfilled, do the following:
 
-- Edit configuration parameters in config.py. Configuration parameters are described in that file.
+- Edit configuration for your needs (see config.py)
 - Create the database:
-  Warning! This command removes all existing data from the FileDB database (don't run this command when the database is populated later).
+
+  **Warning!** This command removes all existing data from the FileDB database (don't run this command when the database is populated later).
 
         python runserver.py --initdb
 
@@ -47,9 +48,9 @@ When the pre-requisites are fulfilled, do the following:
 
 This chapter describes how to upgrade from an earlier version of FileDB.
 
-- Download the latest FileDB version from here
-- Follow the installation chapter for the new FileDB (including updating the configuration parameters)
-- Copy filedb.db from the old installation to the new installation
+- Download a new FileDB version
+- Follow the installation chapter for the new FileDB version
+- Copy your data (filedb.db) from the old FileDB directory to the new one
 
 Note that the database format should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.
 
