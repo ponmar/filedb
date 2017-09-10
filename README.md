@@ -10,11 +10,14 @@ Files are imported to a database via the web application. Categories like person
 
 Exif data is parsed from JPEG images to automatically set available categorization data. Files are not modified via FileDB.
 
-## Documentation ##
+## Download ##
+
+Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or clone the repository.
 
 The release contains the following documentation:
 
 * This README
+* Changelog
 * API documentation
 * Web application help page
 
