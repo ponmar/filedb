@@ -99,6 +99,12 @@ def app_help():
     return render_template('help.html')
 
 
+@app.route('/images/<path:path>')
+def send_js(path):
+    # Needed to put Lightbox images in a custom path
+    return send_from_directory('static/images', path)
+
+
 #
 # API: add data
 #
