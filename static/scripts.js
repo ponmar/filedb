@@ -124,6 +124,12 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#slideshow_fullscreen_button').length){
+        $('#slideshow_fullscreen_button').click(function(){
+            open_fullscreen_slideshow();
+        });
+    }
+
     if ($('#slideshow_prev_file_button').length){
         $('#slideshow_prev_file_button').click(function(){
             prev_slideshow_file();
@@ -270,6 +276,7 @@ $(document).ready(function(){
 
     // TODO: only register on browse page
     // Register slideshow control keys
+    /*
     $(document).keypress(function(e){
         if (e.which == 97){
             // 'a' pressed
@@ -284,6 +291,7 @@ $(document).ready(function(){
             random_slideshow_file();
         }
     });
+    */
 });
 
 function needs_persons(){
@@ -1354,6 +1362,34 @@ function clear_slideshow(){
     $("#slideshow_item_text").text("No search result available");
     $('#slideshow_image').attr('src', '');
     $('#slideshow_image').attr('alt', '');
+}
+
+function open_fullscreen_slideshow(){
+    if (slideshow_files == null || slideshow_files.length == 0){
+        return;
+    }
+
+    /*
+    // Remove possible old input for fullscreen image browser
+    var anchors  = document.getElementsByTagName('a');
+    for (var i=anchors.length-1; i>=0; i--){
+        var a = anchors[i];
+        if (a.id + ''.startsWith('slideshow_file_')){
+            a.parentNode.removeChild(a);
+        }
+    }
+    */
+    
+    // Prepare input for fullscreen image browser
+    for (var i=0, file; file = slideshow_files[i]; i++){
+        var file_url = '/api/filecontent/' + file['id'];
+        var file_link_id = 'slideshow_file_' + file['id'];
+        // TODO: set data-title attribute to something nice?
+        $('body').append($('<a id="' + file_link_id + '" href="' + file_url + '" data-lightbox="fullscreen_slideshow"></a>'));
+    }
+
+    // Click on link for the image being shown to open the fullscreen image browser
+    document.getElementById('slideshow_file_' + slideshow_files[slideshow_index]['id']).click();
 }
 
 function next_slideshow_file(){
