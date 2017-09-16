@@ -77,3 +77,8 @@ The web application may also be reached from the network via an external IP addr
 The API is accessed via the same web server as the web application.
 
 See the included API documentation for more details.
+
+
+## Licenses ##
+
+[Lightbox](http://lokeshdhakar.com/projects/lightbox2/), by Lokesh Dhakar, is used as a fullscreen image viewer. It uses the [MIT license](http://lokeshdhakar.com/projects/lightbox2/#license).
