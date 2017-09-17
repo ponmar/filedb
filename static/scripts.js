@@ -88,9 +88,15 @@ $(document).ready(function(){
         });
     }
     
-    if ($('#clear_all_button').length){
-        $("#clear_all_button").click(function(){
-            clear_all_search();
+    if ($('#reset_search_criteria_button').length){
+        $("#reset_search_criteria_button").click(function(){
+            reset_search_criteria();
+        });
+    }
+
+    if ($('#clear_search_button').length){
+        $("#clear_search_button").click(function(){
+            clear_search_result();
         });
     }
 
@@ -280,25 +286,6 @@ $(document).ready(function(){
             export_zip_file();
         });
     }
-
-    // TODO: only register on browse page
-    // Register slideshow control keys
-    /*
-    $(document).keypress(function(e){
-        if (e.which == 97){
-            // 'a' pressed
-            prev_slideshow_file();
-        }
-        else if (e.which == 100){
-            // 'd' pressed
-            next_slideshow_file();
-        }
-        else if (e.which == 114){
-            // 'r' pressed
-            random_slideshow_file();
-        }
-    });
-    */
 });
 
 function needs_persons(){
@@ -975,13 +962,19 @@ function create_files_url(include_persons, include_locations, include_tags, incl
     return '/api/files?personids=' + checked_persons + '&locationids=' + checked_locations + '&tagids=' + checked_tags + '&pathregexp=' + path_regexp + '&descriptionregexp=' + description_regexp + '&datetimeregexp=' + datetime_regexp;
 }
 
-function clear_all_search(){
+function reset_search_criteria(){
     $("#multiplepersonselect option:selected").prop("selected", false);
     $("#multiplelocationselect option:selected").prop("selected", false);
     $("#multipletagselect option:selected").prop("selected", false);
     $('#file_path_regexp_filter').val('');
     $('#file_description_regexp_filter').val('');
     $('#file_date_regexp_filter').val('');
+}
+
+function clear_search_result(){
+    $("#search_result_text").text("No search result available");
+    clear_previous_search();
+    clear_slideshow();
 }
 
 function clear_previous_search(){
