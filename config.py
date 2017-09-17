@@ -99,6 +99,7 @@ class PontusConfig(DevelopmentConfig):
     """My own configuration."""
     FILES_ROOT_DIRECTORY = 'x:/'
     PORT = 80
+    HOST = '0.0.0.0'
 
 
 # The configuration class to use. Specify any of the above classes.
