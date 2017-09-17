@@ -73,14 +73,14 @@
   <div class="panel-heading">File Browser: <span id="slideshow_file_path">N/A</span></div>
   <div class="panel-body">
     <div class="form-group">
-      <button type="button" class="btn btn-default" id="slideshow_restart_button" title="Skip to beginning">[&lt;&lt;</button>
-      <button type="button" class="btn btn-default" id="slideshow_prev_file_button" title="Previous">&lt;&lt;</button>
-      <button type="button" class="btn btn-default" id="slideshow_next_file_button" title="Next">&gt;&gt;</button>
-      <button type="button" class="btn btn-default" id="slideshow_end_button" title="Skip to end">&gt;&gt;]</button>
+      <button type="button" class="btn btn-default" id="slideshow_restart_button" title="Skip to beginning" disabled>[&lt;&lt;</button>
+      <button type="button" class="btn btn-default" id="slideshow_prev_file_button" title="Previous" disabled>&lt;&lt;</button>
+      <button type="button" class="btn btn-default" id="slideshow_next_file_button" title="Next" disabled>&gt;&gt;</button>
+      <button type="button" class="btn btn-default" id="slideshow_end_button" title="Skip to end" disabled>&gt;&gt;]</button>
       <button type="button" class="btn btn-default" id="slideshow_toggle_repeat_button">Repeat: Off</button>
       <button type="button" class="btn btn-default" id="slideshow_toggle_random_button" title="">Random: Off</button>
       <button type="button" class="btn btn-default" id="slideshow_toggle_button">Slideshow: Off</button>
-      <button type="button" class="btn btn-default" id="slideshow_fullscreen_button">Open fullscreen viewer</button>
+      <button type="button" class="btn btn-default" id="slideshow_fullscreen_button" disabled>Open fullscreen viewer</button>
     </div>
     <div class="form-group"><span id="slideshow_item_text">No search result available</span></div>
     <div id="file_browser_image_div"></div>
@@ -90,9 +90,9 @@
 <div class="panel panel-default">
   <div class="panel-heading">Export</div>
   <div class="panel-body">
-    <button type="button" class="btn btn-default" id="export_absolute_paths">Absolute file paths</button>
-    <button type="button" class="btn btn-default" id="export_relative_paths">Relative file paths</button>
-    <button type="button" class="btn btn-default" id="export_zip_file">Zip file</button>
+    <button type="button" class="btn btn-default" id="export_absolute_paths" disabled>Absolute file paths</button>
+    <button type="button" class="btn btn-default" id="export_relative_paths" disabled>Relative file paths</button>
+    <button type="button" class="btn btn-default" id="export_zip_file" disabled>Zip file</button>
     <br>
     <div id="exportresult"></div>
   </div>

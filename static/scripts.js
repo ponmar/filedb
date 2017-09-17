@@ -1346,6 +1346,7 @@ function toggle_slideshow_repeat(){
     else{
         $("#slideshow_toggle_repeat_button").html('Repeat: Off');
     }
+    update_slideshow_buttons();
 }
 
 function toggle_slideshow_random(){
@@ -1356,6 +1357,7 @@ function toggle_slideshow_random(){
     else{
         $("#slideshow_toggle_random_button").html('Random: Off');
     }
+    update_slideshow_buttons();
 }
 
 function slideshow_timer_function(){
@@ -1373,6 +1375,7 @@ function restart_slideshow(){
     }
     
     slideshow_index = 0;
+    update_slideshow_buttons();
     load_slideshow_file();
 }
 
@@ -1382,6 +1385,7 @@ function end_slideshow(){
     }
 
     slideshow_index = slideshow_files.length - 1;
+    update_slideshow_buttons();
     load_slideshow_file();
 }
 
@@ -1392,6 +1396,17 @@ function clear_slideshow(){
     $("#slideshow_item_text").text("No search result available");
     $('#slideshow_image').attr('src', '');
     $('#slideshow_image').attr('alt', '');
+    update_slideshow_buttons();
+}
+
+function update_slideshow_buttons(){
+    var has_slideshow_files = slideshow_files != null && slideshow_files.length > 0;
+    
+    $("#slideshow_restart_button").prop('disabled', !(has_slideshow_files && slideshow_index > 0));
+    $("#slideshow_prev_file_button").prop('disabled', !(has_slideshow_files && slideshow_index > 0));
+    $("#slideshow_next_file_button").prop('disabled', !(slideshow_random || slideshow_repeat || (has_slideshow_files && slideshow_index < slideshow_files.length - 1)));
+    $("#slideshow_end_button").prop('disabled', !(has_slideshow_files && slideshow_index < slideshow_files.length - 1));
+    $("#slideshow_fullscreen_button").prop('disabled', !has_slideshow_files);
 }
 
 function open_fullscreen_slideshow(){
@@ -1441,17 +1456,20 @@ function next_slideshow_file(){
             random_index = Math.floor((Math.random() * slideshow_files.length));
         } while (slideshow_index == random_index);
         slideshow_index = random_index;
+        update_slideshow_buttons();
         load_slideshow_file();
         return true;
     }
     else {
         if (slideshow_index < slideshow_files.length - 1){
             slideshow_index++;
+            update_slideshow_buttons();
             load_slideshow_file();
             return true;
         }
         else if (slideshow_repeat){
             slideshow_index = 0;
+            update_slideshow_buttons();
             load_slideshow_file();
             return true;
         }
@@ -1462,6 +1480,7 @@ function next_slideshow_file(){
 function prev_slideshow_file(){
     if (slideshow_files != null && slideshow_files.length > 0 && slideshow_index > 0){
         slideshow_index--;
+        update_slideshow_buttons();
         load_slideshow_file();
     }
 }
