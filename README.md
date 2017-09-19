@@ -4,7 +4,7 @@
 
 This is a project for storing meta-data for files. This is used at home for making my image and video collection searchable and for running slideshows.
 
-FileDB provides a web application, that adapts for mobile devices, and a HTTP API for doing tasks from other applications. The web application uses the API from its Javascript code to fetch and to modify data.
+FileDB provides a web application, that adapts for mobile devices, and a HTTP API for doing tasks from other applications. The web application uses the API from its Javascript code to fetch and modify data.
 
 Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can for example be used to link to Google Maps or indicate person age in an image.
 
@@ -81,7 +81,7 @@ See the included API documentation for more details.
 
 ## Licenses ##
 
-This project uses the MIT license.
+This project uses the [MIT license](LICENSE.txt).
 
 jQuery is used by the web application for Ajax calls and DOM updates. It uses the [MIT license](https://jquery.org/license/).
 
