@@ -1,4 +1,9 @@
 {% extends "layout.html" %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lightbox.min.css') }}">
+  <script src="{{ url_for('static', filename='lightbox.min.js') }}"></script>
+{% endblock %}
 {% block content %}
 
 <script>

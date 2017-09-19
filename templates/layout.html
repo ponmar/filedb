@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% block head %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,15 +10,15 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lightbox.min.css') }}">
 
     <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-    <script src="{{ url_for('static', filename='lightbox.min.js') }}"></script>
+    {% endblock %}
   </head>
 
-  {% block body %}
+  <body>
+    {% block body %}
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -51,5 +52,6 @@
 
     </div><!-- /.container -->
 
-  {% endblock %}
+    {% endblock %}
+  </body>
 </html>
