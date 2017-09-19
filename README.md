@@ -6,13 +6,13 @@ This is a project for storing meta-data for files. This is used at home for maki
 
 A Flask application provides user friendly web pages and a HTTP API for doing tasks from other applications. The web pages uses the API from its Javascript code to fetch and to modify data.
 
-Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can example be used to link to Google Maps or indicate person age in an image.
+Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can for example be used to link to Google Maps or indicate person age in an image.
 
 Exif data is parsed from JPEG images to automatically set available categorization data. Files are not modified via FileDB.
 
 ## Download ##
 
-Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or clone the repository.
+Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or use the master branch.
 
 The release contains the following documentation:
 
@@ -80,5 +80,11 @@ See the included API documentation for more details.
 
 
 ## Licenses ##
+
+This project uses the MIT license.
+
+jQuery is used by the web application for Ajax calls and DOM updates. It uses the [MIT license](https://jquery.org/license/).
+
+Bootstrap is used by the web application for GUI layout. It uses the [MIT license](https://v4-alpha.getbootstrap.com/about/license/).
 
 [Lightbox](http://lokeshdhakar.com/projects/lightbox2/), by Lokesh Dhakar, is used as a fullscreen image viewer. It uses the [MIT license](http://lokeshdhakar.com/projects/lightbox2/#license).
