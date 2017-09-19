@@ -155,6 +155,18 @@ $(document).ready(function(){
         });
     }
 
+    if ($('#slideshow_prev_directory_button').length){
+        $('#slideshow_prev_directory_button').click(function(){
+            prev_directory_slideshow();
+        });
+    }
+    
+    if ($('#slideshow_next_directory_button').length){
+        $('#slideshow_next_directory_button').click(function(){
+            next_directory_slideshow();
+        });
+    }
+
     if ($('#slideshow_toggle_random_button').length){
         $('#slideshow_toggle_random_button').click(function(){
             toggle_slideshow_random();
@@ -1184,7 +1196,6 @@ function load_slideshow_file(){
 
     var file_text = "";
 
-    // TODO: remove 'T' in datetime text
     var file_datetime = file['datetime'];
     if (file_datetime != null){
         file_text += file_datetime.replace('T', ' ') + " (" + get_age(file_datetime, new Date()) + " years ago)";
@@ -1367,9 +1378,7 @@ function restart_slideshow(){
         return;
     }
     
-    slideshow_index = 0;
-    update_slideshow_buttons();
-    load_slideshow_file();
+    load_slideshow_index(0);
 }
 
 function end_slideshow(){
@@ -1377,9 +1386,7 @@ function end_slideshow(){
         return;
     }
 
-    slideshow_index = slideshow_files.length - 1;
-    update_slideshow_buttons();
-    load_slideshow_file();
+    load_slideshow_index(slideshow_files.length - 1);
 }
 
 function clear_slideshow(){
@@ -1392,6 +1399,12 @@ function clear_slideshow(){
     update_slideshow_buttons();
 }
 
+function load_slideshow_index(index){
+    slideshow_index = index;
+    update_slideshow_buttons();
+    load_slideshow_file();
+}
+
 function update_slideshow_buttons(){
     var has_slideshow_files = slideshow_files != null && slideshow_files.length > 0;
     
@@ -1400,6 +1413,10 @@ function update_slideshow_buttons(){
     $("#slideshow_next_file_button").prop('disabled', !(slideshow_random || slideshow_repeat || (has_slideshow_files && slideshow_index < slideshow_files.length - 1)));
     $("#slideshow_end_button").prop('disabled', !(has_slideshow_files && slideshow_index < slideshow_files.length - 1));
     $("#slideshow_fullscreen_button").prop('disabled', !has_slideshow_files);
+    
+    // TODO: find out how to set them
+    $("#slideshow_prev_directory_button").prop('disabled', false);
+    $("#slideshow_next_directory_button").prop('disabled', false);
 }
 
 function open_fullscreen_slideshow(){
@@ -1448,33 +1465,66 @@ function next_slideshow_file(){
         do{
             random_index = Math.floor((Math.random() * slideshow_files.length));
         } while (slideshow_index == random_index);
-        slideshow_index = random_index;
-        update_slideshow_buttons();
-        load_slideshow_file();
+        load_slideshow_index(random_index);
         return true;
     }
     else {
         if (slideshow_index < slideshow_files.length - 1){
-            slideshow_index++;
-            update_slideshow_buttons();
-            load_slideshow_file();
+            load_slideshow_index(slideshow_index+1);
             return true;
         }
         else if (slideshow_repeat){
-            slideshow_index = 0;
-            update_slideshow_buttons();
-            load_slideshow_file();
+            load_slideshow_index(0);
             return true;
         }
     }
     return false;
 }
 
+function get_directory_from_path(path){
+    var last_slash_index = path.lastIndexOf("/");
+    if (last_slash_index == -1){
+        return "";
+    }
+    return path.substring(0, last_slash_index);
+}
+
+function prev_directory_slideshow(){
+    var current_dir = get_directory_from_path(slideshow_files[slideshow_index]['path']);
+    var previous_dir = null;
+    for (var i=slideshow_index-1; i>=0; i--){
+        var dir = get_directory_from_path(slideshow_files[i]['path']);
+        if (previous_dir != null){
+            if (previous_dir != dir)
+                load_slideshow_index(i+1);
+                break;
+        }
+        else{
+            if (current_dir != dir){
+                previous_dir = dir;
+            }
+        }
+    }
+    
+    if (previous_dir != null){
+        load_slideshow_index(0);
+    }
+}
+
+function next_directory_slideshow(){
+    var current_dir = get_directory_from_path(slideshow_files[slideshow_index]['path']);
+    for (var i=slideshow_index+1; i<slideshow_files.length; i++){
+        var dir = get_directory_from_path(slideshow_files[i]['path']);
+        if (current_dir != dir){
+            load_slideshow_index(i);
+            break;
+        }
+    }
+}
+
 function prev_slideshow_file(){
     if (slideshow_files != null && slideshow_files.length > 0 && slideshow_index > 0){
-        slideshow_index--;
-        update_slideshow_buttons();
-        load_slideshow_file();
+        load_slideshow_index(slideshow_index-1);
     }
 }
 
