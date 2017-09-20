@@ -76,7 +76,7 @@ The web application may also be reached from the network via an external IP addr
 
 The API is accessed via the same web server as the web application.
 
-See the included API documentation for more details.
+See the included [API documentation](API.html) for more details.
 
 
 ## Licenses ##
