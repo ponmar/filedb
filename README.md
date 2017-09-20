@@ -17,9 +17,10 @@ Either download a specific release by finding the latest tag [here](https://bitb
 The release contains the following documentation:
 
 * This README
-* Changelog
-* API documentation
-* Web application help page
+* [Changelog](CHANGES.html)
+* [API documentation](API.html)
+* Web application help page (FileDB must be running to make it accessible)
+* [Development notes](DESIGN.txt)
 
 ## Installation ##
 
