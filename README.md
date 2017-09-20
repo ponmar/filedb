@@ -14,6 +14,8 @@ Exif data is parsed from JPEG images to automatically set available categorizati
 
 Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or use the master branch.
 
+## Documentation ##
+
 The release contains the following documentation:
 
 * This README
@@ -58,7 +60,7 @@ This chapter describes how to upgrade from an earlier version of FileDB.
 
 Note that the database format should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.
 
-## Starting the Server ##
+## Starting the FileDB Server ##
 
 Print help:
 
