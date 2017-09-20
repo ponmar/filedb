@@ -14,6 +14,8 @@ Exif data is parsed from JPEG images to automatically set available categorizati
 
 Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or use the master branch.
 
+## Documentation ##
+
 The release contains the following documentation:
 
 * This README
