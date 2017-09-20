@@ -894,37 +894,48 @@ function clear_previous_search(){
 
 function search_files_by_persons(){
     clear_previous_search();
-    // TODO: alert if no person was selected
-    var url = create_files_url(true, false, false, false, false, false);
-    $.getJSON(url, function(result){
-        update_search_result(result);
-        show_slideshow();
-    });
+    if ($("#multiplepersonselect :selected").length > 0) {
+        var url = create_files_url(true, false, false, false, false, false);
+        $.getJSON(url, function(result){
+            update_search_result(result);
+            show_slideshow();
+        });
+    }
+    else{
+        alert("No person selected");
+    }
 }
 
 function search_files_by_locations(){
     clear_previous_search();
-    // TODO: alert if no location was selected
-    var url = create_files_url(false, true, false, false, false, false);
-    $.getJSON(url, function(result){
-        update_search_result(result);
-        show_slideshow();
-    });
+    if ($("#multiplelocationselect :selected").length > 0) {
+        var url = create_files_url(false, true, false, false, false, false);
+        $.getJSON(url, function(result){
+            update_search_result(result);
+            show_slideshow();
+        });
+    }
+    else{
+        alert("No location selected");
+    }
 }
 
 function search_files_by_tags(){
     clear_previous_search();
-    // TODO: alert if no tag was selected
-    var url = create_files_url(false, false, true, false, false, false);
-    $.getJSON(url, function(result){
-        update_search_result(result);
-        show_slideshow();
-    });
+    if ($("#multipletagselect :selected").length > 0) {
+        var url = create_files_url(false, false, true, false, false, false);
+        $.getJSON(url, function(result){
+            update_search_result(result);
+            show_slideshow();
+        });
+    }
+    else{
+        alert("No tag selected");
+    }
 }
 
 function search_files_by_all(){
     clear_previous_search();
-    // TODO: check that something has been marked/filled in to not match all files?
     var url = create_files_url(true, true, true, true, true, true);
     $.getJSON(url, function(result){
         update_search_result(result);
