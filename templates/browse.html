@@ -1,9 +1,19 @@
 {% extends "layout.html" %}
+
 {% block head %}
   {{ super() }}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lightbox.min.css') }}">
   <script src="{{ url_for('static', filename='lightbox.min.js') }}"></script>
 {% endblock %}
+
+{% block init_javascript %}
+<script>
+$(document).ready(function(){
+    filedb_init_browse_page();
+});
+</script>
+{% endblock %}
+
 {% block content %}
 
 <script>

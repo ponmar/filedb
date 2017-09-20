@@ -17,303 +17,201 @@ var edited_person_id = -1;
 var edited_location_id = -1;
 var edited_tag_id = -1;
 
-// TODO: use different init-functions per page instead of checking if ids exist
-$(document).ready(function(){
-    if (needs_persons()){
-        get_persons();
-    }
+function filedb_init_files_page(){
+    $("#button_show_all_files").click(function(){
+        update_list_of_files();
+    });
 
-    if (needs_locations()){
-        get_locations();
-    }
+    $("#import_button").click(function(){
+        import_files();
+    });
 
-    if (needs_tags()){
-        get_tags();
-    }
-
-    if (needs_files()){
-        get_files();
-    }
-
-    if ($('#add_person_form').length){
-        $("#add_person_form").submit(function(evt){
-            evt.preventDefault();
-            modify_person();
-        });
-    }
-
-    if ($('#add_location_form').length){
-        $("#add_location_form").submit(function(evt){
-            evt.preventDefault();
-            modify_location();
-        });
-    }
-
-    if ($('#add_tag_form').length){
-        $("#add_tag_form").submit(function(evt){
-            evt.preventDefault();
-            modify_tag();
-        });
-    }
-
-    if ($('#add_directory_form').length){
-        $("#add_directory_form").submit(function(evt){
-            evt.preventDefault();
-            post_add_directory_form();
-        });
-    }
-
-    if ($('#add_file_form').length){
-        $("#add_file_form").submit(function(evt){
-            evt.preventDefault();
-            post_add_file_form();
-        });
-    }
-
-    if ($('#file_path_regexp_button').length){
-        $('#file_path_regexp_button').click(function(){
-            search_files_by_path();
-        });
-    }
-
-    if ($('#file_description_regexp_button').length){
-        $('#file_description_regexp_button').click(function(){
-            search_files_by_description();
-        });
-    }
-
-    if ($('#file_date_regexp_button').length){
-        $('#file_date_regexp_button').click(function(){
-            search_files_by_datetime();
-        });
-    }
+    $('#button_show_directories').click(function(){
+        update_list_of_directories();
+    });
     
-    if ($('#reset_search_criteria_button').length){
-        $("#reset_search_criteria_button").click(function(){
-            reset_search_criteria();
-        });
-    }
-
-    if ($('#clear_search_button').length){
-        $("#clear_search_button").click(function(){
-            clear_search_result();
-        });
-    }
-
-    if ($('#search_files_by_persons_button').length){
-        $("#search_files_by_persons_button").click(function(){
-            search_files_by_persons();
-        });
-    }
-
-    if ($('#search_files_by_locations_button').length){
-        $("#search_files_by_locations_button").click(function(){
-            search_files_by_locations();
-        });
-    }
-
-    if ($('#search_files_by_tags_button').length){
-        $("#search_files_by_tags_button").click(function(){
-            search_files_by_tags();
-        });
-    }
-
-    
-    if ($('#search_files_by_all_button').length){
-        $("#search_files_by_all_button").click(function(){
-            search_files_by_all();
-        });
-    }
-
-    if ($('#slideshow_restart_button').length){
-        $('#slideshow_restart_button').click(function(){
-            restart_slideshow();
-        });
-    }
-
-    if ($('#slideshow_end_button').length){
-        $('#slideshow_end_button').click(function(){
-            end_slideshow();
-        });
-    }
-
-    if ($('#slideshow_fullscreen_button').length){
-        $('#slideshow_fullscreen_button').click(function(){
-            open_fullscreen_slideshow();
-        });
-    }
-
-    if ($('#slideshow_prev_file_button').length){
-        $('#slideshow_prev_file_button').click(function(){
-            prev_slideshow_file();
-        });
-    }
-
-    if ($('#slideshow_next_file_button').length){
-        $('#slideshow_next_file_button').click(function(){
-            next_slideshow_file();
-        });
-    }
-
-    if ($('#slideshow_prev_directory_button').length){
-        $('#slideshow_prev_directory_button').click(function(){
-            prev_directory_slideshow();
-        });
-    }
-    
-    if ($('#slideshow_next_directory_button').length){
-        $('#slideshow_next_directory_button').click(function(){
-            next_directory_slideshow();
-        });
-    }
-
-    if ($('#slideshow_toggle_random_button').length){
-        $('#slideshow_toggle_random_button').click(function(){
-            toggle_slideshow_random();
-        });
-    }
-
-    if ($('#slideshow_toggle_button').length){
-        $("#slideshow_toggle_button").click(function(){
-            toggle_slideshow();
-        });
-    }
-
-    if ($('#slideshow_toggle_repeat_button').length){
-        $("#slideshow_toggle_repeat_button").click(function(){
-            toggle_slideshow_repeat();
-        });
-    }
-
-    if ($('#button_show_all_files').length){
-        $("#button_show_all_files").click(function(){
-            update_list_of_files();
-        });
-    }
-
-    if ($('#import_button').length){
-        $("#import_button").click(function(){
-            import_files();
-        });
-    }
-
-    if ($('#button_show_directories').length){
-        $('#button_show_directories').click(function(){
-            update_list_of_directories();
-        });
-    }
-    
-    if ($('#consistency_check_button').length){
-        $("#consistency_check_button").click(function(){
-            consistency_check();
-        });
-    }
-
-    if ($('#find_file_wo_any_button').length){
-        $('#find_file_wo_any_button').click(function(){
-            search_categorize_files(no_meta_data_comparator);
-        });
-    }
-
-    if ($('#find_file_wo_person_button').length){
-        $('#find_file_wo_person_button').click(function(){
-            search_categorize_files(no_person_comparator);
-        });
-    }
-
-    if ($('#find_file_wo_location_button').length){
-        $('#find_file_wo_location_button').click(function(){
-            search_categorize_files(no_location_comparator);
-        });
-    }
-
-    if ($('#find_file_wo_tag_button').length){
-        $('#find_file_wo_tag_button').click(function(){
-            search_categorize_files(no_tag_comparator);
-        });
-    }
-
-    if ($('#find_file_wo_description_button').length){
-        $('#find_file_wo_description_button').click(function(){
-            search_categorize_files(no_description_comparator);
-        });
-    }
-
-    if ($('#find_file_wo_date_button').length){
-        $('#find_file_wo_date_button').click(function(){
-            search_categorize_files(no_date_comparator);
-        });
-    }
-
-    if ($('#find_file_by_path_button').length){
-        $('#find_file_by_path_button').click(function(){
-            categorize_file_from_path();
-        });
-    }
-
-    if ($('#find_file_by_path_regexp_button').length){
-        $('#find_file_by_path_regexp_button').click(function(){
-            categorize_file_from_path_regexp();
-        });
-    }
-
-    if ($('#prev_file_categorize_button').length){
-        $('#prev_file_categorize_button').click(function(){
-            prev_categorize_file();
-        });
-    }
-
-    if ($('#next_file_categorize_button').length){
-        $('#next_file_categorize_button').click(function(){
-            next_categorize_file();
-        });
-    }
-
-    if ($('#save_file_categorize_button').length){
-        $('#save_file_categorize_button').click(function(){
-            save_file_categorization();
-        });
-    }
-
-    if ($('#save_for_all_files_button').length){
-        $('#save_for_all_files_button').click(function(){
-            save_categorization_for_all();
-        });
-    }
-    
-    if ($('#export_absolute_paths').length){
-        $('#export_absolute_paths').click(function(){
-            export_absolute_paths();
-        });
-    }
-
-    if ($('#export_relative_paths').length){
-        $('#export_relative_paths').click(function(){
-            export_relative_paths();
-        });
-    }
-
-    if ($('#export_zip_file').length){
-        $('#export_zip_file').click(function(){
-            export_zip_file();
-        });
-    }
-});
-
-function needs_persons(){
-    return $('#multiplepersonselect').length || $('#personsdiv').length || $('#person_categories').length;
+    $("#consistency_check_button").click(function(){
+        consistency_check();
+    });
 }
 
-function needs_locations(){
-    return $('#multiplelocationselect').length || $('#locationsdiv').length || $('#location_categories').length;
+function filedb_init_categorize_page(){
+    get_persons();
+    get_locations();
+    get_tags();
+    
+    $('#find_file_wo_any_button').click(function(){
+        search_categorize_files(no_meta_data_comparator);
+    });
+
+    $('#find_file_wo_person_button').click(function(){
+        search_categorize_files(no_person_comparator);
+    });
+
+    $('#find_file_wo_location_button').click(function(){
+        search_categorize_files(no_location_comparator);
+    });
+
+    $('#find_file_wo_tag_button').click(function(){
+        search_categorize_files(no_tag_comparator);
+    });
+
+    $('#find_file_wo_description_button').click(function(){
+        search_categorize_files(no_description_comparator);
+    });
+
+    $('#find_file_wo_date_button').click(function(){
+        search_categorize_files(no_date_comparator);
+    });
+
+    $('#find_file_by_path_button').click(function(){
+        categorize_file_from_path();
+    });
+
+    $('#find_file_by_path_regexp_button').click(function(){
+        categorize_file_from_path_regexp();
+    });
+
+    $('#prev_file_categorize_button').click(function(){
+        prev_categorize_file();
+    });
+
+    $('#next_file_categorize_button').click(function(){
+        next_categorize_file();
+    });
+
+    $('#save_file_categorize_button').click(function(){
+        save_file_categorization();
+    });
+
+    $('#save_for_all_files_button').click(function(){
+        save_categorization_for_all();
+    });
 }
 
-function needs_tags(){
-    return $('#multipletagselect').length || $('#tagsdiv').length || $('#tag_categories').length;
+function filedb_init_browse_page(){
+    get_persons();
+    get_locations();
+    get_tags();
+    
+    $("#add_directory_form").submit(function(evt){
+        evt.preventDefault();
+        post_add_directory_form();
+    });
+
+    $("#add_file_form").submit(function(evt){
+        evt.preventDefault();
+        post_add_file_form();
+    });
+    
+    $('#file_path_regexp_button').click(function(){
+        search_files_by_path();
+    });
+
+    $('#file_description_regexp_button').click(function(){
+        search_files_by_description();
+    });
+
+    $('#file_date_regexp_button').click(function(){
+        search_files_by_datetime();
+    });
+    
+    $("#reset_search_criteria_button").click(function(){
+        reset_search_criteria();
+    });
+
+    $("#clear_search_button").click(function(){
+        clear_search_result();
+    });
+
+    $("#search_files_by_persons_button").click(function(){
+        search_files_by_persons();
+    });
+
+    $("#search_files_by_locations_button").click(function(){
+        search_files_by_locations();
+    });
+
+    $("#search_files_by_tags_button").click(function(){
+        search_files_by_tags();
+    });
+    
+    $("#search_files_by_all_button").click(function(){
+        search_files_by_all();
+    });
+
+    $('#slideshow_restart_button').click(function(){
+        restart_slideshow();
+    });
+
+    $('#slideshow_end_button').click(function(){
+        end_slideshow();
+    });
+
+    $('#slideshow_fullscreen_button').click(function(){
+        open_fullscreen_slideshow();
+    });
+
+    $('#slideshow_prev_file_button').click(function(){
+        prev_slideshow_file();
+    });
+
+    $('#slideshow_next_file_button').click(function(){
+        next_slideshow_file();
+    });
+
+    $('#slideshow_prev_directory_button').click(function(){
+        prev_directory_slideshow();
+    });
+    
+    $('#slideshow_next_directory_button').click(function(){
+        next_directory_slideshow();
+    });
+
+    $('#slideshow_toggle_random_button').click(function(){
+        toggle_slideshow_random();
+    });
+
+    $("#slideshow_toggle_button").click(function(){
+        toggle_slideshow();
+    });
+
+    $("#slideshow_toggle_repeat_button").click(function(){
+        toggle_slideshow_repeat();
+    });
+    
+    $('#export_absolute_paths').click(function(){
+        export_absolute_paths();
+    });
+
+    $('#export_relative_paths').click(function(){
+        export_relative_paths();
+    });
+
+    $('#export_zip_file').click(function(){
+        export_zip_file();
+    });
 }
 
-function needs_files(){
-    return $('#categorize_image_div').length;
+function filedb_init_categories_page(){
+    get_persons();
+    get_locations();
+    get_tags();
+    
+    $("#add_person_form").submit(function(evt){
+        evt.preventDefault();
+        modify_person();
+    });
+
+    $("#add_location_form").submit(function(evt){
+        evt.preventDefault();
+        modify_location();
+    });
+
+    $("#add_tag_form").submit(function(evt){
+        evt.preventDefault();
+        modify_tag();
+    });
 }
 
 function get_persons(){
