@@ -60,7 +60,7 @@ This chapter describes how to upgrade from an earlier version of FileDB.
 
 Note that the database format should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.
 
-## Starting the Server ##
+## Starting the FileDB Server ##
 
 Print help:
 
