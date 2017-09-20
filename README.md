@@ -26,12 +26,15 @@ The release contains the following documentation:
 
 Note that it is recommended to have a backup procedure for your collection of files before running FileDB (although FileDB itself does not modify your files).
 
-The first time you install FileDB the pre-requisites needs to be setup:
+FileDB pre-requisites:
 
-- Install Python and pip (installation instructions depends on your OS)
-- Install Flask (a web server for running server-side code) and Pillow (for reading date and time from JPEG images) Python packages:
+- Python and pip (installation instructions depends on your OS)
+- Flask (a web framework for running server-side code):
 
         pip install flask
+
+- Pillow (for reading date, time and GPS location information from JPEG images):
+
         pip install pillow
 
 When the pre-requisites are fulfilled, do the following:
@@ -43,7 +46,7 @@ When the pre-requisites are fulfilled, do the following:
 
         python runserver.py --initdb
 
-- Decide how and when to backup your FileDB data (filedb.db)
+- Decide your backup policy for your FileDB data (filedb.db)
 
 ## Upgrading ##
 
