@@ -224,6 +224,7 @@ Response: 201 (OK), ...
 <p>Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.</p>
 <pre>
 Request: DELETE /api/file/&lt;id&gt;
+Request: DELETE /api/directory JSON: { "path"=... }
 Request: DELETE /api/person/&lt;id&gt;
 Request: DELETE /api/location/&lt;id&gt;
 Request: DELETE /api/tag/&lt;id&gt;

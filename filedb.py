@@ -636,6 +636,14 @@ def api_remove_file(id):
     return 'OK'
 
 
+@app.route('/api/directory', methods=['DELETE'])
+def api_remove_directory():
+    content = request.get_json(silent=True)
+    path = content['path']
+    # TODO: remove all files that starts with the specified path, or only files within specified directory?
+    return 'OK'
+
+
 @app.route('/api/person/<int:id>', methods=['DELETE'])
 def api_remove_person(id):
     try:
