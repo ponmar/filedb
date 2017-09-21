@@ -62,6 +62,8 @@ Note that the database format should not be changed in future FileDB revisions, 
 
 ## Starting the FileDB Server ##
 
+This section describes how to start the FileDB server with the Flask built-in HTTP server. Note that it is also possible to [deploy Flask applications (FileDB) to a WSGI server](http://flask.pocoo.org/docs/0.12/deploying/#deployment) (not yet tested).
+
 Print help:
 
     python runserver.py --help
