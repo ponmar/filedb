@@ -215,7 +215,7 @@ function filedb_init_categories_page(){
 }
 
 function get_persons(){
-    $.getJSON("/api/persons?orderby=firstname,lastname", function(result){
+    $.getJSON("/api/persons?orderby=firstname", function(result){
         persons = result['persons'];
 
         if ($('#multiplepersonselect').length){

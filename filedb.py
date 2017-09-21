@@ -787,16 +787,28 @@ def api_get_json_files():
 
     return jsonify(dict(files=files))
 
+    
+def get_order_str(args, valid_orderby_values):
+    if 'orderby' not in args:
+        return None
+    orderby = args['orderby']
+    if orderby not in valid_orderby_values:
+        return None
+    order = 'asc'
+    if 'order' in args:
+        order = args['order']
+        if order not in ('asc', 'desc'):
+            return None
+    return ' order by {} {}'.format(orderby, order)
+
 
 @app.route('/api/persons', methods=['GET'])
 def api_get_json_persons():
-    cur = None
-    if 'orderby' in request.args:
-        orderby = request.args['orderby']
-        cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons order by ? asc', (orderby,))
-    else:
-        cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons')
-
+    order_str = get_order_str(request.args, ('firstname', 'lastname', 'description', 'dateofbirth'))
+    query = 'select id, firstname, lastname, description, dateofbirth from persons'
+    if order_str is not None:
+        query = query + order_str
+    cur = g.db.execute(query)
     persons = [dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) for row in cur.fetchall()]
 
     return jsonify(dict(persons=persons))
@@ -804,13 +816,11 @@ def api_get_json_persons():
 
 @app.route('/api/locations', methods=['GET'])
 def api_get_json_locations():
-    cur = None
-    if 'orderby' in request.args:
-        orderby = request.args['orderby']
-        cur = g.db.execute('select id, name, description, position from locations order by ? asc', (orderby,))
-    else:
-        cur = g.db.execute('select id, name, description, position from locations')
-    
+    order_str = get_order_str(request.args, ('name', 'description'))
+    query = 'select id, name, description, position from locations'
+    if order_str is not None:
+        query = query + order_str
+    cur = g.db.execute(query)
     locations = [dict(id=row[0], name=row[1], description=row[2], position=row[3]) for row in cur.fetchall()]
 
     return jsonify(dict(locations=locations))
@@ -818,13 +828,11 @@ def api_get_json_locations():
 
 @app.route('/api/tags', methods=['GET'])
 def api_get_json_tags():
-    cur = None
-    if 'orderby' in request.args:
-        orderby = request.args['orderby']
-        cur = g.db.execute('select id, name from tags order by ? asc', (orderby,))
-    else:
-        cur = g.db.execute('select id, name from tags')
-
+    order_str = get_order_str(request.args, ('name',))
+    query = 'select id, name from tags'
+    if order_str is not None:
+        query = query + order_str
+    cur = g.db.execute(query)
     tags = [dict(id=row[0], name=row[1]) for row in cur.fetchall()]
 
     return jsonify(dict(tags=tags))
