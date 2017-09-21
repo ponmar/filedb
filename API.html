@@ -91,7 +91,7 @@ Response: 200 (OK), 404 (Not Found)
 </pre>
 
 <pre>Request: GET /api/persons
-Request: GET /api/persons?orderby=&lt;column&gt;
+Request: GET /api/persons[?orderby=firstname|lastname|description|dateofbirth][&order=asc|desc]
 Response: 200 (OK)
 {
     "persons" =
@@ -112,7 +112,7 @@ Response: 200 (OK), 404 (Not Found)
 </pre>
 
 <pre>Request: GET /api/locations
-Request: GET /api/locations?orderby=&lt;column&gt;
+Request: GET /api/locations[?orderby=name|description][&order=asc|desc]
 Response: 200 (OK)
 {
     "locations" =
@@ -132,7 +132,7 @@ Response: 200 (OK), 404 (Not Found)
 </pre>
 
 <pre>Request: GET /api/tags
-Request: GET /api/tags?orderby=&lt;column&gt;
+Request: GET /api/tags[?orderby=name][&order=asc|desc]
 Response: 200 (OK)
 {
     "tags" =
