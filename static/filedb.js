@@ -18,20 +18,53 @@ var edited_location_id = -1;
 var edited_tag_id = -1;
 
 function filedb_init_files_page(){
-    $("#button_show_all_files").click(function(){
-        update_list_of_files();
-    });
-
     $("#import_button").click(function(){
         import_files();
+    });
+    
+    $("#add_files_from_directory_update_button").click(function(){
+        fetch_directories_to_add("/api/directories");
+    });
+    
+    $("#add_files_from_directory_update_fs_button").click(function(){
+        fetch_directories_to_add("/api/fs_directories");
+    });
+    
+    $("#add_files_from_directory_add_button").click(function(){
+        var directory_to_add = $("#add_files_directory_list .selectedLi").text();
+        if (directory_to_add) {
+            post_add_directory(directory_to_add);
+        }
     });
 
     $('#button_show_directories').click(function(){
         update_list_of_directories();
     });
+
+    $("#button_show_all_files").click(function(){
+        update_list_of_files();
+    });
     
     $("#consistency_check_button").click(function(){
         consistency_check();
+    });    
+}
+
+function fetch_directories_to_add(url){
+    $.getJSON(url, function(result){
+        directories = result['directories'];
+        if (directories.length > 0){
+            $("#add_files_directory_list").html("");
+            for (var i=0, directory; directory = directories[i]; i++){
+                $("#add_files_directory_list").append('<li><a href="#">' + directory + "</a></li>");
+            }
+            $("#add_files_from_directory_add_button").removeAttr('disabled');
+            // Add a "selected class" when list items clicked to be able to find it later
+            $("#add_files_directory_list li a").click(function(){
+                $('.selectedLi').removeClass('selectedLi');
+                $(this).addClass('selectedLi');
+            });
+        }
     });
 }
 
@@ -93,16 +126,6 @@ function filedb_init_browse_page(){
     get_persons();
     get_locations();
     get_tags();
-    
-    $("#add_directory_form").submit(function(evt){
-        evt.preventDefault();
-        post_add_directory_form();
-    });
-
-    $("#add_file_form").submit(function(evt){
-        evt.preventDefault();
-        post_add_file_form();
-    });
     
     $('#file_path_regexp_button').click(function(){
         search_files_by_path();
@@ -1735,27 +1758,22 @@ function modify_tag(){
     });
 }
 
-// TODO: replace with posting json?
-function post_add_directory_form(){
+function post_add_directory(path){
     clear_add_files_results();
     $("#add_files_status").text("Adding files from directory, please wait...");
-    $.post("/api/directory", $("#add_directory_form").serialize(), function(json){
-        $("#add_files_status").html("Added " + json['num_added_files'] + " of " + (json['num_added_files'] + json['num_not_added_files']) + " files in specified directory");
-    }, "json")
-    .fail(function(){
-        $("#add_files_status").text("Failed to add files from directory, please try another name.");
-    });
-}
-
-// TODO: replace with posting json?
-function post_add_file_form(){
-    clear_add_files_results();
-    $("#add_files_status").text("Adding file, please wait...");
-    $.post("/api/file", $("#add_file_form").serialize(), function(json){
-        $("#add_files_status").text("File added successfully");
-    }, "json")
-    .fail(function(){
-        $("#add_files_status").text("Failed to add file, please try another name");
+    var json = {"path": path};
+    $.ajax
+    ({
+        type: 'POST',
+        url: "/api/directory",
+        contentType: 'application/json',
+        data: JSON.stringify(json),
+        success: function(result){
+            $("#add_files_status").html("Added " + result['num_added_files'] + " of " + (result['num_added_files'] + result['num_not_added_files']) + " files in specified directory");
+        },
+        error: function(){
+            $("#add_files_status").text("Failed to add files from directory, please try another name.");
+        }
     });
 }
 

@@ -36,21 +36,26 @@ $(document).ready(function(){
 <div class="panel panel-default">
     <div class="panel-heading">Add Files</div>
     <div class="panel-body">
-        <div class="alert alert-info" role="alert"><strong>Note:</strong> Paths are specified from within the configured file root directory.</div>
-        <form action="{{ url_for('api_add_directory') }}" method=post class="navbar-form navbar-left" role="search" id="add_directory_form">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="From directory path" name="path">
-            </div>
-            <button type="submit" class="btn btn-default">Add</button>
-        </form>
-        <form action="{{ url_for('api_add_file') }}" method=post class="navbar-form navbar-left" role="search" id="add_file_form">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="From file path" name="path">
-                <input type="text" class="form-control" placeholder="File description" name="description">
-            </div>
-            <button type="submit" class="btn btn-default">Add</button>
-        </form>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Directory<span class="caret"></span></button>
+            <ul class="dropdown-menu" id="add_files_directory_list"></ul>
+            <button id="add_files_from_directory_update_button" class="btn btn-default">Fetch added directories (fast)</button>
+            <button id="add_files_from_directory_update_fs_button" class="btn btn-default">Fetch all directories(slow)</button>
+            <button id="add_files_from_directory_add_button" class="btn btn-default" disabled>Add</button>
+        </div>
         <p id="add_files_status" style="clear:both;"></p>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Delete Files</div>
+    <div class="panel-body">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Directory<span class="caret"></span></button>
+            <ul class="dropdown-menu" id="delete_files_directory_list"></ul>
+            <button id="delete_files_from_directory_update_button" class="btn btn-default">Fetch added directories</button>
+            <button id="delete_files_from_directory_add_button" class="btn btn-default" disabled>Delete</button>
+        </div>
     </div>
 </div>
 

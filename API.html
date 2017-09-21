@@ -160,26 +160,30 @@ second/path/to/file
 
 <h2>Add Data</h2>
 <pre>Request: POST /api/import
-Request: POST /api/file/?path=path&description=description
-Request: POST /api/directory/?path=path
+Response: 200 (OK), 409 (Conflict)
+</pre>
+<pre>Request: POST /api/file JSON: { "path"=..., "description"=... }
+Response: 200 (OK), 409 (Conflict)
+</pre>
+<pre>Request: POST /api/directory JSON: { "path"=... }
 Response: 200 (OK), 409 (Conflict)
 </pre>
 
-<pre>Request: POST /api/person JSON: { "firstname" = ..., "lastname"=..., "description"=..., "dateofbirth"=... }
+<pre>Request: POST /api/person JSON: { "firstname"=..., "lastname"=..., "description"=..., "dateofbirth"=... }
 Response:
 {
     Same data here as for a single person
 }
 </pre>
 
-<pre>Request: POST /api/location JSON: { "name" = ..., "description"=..., "position"=... }
+<pre>Request: POST /api/location JSON: { "name"=..., "description"=..., "position"=... }
 Response:
 {
     Same data here as for a single location
 }
 </pre>
 
-<pre>Request: POST /api/tag JSON: { "name" = ... }
+<pre>Request: POST /api/tag JSON: { "name"=... }
 Response:
 {
     Same data here as for a single tag

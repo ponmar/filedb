@@ -15,19 +15,8 @@ from werkzeug.routing import BaseConverter
 from makeunicode import u
 
 
-class IntListConverter(BaseConverter):
-    regex = r'\d+(?:,\d+)*,?'
-
-    def to_python(self, value):
-        return [int(x) for x in value.split(',')]
-
-    def to_url(self, value):
-        return ','.join(str(x) for x in value)
-
-
 # Create the application
 app = Flask(__name__)
-app.url_map.converters['int_list'] = IntListConverter
 
 
 def connect_db():
@@ -100,7 +89,7 @@ def app_help():
 
 
 @app.route('/images/<path:path>')
-def send_js(path):
+def app_images_route(path):
     # Needed to put Lightbox images in a custom path
     return send_from_directory('static/images', path)
 
@@ -111,8 +100,9 @@ def send_js(path):
 
 @app.route('/api/file', methods=['POST'])
 def api_add_file():
-    path = get_path_from_form(request.form)
-    description = get_form_str('description', request.form)
+    content = request.get_json(silent=True)
+    path = content['path']
+    description = content['path']
     if path is None:
         abort(409, 'No file path specified')
     if not add_file(path, description):
@@ -128,10 +118,10 @@ def listdir(path):
 
 @app.route('/api/directory', methods=['POST'])
 def api_add_directory():
-    path = get_path_from_form(request.form)
+    content = request.get_json(silent=True)
+    path = content['path']
     if path is None:
         abort(409, 'No directory path specified')
-
     directory_path = get_abs_path(path)
 
     if path == '' or path == '.' or path == './' or not os.path.isdir(directory_path):
@@ -359,7 +349,7 @@ def api_export_zip():
 @app.route('/api/exportabspaths', methods=['POST'])
 def api_export_absolute_paths():
     content = request.get_json(silent=True)
-    print('JSON: ' + str(content))
+    #print('JSON: ' + str(content))
     file_ids = content['files']
     #file_ids = [1, 2, 3]
     return export_paths(file_ids, True)
