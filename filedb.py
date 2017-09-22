@@ -30,8 +30,15 @@ def init_db():
         db.commit()
 
         
-def get_abs_path(internal_path):
+def get_file_abs_path(internal_path):
     return app.config['FILES_ROOT_DIRECTORY'] + '/' + internal_path
+
+
+def get_file_directory_path(internal_path):
+    last_slash_index = internal_path.rfind('/')
+    if last_slash_index == -1:
+        return ''
+    return internal_path[:last_slash_index]
 
 
 #
@@ -122,7 +129,7 @@ def api_add_directory():
     path = content['path']
     if path is None:
         abort(409, 'No directory path specified')
-    directory_path = get_abs_path(path)
+    directory_path = get_file_abs_path(path)
 
     if path == '' or path == '.' or path == './' or not os.path.isdir(directory_path):
         abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, app.config['FILES_ROOT_DIRECTORY']))
@@ -182,7 +189,7 @@ def add_file(path, file_description=None):
             app.logger.info('Ignored non-whitelisted file: ' + path)
             return False
 
-        file_path = get_abs_path(path)
+        file_path = get_file_abs_path(path)
 
         # TODO: optimization: check that path not already in database before parsing Exif data etc.
 
@@ -330,7 +337,7 @@ def api_export_zip():
     with zipfile.ZipFile(memory_file, 'w') as zf:
         zf.comment = app.config['EXPORTED_ZIP_COMMENT']
         for file_path in file_paths:
-            file_abs_path = get_abs_path(file_path)
+            file_abs_path = get_file_abs_path(file_path)
             try:
                 data = open(file_abs_path, 'rb').read()
                 file_datetime = os.path.getmtime(file_abs_path)
@@ -369,7 +376,7 @@ def export_paths(file_ids, absolute):
     file_paths = []
     for row in cursor.fetchall():
         if absolute:
-            file_paths.append(get_abs_path(row[0]))
+            file_paths.append(get_file_abs_path(row[0]))
         else:
             file_paths.append(row[0])
     return '\n'.join(file_paths)
@@ -639,9 +646,16 @@ def api_remove_file(id):
 @app.route('/api/directory', methods=['DELETE'])
 def api_remove_directory():
     content = request.get_json(silent=True)
-    path = content['path']
-    # TODO: remove all files that starts with the specified path, or only files within specified directory?
-    return 'OK'
+    directory_path = content['path'] # TODO: remove trailing slash if any?
+    cur = g.db.execute('select id, path from files')
+    for row in cur.fetchall():
+        file_path = row[1]
+        file_directory_path = get_file_directory_path(file_path)
+        if directory_path == file_directory_path:
+            file_id = row[0]
+            print('Remove {} {}'.format(file_id, file_path))
+            # TODO: remove file
+    return 'OK' # TODO: return json with number of removed files
 
 
 @app.route('/api/person/<int:id>', methods=['DELETE'])
@@ -961,7 +975,7 @@ def api_create_file_thumbnail(id):
     if 'height' in request.args:
         size = size[0], int(request.args.get('height'))
 
-    file_path = get_abs_path(row[0])
+    file_path = get_file_abs_path(row[0])
     thumbnail = jpegfile.JpegThumbnail(file_path, size)
     return send_file(thumbnail.get_data(), mimetype='image/jpeg')
 
@@ -971,7 +985,7 @@ def api_fileconsistency():
     missing_files = []
     cur = g.db.execute('select path, id from files')
     for file_path, file_id in cur.fetchall():
-        file_path = get_abs_path(file_path)
+        file_path = get_file_abs_path(file_path)
         if not os.path.isfile(file_path):
             missing_files.append(get_file_dict(file_id))
 
@@ -985,7 +999,7 @@ def api_get_json_file_exif(file_id):
     row = cur.fetchone()
     if row is None:
         abort(404)
-    jpeg = jpegfile.JpegFile(get_abs_path(row[0]))
+    jpeg = jpegfile.JpegFile(get_file_abs_path(row[0]))
     return jsonify(jpeg.get_exif_data())
 
 

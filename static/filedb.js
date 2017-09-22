@@ -36,6 +36,17 @@ function filedb_init_files_page(){
             post_add_directory(directory_to_add);
         }
     });
+    
+    $("#delete_files_from_directory_update_button").click(function(){
+        fetch_directories_to_delete();
+    });
+    
+    $("#delete_files_from_directory_delete_button").click(function(){
+        var directory_to_delete = $("#delete_files_directory_list .selectedLi").text();
+        if (directory_to_delete) {
+            delete_delete_directory(directory_to_delete);
+        }
+    });
 
     $('#button_show_directories').click(function(){
         update_list_of_directories();
@@ -61,6 +72,24 @@ function fetch_directories_to_add(url){
             $("#add_files_from_directory_add_button").removeAttr('disabled');
             // Add a "selected class" when list items clicked to be able to find it later
             $("#add_files_directory_list li a").click(function(){
+                $('.selectedLi').removeClass('selectedLi');
+                $(this).addClass('selectedLi');
+            });
+        }
+    });
+}
+
+function fetch_directories_to_delete(){
+    $.getJSON('/api/directories', function(result){
+        directories = result['directories'];
+        if (directories.length > 0){
+            $("#delete_files_directory_list").html("");
+            for (var i=0, directory; directory = directories[i]; i++){
+                $("#delete_files_directory_list").append('<li><a href="#">' + directory + "</a></li>");
+            }
+            $("#delete_files_from_directory_delete_button").removeAttr('disabled');
+            // Add a "selected class" when list items clicked to be able to find it later
+            $("#delete_files_directory_list li a").click(function(){
                 $('.selectedLi').removeClass('selectedLi');
                 $(this).addClass('selectedLi');
             });
@@ -1477,6 +1506,8 @@ function clear_add_files_results(){
     $("#import_status").text("");
     $("#add_files_status").text("");
     $("#files_status").text("");
+    $("#delete_files_status").text("");
+    $("#rename_files_status").text("");
 }
 
 function consistency_check(){
@@ -1773,6 +1804,27 @@ function post_add_directory(path){
         },
         error: function(){
             $("#add_files_status").text("Failed to add files from directory, please try another name.");
+        }
+    });
+}
+
+function delete_delete_directory(path){
+    clear_add_files_results();
+    $("#delete_files_status").text("Deleting files from directory, please wait...");
+    var json = {"path": path};
+    $.ajax
+    ({
+        type: 'DELETE',
+        url: "/api/directory",
+        contentType: 'application/json',
+        data: JSON.stringify(json),
+        success: function(result){
+            // TODO: return JSON from API and show the number of deleted files here
+            //$("#delete_files_status").html("Added " + result['num_added_files'] + " of " + (result['num_added_files'] + result['num_not_added_files']) + " files in specified directory");
+            $("#delete_files_status").html('Done');
+        },
+        error: function(){
+            $("#delete_files_status").text("Failed to delete files from directory");
         }
     });
 }

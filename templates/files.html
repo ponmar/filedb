@@ -60,8 +60,16 @@ $(document).ready(function(){
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Directory<span class="caret"></span></button>
             <ul class="dropdown-menu" id="delete_files_directory_list"></ul>
             <button id="delete_files_from_directory_update_button" class="btn btn-default">Fetch added directories</button>
-            <button id="delete_files_from_directory_add_button" class="btn btn-default" disabled>Delete</button>
+            <button id="delete_files_from_directory_delete_button" class="btn btn-default" disabled>Delete</button>
         </div>
+        <p id="delete_files_status" style="clear:both;"></p>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Rename Directory</div>
+    <div class="panel-body">
+        <p id="rename_directory_status" style="clear:both;"></p>
     </div>
 </div>
 
