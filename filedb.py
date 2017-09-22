@@ -646,16 +646,26 @@ def api_remove_file(id):
 @app.route('/api/directory', methods=['DELETE'])
 def api_remove_directory():
     content = request.get_json(silent=True)
-    directory_path = content['path'] # TODO: remove trailing slash if any?
+    directory_path = content['path']
     cur = g.db.execute('select id, path from files')
+    files_to_remove = []
     for row in cur.fetchall():
         file_path = row[1]
         file_directory_path = get_file_directory_path(file_path)
         if directory_path == file_directory_path:
             file_id = row[0]
-            print('Remove {} {}'.format(file_id, file_path))
-            # TODO: remove file
-    return 'OK' # TODO: return json with number of removed files
+            #print('Remove {} {}'.format(file_id, file_path))
+            files_to_remove.append(file_id)
+    
+    try:    
+        for file_to_remove in files_to_remove:
+            g.db.execute('delete from files where id = ?', (file_to_remove,))
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+
+    return make_response(jsonify({'num_deleted_files': len(files_to_remove)}),
+                         201)
 
 
 @app.route('/api/person/<int:id>', methods=['DELETE'])

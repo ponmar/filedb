@@ -1819,9 +1819,7 @@ function delete_delete_directory(path){
         contentType: 'application/json',
         data: JSON.stringify(json),
         success: function(result){
-            // TODO: return JSON from API and show the number of deleted files here
-            //$("#delete_files_status").html("Added " + result['num_added_files'] + " of " + (result['num_added_files'] + result['num_not_added_files']) + " files in specified directory");
-            $("#delete_files_status").html('Done');
+            $("#delete_files_status").html('Deleted ' + result['num_deleted_files'] + ' files from specified directory');
         },
         error: function(){
             $("#delete_files_status").text("Failed to delete files from directory");
