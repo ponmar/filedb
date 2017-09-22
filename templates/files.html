@@ -50,6 +50,12 @@ $(document).ready(function(){
 <div class="panel panel-default">
     <div class="panel-heading">Delete Files</div>
     <div class="panel-body">
+        <div class="alert alert-info" role="alert"><strong>Notes:</strong>
+            <ul>
+                <li>No files from your file collection are removed, only file meta-data.</li>
+                <li>If a directory within your files collection has been renamed, use the rename functionality to avoid losing already added meta-data.</li>
+            </ul>
+        </div>
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Directory<span class="caret"></span></button>
             <ul class="dropdown-menu" id="delete_files_directory_list"></ul>
