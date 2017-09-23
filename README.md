@@ -6,9 +6,9 @@ This is a project for storing meta-data for files. This is used at home for maki
 
 FileDB provides a web application, that adapts for mobile devices, and a HTTP API for doing tasks from other applications. The web application uses the API from its Javascript code to fetch and modify data.
 
-Files are imported to a database via the web application. Categories like persons, locations and tags can be created and connected to imported files. Each category has its own details which can for example be used to link to Google Maps or indicate person age in an image.
+File information is imported to a database via the web application. Categories like persons, locations and tags can be created and connected to the imported files. Each category has its own details which can for example be used to link to Google Maps or indicate person age in an image.
 
-Exif data is parsed from JPEG images to automatically set available categorization data. Files are not modified via FileDB.
+Exif data is parsed from JPEG images to automatically set available categorization data. Only information about files is modified via FileDB, not the files themself.
 
 ## Download ##
 
