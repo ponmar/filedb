@@ -108,6 +108,8 @@ function filedb_init_categorize_page(){
     get_locations();
     get_tags();
     
+    get_files();
+    
     $('#find_file_wo_any_button').click(function(){
         search_categorize_files(no_meta_data_comparator);
     });
