@@ -62,10 +62,12 @@ function filedb_init_files_page(){
 }
 
 function fetch_directories_to_add(url){
+    clear_add_files_results();
+    $("#add_files_directory_list").html("");
+    $("#add_files_status").text("Fetching directories...");
     $.getJSON(url, function(result){
         directories = result['directories'];
         if (directories.length > 0){
-            $("#add_files_directory_list").html("");
             for (var i=0, directory; directory = directories[i]; i++){
                 $("#add_files_directory_list").append('<li><a href="#">' + directory + "</a></li>");
             }
@@ -76,14 +78,17 @@ function fetch_directories_to_add(url){
                 $(this).addClass('selectedLi');
             });
         }
+        $("#add_files_status").text("Fetching directories... Done");
     });
 }
 
 function fetch_directories_to_delete(){
+    clear_add_files_results();
+    $("#delete_files_directory_list").html("");
+    $("#delete_files_status").text("Fetching directories...");
     $.getJSON('/api/directories', function(result){
         directories = result['directories'];
         if (directories.length > 0){
-            $("#delete_files_directory_list").html("");
             for (var i=0, directory; directory = directories[i]; i++){
                 $("#delete_files_directory_list").append('<li><a href="#">' + directory + "</a></li>");
             }
@@ -94,6 +99,7 @@ function fetch_directories_to_delete(){
                 $(this).addClass('selectedLi');
             });
         }
+        $("#delete_files_status").text("Fetching directories... Done");
     });
 }
 
