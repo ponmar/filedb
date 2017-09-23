@@ -142,12 +142,20 @@ function filedb_init_categorize_page(){
         categorize_file_from_path_regexp();
     });
 
+    $('#first_file_categorize_button').click(function(){
+        first_categorize_file();
+    });
+
     $('#prev_file_categorize_button').click(function(){
         prev_categorize_file();
     });
 
     $('#next_file_categorize_button').click(function(){
         next_categorize_file();
+    });
+
+    $('#last_file_categorize_button').click(function(){
+        last_categorize_file();
     });
 
     $('#save_file_categorize_button').click(function(){
@@ -541,6 +549,13 @@ function update_directories_table(directories_json){
     });
 }
 
+function first_categorize_file(){
+    if (categorize_result_index > 0){
+        categorize_result_index = 0;
+        categorize_file();
+    }
+}
+
 function prev_categorize_file(){
     if (categorize_result_index > 0){
         categorize_result_index--;
@@ -551,6 +566,13 @@ function prev_categorize_file(){
 function next_categorize_file(){
     if (categorize_result_index != -1 && categorize_result_index < categorize_result.length - 1){
         categorize_result_index++;
+        categorize_file();
+    }
+}
+
+function last_categorize_file(){
+    if (categorize_result.length > 0 && categorize_result_index != categorize_result.length - 1){
+        categorize_result_index = categorize_result.length - 1;
         categorize_file();
     }
 }
