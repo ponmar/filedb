@@ -1461,14 +1461,15 @@ function prev_directory_slideshow(){
     var previous_dir = null;
     for (var i=slideshow_index-1; i>=0; i--){
         var dir = get_directory_from_path(slideshow_files[i]['path']);
-        if (previous_dir != null){
-            if (previous_dir != dir)
-                load_slideshow_index(i+1);
-                break;
-        }
-        else{
+        if (previous_dir == null){
             if (current_dir != dir){
                 previous_dir = dir;
+            }
+        }
+        else{
+            if (previous_dir != dir){
+                load_slideshow_index(i+1);
+                return;
             }
         }
     }
