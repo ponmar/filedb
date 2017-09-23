@@ -8,7 +8,9 @@ FileDB provides a web application, that adapts for mobile devices, and a HTTP AP
 
 File information is imported to a database via the web application. Categories like persons, locations and tags can be created and connected to the imported files. Each category has its own details which can for example be used to link to Google Maps or indicate person age in an image.
 
-Exif data is parsed from JPEG images to automatically set available categorization data. Only information about files is modified via FileDB, not the files themself.
+Exif data is parsed from JPEG images to automatically store file information. Only information about files is modified via FileDB, not the files themself.
+
+All file information stored in FileDB makes extensive searches possible. An example search may be "files with person X at location Y".
 
 ## Download ##
 
