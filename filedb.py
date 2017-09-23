@@ -789,7 +789,7 @@ def api_get_json_files():
     else:
         query = ' intersect '.join(sub_queries)
     
-    print(query)
+    #print(query)
         
     cursor = g.db.execute(query)
 
@@ -807,7 +807,10 @@ def api_get_json_files():
         file_json = get_file_dict(row[0])
         files.append(file_json)
 
-    return jsonify(dict(files=files))
+    cursor = g.db.execute('select count(*) from files')
+    total_num_files = cursor.fetchone()[0]
+        
+    return jsonify(dict(files=files, total_num_files=total_num_files))
 
     
 def get_order_str(args, valid_orderby_values):

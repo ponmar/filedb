@@ -1071,7 +1071,7 @@ function update_search_result(files_json){
 
     var item_separator = ', ';
 
-    var text = slideshow_files.length + " file matches with categories: ";
+    var text = slideshow_files.length + " of " + files_json['total_num_files'] + " files visible with categories: ";
 
     if (Object.keys(persons).length > 0 || Object.keys(locations).length > 0 || Object.keys(tags).length > 0){
         for (var person_id in persons){
