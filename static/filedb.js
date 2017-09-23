@@ -158,6 +158,15 @@ function filedb_init_categorize_page(){
         last_categorize_file();
     });
 
+    $('#prev_directory_categorize_button').click(function(){
+        prev_directory_categorize_file();
+    });
+    
+    $('#next_directory_categorize_button').click(function(){
+        next_directory_categorize_file();
+    });
+
+
     $('#save_file_categorize_button').click(function(){
         save_file_categorization();
     });
@@ -577,13 +586,50 @@ function last_categorize_file(){
     }
 }
 
+function prev_directory_categorize_file(){
+    var current_dir = get_directory_from_path(categorize_files[categorize_result[categorize_result_index]]['path']);
+    var previous_dir = null;
+    for (var i=categorize_result_index-1; i>=0; i--){
+        var dir = get_directory_from_path(categorize_files[categorize_result[i]]['path']);
+        if (previous_dir == null){
+            if (current_dir != dir){
+                previous_dir = dir;
+            }
+        }
+        else{
+            if (previous_dir != dir){
+                categorize_result_index = i+1;
+                categorize_file();
+                return;
+            }
+        }
+    }
+    
+    if (previous_dir != null){
+        categorize_result_index = 0;
+        categorize_file();
+    }
+}
+
+function next_directory_categorize_file(){
+    var current_dir = get_directory_from_path(categorize_files[categorize_result[categorize_result_index]]['path']);
+    for (var i=categorize_result_index+1; i<categorize_result.length; i++){
+        var dir = get_directory_from_path(categorize_files[categorize_result[i]]['path']);
+        if (current_dir != dir){
+            categorize_result_index = i;
+            categorize_file();
+            break;
+        }
+    }
+}
+
 function categorize_file(){
     var file = categorize_files[categorize_result[categorize_result_index]];
     var file_description = file['description'];
     var file_date = file['datetime'];
     var file_url = '/api/filecontent/' + file['id'];
 
-    $('#categorize_file_path').text("[" + (categorize_result_index+1) + "/" + categorize_result.length + "] " + file['path']);
+    $('#categorize_file_header').text(": [" + (categorize_result_index+1) + "/" + categorize_result.length + "] " + file['path']);
 
     if (file_description != null){
         $('#file_description').val(file_description);
@@ -737,7 +783,7 @@ function update_categorize_result(){
 }
 
 function clear_categorize_result(){
-    $('#categorize_file_path').text("N/A");
+    $('#categorize_file_header').text("");
     $('#file_description').val("");
     $('#file_date').val("");
     if ($('#categorize_image').length){
