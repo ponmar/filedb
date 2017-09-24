@@ -897,6 +897,16 @@ def api_json_file_by_id(id):
     return file_json
 
 
+@app.route('/api/randomfile/', methods=['GET', 'POST'])
+def api_random_json_file():
+    cur = g.db.execute('select id from files order by random() limit 1')
+    id = cur.fetchone()[0]
+    file_json = get_file_json(id)
+    if file_json is None:
+        abort(404)
+    return file_json
+
+
 @app.route('/api/person/<int:id>', methods=['GET'])
 def api_get_json_person(id):
     person_dict = get_person_dict(id)
