@@ -678,6 +678,7 @@ function categorize_file(){
                     id: 'categorize_image',
                     src: file_url,
                     alt: file_url,
+                    title: 'File id: ' + file['id'],
                     class: 'limited_img'
                 });
                 img.appendTo($('#categorize_image_div'));
@@ -1244,6 +1245,7 @@ function load_slideshow_file(){
                     id: 'slideshow_image',
                     src: file_url,
                     alt: file_url,
+                    title: 'File id: ' + file['id'],
                     class: 'limited_img'
                 });
                 img.appendTo($('#file_browser_image_div'));
