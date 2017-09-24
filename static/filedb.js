@@ -1183,6 +1183,18 @@ function update_search_result(files_json){
     else{
         text += "N/A";
     }
+    
+    if (slideshow_files.length > 0){
+        prev_dir = null;
+        for (var i=0, file; file = slideshow_files[i]; i++){
+            path = slideshow_files[i]['path'];
+            var dir = get_directory_from_path(path);
+            if (prev_dir == null || prev_dir != dir){
+                text += '<br>' + dir;
+                prev_dir = dir;
+            }
+        }
+    }
 
     $("#search_result_text").html(text);
 }
