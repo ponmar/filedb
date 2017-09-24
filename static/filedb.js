@@ -166,7 +166,6 @@ function filedb_init_categorize_page(){
         next_directory_categorize_file();
     });
 
-
     $('#save_file_categorize_button').click(function(){
         save_file_categorization();
     });
@@ -776,6 +775,18 @@ function update_categorize_result(){
     if (categorize_result.length > 0){
         categorize_result_index = 0;
         categorize_file();
+
+        var categorize_search_result_text = "";
+        prev_dir = null;
+        for (i=0; i<categorize_result.length; i++){
+            var path = categorize_files[categorize_result[i]]['path'];
+            var dir = get_directory_from_path(path);
+            if (prev_dir == null || prev_dir != dir){
+                categorize_search_result_text += dir + '<br>';
+                prev_dir = dir;
+            }
+        }
+        $('#categorize_search_result_text').html(categorize_search_result_text);
     }
     else{
         clear_categorize_result();
@@ -783,6 +794,8 @@ function update_categorize_result(){
 }
 
 function clear_categorize_result(){
+    $('#categorize_search_result_text').text("No search result available");
+    
     $('#categorize_file_header').text("");
     $('#file_description').val("");
     $('#file_date').val("");
