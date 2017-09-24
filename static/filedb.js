@@ -255,6 +255,10 @@ function filedb_init_browse_page(){
     $("#slideshow_toggle_repeat_button").click(function(){
         toggle_slideshow_repeat();
     });
+
+    $('#export_file_list').click(function(){
+        export_file_list();
+    });
     
     $('#export_absolute_paths').click(function(){
         export_absolute_paths();
@@ -1485,6 +1489,7 @@ function update_slideshow_buttons(){
 
 function update_export_buttons(){
     var has_slideshow_files = slideshow_files != null && slideshow_files.length > 0;
+    $("#export_file_list").prop('disabled', !has_slideshow_files);
     $("#export_absolute_paths").prop('disabled', !has_slideshow_files);
     $("#export_relative_paths").prop('disabled', !has_slideshow_files);
     $("#export_zip_file").prop('disabled', !has_slideshow_files);
@@ -2018,6 +2023,18 @@ function show_exported_data(data){
 
 function download_exported_data(data){
     // TODO: how to trigger download dialog?
+}
+
+function export_file_list(){
+    if (slideshow_files == null || slideshow_files.length == 0){
+        $('#exportresult').html('Nothing to export');
+        return;
+    }
+    exported_data = "";
+    for (var i=0, file; file = slideshow_files[i]; i++){
+        exported_data += file['id'] + ';';
+    }
+    show_exported_data(exported_data);
 }
 
 function export_absolute_paths(){
