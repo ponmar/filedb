@@ -730,6 +730,21 @@ def api_get_json_fs_directories():
 
     return jsonify(dict(directories=directories))
 
+    
+@app.route('/api/randomfiles/<int(min=1, max=10):numfiles>', methods=['GET', 'POST'])
+def api_get_json_random_files(numfiles):
+    cursor = g.db.execute('select id from files order by random() limit {}'.format(numfiles))
+
+    files = []
+    for row in cursor.fetchall():
+        file_json = get_file_dict(row[0])
+        files.append(file_json)
+
+    cursor = g.db.execute('select count(*) from files')
+    total_num_files = cursor.fetchone()[0]
+        
+    return jsonify(dict(files=files, total_num_files=total_num_files))
+
 
 @app.route('/api/files', methods=['GET'])
 def api_get_json_files():
