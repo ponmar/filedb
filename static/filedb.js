@@ -215,6 +215,10 @@ function filedb_init_browse_page(){
     $("#search_files_by_all_button").click(function(){
         search_files_by_all();
     });
+    
+    $("#search_ten_random_files_button").click(function(){
+        search_files_by_random(10);
+    });
 
     $('#slideshow_restart_button').click(function(){
         restart_slideshow();
@@ -1078,6 +1082,14 @@ function search_files_by_tags(){
     else{
         alert("No tag selected");
     }
+}
+
+function search_files_by_random(numfiles){
+    clear_previous_search();    
+    $.getJSON('/api/randomfiles/' + numfiles, function(result){
+        update_search_result(result);
+        show_slideshow();
+    });
 }
 
 function search_files_by_all(){
