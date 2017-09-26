@@ -109,7 +109,7 @@ def app_images_route(path):
 def api_add_file():
     content = request.get_json(silent=True)
     path = content['path']
-    description = content['path']
+    description = content['description']
     if path is None:
         abort(409, 'No file path specified')
     if not add_file(path, description):
