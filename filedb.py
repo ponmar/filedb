@@ -41,6 +41,11 @@ def get_file_directory_path(internal_path):
     return internal_path[:last_slash_index]
 
 
+def is_hidden_path(internal_path):
+    """Returns if the specified path includes a hidden directory or file."""
+    return internal_path.startswith('.') or '/.' in internal_path
+    
+
 #
 # Database handle for every request
 #
@@ -119,7 +124,7 @@ def api_add_file():
 
 def listdir(path):
     for f in os.listdir(path):
-        if app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not f.startswith('.'):
+        if app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not is_hidden_path(f):
             yield f
 
 
@@ -157,14 +162,16 @@ def api_import_files():
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
-            filename_in_wanted_directory = filename_with_path.split('/', 1)[1]
+            
+            if app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not is_hidden_path(filename_with_path):
+                filename_in_wanted_directory = filename_with_path.split('/', 1)[1]
 
-            if add_file(filename_in_wanted_directory):
-                app.logger.info('Imported file: ' + filename_in_wanted_directory)
-                num_imported_files += 1
-            else:
-                app.logger.info('Could not import file: ' + filename_with_path)
-                num_not_imported_files += 1
+                if add_file(filename_in_wanted_directory):
+                    app.logger.info('Imported file: ' + filename_in_wanted_directory)
+                    num_imported_files += 1
+                else:
+                    app.logger.info('Could not import file: ' + filename_with_path)
+                    num_not_imported_files += 1
 
     return create_files_added_response(num_imported_files, num_not_imported_files)
 
