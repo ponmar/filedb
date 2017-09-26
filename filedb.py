@@ -189,9 +189,12 @@ def add_file(path, file_description=None):
             app.logger.info('Ignored non-whitelisted file: ' + path)
             return False
 
-        file_path = get_file_abs_path(path)
+        # Check if file already added before starting to parse possible Exif date etc.
+        if g.db.execute("select count(*) from files where path=?", (path, )).fetchone()[0] > 0:
+            app.logger.info('Ignored already added file: ' + path)
+            return False
 
-        # TODO: optimization: check that path not already in database before parsing Exif data etc.
+        file_path = get_file_abs_path(path)
 
         if not os.path.isfile(file_path):
             abort(400, 'No file with path "{}" within the "{}" directory'.format(path, app.config['FILES_ROOT_DIRECTORY']))
