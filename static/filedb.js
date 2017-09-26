@@ -1615,9 +1615,9 @@ function clear_add_files_results(){
 }
 
 function consistency_check(){
-    if (window.confirm("File consistency check for all file entries may take several minutes. Continue?")){
+    if (window.confirm("File consistency check may take several minutes for all files. Continue?")){
         clear_add_files_results();
-        $("#tools_status").text("Running, please wait...");
+        $("#tools_status").text("File consistency check running, please wait...");
         $.getJSON("/api/fileconsistency", function(result){
             missing_files = result['missing_files'];
             if (missing_files.length == 0){
@@ -1625,7 +1625,7 @@ function consistency_check(){
                 clear_files_table();
             }
             else{
-                $("#tools_status").text("Found " + missing_files.length + " missing files:");
+                $("#tools_status").text("File consistency check found " + missing_files.length + " missing files:");
                 update_files_table(missing_files);
             }
         });
