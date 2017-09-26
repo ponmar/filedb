@@ -12,10 +12,6 @@ Exif data is parsed from JPEG images to automatically store file information. On
 
 All file information stored in FileDB makes extensive searches possible. An example search may be "files with person X at location Y".
 
-## Download ##
-
-Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or use the master branch.
-
 ## Documentation ##
 
 The release contains the following documentation:
@@ -26,11 +22,11 @@ The release contains the following documentation:
 * Web application help page (FileDB must be running to make it accessible)
 * [Development notes](DESIGN.txt)
 
-## Installation ##
+## Prerequisites ##
 
-Note that it is recommended to have a backup procedure for your collection of files before running FileDB (although FileDB itself does not modify your files).
+Note that it is recommended to have a backup procedure for your file collection before running FileDB (although FileDB itself does not modify your files).
 
-FileDB pre-requisites:
+FileDB prerequisites:
 
 - Python and pip (installation instructions depends on your OS)
 - Flask (a web framework for running server-side code):
@@ -41,8 +37,15 @@ FileDB pre-requisites:
 
         pip install pillow
 
-When the pre-requisites are fulfilled, do the following:
+## Download ##
 
+Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or use the master branch.
+
+## Installation ##
+
+This chapter describes how to install FileDB from scratch (no upgrade).
+
+- Download and fix the prerequisites (see above)
 - Edit configuration for your needs (see config.py)
 - Create the database:
 
@@ -56,8 +59,8 @@ When the pre-requisites are fulfilled, do the following:
 
 This chapter describes how to upgrade from an earlier version of FileDB.
 
-- Download a new FileDB version
-- Follow the installation chapter for the new FileDB version
+- Download a new FileDB version to a new directory
+- Edit configuration for your needs (see config.py)
 - Copy your data (filedb.db) from the old FileDB directory to the new one
 
 Note that the database format should not be changed in future FileDB revisions, but the configuration file (config.py) may be changed.
