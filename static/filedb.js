@@ -48,13 +48,11 @@ function filedb_init_files_page(){
         }
     });
 
-    $('#button_show_directories').click(function(){
-        update_list_of_directories();
-    });
-
+    /*
     $("#button_show_all_files").click(function(){
         update_list_of_files();
     });
+    */
     
     $("#consistency_check_button").click(function(){
         consistency_check();
@@ -497,29 +495,19 @@ function get_files(){
     });
 }
 
-function update_list_of_directories(){
-    if (window.confirm("Listing all remote directories from the filesystem may take a while. Continue?")){
-        $("#files_status").text("Loading directories...");
-        $.getJSON("/api/fs_directories", function(result){
-            update_directories_table(result['directories']);
-        })
-        .always(function(){
-            $("#files_status").text("");
-        });
-    }
-}
-
+/*
 function update_list_of_files(){
     if (window.confirm("Download all file information may take a while. Continue?")){
-        $("#files_status").text("Loading files...");
+        $("#tools_status").text("Loading files...");
         $.getJSON("/api/files", function(result){
             update_files_table(result['files']);
         })
         .always(function(){
-            $("#files_status").text("");
+            $("#tools_status").text("");
         });
     }
 }
+*/
 
 function clear_files_table(){
     $("#filestable").empty();
@@ -548,20 +536,6 @@ function update_files_table(files_json){
         var id = $(this).attr('id').replace('delete_file_', '');
         delete_file(id);
         return false; // do not follow link
-    });
-}
-
-function update_directories_table(directories_json){
-    var tableRows = '<tr><th>Directory</th></tr>';
-    for (var i=0, directory; directory = directories_json[i]; i++){
-        tableRows += '<tr><td class="clickabletext">' + directory + '</td></tr>';
-    }
-
-    $("#directoriestable").empty();
-    $("#directoriestable").append(tableRows);
-    $(".clickabletext").click(function() {
-        // Copy directory to form input
-        $('#add_directory_form :input[name=path]').val(this.innerHTML);
     });
 }
 
@@ -1635,7 +1609,7 @@ function import_files(){
 function clear_add_files_results(){
     $("#import_status").text("");
     $("#add_files_status").text("");
-    $("#files_status").text("");
+    $("#tools_status").text("");
     $("#delete_files_status").text("");
     $("#rename_files_status").text("");
 }
@@ -1643,15 +1617,15 @@ function clear_add_files_results(){
 function consistency_check(){
     if (window.confirm("File consistency check for all file entries may take several minutes. Continue?")){
         clear_add_files_results();
-        $("#files_status").text("Running, please wait...");
+        $("#tools_status").text("Running, please wait...");
         $.getJSON("/api/fileconsistency", function(result){
             missing_files = result['missing_files'];
             if (missing_files.length == 0){
-                $("#files_status").text("File consistency check finished successfully");
+                $("#tools_status").text("File consistency check finished successfully");
                 clear_files_table();
             }
             else{
-                $("#files_status").text("Found " + missing_files.length + " missing files:");
+                $("#tools_status").text("Found " + missing_files.length + " missing files:");
                 update_files_table(missing_files);
             }
         });
