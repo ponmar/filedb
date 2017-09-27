@@ -612,6 +612,7 @@ function categorize_file(){
     var file_date = file['datetime'];
     var file_url = '/api/filecontent/' + file['id'];
 
+    $('#categorize_save_status').text('');
     $('#categorize_file_header').text(": [" + (categorize_result_index+1) + "/" + categorize_result.length + "] " + file['path']);
 
     if (file_description != null){
@@ -643,7 +644,6 @@ function categorize_file(){
         $('#tag_' + tag['id']).prop('checked', file_has_tag);
     }
 
-    $("#save_categorization_status").text("");
     $('#categorize_image_div').empty();
     
     // Make a HEAD request to find out file type (it is not known from the URL)
@@ -782,6 +782,7 @@ function clear_categorize_result(){
     $('#categorize_search_result_text').text("No search result available");
     
     $('#categorize_file_header').text("");
+    $('#categorize_save_status').text('');
     $('#file_description').val("");
     $('#file_date').val("");
     if ($('#categorize_image').length){
@@ -868,7 +869,7 @@ function save_file_categorization(){
     if (categorize_result_index != -1){
         var jsonData = createJsonDataForFileCategorization();
 
-        $("#save_categorization_status").text("Saving...");
+        $("#categorize_save_status").text("Saving...");
         $.ajax
         ({
             type: "PUT",
@@ -877,11 +878,11 @@ function save_file_categorization(){
             data: jsonData,
             dataType: "json",
             success: function(responseData){
-                $("#save_categorization_status").text("Saved successfully");
+                $("#categorize_save_status").text("Saved successfully");
                 categorize_files[categorize_result[categorize_result_index]] = responseData;
             },
             error: function(){
-                $("#save_categorization_status").text("An error occured");
+                $("#categorize_save_status").text("An error occured");
             }
         });
     }
