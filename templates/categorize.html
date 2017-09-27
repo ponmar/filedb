@@ -16,6 +16,9 @@ $(document).ready(function(){
 
 <h1>Categorize Files</h1>
 
+<span id="categorize_page_loading_text">Loading...</span>
+<div id="categorize_page_content" class="hidden">
+
 <div class="panel panel-default">
     <div class="panel-heading">Find Files without Specified Categorization</div>
     <div class="panel-body">
@@ -94,6 +97,8 @@ $(document).ready(function(){
             <span id="save_all_status"></span>
         </div>
     </div>
+</div>
+
 </div>
 
 {% endblock %}

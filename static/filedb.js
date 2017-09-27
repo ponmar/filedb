@@ -492,6 +492,8 @@ function get_files(){
         if ($('#categorize_image_div').length){
             categorize_files = result['files'];
         }
+        $('#categorize_page_loading_text').addClass('hidden');
+        $('#categorize_page_content').removeClass('hidden').addClass('visible');
     });
 }
 

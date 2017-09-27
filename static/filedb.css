@@ -6,3 +6,11 @@
 .margin_spacer {
     margin-right: 15px;
 }
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
