@@ -164,6 +164,10 @@ function filedb_init_categorize_page(){
         next_directory_categorize_file();
     });
 
+    $('#reset_file_categorize_button').click(function(){
+        reset_file_categorization();
+    });
+    
     $('#save_file_categorize_button').click(function(){
         save_file_categorization();
     });
@@ -539,6 +543,12 @@ function update_files_table(files_json){
         delete_file(id);
         return false; // do not follow link
     });
+}
+
+function reset_file_categorization(){
+    if (categorize_result_index != -1){
+        categorize_file();
+    }
 }
 
 function first_categorize_file(){
