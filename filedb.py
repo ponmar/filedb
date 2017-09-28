@@ -235,14 +235,14 @@ def add_file(path, file_description=None):
         if file_latitude is not None and file_longitude is not None:
             app.logger.info('Found GPS position in file: {} {}'.format(file_latitude, file_longitude))
             file_id = cursor.lastrowid
-            add_file_location(file_id, float(file_latitude), float(file_longitude))
+            add_file_near_locations(file_id, float(file_latitude), float(file_longitude))
         return True
 
     except sqlite3.IntegrityError:
         return False
 
 
-def add_file_location(file_id, file_latitude, file_longitude):
+def add_file_near_locations(file_id, file_latitude, file_longitude):
     cursor = g.db.execute('select id, position from locations')
     for row in cursor.fetchall():
         location_id = row[0]
