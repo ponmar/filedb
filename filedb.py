@@ -44,7 +44,11 @@ def get_file_directory_path(internal_path):
 def is_hidden_path(internal_path):
     """Returns if the specified path includes a hidden directory or file."""
     return internal_path.startswith('.') or '/.' in internal_path
-    
+
+
+def path_is_visible(internal_path):
+    return app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not is_hidden_path(internal_path)
+
 
 #
 # Database handle for every request
@@ -124,7 +128,7 @@ def api_add_file():
 
 def listdir(path):
     for f in os.listdir(path):
-        if app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not is_hidden_path(f):
+        if path_is_visible(f):
             yield f
 
 
@@ -163,7 +167,7 @@ def api_import_files():
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
             
-            if app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not is_hidden_path(filename_with_path):
+            if path_is_visible(filename_with_path):
                 filename_in_wanted_directory = filename_with_path.split('/', 1)[1]
 
                 if add_file(filename_in_wanted_directory):
