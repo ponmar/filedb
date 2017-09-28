@@ -934,6 +934,7 @@ function save_file_categorization(){
     }
 }
 
+/*
 function save_categorization_for_all(){
     if (categorize_result_index != -1){
         if (window.confirm("Replace all meta-data for " + categorize_result.length + " files?")){
@@ -970,6 +971,7 @@ function save_categorization_for_all(){
         show_no_categorize_result();
     }
 }
+*/
 
 function get_categorize_file_ids(){
     var file_ids = [];
@@ -980,27 +982,39 @@ function get_categorize_file_ids(){
 }
 
 function add_files_locations(){
-    modify_files_locations('PUT');
+    if (window.confirm("Add selected locations to search result files?")){
+        modify_files_locations('PUT');
+    }
 }
 
 function remove_files_locations(){
-    modify_files_locations('DELETE');
+    if (window.confirm("Remove selected locations from search result files?")){
+        modify_files_locations('DELETE');
+    }
 }
 
 function add_files_persons(){
-    modify_files_persons('PUT');
+    if (window.confirm("Add selected persons to search result files?")){
+        modify_files_persons('PUT');
+    }
 }
 
 function remove_files_persons(){
-    modify_files_persons('DELETE');
+    if (window.confirm("Remove selected persons from search result files?")){
+        modify_files_persons('DELETE');
+    }
 }
 
 function add_files_tags(){
-    modify_files_tags('PUT');
+    if (window.confirm("Add selected tags to search result files?")){
+        modify_files_tags('PUT');
+    }
 }
 
 function remove_files_tags(){
-    modify_files_tags('DELETE');
+    if (window.confirm("Remove selected tags from search result files?")){
+        modify_files_tags('DELETE');
+    }
 }
 
 function modify_files_locations(type){
@@ -1015,10 +1029,10 @@ function modify_files_locations(type){
             $.ajax
             ({
                 type: type,
-                url: '/api/filelocations/',
+                url: '/api/filelocations',
                 contentType: 'application/json',
                 data: JSON.stringify( { "files": file_ids, "locations": location_ids }),
-                dataType: "json",
+                //dataType: "json",
                 success: function(responseData){
                     $('#categorize_save_status').text(file_ids.length + " files saved successfully");
                     // TODO: update local data
@@ -1043,10 +1057,10 @@ function modify_files_persons(type){
             $.ajax
             ({
                 type: type,
-                url: '/api/filepersons/',
+                url: '/api/filepersons',
                 contentType: 'application/json',
                 data: JSON.stringify( { "files": file_ids, "persons": person_ids }),
-                dataType: "json",
+                //dataType: "json",
                 success: function(responseData){
                     $('#categorize_save_status').text(file_ids.length + " files saved successfully");
                     // TODO: update local data
@@ -1071,10 +1085,10 @@ function modify_files_tags(type){
             $.ajax
             ({
                 type: type,
-                url: '/api/filetags/',
+                url: '/api/filetags',
                 contentType: 'application/json',
                 data: JSON.stringify( { "files": file_ids, "tags": tag_ids }),
-                dataType: "json",
+                //dataType: "json",
                 success: function(responseData){
                     $('#categorize_save_status').text(file_ids.length + " files saved successfully");
                     // TODO: update local data

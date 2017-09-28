@@ -557,6 +557,63 @@ def api_update_file(file_id):
     return make_response(get_file_json(file_id), 201)
 
 
+@app.route('/api/filelocations', methods=['PUT'])
+def api_update_file_locations():
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    location_ids = content['locations']
+    
+    cursor = g.db.cursor()
+    for file_id in file_ids:
+        for location_id in location_ids:
+            try:
+                cursor.execute('insert into filelocations (fileid, locationid) values (?, ?)', (file_id, location_id))
+            except sqlite3.IntegrityError:
+                # Location already added to file
+                pass
+    
+    g.db.commit()
+    return 'OK'
+
+    
+@app.route('/api/filepersons', methods=['PUT'])
+def api_update_file_persons():
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    person_ids = content['persons']
+    
+    cursor = g.db.cursor()
+    for file_id in file_ids:
+        for person_id in person_ids:
+            try:
+                cursor.execute('insert into filepersons (fileid, personid) values (?, ?)', (file_id, person_id))
+            except sqlite3.IntegrityError:
+                # Person already added to file
+                pass
+    
+    g.db.commit()
+    return 'OK'
+
+    
+@app.route('/api/filetags', methods=['PUT'])
+def api_update_file_tags():
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    tag_ids = content['tags']
+    
+    cursor = g.db.cursor()
+    for file_id in file_ids:
+        for tag_id in tag_ids:
+            try:
+                cursor.execute('insert into filetags (fileid, tagid) values (?, ?)', (file_id, tag_id))
+            except sqlite3.IntegrityError:
+                # Tag already added to file
+                pass
+
+    g.db.commit()
+    return 'OK'
+
+
 @app.route('/api/person/<int:person_id>', methods=['PUT'])
 def api_update_person(person_id):
     content = request.get_json(silent=True)
@@ -709,6 +766,63 @@ def api_remove_tag(id):
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
+    return 'OK'
+
+
+@app.route('/api/filelocations', methods=['DELETE'])
+def api_delete_file_locations():
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    location_ids = content['locations']
+    
+    cursor = g.db.cursor()
+    for file_id in file_ids:
+        for location_id in location_ids:
+            try:
+                cursor.execute('delete from filelocations where fileid = ? and locationid = ?', (file_id, location_id))
+            except sqlite3.IntegrityError:
+                # No such location for this file
+                pass
+    
+    g.db.commit()
+    return 'OK'
+
+
+@app.route('/api/filepersons', methods=['DELETE'])
+def api_delete_file_persons():
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    person_ids = content['persons']
+    
+    cursor = g.db.cursor()
+    for file_id in file_ids:
+        for person_id in person_ids:
+            try:
+                cursor.execute('delete from filepersons where fileid = ? and personid = ?', (file_id, person_id))
+            except sqlite3.IntegrityError:
+                # No such person for this file
+                pass
+    
+    g.db.commit()
+    return 'OK'
+
+
+@app.route('/api/filetags', methods=['DELETE'])
+def api_delete_file_tags():
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+    tag_ids = content['tags']
+    
+    cursor = g.db.cursor()
+    for file_id in file_ids:
+        for tag_id in tag_ids:
+            try:
+                cursor.execute('delete from filetags where fileid = ? and tagid = ?', (file_id, tag_id))
+            except sqlite3.IntegrityError:
+                # No such tag for this file
+                pass
+
+    g.db.commit()
     return 'OK'
 
 

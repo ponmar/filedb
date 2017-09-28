@@ -223,6 +223,12 @@ Response: 201 (OK), ...
 }
 </pre>
 
+<pre>Request: PUT /api/filepersons JSON: { "files"=[...], "persons"=[...] }
+Request: PUT /api/filelocations JSON: { "files"=[...], "locations"=[...] }
+Request: PUT /api/filetags JSON: { "files"=[...], "tags"=[...] }
+Response: 200 (OK)
+</pre>
+
 <h2>Remove Data</h2>
 <p>Note that when removing a person, location or tag, this meta-data is removed from the files it was used in.</p>
 <pre>
