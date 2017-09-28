@@ -172,8 +172,28 @@ function filedb_init_categorize_page(){
         save_file_categorization();
     });
 
-    $('#save_for_all_files_button').click(function(){
-        save_categorization_for_all();
+    $('#categorize_add_files_locations').click(function(){
+        add_files_locations();
+    });
+
+    $('#categorize_remove_files_locations').click(function(){
+        remove_files_locations();
+    });
+
+    $('#categorize_add_files_persons').click(function(){
+        add_files_persons();
+    });
+
+    $('#categorize_remove_files_persons').click(function(){
+        remove_files_persons();
+    });
+
+    $('#categorize_add_files_tags').click(function(){
+        add_files_tags();
+    });
+
+    $('#categorize_remove_files_tags').click(function(){
+        remove_files_tags();
     });
 }
 
@@ -810,33 +830,46 @@ function clear_categorize_result(){
     }
 }
 
-function createJsonDataForFileCategorization(){
-    var selected_persons = [];
+function get_categorize_selected_person_ids(){
+    var person_ids = [];
     for (var i=0, person; person = persons[i]; i++){
         var id = "person_" + person['id'];
         var checkbox = document.getElementById(id);
         if (checkbox != null && checkbox.checked){
-            selected_persons.push(person['id']);
+            person_ids.push(person['id']);
         }
     }
+    return person_ids;
+}
 
-    var selected_locations = [];
+function get_categorize_selected_location_ids(){
+    var location_ids = [];
     for (var i=0, location; location = locations[i]; i++){
         var id = "location_" + location['id'];
         var checkbox = document.getElementById(id);
         if (checkbox != null && checkbox.checked){
-            selected_locations.push(location['id']);
+            location_ids.push(location['id']);
         }
     }
+    return location_ids;
+}
 
-    var selected_tags = [];
+function get_categorize_selected_tag_ids(){
+    var tag_ids = [];
     for (var i=0, tag; tag = tags[i]; i++){
         var id = "tag_" + tag['id'];
         var checkbox = document.getElementById(id);
         if (checkbox != null && checkbox.checked){
-            selected_tags.push(tag['id']);
+            tag_ids.push(tag['id']);
         }
     }
+    return tag_ids;
+}
+
+function createJsonDataForFileCategorization(){
+    var selected_persons = get_categorize_selected_person_ids();
+    var selected_locations = get_categorize_selected_location_ids();
+    var selected_tags = get_categorize_selected_tag_ids();
 
     var description = $('#file_description').val();
     if (description == ""){
@@ -935,6 +968,122 @@ function save_categorization_for_all(){
     }
     else{
         show_no_categorize_result();
+    }
+}
+
+function get_categorize_file_ids(){
+    var file_ids = [];
+    for (var i=0; i<categorize_result.length; i++){
+        file_ids.push(categorize_files[categorize_result[i]]['id']);
+    }
+    return file_ids;
+}
+
+function add_files_locations(){
+    modify_files_locations('PUT');
+}
+
+function remove_files_locations(){
+    modify_files_locations('DELETE');
+}
+
+function add_files_persons(){
+    modify_files_persons('PUT');
+}
+
+function remove_files_persons(){
+    modify_files_persons('DELETE');
+}
+
+function add_files_tags(){
+    modify_files_tags('PUT');
+}
+
+function remove_files_tags(){
+    modify_files_tags('DELETE');
+}
+
+function modify_files_locations(type){
+    var file_ids = get_categorize_file_ids();
+    var location_ids = get_categorize_selected_location_ids();
+
+    if (file_ids.length > 0){
+        if (location_ids.length == 0){
+            $("#categorize_save_status").text("No location selected");
+        }
+        else{
+            $.ajax
+            ({
+                type: type,
+                url: '/api/filelocations/',
+                contentType: 'application/json',
+                data: JSON.stringify( { "files": file_ids, "locations": location_ids }),
+                dataType: "json",
+                success: function(responseData){
+                    $('#categorize_save_status').text(file_ids.length + " files saved successfully");
+                    // TODO: update local data
+                },
+                error: function(){
+                    $("#categorize_save_status").text("An error occured");
+                }
+            });
+        }
+    }
+}
+
+function modify_files_persons(type){
+    var file_ids = get_categorize_file_ids();
+    var person_ids = get_categorize_selected_person_ids();
+
+    if (file_ids.length > 0){
+        if (person_ids.length == 0){
+            $("#categorize_save_status").text("No person selected");
+        }
+        else{        
+            $.ajax
+            ({
+                type: type,
+                url: '/api/filepersons/',
+                contentType: 'application/json',
+                data: JSON.stringify( { "files": file_ids, "persons": person_ids }),
+                dataType: "json",
+                success: function(responseData){
+                    $('#categorize_save_status').text(file_ids.length + " files saved successfully");
+                    // TODO: update local data
+                },
+                error: function(){
+                    $("#categorize_save_status").text("An error occured");
+                }
+            });
+        }
+    }
+}
+
+function modify_files_tags(type){
+    var file_ids = get_categorize_file_ids();
+    var tag_ids = get_categorize_selected_tag_ids();
+
+    if (file_ids.length > 0){
+        if (tag_ids.length == 0){
+            $("#categorize_save_status").text("No tag selected");
+        }
+        else{        
+            $.ajax
+            ({
+                type: type,
+                url: '/api/filetags/',
+                contentType: 'application/json',
+                data: JSON.stringify( { "files": file_ids, "tags": tag_ids }),
+                dataType: "json",
+                success: function(responseData){
+                    $('#categorize_save_status').text(file_ids.length + " files saved successfully");
+                    // TODO: update local data
+                },
+                error: function(){
+                    $("#categorize_save_status").text("An error occured");
+                }
+            });
+        }
     }
 }
 
