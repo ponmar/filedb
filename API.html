@@ -240,6 +240,12 @@ Request: DELETE /api/tag/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found)
 </pre>
 
+<pre>Request: DELETE /api/filepersons JSON: { "files"=[...], "persons"=[...] }
+Request: DELETE /api/filelocations JSON: { "files"=[...], "locations"=[...] }
+Request: DELETE /api/filetags JSON: { "files"=[...], "tags"=[...] }
+Response: 200 (OK)
+</pre>
+
 <h2>Check File Consistency</h2>
 <p>Checks that all imported/added files are available. Returns the list of missing files.</p>
 <pre>Request: GET /api/fileconsistency
