@@ -298,21 +298,6 @@ def file_is_whitelisted(file_path):
     return False
 
 
-def get_form_str(param_name, form, min_length=1, max_length=100):
-    if param_name in form:
-        param_value = form[param_name]
-        if len(param_value) in range(min_length, max_length + 1):
-            return param_value
-    return None
-
-
-def get_path_from_form(form):
-    path = get_form_str('path', form)
-    if path is None:
-        return None
-    return update_path(path)
-
-
 def update_path(path):
     # Internal paths should always use "/" as directory separator
     path = path.replace('\\', '/')
