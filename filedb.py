@@ -840,7 +840,7 @@ def api_get_json_fs_directories():
             if '/' in path:
                 # Remove root dir prefix from path
                 path = path.split('/', 1)[1]
-            if not path_is_blacklisted(path):
+            if not path_is_blacklisted(path) and path_is_visible(path):
                 directories.append(path)
 
     return jsonify(dict(directories=directories))
