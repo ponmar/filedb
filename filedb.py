@@ -558,7 +558,7 @@ def api_update_file_locations():
                 pass
     
     g.db.commit()
-    return 'OK'
+    return '', 204
 
     
 @app.route('/api/filepersons', methods=['PUT'])
@@ -577,7 +577,7 @@ def api_update_file_persons():
                 pass
     
     g.db.commit()
-    return 'OK'
+    return '', 204
 
     
 @app.route('/api/filetags', methods=['PUT'])
@@ -596,7 +596,7 @@ def api_update_file_tags():
                 pass
 
     g.db.commit()
-    return 'OK'
+    return '', 204
 
 
 @app.route('/api/person/<int:person_id>', methods=['PUT'])
@@ -696,7 +696,7 @@ def api_remove_file(id):
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
+    return '', 204
 
 
 @app.route('/api/directory', methods=['DELETE'])
@@ -731,7 +731,7 @@ def api_remove_person(id):
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
+    return '', 204
 
 
 @app.route('/api/location/<int:id>', methods=['DELETE'])
@@ -741,7 +741,7 @@ def api_remove_location(id):
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
+    return '', 204
 
 
 @app.route('/api/tag/<int:id>', methods=['DELETE'])
@@ -751,7 +751,7 @@ def api_remove_tag(id):
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
-    return 'OK'
+    return '', 204
 
 
 @app.route('/api/filelocations', methods=['DELETE'])
@@ -770,7 +770,7 @@ def api_delete_file_locations():
                 pass
     
     g.db.commit()
-    return 'OK'
+    return '', 204
 
 
 @app.route('/api/filepersons', methods=['DELETE'])
@@ -789,7 +789,7 @@ def api_delete_file_persons():
                 pass
     
     g.db.commit()
-    return 'OK'
+    return '', 204
 
 
 @app.route('/api/filetags', methods=['DELETE'])
@@ -808,7 +808,7 @@ def api_delete_file_tags():
                 pass
 
     g.db.commit()
-    return 'OK'
+    return '', 204
 
 
 #
