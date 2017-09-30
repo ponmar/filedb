@@ -66,7 +66,7 @@ class DefaultConfig(object):
 
     # Files are ignored when any of the blacklisted file patterns can be found in
     # the file path. Black-listed file patterns are case sensitive.
-    BLACKLISTED_FILE_PATH_PATTERNS = ['TN_', 'Thumbs.db', 'nytt/', 'unsorted/']
+    BLACKLISTED_FILE_PATH_PATTERNS = ['Thumbs.db']
 
     # If a file is not blacklisted a whitelisted test will be done. A file will be
     # added, during an import action, if its path ends with any of the specified
@@ -100,6 +100,7 @@ class PontusConfig(DevelopmentConfig):
     FILES_ROOT_DIRECTORY = 'x:/'
     PORT = 80
     HOST = '0.0.0.0'
+    BLACKLISTED_FILE_PATH_PATTERNS = DevelopmentConfig.BLACKLISTED_FILE_PATH_PATTERNS + ['nytt', 'TN_']
 
 
 # The configuration class to use. Specify any of the above classes.
