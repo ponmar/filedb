@@ -33,10 +33,6 @@ class DefaultConfig(object):
     # memory (not on disk), so a limit is needed. Set to None to ignore.
     EXPORTED_ZIP_MAX_NUM_FILES = 100
     
-    # The key used for signing cookies. This can for example be generated with:
-    # os.urandom(24)
-    SECRET_KEY = 'my random key'
-
     # Specify the network interface to be used by the FileDB web server:
     # - '0.0.0.0': accessible via network
     # - None: only accessible via localhost
