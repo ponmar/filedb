@@ -88,7 +88,6 @@ class DefaultConfig(object):
 class DevelopmentConfig(DefaultConfig):
     """Use this configuration when troubleshooting FileDB."""
     DEBUG = True
-    SECRET_KEY = 'development key'
 
 
 class PontusConfig(DevelopmentConfig):
