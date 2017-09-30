@@ -845,7 +845,9 @@ def api_get_json_directories():
 
 @app.route('/api/fs_directories', methods=['GET'])
 def api_get_json_fs_directories():
-    """Returns all non-blacklisted directories within the configured root directory."""
+    """Returns all non-blacklisted directories within the configured root directory.
+    Note: this function reads data from files collection.
+    """
     directories = []
     for root, _, _ in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
         path = update_path(root)
@@ -1149,6 +1151,7 @@ def api_create_file_thumbnail(id):
 
 @app.route('/api/fileconsistency', methods=['GET'])
 def api_fileconsistency():
+    """Note: this function reads data from files collection."""
     missing_files = []
     cur = g.db.execute('select path, id from files')
     for file_path, file_id in cur.fetchall():
