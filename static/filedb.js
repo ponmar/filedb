@@ -47,6 +47,10 @@ function filedb_init_files_page(){
             delete_delete_directory(directory_to_delete);
         }
     });
+    
+    $("#rename_directory_update_button").click(function(){
+        fetch_directories_for_rename();
+    });
 
     /*
     $("#button_show_all_files").click(function(){
@@ -98,6 +102,44 @@ function fetch_directories_to_delete(){
             });
         }
         $("#delete_files_status").text("Fetching directories... Done");
+    });
+}
+
+function fetch_directories_for_rename(){
+    clear_add_files_results();
+    $("#rename_directory_source_list").html("");
+    $("#rename_directory_destination_list").html("");
+    $("#rename_directory_status").text("Fetching source directories...");
+    
+    $.getJSON('/api/directories', function(result){
+        directories = result['directories'];
+        if (directories.length > 0){
+            for (var i=0, directory; directory = directories[i]; i++){
+                $("#rename_directory_source_list").append('<li><a href="#">' + directory + "</a></li>");
+            }
+            // Add a "selected class" when list items clicked to be able to find it later
+            $("#rename_directory_source_list li a").click(function(){
+                $('.selectedLi').removeClass('selectedLi');
+                $(this).addClass('selectedLi');
+            });
+        }
+        $("#rename_directory_status").text("Fetching destination directories...");
+    });
+    
+    $.getJSON('/api/fs_directories', function(result){
+        directories = result['directories'];
+        if (directories.length > 0){
+            for (var i=0, directory; directory = directories[i]; i++){
+                $("#rename_directory_destination_list").append('<li><a href="#">' + directory + "</a></li>");
+            }
+            $("#rename_directory_rename_button").removeAttr('disabled');
+            // Add a "selected class" when list items clicked to be able to find it later
+            $("#rename_directory_destination_list li a").click(function(){
+                $('.selectedLi').removeClass('selectedLi');
+                $(this).addClass('selectedLi');
+            });
+        }
+        $("#rename_directory_status").text("Fetching destination directories... Done");
     });
 }
 
