@@ -542,6 +542,30 @@ def api_update_file(file_id):
     return make_response(get_file_json(file_id), 201)
 
 
+@app.route('/api/renamefilesindir', methods=['PUT'])
+def api_rename_directory():
+    content = request.get_json(silent=True)
+    source_dir = content['sourcedir']
+    destination_dir = content['destinationdir']
+
+    num_updated_files = 0
+    cursor = g.db.execute('select id, path from files')
+    try:
+        for row in cursor.fetchall():
+            file_id = row[0]
+            file_path = row[1]
+            if file_path.startswith(source_dir):
+                new_file_path = file_path.replace(source_dir, destination_dir, 1)
+                cursor.execute("update files set path = ? where id = ?", (new_file_path, file_id))
+                num_updated_files += 1
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        # TODO: how should this error be handled?
+        pass
+
+    return jsonify({'updated_files': num_updated_files})
+
+
 @app.route('/api/filelocations', methods=['PUT'])
 def api_update_file_locations():
     content = request.get_json(silent=True)
