@@ -91,9 +91,11 @@ The API is accessed via the same web server as the web application.
 
 See the included [API documentation](API.html) for more details.
 
+See API example usage in the utils directory.
+
 ## Contribute ##
 
-So far this project has been developed by me, Pontus MarkstrÃ¶m, and I would love to see that change both regarding number of developers and users. Feel free to contribute!
+So far this project has been developed by me, Pontus Markström, and I would love to see that change both regarding number of developers and users. Feel free to contribute!
 
 ## Licenses ##
 
