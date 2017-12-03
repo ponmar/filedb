@@ -4,9 +4,9 @@ import filedb
 
 
 def validate_root_directory():
-    is_dir = os.path.isdir(filedb.app.config['FILES_ROOT_DIRECTORY'])
+    is_dir = filedb.files_root_dir_exists()
     if not is_dir:
-        print('Warning: configured root directory is not a directory')
+        print('Warning: configured root directory does not exist')
     return filedb.app.config['ALLOW_MISSING_ROOT_DIRECTORY'] or is_dir
 
 
