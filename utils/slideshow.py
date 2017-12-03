@@ -14,14 +14,14 @@ STRETCH = False
 
 def get_json(url):
     r = requests.get(url)
-    if r.status_code != 200:
+    if r.status_code != requests.codes.ok:
         print('Server returned status code {}'.format(r.status_code))
         return None
     return r.json()
 
 def get_file(url):
     r = requests.get(url)
-    if r.status_code != 200:
+    if r.status_code != requests.codes.ok:
         print('Server returned status code {}'.format(r.status_code))
         return None
     return r.content
@@ -54,22 +54,28 @@ def load_image(image_data, screen_width, screen_height):
         image = pygame.transform.scale(image, (width, height))
     return image, width, height
     
-def run_slideshow(filedb_base_url):
+def create_window():
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     pygame.display.set_caption(TITLE)
-    screen_width = screen.get_width()
-    screen_height = screen.get_height()
+    pygame.mouse.set_visible(False)
+    return screen
+    
+def show_image(screen, image_data):
+    image, width, height = load_image(image_data, screen.get_width(), screen.get_height())
+    screen.fill(0)
+    screen.blit(image, ((screen.get_width() - width)/2, (screen.get_height() - height)/2))
+    pygame.display.update()
+    
+def run_slideshow(filedb_base_url):
+    screen = create_window()
 
     run = True
     while run:
-        url = get_random_file_url(filedb_base_url)
-        file_content = get_file(url)
-
         try:
-            image, width, height = load_image(file_content, screen_width, screen_height)
-            screen.fill(0)
-            screen.blit(image, ((screen_width - width)/2, (screen_height - height)/2))
-            pygame.display.update()
+            url = get_random_file_url(filedb_base_url)
+            file_content = get_file(url)
+            
+            show_image(screen, file_content)
 
             t = time.time()
             goto_next = False
@@ -88,6 +94,9 @@ def run_slideshow(filedb_base_url):
                 time.sleep(0.1)
         except pygame.error:
             print('Unable to load {}, trying next...'.format(url))
+        except requests.exceptions.RequestException:
+            print('Connection problem, exiting...')
+            run = False
 
     pygame.quit()
 
