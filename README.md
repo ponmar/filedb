@@ -95,7 +95,7 @@ See API example usage in the utils directory.
 
 ## Contribute ##
 
-So far this project has been developed by me, Pontus Markström, and I would love to see that change both regarding number of developers and users. Feel free to contribute!
+So far this project has been developed by me, Pontus Markstrom, and I would love to see that change both regarding number of developers and users. Feel free to contribute!
 
 ## Licenses ##
 
