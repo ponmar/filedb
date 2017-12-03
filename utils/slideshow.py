@@ -7,7 +7,7 @@ import pygame
 from pygame.locals import *
 
 TITLE = 'FileDB slideshow'
-FILEDB_QUERY = '{}/api/randomfile'
+FILEDB_QUERY = '{}/api/randomfile/'
 FILEDB_FILECONTENT = '{}/api/filecontent/{}'
 DISPLAY_TIME = 5
 STRETCH = False
