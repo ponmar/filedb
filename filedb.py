@@ -49,6 +49,10 @@ def is_hidden_path(internal_path):
 def path_is_visible(internal_path):
     return app.config['INCLUDE_HIDDEN_DIRECTORIES'] or not is_hidden_path(internal_path)
 
+    
+def files_root_dir_exists():
+    return os.path.isdir(app.config['FILES_ROOT_DIRECTORY'])
+
 
 #
 # Database handle for every request
@@ -74,7 +78,8 @@ def teardown_request(exception):
 
 @app.route('/')
 def app_index():
-    return render_template('index.html')
+    # TODO: pass if root dir is available to template
+    return render_template('index.html', root_dir_exists=files_root_dir_exists())
 
 
 @app.route('/files')
