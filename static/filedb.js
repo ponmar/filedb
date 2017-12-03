@@ -55,7 +55,6 @@ function filedb_init_files_page(){
     $("#rename_directory_rename_button").click(function(){
         var source_directory = $("#rename_directory_source_list .selectedLi").text();
         var destination_directory = $("#rename_directory_destination_list .selectedLi").text();
-        alert("Rename pressed with " + source_directory + " and " + destination_directory);
         if (source_directory && destination_directory) {
             rename_directory(source_directory, destination_directory);
         }
