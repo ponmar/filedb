@@ -22,21 +22,20 @@ def main():
     parser.add_argument('--configuration', help='change configuration without updating config.py')
     args = parser.parse_args()
 
+    if args.configuration:
+        configuration_name = args.configuration
+    else:
+        from config import MY_CONFIG
+        configuration_name = 'config.' + MY_CONFIG.__name__
+
+    print('Loading configuration ' + configuration_name)
+    filedb.app.config.from_object(configuration_name)
+
     if args.initdb:
         print('Cleaning database...')
         filedb.init_db()
         print('Done.')
     else:
-        configuration_name = None
-        if args.configuration:
-            configuration_name = args.configuration
-        else:
-            from config import MY_CONFIG
-            configuration_name = 'config.' + MY_CONFIG.__name__
-            
-        print('Loading configuration ' + configuration_name)
-        filedb.app.config.from_object(configuration_name)
-
         if database_exists():
             if validate_root_directory():
                 print('Starting the FileDB server...')
