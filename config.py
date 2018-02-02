@@ -9,7 +9,7 @@ class DefaultConfig(object):
     """The default FileDB configuration. Create your own configuration by
     inheriting from this class. See examples at the end of this file.
     
-    To simplify upgrading FileDB releases:
+    To simplify the FileDB upgrade process:
     DO NOT EDIT SETTINGS IN THIS CLASS!
     """
 
@@ -23,7 +23,8 @@ class DefaultConfig(object):
     DEBUG = False
 
     # This name is the title and heading for all webapp pages. Example:
-    #TITLE = 'My Pictures'
+    # Example:
+    #   TITLE = 'My Pictures'
     TITLE = 'FileDB'
      
     # Set to a string no longer than 65535 bytes
@@ -34,8 +35,12 @@ class DefaultConfig(object):
     EXPORTED_ZIP_MAX_NUM_FILES = 100
     
     # Specify the network interface to be used by the FileDB web server:
-    # - '0.0.0.0': accessible via network
-    # - None: only accessible via localhost
+    #
+    # Example for making FileDB accessible via all network interfaces:
+    #   HOST = '0.0.0.0'
+    #
+    # Example for making FileDB accessible via localhost only:
+    #   HOST = None
     HOST = None
     
     # Specify the TCP port to run the webserver at. Port 80 is not selected
@@ -57,6 +62,13 @@ class DefaultConfig(object):
     #   FILES_ROOT_DIRECTORY = 'x:/'
     #
     FILES_ROOT_DIRECTORY = 'files/'
+
+    # Specify a mount command to run at startup if the root directory is missing.
+    # Note that the 'net use' Windows command asks for username and password if it is not specified.
+    #
+    # Example:
+    #   FILES_ROOT_DIRECTORY_MOUNT_COMMAND = r'net use x: \\my_computer\share\pictures'
+    FILES_ROOT_DIRECTORY_MOUNT_COMMAND = None
 
     # Set this option to True to make it possible to start FileDB before the root
     # directory is available. This may be the case when mounting a Samba network
@@ -100,13 +112,14 @@ class DevelopmentConfig(DefaultConfig):
     DEBUG = True
 
 
-class PontusConfig(DevelopmentConfig):
-    """My own configuration."""
+class MyConfig(DevelopmentConfig):
+    """A custom configuration example."""
     FILES_ROOT_DIRECTORY = 'x:/'
+    FILES_ROOT_DIRECTORY_MOUNT_COMMAND = r'net use x: \\nas\data1\bilder'
     PORT = 80
     HOST = '0.0.0.0'
     BLACKLISTED_FILE_PATH_PATTERNS = DevelopmentConfig.BLACKLISTED_FILE_PATH_PATTERNS + ['nytt', 'TN_']
 
 
 # The configuration class to use. Specify any of the above classes.
-MY_CONFIG = PontusConfig
+MY_CONFIG = MyConfig

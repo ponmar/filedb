@@ -1,5 +1,6 @@
 import os
 import argparse
+import subprocess
 import filedb
 
 
@@ -10,7 +11,19 @@ def validate_root_directory():
     if not filedb.app.config['FILES_ROOT_DIRECTORY'].endswith('/'):
         print("Configuration error: FILES_ROOT_DIRECTORY does not end with a slash")
         return False
+    return True
 
+
+def mount_root_directory():
+    cmd = filedb.app.config['FILES_ROOT_DIRECTORY_MOUNT_COMMAND']
+    if cmd is not None:
+        print('Mounting files root directory...')
+        while subprocess.call(cmd, shell=True) != 0:
+            print('Failed to mount network share, retrying...')
+        print('Root directory mounted successfully')
+
+
+def can_start():
     is_dir = filedb.files_root_dir_exists()
     if not is_dir:
         print('Warning: configured root directory does not exist')
@@ -49,14 +62,22 @@ def main():
         filedb.init_db()
         print('Done.')
     elif args.print_files:
-        filedb.print_file_paths()
+        if database_exists():
+            filedb.print_file_paths()
+        else:
+            print('Database not created')
     else:
         if database_exists():
             if validate_root_directory():
-                print('Starting the FileDB server...')
-                filedb.app.run(debug=filedb.app.config['DEBUG'], host=filedb.app.config['HOST'], port=filedb.app.config['PORT'])
+                if not filedb.files_root_dir_exists():
+                    mount_root_directory()
+                if can_start():
+                    print('Starting the FileDB server...')
+                    filedb.app.run(debug=filedb.app.config['DEBUG'],
+                                   host=filedb.app.config['HOST'],
+                                   port=filedb.app.config['PORT'])
         else:
-            print('Database not created: ' + filedb.app.config['DATABASE'])
+            print('Database not created')
 
 
 if __name__ == "__main__":
