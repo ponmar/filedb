@@ -8,7 +8,7 @@ drop table if exists tags;
 
 create table files(
     id integer primary key autoincrement not null,
-    path text unique not null, /* Path directories should use the unix style separator */
+    path text unique not null, /* Format: path/to/file/filename */
     description text,
     datetime varchar(19) /* Format: YYYY (requested by a user), YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS */
 );
