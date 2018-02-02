@@ -31,7 +31,8 @@ def init_db():
 
         
 def get_file_abs_path(internal_path):
-    return app.config['FILES_ROOT_DIRECTORY'] + '/' + internal_path
+    # Note that the root directory always ends with a slash
+    return app.config['FILES_ROOT_DIRECTORY'] + internal_path
 
 
 def get_file_directory_path(internal_path):
@@ -139,31 +140,32 @@ def api_add_file():
     return create_files_added_response(1, 0)
 
 
-def listdir(path):
-    for f in os.listdir(path):
-        if path_is_visible(f):
-            yield f
-
-
 @app.route('/api/directory', methods=['POST'])
 def api_add_directory():
     content = request.get_json(silent=True)
     path = content['path']
-    if path is None:
-        abort(409, 'No directory path specified')
-    directory_path = get_file_abs_path(path)
 
-    if path == '' or path == '.' or path == './' or not os.path.isdir(directory_path):
-        abort(400, 'Specified path {} is not a directory within the {} directory'.format(path, app.config['FILES_ROOT_DIRECTORY']))
+    if path is None or path == '':
+        abort(409, 'No directory path specified')
+    if path == '.' or path == './':
+        abort(400, 'Invalid directory path specified')
+
+    directory_abs_path = get_file_abs_path(path)
+    if not os.path.isdir(directory_abs_path):
+        abort(400, 'Specified path is not a directory')
 
     num_added_files = 0
     num_not_added_files = 0
 
-    for new_file in listdir(directory_path):
-        if add_file(path + '/' + new_file):
-            num_added_files += 1
-        else:
-            num_not_added_files += 1
+    for filename in os.listdir(directory_abs_path):
+        # TODO: if a slash is used as separator here it must be checked that the specified directory does not end
+        #       with a slash?
+        file_path = path + '/' + filename
+        if path_is_visible(file_path):
+            if add_file(file_path):
+                num_added_files += 1
+            else:
+                num_not_added_files += 1
 
     return create_files_added_response(num_added_files, num_not_added_files)
 
@@ -204,25 +206,35 @@ def add_file(path, file_description=None):
     """Add file to database if possible.
     path is the path within the root directory with / as separator.
     """
-    # TODO: check that path within files directory (enough to fail if ".." is included?)
     try:
+        if '..' in path:
+            # This is needed to avoid that files outside the configured root directory is added (and later read via the
+            # API).
+            app.logger.info("Ignored path ('..' not allowed): '" + path)
+            return False
+
+        if '\\' in path:
+            app.logger.info("Ignored path (backslash instead of slash found): '" + path)
+            return False
+
         if path_is_blacklisted(path):
-            app.logger.info('Ignored blacklisted file: ' + path)
+            app.logger.info('Ignored file (blacklisted): ' + path)
             return False
 
         if not file_is_whitelisted(path):
-            app.logger.info('Ignored non-whitelisted file: ' + path)
+            app.logger.info('Ignored file (non-whitelisted): ' + path)
             return False
 
         # Check if file already added before starting to parse possible Exif date etc.
         if g.db.execute("select count(*) from files where path=?", (path, )).fetchone()[0] > 0:
-            app.logger.info('Ignored already added file: ' + path)
+            app.logger.info('Ignored file (already added): ' + path)
             return False
 
         file_path = get_file_abs_path(path)
 
         if not os.path.isfile(file_path):
-            abort(400, 'No file with path "{}" within the "{}" directory'.format(path, app.config['FILES_ROOT_DIRECTORY']))
+            app.logger.info('Ignored path (not a file): ' + file_path)
+            return False
 
         if file_description == '':
             file_description = None
