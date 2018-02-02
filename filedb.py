@@ -170,9 +170,10 @@ def api_import_files():
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
-            
+
             if path_is_visible(filename_with_path):
-                filename_in_wanted_directory = filename_with_path.split('/', 1)[1]
+                # Remove root dir prefix from path
+                filename_in_wanted_directory = filename_with_path[len(app.config['FILES_ROOT_DIRECTORY']):]
 
                 if add_file(filename_in_wanted_directory):
                     app.logger.info('Imported file: ' + filename_in_wanted_directory)
