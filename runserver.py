@@ -4,6 +4,13 @@ import filedb
 
 
 def validate_root_directory():
+    if '\\' in filedb.app.config['FILES_ROOT_DIRECTORY']:
+        print("Configuration error: FILES_ROOT_DIRECTORY contains backslash")
+        return False
+    if not filedb.app.config['FILES_ROOT_DIRECTORY'].endswith('/'):
+        print("Configuration error: FILES_ROOT_DIRECTORY does not end with a slash")
+        return False
+
     is_dir = filedb.files_root_dir_exists()
     if not is_dir:
         print('Warning: configured root directory does not exist')

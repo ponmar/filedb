@@ -44,9 +44,19 @@ class DefaultConfig(object):
 
     # This is the root directory for where to add files from. Only files from
     # within this directory will be accessible via the web application and API.
-    # A Samba network share can be mounted and be specified here.
-    #FILES_ROOT_DIRECTORY = 'x:/'
-    FILES_ROOT_DIRECTORY = 'files'
+    # Slash (/) should be used as directory separator and include an ending
+    # slash.
+    #
+    # Example with relative path:
+    #   FILES_ROOT_DIRECTORY = '../../files/'
+    #
+    # Example with absolute path:
+    #   FILES_ROOT_DIRECTORY = 'C:/Users/pontus/Pictures/
+    #
+    # Example with a mounted Samba network share:
+    #   FILES_ROOT_DIRECTORY = 'x:/'
+    #
+    FILES_ROOT_DIRECTORY = 'files/'
 
     # Set this option to True to make it possible to start FileDB before the root
     # directory is available. This may be the case when mounting a Samba network

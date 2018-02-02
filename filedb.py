@@ -171,15 +171,15 @@ def api_import_files():
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
 
-            if path_is_visible(filename_with_path):
-                # Remove root dir prefix from path
-                filename_in_wanted_directory = filename_with_path[len(app.config['FILES_ROOT_DIRECTORY']):]
+            # Remove root dir prefix from path
+            filename_in_wanted_directory = filename_with_path[len(app.config['FILES_ROOT_DIRECTORY']):]
 
+            if path_is_visible(filename_in_wanted_directory):
                 if add_file(filename_in_wanted_directory):
                     app.logger.info('Imported file: ' + filename_in_wanted_directory)
                     num_imported_files += 1
                 else:
-                    app.logger.info('Could not import file: ' + filename_with_path)
+                    app.logger.info('Import ignored file: ' + filename_in_wanted_directory)
                     num_not_imported_files += 1
 
     return create_files_added_response(num_imported_files, num_not_imported_files)
