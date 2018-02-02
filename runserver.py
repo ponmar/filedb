@@ -25,8 +25,14 @@ def main():
     """Runs the FileDB server side application."""
 
     parser = argparse.ArgumentParser(description='A file database and server application.')
-    parser.add_argument('--initdb', help='clean the database', action='store_true')
-    parser.add_argument('--configuration', help='change configuration without updating config.py')
+    parser.add_argument('--initdb',
+                        help='clean the database',
+                        action='store_true')
+    parser.add_argument('--configuration',
+                        help='change configuration without updating config.py')
+    parser.add_argument('--print_files',
+                        help='Print added files (used for debugging purposes only)',
+                        action='store_true')
     args = parser.parse_args()
 
     if args.configuration:
@@ -42,6 +48,8 @@ def main():
         print('Cleaning database...')
         filedb.init_db()
         print('Done.')
+    elif args.print_files:
+        filedb.print_file_paths()
     else:
         if database_exists():
             if validate_root_directory():

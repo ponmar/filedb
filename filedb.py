@@ -54,6 +54,15 @@ def files_root_dir_exists():
     return os.path.isdir(app.config['FILES_ROOT_DIRECTORY'])
 
 
+def print_file_paths():
+    db = connect_db()
+    db.execute('PRAGMA foreign_keys = ON')
+    cur = db.execute('select id, path from files')
+    for row in cur.fetchall():
+        print('{} ({})'.format(row[1], row[0]))
+    db.close()
+
+
 #
 # Database handle for every request
 #
