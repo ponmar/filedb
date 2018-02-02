@@ -44,8 +44,8 @@ class DefaultConfig(object):
 
     # This is the root directory for where to add files from. Only files from
     # within this directory will be accessible via the web application and API.
-    # Slash (/) should be used as directory separator and include an ending
-    # slash.
+    # Slash (/) should be used as directory separator. The path shall include
+    # an ending slash.
     #
     # Example with relative path:
     #   FILES_ROOT_DIRECTORY = '../../files/'
