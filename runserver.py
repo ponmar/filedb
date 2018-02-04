@@ -5,10 +5,14 @@ import filedb
 
 
 def validate_root_directory():
-    if '\\' in filedb.app.config['FILES_ROOT_DIRECTORY']:
+    root_dir = filedb.app.config['FILES_ROOT_DIRECTORY']
+    if root_dir is None:
+        print("Configuration error: FILES_ROOT_DIRECTORY not set")
+        return False
+    if '\\' in root_dir:
         print("Configuration error: FILES_ROOT_DIRECTORY contains backslash")
         return False
-    if not filedb.app.config['FILES_ROOT_DIRECTORY'].endswith('/'):
+    if not root_dir.endswith('/'):
         print("Configuration error: FILES_ROOT_DIRECTORY does not end with a slash")
         return False
     return True
@@ -21,6 +25,17 @@ def mount_root_directory():
         while subprocess.call(cmd, shell=True) != 0:
             print('Failed to mount network share, retrying...')
         print('Root directory mounted successfully')
+
+
+def unmount_root_directory():
+    cmd = filedb.app.config['FILES_ROOT_DIRECTORY_UMOUNT_COMMAND']
+    if cmd is not None:
+        print('Un-mounting files root directory...')
+        if subprocess.call(cmd, shell=True) == 0:
+            print('Root directory mounted successfully')
+        else:
+            print('Failed to un-mount root directory')
+
 
 
 def can_start():
@@ -69,13 +84,16 @@ def main():
     else:
         if database_exists():
             if validate_root_directory():
-                if not filedb.files_root_dir_exists():
-                    mount_root_directory()
-                if can_start():
-                    print('Starting the FileDB server...')
-                    filedb.app.run(debug=filedb.app.config['DEBUG'],
-                                   host=filedb.app.config['HOST'],
-                                   port=filedb.app.config['PORT'])
+                try:
+                    if not filedb.files_root_dir_exists():
+                        mount_root_directory()
+                    if can_start():
+                        print('Starting the FileDB server...')
+                        filedb.app.run(debug=filedb.app.config['DEBUG'],
+                                       host=filedb.app.config['HOST'],
+                                       port=filedb.app.config['PORT'])
+                finally:
+                    unmount_root_directory()
         else:
             print('Database not created')
 

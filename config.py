@@ -55,20 +55,37 @@ class DefaultConfig(object):
     # Example with relative path:
     #   FILES_ROOT_DIRECTORY = '../../files/'
     #
-    # Example with absolute path:
+    # Example with absolute path (Windows):
     #   FILES_ROOT_DIRECTORY = 'C:/Users/pontus/Pictures/
     #
-    # Example with a mounted Samba network share:
+    # Example with a mounted Samba network share (Windows):
     #   FILES_ROOT_DIRECTORY = 'x:/'
     #
-    FILES_ROOT_DIRECTORY = 'files/'
+    # Example with absolute path (Linux):
+    #   FILES_ROOT_DIRECTORY = '/mnt/pictures/'
+    #
+    FILES_ROOT_DIRECTORY = None
 
     # Specify a mount command to run at startup if the root directory is missing.
     # Note that the 'net use' Windows command asks for username and password if it is not specified.
     #
-    # Example:
+    # Example (Windows):
     #   FILES_ROOT_DIRECTORY_MOUNT_COMMAND = r'net use x: \\my_computer\share\pictures'
+    #
+    # Example (Linux):
+    #   FILES_ROOT_DIRECTORY_MOUNT_COMMAND = 'mount -t cifs -o user=pontus //nas/pictures /mnt/pictures'
+    #
     FILES_ROOT_DIRECTORY_MOUNT_COMMAND = None
+
+    # Specify an un-mount command to run when FileDB quits.
+    #
+    # Example (Windows):
+    #   FILES_ROOT_DIRECTORY_UMOUNT_COMMAND = 'net use x: /delete'
+    #
+    # Example (Linux):
+    #   FILES_ROOT_DIRECTORY_UMOUNT_COMMAND = 'umount /mnt/pictures'
+    #
+    FILES_ROOT_DIRECTORY_UMOUNT_COMMAND = None
 
     # Set this option to True to make it possible to start FileDB before the root
     # directory is available. This may be the case when mounting a Samba network
@@ -116,6 +133,7 @@ class MyConfig(DevelopmentConfig):
     """A custom configuration example."""
     FILES_ROOT_DIRECTORY = 'x:/'
     FILES_ROOT_DIRECTORY_MOUNT_COMMAND = r'net use x: \\nas\data1\bilder'
+    FILES_ROOT_DIRECTORY_UMOUNT_COMMAND = 'net use x: /delete'
     PORT = 80
     HOST = '0.0.0.0'
     BLACKLISTED_FILE_PATH_PATTERNS = DevelopmentConfig.BLACKLISTED_FILE_PATH_PATTERNS + ['nytt', 'TN_']
