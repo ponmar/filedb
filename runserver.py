@@ -32,7 +32,7 @@ def unmount_root_directory():
     if cmd is not None:
         print('Un-mounting files root directory...')
         if subprocess.call(cmd, shell=True) == 0:
-            print('Root directory mounted successfully')
+            print('Root directory un-mounted successfully')
         else:
             print('Failed to un-mount root directory')
 
@@ -93,7 +93,8 @@ def main():
                                        host=filedb.app.config['HOST'],
                                        port=filedb.app.config['PORT'])
                 finally:
-                    unmount_root_directory()
+                    if filedb.files_root_dir_exists():
+                        unmount_root_directory()
         else:
             print('Database not created')
 
