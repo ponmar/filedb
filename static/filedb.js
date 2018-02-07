@@ -1004,45 +1004,6 @@ function save_file_categorization(){
     }
 }
 
-/*
-function save_categorization_for_all(){
-    if (categorize_result_index != -1){
-        if (window.confirm("Replace all meta-data for " + categorize_result.length + " files?")){
-            for (var i=0; i<categorize_result.length; i++){
-                var jsonData = createJsonDataForFileCategorization();
-                // TODO: add a countdown text or progress bar to page?
-                $.ajax
-                ({
-                    type: "PUT",
-                    url: '/api/file/' + categorize_files[categorize_result[i]]['id'],
-                    contentType : 'application/json',
-                    data: jsonData,
-                    dataType: "json",
-                    success: function(responseData){
-                        var file_index_to_update = find_categorize_file_index_from_id(responseData['id']);
-                        if (file_index_to_update != -1){
-                            // TODO: need this to avoid duplicates?
-                            // delete categorize_files[file_index_to_update];
-                            categorize_files[file_index_to_update] = responseData;
-                        }
-                        else{
-                            // TODO: why does this happen sometimes?
-                            alert("Could not find returned entry for id " + responseData['id'] + ". Searched data: " + JSON.stringify(categorize_files));
-                        }
-                    },
-                    error: function(){
-                        alert("Error");
-                    }
-                });
-            }
-        }
-    }
-    else{
-        show_no_categorize_result();
-    }
-}
-*/
-
 function get_categorize_file_ids(){
     var file_ids = [];
     for (var i=0; i<categorize_result.length; i++){
@@ -1716,9 +1677,8 @@ function update_slideshow_buttons(){
     $("#slideshow_end_button").prop('disabled', !(has_slideshow_files && slideshow_index < slideshow_files.length - 1));
     $("#slideshow_fullscreen_button").prop('disabled', !has_slideshow_files);
     
-    // TODO: find out how to set them
-    $("#slideshow_prev_directory_button").prop('disabled', false);
-    $("#slideshow_next_directory_button").prop('disabled', false);
+    $("#slideshow_prev_directory_button").prop('disabled', get_prev_directory_slideshow_index() == -1);
+    $("#slideshow_next_directory_button").prop('disabled', get_next_directory_slideshow_index() == -1);
 }
 
 function update_export_buttons(){
@@ -1800,37 +1760,55 @@ function get_directory_from_path(path){
 }
 
 function prev_directory_slideshow(){
-    var current_dir = get_directory_from_path(slideshow_files[slideshow_index]['path']);
-    var previous_dir = null;
-    for (var i=slideshow_index-1; i>=0; i--){
-        var dir = get_directory_from_path(slideshow_files[i]['path']);
-        if (previous_dir == null){
-            if (current_dir != dir){
-                previous_dir = dir;
-            }
-        }
-        else{
-            if (previous_dir != dir){
-                load_slideshow_index(i+1);
-                return;
-            }
-        }
-    }
-    
-    if (previous_dir != null){
-        load_slideshow_index(0);
+    var i = get_prev_directory_slideshow_index();
+    if (i != -1){
+        load_slideshow_index(i);
     }
 }
 
-function next_directory_slideshow(){
-    var current_dir = get_directory_from_path(slideshow_files[slideshow_index]['path']);
-    for (var i=slideshow_index+1; i<slideshow_files.length; i++){
-        var dir = get_directory_from_path(slideshow_files[i]['path']);
-        if (current_dir != dir){
-            load_slideshow_index(i);
-            break;
+function get_prev_directory_slideshow_index(){
+    if (slideshow_files != null){
+        var current_dir = get_directory_from_path(slideshow_files[slideshow_index]['path']);
+        var previous_dir = null;
+        for (var i=slideshow_index-1; i>=0; i--){
+            var dir = get_directory_from_path(slideshow_files[i]['path']);
+            if (previous_dir == null){
+                if (current_dir != dir){
+                    previous_dir = dir;
+                }
+            }
+            else{
+                if (previous_dir != dir){
+                    return i+1;
+                }
+            }
+        }
+
+        if (previous_dir != null){
+            return 0;
         }
     }
+    return -1;
+}
+
+function next_directory_slideshow(){
+    var i = get_next_directory_slideshow_index();
+    if (i != -1){
+        load_slideshow_index(i);
+    }
+}
+
+function get_next_directory_slideshow_index(){
+    if (slideshow_files != null){
+        var current_dir = get_directory_from_path(slideshow_files[slideshow_index]['path']);
+        for (var i=slideshow_index+1; i<slideshow_files.length; i++){
+            var dir = get_directory_from_path(slideshow_files[i]['path']);
+            if (current_dir != dir){
+                return i;
+            }
+        }
+    }
+    return -1;
 }
 
 function prev_slideshow_file(){
