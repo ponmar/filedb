@@ -307,7 +307,11 @@ function filedb_init_browse_page(){
     $("#search_files_by_all_button").click(function(){
         search_files_by_all();
     });
-    
+
+    $("#exported_list_of_files_button").click(function(){
+        search_files_by_file_list();
+    });
+
     $("#search_ten_random_files_button").click(function(){
         search_files_by_random(10);
     });
@@ -1263,6 +1267,51 @@ function search_files_by_tags(){
     else{
         alert("No tag selected");
     }
+}
+
+function search_files_by_file_list(){
+    clear_previous_search();
+
+    var file_list_str = $('#exported_list_of_files_input').val();
+    if (file_list_str.length == 0){
+        alert("Specify a file list");
+        return;
+    }
+
+    var file_id_strs = file_list_str.split(';');
+    if (file_id_strs.length == 0){
+        alert("Specify a file list");
+        return;
+    }
+
+    var file_ids = [];
+    for (var i=0; i<file_id_strs.length; i++){
+        var file_id_str = file_id_strs[i];
+        if (file_id_str.length > 0){
+            var file_id = parseInt(file_id_strs[i]);
+            if (!Number.isNaN(file_id)){
+                file_ids.push(file_id);
+            }
+        }
+    }
+
+    var jsonData = JSON.stringify({"files": file_ids});
+
+    $.ajax
+    ({
+        type: 'POST',
+        url: '/api/files',
+        contentType: 'application/json',
+        data: jsonData,
+        dataType: "json",
+        success: function(result){
+            update_search_result(result);
+            show_slideshow();
+        },
+        error: function(){
+            alert("Could not post data");
+        }
+    });
 }
 
 function search_files_by_random(numfiles){
