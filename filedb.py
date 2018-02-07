@@ -1019,12 +1019,19 @@ def api_get_json_files_from_ids():
     content = request.get_json(silent=True)
     file_ids = content['files']
 
+    # The sqlite query must be split to handle large amount of file ids (>SQLITE_LIMIT_VARIABLE_NUMBER)
+    sqlite_max_num_variables = 999
     files = []
-    cursor = g.db.execute('select id from files where id in (%s)' % ','.join('?'*len(file_ids)), file_ids)
 
-    for row in cursor.fetchall():
-        file_json = get_file_dict(row[0])
-        files.append(file_json)
+    for i in range(0, len(file_ids), sqlite_max_num_variables):
+        num_variables = min(sqlite_max_num_variables, len(file_ids)-i)
+        cursor = g.db.execute('select id from files where id in (%s)' % ','.join('?' * num_variables),
+                              file_ids[i:i+num_variables])
+
+        for row in cursor.fetchall():
+            file_json = get_file_dict(row[0])
+            files.append(file_json)
+
     files.sort(key=lambda file: file['path'])
 
     cursor = g.db.execute('select count(*) from files')
