@@ -15,6 +15,9 @@ from werkzeug.routing import BaseConverter
 from makeunicode import u
 
 
+ZIPFILE_COMMENT_MAX_LENGTH = 65535
+
+
 # Create the application
 app = Flask(__name__)
 
@@ -360,7 +363,10 @@ def api_export_zip():
     
     memory_file = io.BytesIO()
     with zipfile.ZipFile(memory_file, 'w') as zf:
-        zf.comment = app.config['EXPORTED_ZIP_COMMENT']
+        comment = app.config['EXPORTED_ZIP_COMMENT']
+        if len(comment) > ZIPFILE_COMMENT_MAX_LENGTH:
+            comment = comment[:ZIPFILE_COMMENT_MAX_LENGTH]
+        zf.comment = comment
         for file_path in file_paths:
             file_abs_path = get_file_abs_path(file_path)
             try:

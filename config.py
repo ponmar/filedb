@@ -27,8 +27,8 @@ class DefaultConfig(object):
     #   TITLE = 'My Pictures'
     TITLE = 'FileDB'
      
-    # Set to a string no longer than 65535 bytes
-    EXPORTED_ZIP_COMMENT = 'Exported by FileDB'
+    # Set to a byte string no longer than 65535.
+    EXPORTED_ZIP_COMMENT = b'Exported by FileDB'
     
     # The maximum number of files in a Zip archive. Zip archives are created in
     # memory (not on disk), so a limit is needed. Set to None to ignore.
