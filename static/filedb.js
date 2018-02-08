@@ -17,6 +17,10 @@ var edited_person_id = -1;
 var edited_location_id = -1;
 var edited_tag_id = -1;
 
+var persons_order_by = "firstname";
+var locations_order_by = "name";
+var tags_order_by = "name";
+
 function filedb_init_files_page(){
     $("#import_button").click(function(){
         import_files();
@@ -60,12 +64,6 @@ function filedb_init_files_page(){
         }
     });
 
-    /*
-    $("#button_show_all_files").click(function(){
-        update_list_of_files();
-    });
-    */
-    
     $("#consistency_check_button").click(function(){
         consistency_check();
     });    
@@ -395,7 +393,7 @@ function filedb_init_categories_page(){
 }
 
 function get_persons(){
-    $.getJSON("/api/persons?orderby=firstname", function(result){
+    $.getJSON("/api/persons?orderby=" + persons_order_by, function(result){
         persons = result['persons'];
 
         if ($('#multiplepersonselect').length){
@@ -423,8 +421,33 @@ function get_persons(){
 
 function reload_persons_table(){
     if (persons.length > 0){
-        // TODO: do not set table id? istead search for the table inside personsdiv below?
-        $('#personsdiv').html('<table class="table" id="personstable"><tr><th>First Name</th><th>Last Name</th><th>Description</th><th>Age</th><th>Date of Birth</th><th>Actions</th></tr></table>');
+        // TODO: do not set table id? instead search for the table inside personsdiv below?
+        $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name</th><th id="persons_lastname_col_header">Last Name</th><th id="persons_description_col_header">Description</th><th id="persons_age_col_header">Age</th><th id="persons_dateofbirth_col_header">Date of Birth</th><th>Actions</th></tr></table>');
+
+        $('#persons_firstname_col_header').click(function(){
+            persons_order_by = 'firstname';
+            get_persons();
+        });
+
+        $('#persons_lastname_col_header').click(function(){
+            persons_order_by = 'lastname';
+            get_persons();
+        });
+
+        $('#persons_description_col_header').click(function(){
+            persons_order_by = 'description';
+            get_persons();
+        });
+
+        $('#persons_age_col_header').click(function(){
+            persons_order_by = 'dateofbirth';
+            get_persons();
+        });
+
+        $('#persons_dateofbirth_col_header').click(function(){
+            persons_order_by = 'dateofbirth';
+            get_persons();
+        });
 
         var now = new Date();
 
@@ -463,7 +486,7 @@ function reload_persons_table(){
 }
 
 function get_locations(){
-    $.getJSON("/api/locations?orderby=name", function(result){
+    $.getJSON("/api/locations?orderby=" + locations_order_by, function(result){
         locations = result['locations'];
 
         if ($('#multiplelocationselect').length){
@@ -491,8 +514,18 @@ function get_locations(){
 
 function reload_locations_table(){
     if (locations.length > 0){
-        // TODO: do not set table id? istead search for the table inside locationsdiv below?
-        $('#locationsdiv').html('<table class="table" id="locationstable"><tr><th>Name</th><th>Description</th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr></table>');
+        // TODO: do not set table id? instead search for the table inside locationsdiv below?
+        $('#locationsdiv').html('<table class="table" id="locationstable"><tr><th id="locations_name_col_header">Name</th><th id="locations_description_col_header">Description</th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr></table>');
+
+        $('#locations_name_col_header').click(function(){
+            locations_order_by = 'name';
+            get_locations();
+        });
+
+        $('#locations_description_col_header').click(function(){
+            locations_order_by = 'description';
+            get_locations();
+        });
 
         var locationRows = "";
         for (var i=0, location; location = locations[i]; i++){
@@ -524,7 +557,7 @@ function reload_locations_table(){
 }
 
 function get_tags(){
-    $.getJSON("/api/tags?orderby=name", function(result){
+    $.getJSON("/api/tags?orderby=" + tags_order_by, function(result){
         tags = result['tags'];
 
         if ($('#multipletagselect').length){
@@ -594,20 +627,6 @@ function get_files(){
         $('#categorize_page_content').removeClass('hidden').addClass('visible');
     });
 }
-
-/*
-function update_list_of_files(){
-    if (window.confirm("Download all file information may take a while. Continue?")){
-        $("#tools_status").text("Loading files...");
-        $.getJSON("/api/files", function(result){
-            update_files_table(result['files']);
-        })
-        .always(function(){
-            $("#tools_status").text("");
-        });
-    }
-}
-*/
 
 function clear_files_table(){
     $("#filestable").empty();
