@@ -17,9 +17,9 @@ var edited_person_id = -1;
 var edited_location_id = -1;
 var edited_tag_id = -1;
 
-var persons_order_by = "firstname";
-var locations_order_by = "name";
-var tags_order_by = "name";
+var persons_order_by = 'lastname:asc,firstname:asc,description:asc';
+var locations_order_by = 'name:asc,description:asc';
+var tags_order_by = 'name:asc';
 
 function filedb_init_files_page(){
     $("#import_button").click(function(){
@@ -422,30 +422,30 @@ function get_persons(){
 function reload_persons_table(){
     if (persons.length > 0){
         // TODO: do not set table id? instead search for the table inside personsdiv below?
-        $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name</th><th id="persons_lastname_col_header">Last Name</th><th id="persons_description_col_header">Description</th><th id="persons_age_col_header">Age</th><th id="persons_dateofbirth_col_header">Date of Birth</th><th>Actions</th></tr></table>');
+        $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name</th><th id="persons_lastname_col_header">Last Name</th><th id="persons_description_col_header">Description</th><th id="persons_age_col_header">Born Years Ago</th><th id="persons_dateofbirth_col_header">Date of Birth</th><th>Actions</th></tr></table>');
 
         $('#persons_firstname_col_header').click(function(){
-            persons_order_by = 'firstname';
+            persons_order_by = 'firstname:asc,lastname:asc,description:asc'
             get_persons();
         });
 
         $('#persons_lastname_col_header').click(function(){
-            persons_order_by = 'lastname';
+            persons_order_by = 'lastname:asc,firstname:asc,description:asc'
             get_persons();
         });
 
         $('#persons_description_col_header').click(function(){
-            persons_order_by = 'description';
+            persons_order_by = 'description:asc,lastname:asc,firstname:asc';
             get_persons();
         });
 
         $('#persons_age_col_header').click(function(){
-            persons_order_by = 'dateofbirth';
+            persons_order_by = 'dateofbirth:desc,lastname:asc,firstname:asc,description:asc';
             get_persons();
         });
 
         $('#persons_dateofbirth_col_header').click(function(){
-            persons_order_by = 'dateofbirth';
+            persons_order_by = 'dateofbirth:asc,lastname:asc,firstname:asc,description:asc';
             get_persons();
         });
 
@@ -518,12 +518,12 @@ function reload_locations_table(){
         $('#locationsdiv').html('<table class="table" id="locationstable"><tr><th id="locations_name_col_header">Name</th><th id="locations_description_col_header">Description</th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr></table>');
 
         $('#locations_name_col_header').click(function(){
-            locations_order_by = 'name';
+            locations_order_by = 'name:asc,description:asc';
             get_locations();
         });
 
         $('#locations_description_col_header').click(function(){
-            locations_order_by = 'description';
+            locations_order_by = 'description:asc,name:asc';
             get_locations();
         });
 

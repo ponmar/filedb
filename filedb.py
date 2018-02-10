@@ -1000,18 +1000,27 @@ def api_get_json_files():
     return jsonify(dict(files=files, total_num_files=total_num_files))
 
 
-def get_order_str(args, valid_orderby_values):
+def get_order_str(args, available_columns):
     if 'orderby' not in args:
         return None
     orderby = args['orderby']
-    if orderby not in valid_orderby_values:
+    columns = orderby.split(',')
+    if len(columns) == 0:
         return None
-    order = 'asc'
-    if 'order' in args:
-        order = args['order']
-        if order not in ('asc', 'desc'):
+
+    result = []
+
+    for column in columns:
+        parts = column.split(':')
+        if len(parts) != 2:
             return None
-    return ' order by {} {}'.format(orderby, order)
+        if parts[0] not in available_columns:
+            return None
+        if parts[1] not in ['asc', 'desc']:
+            return None
+        result.append(parts[0] + ' ' + parts[1])
+
+    return ' order by ' + ', '.join(result)
 
 
 @app.route('/api/files', methods=['POST'])
