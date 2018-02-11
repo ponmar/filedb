@@ -104,5 +104,3 @@ This project uses the [MIT license](LICENSE.txt).
 [jQuery](http://jquery.com/) is used by the web application for Ajax calls and DOM updates. It uses the [MIT license](https://jquery.org/license/).
 
 [Bootstrap](http://getbootstrap.com) is used by the web application for GUI layout. It uses the [MIT license](https://v4-alpha.getbootstrap.com/about/license/).
-
-[Lightbox](http://lokeshdhakar.com/projects/lightbox2/), by Lokesh Dhakar, is used as a fullscreen image viewer. It uses the [MIT license](http://lokeshdhakar.com/projects/lightbox2/#license).
