@@ -376,8 +376,8 @@ function filedb_init_browse_page(){
 
     $('body').keypress(function(e){
         // Setup fullscreen controls
+        //alert("keypress: " + e.keyCode);
         if (fullscreen_slideshow_opened()){
-            //alert("keypress: " + e.keyCode);
             if (e.keyCode == 27){
                 // Escape pressed
                 close_fullscreen_browser();
@@ -411,6 +411,11 @@ function filedb_init_browse_page(){
             else if (e.keyCode == 35){
                 // End pressed
                 end_slideshow();
+                e.preventDefault();
+            }
+            else if (e.keyCode == 13){
+                // Enter pressed
+                toggle_slideshow();
                 e.preventDefault();
             }
         }
