@@ -15,3 +15,7 @@
 .visible {
     display: block;
 }
+
+body {
+    margin-bottom: 4em;
+}
