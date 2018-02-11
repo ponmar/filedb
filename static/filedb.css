@@ -33,6 +33,7 @@ body {
     overflow: hidden; /* No scrollbars */
     display: block; /* Show div */
     z-index: 10000; /* Make sure it is rendered on top */
+    cursor: none; /* Hide mouse cursor */
 }
 
 .fullscreen_browser img {
