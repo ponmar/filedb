@@ -310,6 +310,10 @@ function filedb_init_browse_page(){
         search_files_by_file_list();
     });
 
+    $("#search_all_files_button").click(function(){
+        search_all_files();
+    });
+
     $("#search_ten_random_files_button").click(function(){
         search_files_by_random(10);
     });
@@ -1330,6 +1334,15 @@ function search_files_by_file_list(){
         error: function(){
             alert("Could not post data");
         }
+    });
+}
+
+function search_all_files(){
+    clear_previous_search();
+    var url = '/api/files';
+    $.getJSON(url, function(result){
+        update_search_result(result);
+        show_slideshow();
     });
 }
 

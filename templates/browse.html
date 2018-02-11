@@ -23,7 +23,15 @@ $(document).ready(function(){
 <h1>Browse Files</h1>
 
 <div class="panel panel-default">
-  <div class="panel-heading">Search Criteria</div>
+  <div class="panel-heading">Simple Search Criteria</div>
+  <div class="panel-body">
+    <button type="button" class="btn btn-default" id="search_all_files_button" title="">Browse all files</button>
+    <button type="button" class="btn btn-default" id="search_ten_random_files_button" title="">Browse ten random files</button>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Advanced Search Criteria</div>
   <div class="panel-body">
     <div class="alert alert-info" role="alert"><strong>Note:</strong> Read about regular expressions at the <a href="{{ url_for('app_help') }}#regexp">Help page</a>.</div>
     <div class="row">
@@ -74,21 +82,21 @@ $(document).ready(function(){
     </div>
 
     <br>
-    <label for="file_path_regexp_filter">Exported file list</label>
+    <button type="button" class="btn btn-default" id="reset_search_criteria_button" title="Reset search criteria">Reset</button>
+    <button type="button" class="btn btn-default" id="clear_search_button" title="Clear previous search result">Clear</button>
+    <button type="button" class="btn btn-default" id="search_files_by_all_button" title="Make a new search">Search</button>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Exported Search Criteria</div>
+  <div class="panel-body">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="exported_list_of_files_input">
       <span class="input-group-btn">
       <button type="button" class="btn btn-default" id="exported_list_of_files_button">Search</button>
       </span>
     </div>
-
-    <br>
-    <button type="button" class="btn btn-default" id="search_ten_random_files_button" title="">Search ten random files</button>
-    
-    <br><br>
-    <button type="button" class="btn btn-default" id="reset_search_criteria_button" title="Reset search criteria">Reset</button>
-    <button type="button" class="btn btn-default" id="clear_search_button" title="Clear previous search result">Clear</button>
-    <button type="button" class="btn btn-default" id="search_files_by_all_button" title="Make a new search">Search</button>
   </div>
 </div>
 
