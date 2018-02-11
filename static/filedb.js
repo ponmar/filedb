@@ -373,6 +373,48 @@ function filedb_init_browse_page(){
     $('#export_zip_file').click(function(){
         export_zip_file();
     });
+
+    $('body').keypress(function(e){
+        // Setup fullscreen controls
+        if (fullscreen_slideshow_opened()){
+            //alert("keypress: " + e.keyCode);
+            if (e.keyCode == 27){
+                // Escape pressed
+                close_fullscreen_browser();
+                e.preventDefault();
+            }
+            else if (e.keyCode == 39){
+                // Left pressed
+                next_slideshow_file();
+                e.preventDefault();
+            }
+            else if (e.keyCode == 37){
+                // Right pressed
+                prev_slideshow_file();
+                e.preventDefault();
+            }
+            else if (e.keyCode == 33){
+                // Page-up pressed
+                next_directory_slideshow();
+                e.preventDefault();
+            }
+            else if (e.keyCode == 34){
+                // Page-down pressed
+                next_directory_slideshow();
+                e.preventDefault();
+            }
+            else if (e.keyCode == 36){
+                // Home pressed
+                restart_slideshow();
+                e.preventDefault();
+            }
+            else if (e.keyCode == 35){
+                // End pressed
+                end_slideshow();
+                e.preventDefault();
+            }
+        }
+    });
 }
 
 function filedb_init_categories_page(){
@@ -1530,6 +1572,8 @@ function load_slideshow_file(){
     $('#slideshow_file_header').text(": [" + (slideshow_index + 1) + "/" + slideshow_files.length + "] " + file['path']);
 
     $('#file_browser_image_div').empty();
+    $('#my_fullscreen_browser').empty();
+
     update_image_div_height('#file_browser_image_div');
 
     // Make a HEAD request to find out file type (it is not known from the URL)
@@ -1539,6 +1583,7 @@ function load_slideshow_file(){
         success: function(data, textStatus, xhr){
             var content_type = xhr.getResponseHeader("content-type") || "";
             if (is_content_type_image(content_type)){
+                // Small image
                 var img = $('<img />', {
                     id: 'slideshow_image',
                     src: file_url,
@@ -1547,16 +1592,29 @@ function load_slideshow_file(){
                     class: 'limited_img'
                 });
                 img.appendTo($('#file_browser_image_div'));
+
+                // Fullscreen image
+                var img = $('<img />', {
+                    //id: 'fullscreen_slideshow_image',
+                    src: file_url,
+                    alt: file_url,
+                    title: 'File id: ' + file['id']
+                });
+                img.appendTo($('#my_fullscreen_browser'));
             }
             else{
                 // Note: target blank to not clear search result
-                $('#file_browser_image_div').html('<a href="' + file_url + '" target="_blank">Open file of type ' + content_type + '</a>');
+                var non_image_html = '<a href="' + file_url + '" target="_blank">Open file of type ' + content_type + '</a>';
+                $('#file_browser_image_div').html(non_image_html);
+                $('#my_fullscreen_browser').html(non_image_html);
             }
             update_image_div_height('#file_browser_image_div');
         },
         error: function(){
             // TODO: show a bootstrap error div and add a link
-            $('#file_browser_image_div').html('Unable to load file, see <a href="/help#troubleshooting">troubleshooting</a>!');
+            var load_error_html = 'Unable to load file, see <a href="/help#troubleshooting">troubleshooting</a>!';
+            $('#file_browser_image_div').html(load_error_html);
+            $('#my_fullscreen_browser').html(load_error_html);
             update_image_div_height('#file_browser_image_div');
         }
     });
@@ -1795,39 +1853,21 @@ function update_export_buttons(){
 }
 
 function open_fullscreen_slideshow(){
-    if (slideshow_files == null || slideshow_files.length == 0){
-        return;
-    }
+    document.getElementById("my_fullscreen_browser").style.display = "block";
 
-    /*
-    // Remove possible old input for fullscreen image browser
-    var anchors  = document.getElementsByTagName('a');
-    for (var i=anchors.length-1; i>=0; i--){
-        var a = anchors[i];
-        if (a.id + ''.startsWith('slideshow_file_')){
-            a.parentNode.removeChild(a);
-        }
-    }
-    */
-    
-    lightbox.option({
-      'fadeDuration': 100,
-      'imageFadeDuration': 100,
-      'resizeDuration': 100,
-      'positionFromTop': 10
-      //'wrapAround': true
-    })
-    
-    // Prepare input for fullscreen image browser
-    for (var i=0, file; file = slideshow_files[i]; i++){
-        var file_url = '/api/filecontent/' + file['id'];
-        var file_link_id = 'slideshow_file_' + file['id'];
-        // TODO: set data-title attribute to something nice?
-        $('body').append($('<a id="' + file_link_id + '" href="' + file_url + '" data-lightbox="fullscreen_slideshow"></a>'));
-    }
+    // Needed to hide body scrollbar
+    $("body").css('overflow', 'hidden');
+}
 
-    // Click on link for the image being shown to open the fullscreen image browser
-    document.getElementById('slideshow_file_' + slideshow_files[slideshow_index]['id']).click();
+function close_fullscreen_browser(){
+    // Revert hiding body scrollbar
+    $("body").css('overflow', 'visible');
+
+    document.getElementById("my_fullscreen_browser").style.display = "none";
+}
+
+function fullscreen_slideshow_opened(){
+    return document.getElementById("my_fullscreen_browser").style.display == "block";
 }
 
 function next_slideshow_file(){

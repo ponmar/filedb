@@ -1,11 +1,5 @@
 {% extends "layout.html" %}
 
-{% block head %}
-  {{ super() }}
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='lightbox.min.css') }}">
-  <script src="{{ url_for('static', filename='lightbox.min.js') }}"></script>
-{% endblock %}
-
 {% block subtitle %} | Browse Files{% endblock %}
 
 {% block init_javascript %}
@@ -138,5 +132,7 @@ $(document).ready(function(){
     <div id="exportresult"></div>
   </div>
 </div>
+
+<div id="my_fullscreen_browser" class="fullscreen_browser"></div>
 
 {% endblock %}

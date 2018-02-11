@@ -121,12 +121,6 @@ def app_help():
     return render_template('help.html')
 
 
-@app.route('/images/<path:path>')
-def app_images_route(path):
-    # Needed to put Lightbox images in a custom path
-    return send_from_directory('static/images', path)
-
-
 @app.route('/fonts/<path:path>')
 def app_fonts_route(path):
     return send_from_directory('static/fonts', path)
