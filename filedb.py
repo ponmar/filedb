@@ -127,6 +127,11 @@ def app_images_route(path):
     return send_from_directory('static/images', path)
 
 
+@app.route('/fonts/<path:path>')
+def app_fonts_route(path):
+    return send_from_directory('static/fonts', path)
+
+
 #
 # API: add data
 #

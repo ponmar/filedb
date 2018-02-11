@@ -426,7 +426,24 @@ function get_persons(){
 function reload_persons_table(){
     if (persons.length > 0){
         // TODO: do not set table id? instead search for the table inside personsdiv below?
-        $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name</th><th id="persons_lastname_col_header">Last Name</th><th id="persons_description_col_header">Description</th><th id="persons_age_col_header">Born Years Ago</th><th id="persons_dateofbirth_col_header">Date of Birth</th><th>Actions</th></tr></table>');
+        $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name <span id="sort_by_person_first_name_icon"></span></th><th id="persons_lastname_col_header">Last Name <span id="sort_by_person_last_name_icon"></span></th><th id="persons_description_col_header">Description  <span id="sort_by_person_description_icon"></span></th><th id="persons_age_col_header">Born Years Ago  <span id="sort_by_person_age_icon"></span></th><th id="persons_dateofbirth_col_header">Date of Birth  <span id="sort_by_person_dateofbirth_icon"></span></th><th>Actions</th></tr></table>');
+
+        $("#sort_by_person_last_name_icon").removeClass("glyphicon glyphicon-triangle-bottom");
+        if (persons_order_by.startsWith('firstname')){
+            $("#sort_by_person_first_name_icon").addClass("glyphicon glyphicon-triangle-bottom");
+        }
+        else if (persons_order_by.startsWith('lastname')){
+            $("#sort_by_person_last_name_icon").addClass("glyphicon glyphicon-triangle-bottom");
+        }
+        else if (persons_order_by.startsWith('description')){
+            $("#sort_by_person_description_icon").addClass("glyphicon glyphicon-triangle-bottom");
+        }
+        else if (persons_order_by.startsWith('dateofbirth:desc')){
+            $("#sort_by_person_age_icon").addClass("glyphicon glyphicon-triangle-bottom");
+        }
+        else if (persons_order_by.startsWith('dateofbirth:asc')){
+            $("#sort_by_person_dateofbirth_icon").addClass("glyphicon glyphicon-triangle-bottom");
+        }
 
         $('#persons_firstname_col_header').click(function(){
             persons_order_by = 'firstname:asc,lastname:asc,description:asc'
@@ -519,7 +536,14 @@ function get_locations(){
 function reload_locations_table(){
     if (locations.length > 0){
         // TODO: do not set table id? instead search for the table inside locationsdiv below?
-        $('#locationsdiv').html('<table class="table" id="locationstable"><tr><th id="locations_name_col_header">Name</th><th id="locations_description_col_header">Description</th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr></table>');
+        $('#locationsdiv').html('<table class="table" id="locationstable"><tr><th id="locations_name_col_header">Name <span id="sort_by_location_name_icon"></span></th><th id="locations_description_col_header">Description <span id="sort_by_location_description_icon"></span></th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr></table>');
+
+        if (locations_order_by.startsWith('name')){
+            $("#sort_by_location_name_icon").addClass("glyphicon glyphicon-triangle-bottom");
+        }
+        else if (locations_order_by.startsWith('description')){
+            $("#sort_by_location_description_icon").addClass("glyphicon glyphicon-triangle-bottom");
+        }
 
         $('#locations_name_col_header').click(function(){
             locations_order_by = 'name:asc,description:asc';
@@ -591,7 +615,7 @@ function get_tags(){
 function reload_tags_table(){
     if (tags.length > 0){
         // TODO: do not set table id? istead search for the table inside tagsdiv below?
-        $('#tagsdiv').html('<table class="table" id="tagstable"><tr><th>Name</th><th>Actions</th></tr></table>');
+        $('#tagsdiv').html('<table class="table" id="tagstable"><tr><th>Name <span class="glyphicon glyphicon-triangle-bottom"></span></th><th>Actions</th></tr></table>');
 
         var tagRows = "";
         for (var i=0, tag; tag = tags[i]; i++){
