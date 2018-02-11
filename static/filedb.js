@@ -1602,8 +1602,8 @@ function load_slideshow_file(){
                 var img = $('<img />', {
                     //id: 'fullscreen_slideshow_image',
                     src: file_url,
-                    alt: file_url,
-                    title: 'File id: ' + file['id']
+                    alt: file_url//,
+                    //title: 'File id: ' + file['id']
                 });
                 img.appendTo($('#my_fullscreen_browser'));
             }
