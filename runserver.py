@@ -37,7 +37,6 @@ def unmount_root_directory():
             print('Failed to un-mount root directory')
 
 
-
 def can_start():
     is_dir = filedb.files_root_dir_exists()
     if not is_dir:

@@ -1,13 +1,14 @@
+import datetime
 try:
     from StringIO import StringIO
 except ImportError:
-    from io import StringIO # for Python 3.6
+    from io import StringIO  # for Python 3.6
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
-DATE_AND_TIME_TAG_VALUE_LENGTH = len('YYYY:MM:DD HH:MM:SS')
-
-# Note: there is also a DateTime (can be much later?) and DateTimeDigitized
+# Note why the following Exif tags are not used:
+# * DateTime: the date and time the file was changed (may be much later)
+# * DateTimeDigitized: when the image was stored as digital data (when copied from a digital camera to the computer)
 DATE_TIME_TAG_NAME = 'DateTimeOriginal'
 GPS_TAG = 'GPSInfo'
 
@@ -34,24 +35,27 @@ class JpegFile:
                     for subGpsValue in value:
                         sub_decoded = GPSTAGS.get(subGpsValue, subGpsValue)
                         gps_data[sub_decoded] = value[subGpsValue]
-                    self.__tags[decoded] = gps_data
-                else:
-                    self.__tags[decoded] = value
+                    value = gps_data
+                self.__tags[decoded] = value
 
     def get_exif_data(self):
         """Get all parsed Exif data.
         Note: normally the get methods in this class should be used to get specific data.
+        Note: values in the returned dictionary may contain bytes data that needs to be decoded depending on its use.
         """
         return self.__tags
 
     def get_date_time(self):
-        """Get the date time  in text format from the parsed Exif, or None."""
+        """Get the date time in text format (YYYY-MM-DDTHH:MM:SS) from the parsed Exif, or None."""
         if DATE_TIME_TAG_NAME in self.__tags:
-            # TODO: use regular expressions instead?
-            date_time = self.__tags[DATE_TIME_TAG_NAME]
-            if len(date_time) == DATE_AND_TIME_TAG_VALUE_LENGTH:
-                # Change format from YYYY:MM:DD HH:MM -> YYYY-MM-DDTHH:MM:SS
-                return '{}-{}-{}T{}'.format(date_time[:4], date_time[5:7], date_time[8:10], date_time[11:])
+            try:
+                # Check parsing and change format from "YYYY:MM:DD HH:MM" to "YYYY-MM-DDTHH:MM:SS".
+                # The string "    :  :     :  :  " (set by a digital camera) should return None.
+                parsed_date_time = datetime.datetime.strptime(self.__tags[DATE_TIME_TAG_NAME], '%Y:%m:%d %H:%M:%S')
+                return parsed_date_time.strftime('%Y-%m-%dT%H:%M:%S')
+            except ValueError:
+                # Date or time parse error, ignore
+                pass
         return None
 
     def get_gps_position(self):
