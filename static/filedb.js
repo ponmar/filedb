@@ -941,8 +941,8 @@ function no_date_comparator(file){
 
 function categorize_file_from_path(){
     if (categorize_files != null){
-        var path = $('#find_file_by_path_input').val();
-        if (path != null && path != ""){
+        var path = $('#find_file_by_path_input').val().trim();
+        if (path != ""){
             categorize_result = [];
             for (var file, i=0; file = categorize_files[i]; i++){
                 if (file['path'].startsWith(path)){
@@ -956,8 +956,8 @@ function categorize_file_from_path(){
 
 function categorize_file_from_path_regexp(){
     if (categorize_files != null){
-        var pattern = $('#find_file_by_path_regexp_input').val();
-        if (pattern != null && pattern != ""){
+        var pattern = $('#find_file_by_path_regexp_input').val().trim();
+        if (pattern != ""){
             var regexp = new RegExp(pattern);
             categorize_result = [];
             for (var file, i=0; file = categorize_files[i]; i++){
@@ -1055,12 +1055,12 @@ function createJsonDataForFileCategorization(){
     var selected_locations = get_categorize_selected_location_ids();
     var selected_tags = get_categorize_selected_tag_ids();
 
-    var description = $('#file_description').val();
+    var description = $('#file_description').val().trim();
     if (description == ""){
         description = null;
     }
 
-    var datetime = $('#file_date').val();
+    var datetime = $('#file_date').val().trim();
     if (datetime == ""){
         datetime = null;
     }
@@ -1382,7 +1382,7 @@ function search_files_by_tags(){
 function search_files_by_file_list(){
     clear_previous_search();
 
-    var file_list_str = $('#exported_list_of_files_input').val();
+    var file_list_str = $('#exported_list_of_files_input').val().trim();
     if (file_list_str.length == 0){
         alert("Specify a file list");
         return;
@@ -2488,8 +2488,8 @@ function filelist2_update(){
 function filelists_union(){
     show_filelists_result([]);
 
-    var list1 = $('#filelist1_input').val();
-    var list2 = $('#filelist2_input').val();
+    var list1 = $('#filelist1_input').val().trim();
+    var list2 = $('#filelist2_input').val().trim();
 
     list1_ids = list1.split(';');
     list2_ids = list2.split(';');
@@ -2507,8 +2507,8 @@ function filelists_union(){
 function filelists_intersection(){
     show_filelists_result([]);
 
-    var list1 = $('#filelist1_input').val();
-    var list2 = $('#filelist2_input').val();
+    var list1 = $('#filelist1_input').val().trim();
+    var list2 = $('#filelist2_input').val().trim();
 
     list1_ids = list1.split(';');
     list2_ids = list2.split(';');
