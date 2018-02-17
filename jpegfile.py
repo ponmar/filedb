@@ -51,6 +51,7 @@ class JpegFile:
             try:
                 # Check parsing and change format from "YYYY:MM:DD HH:MM" to "YYYY-MM-DDTHH:MM:SS".
                 # The string "    :  :     :  :  " (set by a digital camera) should return None.
+                # Note that this also handles the case when "0000:00:00 00:00:00" is used by some cameras.
                 parsed_date_time = datetime.datetime.strptime(self.__tags[DATE_TIME_TAG_NAME], '%Y:%m:%d %H:%M:%S')
                 return parsed_date_time.strftime('%Y-%m-%dT%H:%M:%S')
             except ValueError:
