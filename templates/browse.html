@@ -133,6 +133,28 @@ $(document).ready(function(){
   </div>
 </div>
 
+<div class="panel panel-default">
+  <div class="panel-heading">File List Tools</div>
+  <div class="panel-body">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="filelist1_input">
+      <span class="input-group-btn">
+      <button type="button" class="btn btn-default" id="filelist1_update_button">Update from search</button>
+      </span>
+    </div>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="filelist2_input">
+      <span class="input-group-btn">
+      <button type="button" class="btn btn-default" id="filelist2_update_button">Update from search</button>
+      </span>
+    </div>
+    <button type="button" class="btn btn-default" id="filelists_union_button">Generate union</button>
+    <button type="button" class="btn btn-default" id="filelists_intersection_button">Generate intersection</button>
+    <br>
+    <div id="filelisttoolsresult"></div>
+  </div>
+</div>
+
 <div id="my_fullscreen_browser" class="fullscreen_browser"></div>
 
 {% endblock %}

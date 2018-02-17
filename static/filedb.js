@@ -374,6 +374,22 @@ function filedb_init_browse_page(){
         export_zip_file();
     });
 
+    $('#filelist1_update_button').click(function(){
+        filelist1_update();
+    });
+
+    $('#filelist2_update_button').click(function(){
+        filelist2_update();
+    });
+
+    $('#filelists_union_button').click(function(){
+        filelists_union();
+    });
+
+    $('#filelists_intersection_button').click(function(){
+        filelists_intersection();
+    });
+
     $('body').keypress(function(e){
         // Setup fullscreen controls
         //alert("keypress: " + e.keyCode);
@@ -2437,4 +2453,80 @@ function export_data(url, success_function){
 
 function export_zip_file(){
     export_data('/api/exportzip', download_exported_data);
+}
+
+function get_search_result_file_export_str(){
+    var file_ids_str = "";
+    if (slideshow_files != null){
+        for (var i=0, file; file = slideshow_files[i]; i++){
+            file_ids_str += file['id'] + ";";
+        }
+    }
+    return file_ids_str;
+}
+
+function filelist1_update(){
+    var files_str = get_search_result_file_export_str();
+    if (files_str == ""){
+        $('#filelisttoolsresult').html('No search result available');
+    }
+    else{
+        $('#filelist1_input').val(files_str);
+    }
+}
+
+function filelist2_update(){
+    var files_str = get_search_result_file_export_str();
+    if (files_str == ""){
+        $('#filelisttoolsresult').html('No search result available');
+    }
+    else{
+        $('#filelist2_input').val(files_str);
+    }
+}
+
+function filelists_union(){
+    show_filelists_result([]);
+
+    var list1 = $('#filelist1_input').val();
+    var list2 = $('#filelist2_input').val();
+
+    list1_ids = list1.split(';');
+    list2_ids = list2.split(';');
+
+    var result_ids = list1_ids;
+    for (var i=0; i<list2_ids.length; i++){
+        if (result_ids.indexOf(list2_ids[i]) == -1){
+            result_ids.push(list2_ids[i]);
+        }
+    }
+
+    show_filelists_result(result_ids);
+}
+
+function filelists_intersection(){
+    show_filelists_result([]);
+
+    var list1 = $('#filelist1_input').val();
+    var list2 = $('#filelist2_input').val();
+
+    list1_ids = list1.split(';');
+    list2_ids = list2.split(';');
+
+    var result_ids = [];
+    for (var i=0; i<list1_ids.length && i<list2_ids.length; i++){
+        if (list2_ids.indexOf(list1_ids[i]) != -1){
+            result_ids.push(list1_ids[i]);
+        }
+    }
+
+    show_filelists_result(result_ids);
+}
+
+function show_filelists_result(file_ids){
+    files_str = "";
+    for (var i=0, file_id; file_id = file_ids[i]; i++){
+        files_str += file_id + ';';
+    }
+    $('#filelisttoolsresult').html('<pre>' + files_str + '</pre>');
 }
