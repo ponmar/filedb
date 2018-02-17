@@ -2514,7 +2514,7 @@ function filelists_intersection(){
     list2_ids = list2.split(';');
 
     var result_ids = [];
-    for (var i=0; i<list1_ids.length && i<list2_ids.length; i++){
+    for (var i=0; i<list1_ids.length; i++){
         if (list2_ids.indexOf(list1_ids[i]) != -1){
             result_ids.push(list1_ids[i]);
         }
