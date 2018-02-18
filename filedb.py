@@ -879,7 +879,6 @@ def api_get_json_directories():
         path_parts = row[0].rsplit('/', 1)
         if len(path_parts) > 1:
             directories.add(path_parts[0])
-                
     return jsonify(dict(directories=sorted(directories)))
 
 
@@ -897,6 +896,7 @@ def api_get_json_fs_directories():
                 path = path.split('/', 1)[1]
             if not path_is_blacklisted(path) and path_is_visible(path):
                 directories.append(path)
+    directories.sort()
 
     return jsonify(dict(directories=directories))
 
