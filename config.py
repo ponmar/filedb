@@ -15,8 +15,12 @@ class DefaultConfig(object):
 
     # Do not change
     SQL_SCHEMA = 'filedb.sql'
-    DATABASE = 'filedb.db'
     PROJECT_HOME = 'https://bitbucket.org/pontusmarkstrom/filedb'
+
+    # The path to the FileDB database. Default is to have it within the FileDB
+    # install directory, but it is possible to put it within the works to put
+    # it within the files root directory.
+    DATABASE = 'filedb.db'
 
     # Set to True to restart webserver when files have been changed and change
     # the behavior of unhandled exceptions.
@@ -101,7 +105,7 @@ class DefaultConfig(object):
 
     # Files are ignored when any of the blacklisted file patterns can be found in
     # the file path. Black-listed file patterns are case sensitive.
-    BLACKLISTED_FILE_PATH_PATTERNS = ['Thumbs.db']
+    BLACKLISTED_FILE_PATH_PATTERNS = ['Thumbs.db', 'filedb.db']
 
     # If a file is not blacklisted a whitelisted test will be done. A file will be
     # added, during an import action, if its path ends with any of the specified
