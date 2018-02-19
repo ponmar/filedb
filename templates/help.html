@@ -29,7 +29,7 @@
     <li>Enable location saving in images to make FileDB automatically connect known locations when adding files</li>
 </ul>
 <p>JPEG images contain orientation information. Digital cameras usually have an orientation sensor and add this information instead of rotating the images. Not all image viewers use this information when presenting images. There are two alternatives for how to handle such JPEG images. Either only use image viewers that correctly use the orientation information or rotate them manually (this usually removes/resets the orientation information). The FileDB webapp image viewer sets a CSS property that should make the browser use this information from the JPEG image, but this is currently only supported by Firefox (more info <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/image-orientation#Browser_compatibility">here</a>).</p>
-<p>When you start with an empty file database you probably want to import all your files at the <a href="{{ url_for('app_files') }}">Add File page</a>. Later, when adding new directories, specific directories can be added to improve performance.</p>
+<p>When you start with an empty file database you probably want to add all your files at the <a href="{{ url_for('app_files') }}">Manage Files</a>. Later, when adding new directories, specific directories can be added to improve performance for large file collections.</p>
 
 <h2>Categorization</h2>
 <p>When FileDB is up and running it is time to create the categories at the <a href="{{ url_for('app_categories') }}">Edit Categories page</a>.</p>
@@ -40,8 +40,8 @@
 <p>File descriptions can, for example, be used to create subtitles for pictures.</p>
 
 <h2>Notes About Your Files Collection</h2>
-<p>FileDB does not modify any files in your file collection. Files are read when importing (adding) files, viewing files or when reading Exif-data via the API.</p>
-<p>Before importing your files, take a moment to think about the directory structure. Any directory structure can be used for sorting files in your existing collection. However, this layout has been proven to work very well:</p>
+<p>FileDB does not modify any files in your file collection. Files are read when adding files, viewing files or when reading Exif-data via the API.</p>
+<p>Before adding your files, take a moment to think about the directory structure. Any directory structure can be used for sorting files in your existing collection. However, this layout has been proven to work very well:</p>
 <pre>
 root
  |- 2015

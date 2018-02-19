@@ -1984,14 +1984,14 @@ function prev_slideshow_file(){
 }
 
 function import_files(){
-    if (window.confirm("Importing all files may take several minutes. Continue?")){
+    if (window.confirm("Adding all files may take several minutes. Continue?")){
         clear_add_files_results();
-        $("#import_status").text("Importing, please wait...");
+        $("#import_status").text("Adding, please wait...");
         $.post("/api/import", function(json) {
-            $("#import_status").text('Imported ' + json['num_added_files'] + ' of ' + (json['num_added_files'] + json['num_not_added_files']) + ' files from the file collection');
+            $("#import_status").text('Added ' + json['num_added_files'] + ' of ' + (json['num_added_files'] + json['num_not_added_files']) + ' files from the file collection');
         }, "json")
         .fail(function(){
-            $("#import_status").text("Import failed");
+            $("#import_status").text("Add all files failed");
         });
     }
 }
