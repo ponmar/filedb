@@ -411,7 +411,7 @@ function filedb_init_browse_page(){
             }
             else if (e.keyCode == 33){
                 // Page-up pressed
-                next_directory_slideshow();
+                prev_directory_slideshow();
                 e.preventDefault();
             }
             else if (e.keyCode == 34){
