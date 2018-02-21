@@ -2219,7 +2219,7 @@ function modify_location(){
         dataType: "json",
         success: function(responseData){
             clear_edit_location();
-            get_location();
+            get_locations();
         },
         error: function(){
             alert("Save location failed");
