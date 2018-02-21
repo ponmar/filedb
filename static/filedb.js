@@ -390,6 +390,10 @@ function filedb_init_browse_page(){
         filelists_intersection();
     });
 
+    $('#filelists_difference_button').click(function(){
+        filelists_difference();
+    });
+
     $('body').keypress(function(e){
         // Setup fullscreen controls
         //alert("keypress: " + e.keyCode);
@@ -2496,6 +2500,30 @@ function filelists_intersection(){
     for (var i=0; i<list1_ids.length; i++){
         if (list2_ids.indexOf(list1_ids[i]) != -1){
             result_ids.push(list1_ids[i]);
+        }
+    }
+
+    show_filelists_result(result_ids);
+}
+
+function filelists_difference(){
+    show_filelists_result([]);
+
+    var list1 = $('#filelist1_input').val().trim();
+    var list2 = $('#filelist2_input').val().trim();
+
+    list1_ids = list1.split(';');
+    list2_ids = list2.split(';');
+
+    var result_ids = [];
+    for (var i=0; i<list1_ids.length; i++){
+        if (list2_ids.indexOf(list1_ids[i]) == -1){
+            result_ids.push(list1_ids[i]);
+        }
+    }
+    for (var i=0; i<list2_ids.length; i++){
+        if (list1_ids.indexOf(list2_ids[i]) == -1){
+            result_ids.push(list2_ids[i]);
         }
     }
 
