@@ -2182,14 +2182,7 @@ function modify_person(){
         dataType: "json",
         success: function(responseData){
             clear_edit_person();
-            var personIndex = find_person_index(responseData['id']);
-            if (personIndex == -1){
-                persons.push(responseData);
-            }
-            else{
-                persons[personIndex] = responseData;
-            }
-            reload_persons_table();
+            get_persons();
         },
         error: function(){
             alert("Save person failed");
@@ -2226,14 +2219,7 @@ function modify_location(){
         dataType: "json",
         success: function(responseData){
             clear_edit_location();
-            var locationIndex = find_location_index(responseData['id']);
-            if (locationIndex == -1){
-                locations.push(responseData);
-            }
-            else{
-                locations[locationIndex] = responseData;
-            }
-            reload_locations_table();
+            get_location();
         },
         error: function(){
             alert("Save location failed");
@@ -2268,14 +2254,7 @@ function modify_tag(){
         dataType: "json",
         success: function(responseData){
             clear_edit_tag();
-            var tagIndex = find_tag_index(responseData['id']);
-            if (tagIndex == -1){
-                tags.push(responseData);
-            }
-            else{
-                tags[tagIndex] = responseData;
-            }
-            reload_tags_table();
+            get_tags();
         },
         error: function(){
             alert("Save tag failed");
