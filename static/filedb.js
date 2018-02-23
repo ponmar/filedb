@@ -208,6 +208,10 @@ function filedb_init_categorize_page(){
         categorize_file_from_path_regexp();
     });
 
+    $('#categorize_exported_list_of_files_button').click(function(){
+        categorize_from_exported_search();
+    });
+
     $('#first_file_categorize_button').click(function(){
         first_categorize_file();
     });
@@ -974,6 +978,33 @@ function categorize_file_from_path_regexp(){
     }
 }
 
+function categorize_from_exported_search(){
+    if (categorize_files != null){
+        var input = $('#categorize_exported_list_of_files_input').val().trim();
+
+        var file_ids = parse_file_list_ids(input);
+        if (file_ids.length == 0){
+            alert("Specify a file list");
+            return;
+        }
+
+        categorize_result = [];
+
+        for (var file_id, i=0; file_id = file_ids[i]; i++){
+            var file_index = find_categorize_file_index_from_file_id(file_id);
+            if (file_index != -1){
+                categorize_result.push(file_index);
+            }
+        }
+
+        update_categorize_result();
+
+        if (file_ids.length != categorize_result.length){
+            alert((file_ids.length - categorize_result.length) + " files ignored");
+        }
+    }
+}
+
 function update_categorize_result(){
     if (categorize_result.length > 0){
         categorize_result_index = 0;
@@ -1081,17 +1112,11 @@ function createJsonDataForFileCategorization(){
     return jsonData;
 }
 
-function find_categorize_file_index_from_id(file_id){
-    alert("Checking id: " + file_id);
-    if (categorize_result_index != -1){
-        for (var j=0; j<categorize_result.length; j++){
-            if (categorize_files[categorize_result[j]]['id'] == file_id){
-                return j;
-            }
+function find_categorize_file_index_from_file_id(file_id){
+    for (var i=0; i<categorize_files.length; i++){
+        if (categorize_files[i]['id'] == file_id){
+            return i;
         }
-    }
-    else{
-        alert("categorize_result_index == -1");
     }
     return -1;
 }
@@ -1383,30 +1408,36 @@ function search_files_by_tags(){
     }
 }
 
-function search_files_by_file_list(){
-    clear_previous_search();
+function parse_file_list_ids(input_string){
+    var result = [];
 
-    var file_list_str = $('#exported_list_of_files_input').val().trim();
-    if (file_list_str.length == 0){
-        alert("Specify a file list");
-        return;
-    }
-
-    var file_id_strs = file_list_str.split(';');
+    var file_id_strs = input_string.split(';');
     if (file_id_strs.length == 0){
-        alert("Specify a file list");
-        return;
+        return result;
     }
 
-    var file_ids = [];
     for (var i=0; i<file_id_strs.length; i++){
         var file_id_str = file_id_strs[i];
         if (file_id_str.length > 0){
             var file_id = parseInt(file_id_strs[i]);
             if (!Number.isNaN(file_id)){
-                file_ids.push(file_id);
+                result.push(file_id);
             }
         }
+    }
+
+    return result;
+}
+
+function search_files_by_file_list(){
+    clear_previous_search();
+
+    var file_list_str = $('#exported_list_of_files_input').val().trim();
+
+    var file_ids = parse_file_list_ids(file_list_str);
+    if (file_ids.length == 0){
+        alert("Specify a file list");
+        return;
     }
 
     var jsonData = JSON.stringify({"files": file_ids});
