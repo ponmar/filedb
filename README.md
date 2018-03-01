@@ -13,6 +13,7 @@ Exif data is parsed from JPEG images to automatically store file information. On
 All file information stored in FileDB makes extensive searches possible. An example search may be "files with person X at location Y".
 
 ![Webapp screenshot](images/filedb_webapp_screenshot.png)
+
 *The FileDB webapp start page.*
 
 ## Documentation ##
