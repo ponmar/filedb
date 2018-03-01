@@ -15,6 +15,19 @@ h2 {
 
 <h1>FileDB CHANGES</h1>
 
+<h2>0.14</h2>
+<ul>
+<li>Server: Bugfix for parsing of strange JPEG Exif date and time format created by some old cameras with no time set</li>
+<li>API: Some requests support sorting by multiple columns</li>
+<li>Webapp: Fullscreen image viewer (Lightbox) replaced with own improved version with better integration</li>
+<li>Webapp: Exported file lists can now be used at the categorize page</li>
+<li>Webapp: New exported file list tools: union, intersection and difference</li>
+<li>Webapp: CSS is now used to rotate images depending on Exif-data (read more information at the help page)</li>
+<li>Webapp: Sort by different columns at the browse page</li>
+<li>Webapp: Some button enabling/disabling</li>
+<li>Webapp: Bugfix for latitude and longitude input validation for locations</li>
+</ul>
+
 <h2>0.13</h2>
 <ul>
 <li>Webapp: Show a warning message at the index page if the root directory is missing</li>
@@ -22,8 +35,8 @@ h2 {
 <li>Configuration: Improved documentation and error handling for the files root directory option</li>
 <li>Configuration: Added FILES_ROOT_DIRECTORY_MOUNT_COMMAND option</li>
 <li>Configuration: Added FILES_ROOT_DIRECTORY_UMOUNT_COMMAND option</li>
-<li>Server: Bug fix for files root directory relative path that includes ..</li>
-<li>Server: Bug fix for database initialization</li>
+<li>Server: Bugfix for files root directory relative path that includes ..</li>
+<li>Server: Bugfix for database initialization</li>
 <li>Server: New command line argument for printing added files (for debugging purposes)</li>
 </ul>
 
