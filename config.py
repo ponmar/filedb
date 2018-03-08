@@ -18,8 +18,8 @@ class DefaultConfig(object):
     PROJECT_HOME = 'https://bitbucket.org/pontusmarkstrom/filedb'
 
     # The path to the FileDB database. Default is to have it within the FileDB
-    # install directory, but it is possible to put it within the works to put
-    # it within the files root directory.
+    # install directory, but it is possible to put it within the files root directory.
+    # It is recommended to put the database on local storage for good performance.
     DATABASE = 'filedb.db'
 
     # Set to True to restart webserver when files have been changed and change
