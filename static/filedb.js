@@ -51,6 +51,10 @@ function filedb_init_files_page(){
             delete_delete_directory(directory_to_delete);
         }
     });
+
+    $("#delete_files_from_filelist_button").click(function(){
+        delete_files_from_filelist();
+    });
     
     $("#rename_directory_update_button").click(function(){
         fetch_directories_for_rename();
@@ -2331,6 +2335,35 @@ function delete_delete_directory(path){
         },
         error: function(){
             $("#delete_files_status").text("Failed to delete files from directory");
+        }
+    });
+}
+
+function delete_files_from_filelist(){
+    var file_list_str = $('#delete_files_from_filelist_input').val().trim();
+    var file_ids = parse_file_list_ids(file_list_str);
+    if (file_ids.length == 0){
+        alert("Specify a file list");
+        return;
+    }
+
+    clear_add_files_results();
+    $("#delete_files_status").text("Deleting files, please wait...");
+
+    var jsonData = JSON.stringify({"files": file_ids});
+
+    $.ajax
+    ({
+        type: 'DELETE',
+        url: '/api/files',
+        contentType: 'application/json',
+        data: jsonData,
+        dataType: "json",
+        success: function(result){
+            $("#delete_files_status").html('Deleted ' + result['num_deleted_files'] + ' files');
+        },
+        error: function(){
+            $("#delete_files_status").text("Failed to delete files");
         }
     });
 }
