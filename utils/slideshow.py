@@ -12,6 +12,7 @@ FILEDB_FILECONTENT = '{}/api/filecontent/{}'
 DISPLAY_TIME = 5
 STRETCH = False
 
+
 def get_json(url):
     r = requests.get(url)
     if r.status_code != requests.codes.ok:
@@ -19,18 +20,21 @@ def get_json(url):
         return None
     return r.json()
 
+
 def get_file(url):
     r = requests.get(url)
     if r.status_code != requests.codes.ok:
         print('Server returned status code {}'.format(r.status_code))
         return None
     return r.content
-    
+
+
 def get_random_file_url(filedb_base_url):
     json = get_json(FILEDB_QUERY.format(filedb_base_url))
     if json is None:
         return None
     return FILEDB_FILECONTENT.format(filedb_base_url, json['id'])
+
 
 def load_image(image_data, screen_width, screen_height):
     image = pygame.image.load(io.BytesIO(image_data))
@@ -53,19 +57,22 @@ def load_image(image_data, screen_width, screen_height):
         height = screen_height
         image = pygame.transform.scale(image, (width, height))
     return image, width, height
-    
+
+
 def create_window():
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     pygame.display.set_caption(TITLE)
     pygame.mouse.set_visible(False)
     return screen
-    
+
+
 def show_image(screen, image_data):
     image, width, height = load_image(image_data, screen.get_width(), screen.get_height())
     screen.fill(0)
     screen.blit(image, ((screen.get_width() - width)/2, (screen.get_height() - height)/2))
     pygame.display.update()
-    
+
+
 def run_slideshow(filedb_base_url):
     screen = create_window()
 
@@ -99,6 +106,7 @@ def run_slideshow(filedb_base_url):
             run = False
 
     pygame.quit()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=TITLE)
