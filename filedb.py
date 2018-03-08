@@ -744,18 +744,33 @@ def api_update_tag(tag_id):
 # API: delete data
 #
 
-@app.route('/api/file/<int:id>', methods=['DELETE'])
-def api_remove_file(id):
+@app.route('/api/file/<int:file_id>', methods=['DELETE'])
+def api_remove_file(file_id):
     try:
-        g.db.execute('delete from files where id = ?', (id,))
+        g.db.execute('delete from files where id = ?', (file_id,))
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return '', 204
 
 
+@app.route('/api/files', methods=['DELETE'])
+def api_remove_files():
+    content = request.get_json(silent=True)
+    file_ids = content['files']
+
+    try:
+        for file_id in file_ids:
+            g.db.execute('delete from files where id = ?', (file_id,))
+        g.db.commit()
+    except sqlite3.IntegrityError:
+        abort(409)
+    return make_response(jsonify({'num_deleted_files': len(file_ids)}),
+                         201)
+
+
 @app.route('/api/directory', methods=['DELETE'])
-def api_remove_directory():
+def api_remove_files_in_directory():
     content = request.get_json(silent=True)
     directory_path = content['path']
     cur = g.db.execute('select id, path from files')
@@ -779,30 +794,30 @@ def api_remove_directory():
                          201)
 
 
-@app.route('/api/person/<int:id>', methods=['DELETE'])
-def api_remove_person(id):
+@app.route('/api/person/<int:person_id>', methods=['DELETE'])
+def api_remove_person(person_id):
     try:
-        g.db.execute('delete from persons where id = ?', (id,))
+        g.db.execute('delete from persons where id = ?', (person_id,))
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return '', 204
 
 
-@app.route('/api/location/<int:id>', methods=['DELETE'])
-def api_remove_location(id):
+@app.route('/api/location/<int:location_id>', methods=['DELETE'])
+def api_remove_location(location_id):
     try:
-        g.db.execute('delete from locations where id = ?', (id,))
+        g.db.execute('delete from locations where id = ?', (location_id,))
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
     return '', 204
 
 
-@app.route('/api/tag/<int:id>', methods=['DELETE'])
-def api_remove_tag(id):
+@app.route('/api/tag/<int:tag_id>', methods=['DELETE'])
+def api_remove_tag(tag_id):
     try:
-        g.db.execute('delete from tags where id = ?', (id,))
+        g.db.execute('delete from tags where id = ?', (tag_id,))
         g.db.commit()
     except sqlite3.IntegrityError:
         abort(409)
