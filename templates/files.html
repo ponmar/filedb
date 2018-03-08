@@ -18,39 +18,29 @@ $(document).ready(function(){
 
 <h1>Manage Files</h1>
 
-<div class="alert alert-info" role="alert"><strong>Notes:</strong>
-    <ul>
-        <li>What is added depends on the FileDB configuration.</li>
-        <li>Date and time are automatically extracted from JPEG files, but can be edited later.</li>
-        <li>Edited JPEG files usually does not have the date and time information. FileDB will then try to extract this from the file path instead.</li>
-        <li>GPS position is automatically extracted from JPEG files for automatically setting file location. Set GPS position for each location at the <a href="{{ url_for('app_categories') }}">Edit Categories page</a>.</li>
-    </ul>
-</div>
-
 <div class="panel panel-default">
-    <div class="panel-heading">Add All Files</div>
+    <div class="panel-heading">Add Files</div>
     <div class="panel-body">
         <div class="alert alert-info" role="alert"><strong>Notes:</strong>
             <ul>
+                <li>What is added depends on the FileDB configuration.</li>
                 <li>Already added files are ignored.</li>
                 <li>Run a consistency check and take care of problems to avoid adding renamed files twice.</li>
+                <li>Date and time are automatically extracted from JPEG files, but can be edited later.</li>
+                <li>Edited JPEG files usually does not have the date and time information. FileDB will then try to extract this from the file path instead.</li>
+                <li>GPS position is automatically extracted from JPEG files for automatically setting file location. Set GPS position for each location at the <a href="{{ url_for('app_categories') }}">Edit Categories page</a>.</li>
             </ul>
         </div>
-        <p><button type="submit" class="btn btn-default" id="import_button">Add all files...</button></p>
-        <p id="import_status"></p>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">Add Files From Directory</div>
-    <div class="panel-body">
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Directory<span class="caret"></span></button>
             <ul class="dropdown-menu" id="add_files_directory_list"></ul>
             <button id="add_files_from_directory_update_button" class="btn btn-default">List added directories (fast)</button>
             <button id="add_files_from_directory_update_fs_button" class="btn btn-default">List available directories (slow)</button>
-            <button id="add_files_from_directory_add_button" class="btn btn-default" disabled autocomplete="off">Add</button>
+            <button id="add_files_from_directory_add_button" class="btn btn-default" disabled autocomplete="off">Add files from selected directory</button>
         </div>
+        <br>
+        <button type="submit" class="btn btn-default" id="import_button">Add all files...</button>
+        <br>
         <p id="add_files_status" style="clear:both;"></p>
     </div>
 </div>

@@ -74,7 +74,7 @@ function filedb_init_files_page(){
 }
 
 function fetch_directories_to_add(url){
-    clear_add_files_results();
+    clear_manage_files_results();
     $("#add_files_directory_list").html("");
     $("#add_files_status").text("Fetching directories...");
     $.getJSON(url, function(result){
@@ -95,7 +95,7 @@ function fetch_directories_to_add(url){
 }
 
 function fetch_directories_to_delete(){
-    clear_add_files_results();
+    clear_manage_files_results();
     $("#delete_files_directory_list").html("");
     $("#delete_files_status").text("Fetching directories...");
     $.getJSON('/api/directories', function(result){
@@ -116,7 +116,7 @@ function fetch_directories_to_delete(){
 }
 
 function fetch_directories_for_rename(){
-    clear_add_files_results();
+    clear_manage_files_results();
     $("#rename_directory_source_list").html("");
     $("#rename_directory_destination_list").html("");
     $("#rename_directory_status").text("Fetching source directories...");
@@ -155,7 +155,7 @@ function fetch_directories_for_rename(){
 }
 
 function rename_directory(source_directory, destination_directory){
-    clear_add_files_results();
+    clear_manage_files_results();
     var jsonData = {"sourcedir": source_directory, "destinationdir": destination_directory};
     $.ajax
     ({
@@ -2024,19 +2024,18 @@ function prev_slideshow_file(){
 
 function import_files(){
     if (window.confirm("Adding all files may take several minutes. Continue?")){
-        clear_add_files_results();
-        $("#import_status").text("Adding, please wait...");
+        clear_manage_files_results();
+        $("#add_files_status").text("Adding, please wait...");
         $.post("/api/import", function(json) {
-            $("#import_status").text('Added ' + json['num_added_files'] + ' of ' + (json['num_added_files'] + json['num_not_added_files']) + ' files from the file collection');
+            $("#add_files_status").text('Added ' + json['num_added_files'] + ' of ' + (json['num_added_files'] + json['num_not_added_files']) + ' files from the file collection');
         }, "json")
         .fail(function(){
-            $("#import_status").text("Add all files failed");
+            $("#add_files_status").text("Add all files failed");
         });
     }
 }
 
-function clear_add_files_results(){
-    $("#import_status").text("");
+function clear_manage_files_results(){
     $("#add_files_status").text("");
     $("#tools_status").text("");
     $("#delete_files_status").text("");
@@ -2045,7 +2044,7 @@ function clear_add_files_results(){
 
 function consistency_check(){
     if (window.confirm("File consistency check may take several minutes for all files. Continue?")){
-        clear_add_files_results();
+        clear_manage_files_results();
         $("#tools_status").text("File consistency check running, please wait...");
         $.getJSON("/api/fileconsistency", function(result){
             missing_files = result['missing_files'];
@@ -2302,7 +2301,7 @@ function modify_tag(){
 }
 
 function post_add_directory(path){
-    clear_add_files_results();
+    clear_manage_files_results();
     $("#add_files_status").text("Adding files from directory, please wait...");
     var json = {"path": path};
     $.ajax
@@ -2321,7 +2320,7 @@ function post_add_directory(path){
 }
 
 function delete_delete_directory(path){
-    clear_add_files_results();
+    clear_manage_files_results();
     $("#delete_files_status").text("Deleting files from directory, please wait...");
     var json = {"path": path};
     $.ajax
@@ -2347,7 +2346,7 @@ function delete_files_from_filelist(){
         return;
     }
 
-    clear_add_files_results();
+    clear_manage_files_results();
     $("#delete_files_status").text("Deleting files, please wait...");
 
     var jsonData = JSON.stringify({"files": file_ids});
