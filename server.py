@@ -49,7 +49,7 @@ def database_exists():
     
 
 def main():
-    """Runs the FileDB server side application."""
+    """Runs the FileDB server side CLI application."""
 
     parser = argparse.ArgumentParser(description='A file database and server application.')
     parser.add_argument('--initdb',

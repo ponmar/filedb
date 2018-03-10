@@ -55,7 +55,7 @@ This chapter describes how to install FileDB from scratch (no upgrade).
 
   **Warning!** This command removes all existing data from the FileDB database (don't run this command when the database is populated later).
 
-        python runserver.py --initdb
+        python server.py --initdb
 
 - Decide your backup policy for your FileDB data (filedb.db)
 
@@ -75,11 +75,11 @@ This section describes how to start the FileDB server with the Flask built-in HT
 
 Print help:
 
-    python runserver.py --help
+    python server.py --help
 
 Start the server:
 
-    python runserver.py
+    python server.py
 
 Note that your OS can be setup to run this command at startup. How to do this depends on your OS.
 

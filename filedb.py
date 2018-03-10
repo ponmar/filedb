@@ -11,7 +11,6 @@ from flask import Flask, request, session, g, url_for, \
      abort, render_template, jsonify, send_from_directory, make_response, \
      send_file
 import jpegfile
-from werkzeug.routing import BaseConverter
 from makeunicode import u
 
 
