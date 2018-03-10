@@ -573,28 +573,32 @@ def api_update_file(file_id):
     return make_response(get_file_json(file_id), 201)
 
 
-@app.route('/api/renamefilesindir', methods=['PUT'])
-def api_rename_directory():
+@app.route('/api/renamefiles', methods=['PUT'])
+def api_rename_files():
     content = request.get_json(silent=True)
-    source_dir = content['sourcedir']
+    source_file_ids = content['sourcefiles']
     destination_dir = content['destinationdir']
 
-    num_updated_files = 0
-    cursor = g.db.execute('select id, path from files')
+    # Note: an empty destination directory is valid when moving files to the top directory.
+    if len(destination_dir) > 0 and not destination_dir.endswith('/'):
+        destination_dir += '/'
+
+    # TODO: validate destination directory (no .. etc.)
+
     try:
-        for row in cursor.fetchall():
-            file_id = row[0]
-            file_path = row[1]
-            if file_path.startswith(source_dir):
-                new_file_path = file_path.replace(source_dir, destination_dir, 1)
-                cursor.execute("update files set path = ? where id = ?", (new_file_path, file_id))
-                num_updated_files += 1
+        for source_file_id in source_file_ids:
+            file_path = g.db.execute('select path from files where id = ?', (source_file_id,)).fetchone()[0]
+            # Note: this also works for files in the top directory
+            file_filename = file_path.split('/')[-1]
+            new_file_path = destination_dir + file_filename
+            #print('Rename: ' + file_path + " -> " + new_file_path)
+            g.db.execute("update files set path = ? where id = ?", (new_file_path, source_file_id))
         g.db.commit()
     except sqlite3.IntegrityError:
-        # TODO: how should this error be handled?
         pass
 
-    return jsonify({'updated_files': num_updated_files})
+    # TODO: return updated files?
+    return jsonify({})
 
 
 @app.route('/api/filelocations', methods=['PUT'])

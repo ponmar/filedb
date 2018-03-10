@@ -62,7 +62,8 @@ $(document).ready(function(){
         </div>
         <br>
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="delete_files_from_filelist_input">
+            <span class="input-group-addon" id="basic-addon2">File list</span>
+            <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="delete_files_from_filelist_input" aria-describedby="basic-addon2">
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" id="delete_files_from_filelist_button">Delete</button>
             </span>
@@ -72,19 +73,28 @@ $(document).ready(function(){
 </div>
 
 <div class="panel panel-default">
-    <div class="panel-heading">Rename Directory</div>
+    <div class="panel-heading">Rename Files</div>
     <div class="panel-body">
-        <div class="alert alert-info" role="alert"><strong>Note:</strong> Use this functionality when a directory has been renamed within your files collection (categorization data is kept, unlike a delete+add).</div>
-        <button id="rename_directory_update_button" class="btn btn-default">List directories</button>
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Source directory<span class="caret"></span></button>
-            <ul class="dropdown-menu" id="rename_directory_source_list"></ul>
+        <div class="alert alert-info" role="alert"><strong>Notes:</strong>
+            <ul>
+                <li>Use this functionality when files within your files collection have been moved/renamed (categorization data is kept, unlike a delete+add).</li>
+                <li>It is only possible to move files to sub directories within the files collection, not to the top directory.</li>
+            </ul>
         </div>
+
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Source file list</span>
+            <input type="text" class="form-control" id="rename_files_from_filelist_input" placeholder="Format: id1;id2;id3;..." aria-describedby="basic-addon1">
+        </div>
+
+        <br>
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Destination directory<span class="caret"></span></button>
             <ul class="dropdown-menu" id="rename_directory_destination_list"></ul>
+            <button id="rename_directory_update_button" class="btn btn-default">List destination directories</button>
         </div>
-        <button id="rename_directory_rename_button" class="btn btn-default" disabled autocomplete="off">Rename</button>
+        <br>
+        <button id="rename_directory_rename_button" class="btn btn-default" disabled autocomplete="off">Rename...</button>
         <p id="rename_directory_status" style="clear:both;"></p>
     </div>
 </div>

@@ -230,11 +230,8 @@ Request: PUT /api/filetags JSON: { "files"=[...], "tags"=[...] }
 Response: 200 (OK)
 </pre>
 
-<pre>Request: PUT /api/renamefilesindir JSON: { "sourcedir"=..., "destinationdir"=... }
+<pre>Request: PUT /api/renamefiles JSON: { "sourcefiles"=[id1, id2, id3, ...], "destinationdir"=... }
 Response: 200 (OK)
-{
-    "updated_files" = num_files
-}
 </pre>
 
 <h2>Remove Data</h2>

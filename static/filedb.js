@@ -61,10 +61,21 @@ function filedb_init_files_page(){
     });
     
     $("#rename_directory_rename_button").click(function(){
-        var source_directory = $("#rename_directory_source_list .selectedLi").text();
+        var input = $('#rename_files_from_filelist_input').val().trim();
+        var source_file_ids = parse_file_list_ids(input);
+        if (source_file_ids.length == 0){
+            alert("Specify a file list");
+            return;
+        }
+
         var destination_directory = $("#rename_directory_destination_list .selectedLi").text();
-        if (source_directory && destination_directory) {
-            rename_directory(source_directory, destination_directory);
+        if (destination_directory) {
+            if (window.confirm("Rename " + source_file_ids.length + " files to destination directory " + destination_directory + "?")){
+                rename_files(source_file_ids, destination_directory);
+            }
+        }
+        else {
+            alert("Specify a destination directory");
         }
     });
 
@@ -117,26 +128,9 @@ function fetch_directories_to_delete(){
 
 function fetch_directories_for_rename(){
     clear_manage_files_results();
-    $("#rename_directory_source_list").html("");
     $("#rename_directory_destination_list").html("");
-    $("#rename_directory_status").text("Fetching source directories...");
-    
-    $.getJSON('/api/directories', function(result){
-        directories = result['directories'];
-        if (directories.length > 0){
-            for (var i=0, directory; directory = directories[i]; i++){
-                $("#rename_directory_source_list").append('<li><a href="#">' + directory + "</a></li>");
-            }
-            // Add a "selected class" when list items clicked to be able to find it later
-            $("#rename_directory_source_list li a").click(function(){
-                $('#rename_directory_source_list .selectedLi').removeClass('selectedLi');
-                $(this).addClass('selectedLi');
-            });
-        }
-        $("#rename_directory_status").text("Fetching destination directories...");
-    });
+    $("#rename_directory_status").text("Fetching destination directories...");
 
-    // TODO: download when source fetched instead? Now there is a race condition for rename_directory_status.
     $.getJSON('/api/fs_directories', function(result){
         directories = result['directories'];
         if (directories.length > 0){
@@ -154,21 +148,21 @@ function fetch_directories_for_rename(){
     });
 }
 
-function rename_directory(source_directory, destination_directory){
+function rename_files(source_file_ids, destination_directory){
     clear_manage_files_results();
-    var jsonData = {"sourcedir": source_directory, "destinationdir": destination_directory};
+    var jsonData = {"sourcefiles": source_file_ids, "destinationdir": destination_directory};
     $.ajax
     ({
         type: 'PUT',
-        url: '/api/renamefilesindir',
+        url: '/api/renamefiles',
         contentType: 'application/json',
         data: JSON.stringify(jsonData),
         dataType: "json",
         success: function(responseData){
-            $("#rename_directory_status").text('Rename directory success');
+            $("#rename_directory_status").text('Rename files success');
         },
         error: function(){
-            $("#rename_directory_status").text('Rename directory failed');
+            $("#rename_directory_status").text('Rename files failed');
         }
     });
 }
