@@ -2592,5 +2592,5 @@ function show_filelists_result(file_ids){
     for (var i=0, file_id; file_id = file_ids[i]; i++){
         files_str += file_id + ';';
     }
-    $('#filelisttoolsresult').html('<pre>' + files_str + '</pre>');
+    $('#filelists_result_input').val(files_str);
 }
