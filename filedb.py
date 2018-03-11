@@ -1122,9 +1122,9 @@ def get_file_json(file_id):
     return jsonify(get_file_dict(file_id))
 
 
-@app.route('/api/file/<int:id>', methods=['GET'])
-def api_json_file_by_id(id):
-    file_json = get_file_json(id)
+@app.route('/api/file/<int:file_id>', methods=['GET'])
+def api_json_file_by_id(file_id):
+    file_json = get_file_json(file_id)
     if file_json is None:
         abort(404)
     return file_json
@@ -1140,9 +1140,9 @@ def api_random_json_file():
     return file_json
 
 
-@app.route('/api/person/<int:id>', methods=['GET'])
-def api_get_json_person(id):
-    person_dict = get_person_dict(id)
+@app.route('/api/person/<int:person_id>', methods=['GET'])
+def api_get_json_person(person_id):
+    person_dict = get_person_dict(person_id)
     if person_dict is None:
         abort(404)
     return jsonify(person_dict)
@@ -1161,9 +1161,9 @@ def get_person_json(person_id):
     return jsonify(get_person_dict(person_id))
 
 
-@app.route('/api/location/<int:id>', methods=['GET'])
-def api_get_json_location(id):
-    location_dict = get_location_dict(id)
+@app.route('/api/location/<int:location_id>', methods=['GET'])
+def api_get_json_location(location_id):
+    location_dict = get_location_dict(location_id)
     if location_dict is None:
         abort(404)
 
@@ -1183,9 +1183,9 @@ def get_location_json(location_id):
     return jsonify(get_location_dict(location_id))
 
 
-@app.route('/api/tag/<int:id>', methods=['GET'])
-def api_get_json_tag(id):
-    tag_dict = get_tag_dict(id)
+@app.route('/api/tag/<int:tag_id>', methods=['GET'])
+def api_get_json_tag(tag_id):
+    tag_dict = get_tag_dict(tag_id)
     if tag_dict is None:
         abort(404)
     return jsonify(tag_dict)
@@ -1204,10 +1204,10 @@ def get_tag_json(tag_id):
     return jsonify(get_tag_dict(tag_id))
 
 
-@app.route('/api/filecontent/<int:id>', methods=['GET'])
-def api_get_file_content(id):
+@app.route('/api/filecontent/<int:file_id>', methods=['GET'])
+def api_get_file_content(file_id):
     """Note: this function reads data from files collection."""
-    cur = g.db.execute('select path from files where id = ?', (id,))
+    cur = g.db.execute('select path from files where id = ?', (file_id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
@@ -1215,10 +1215,10 @@ def api_get_file_content(id):
     return send_from_directory(app.config['FILES_ROOT_DIRECTORY'], file_path)
 
 
-@app.route('/api/thumbnail/<int:id>', methods=['GET'])
-def api_create_file_thumbnail(id):
+@app.route('/api/thumbnail/<int:file_id>', methods=['GET'])
+def api_create_file_thumbnail(file_id):
     """Note: this function reads data from files collection."""
-    cur = g.db.execute('select path from files where id = ?', (id,))
+    cur = g.db.execute('select path from files where id = ?', (file_id,))
     row = cur.fetchone()
     if row is None:
         abort(404)
