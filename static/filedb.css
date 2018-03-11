@@ -36,6 +36,18 @@ body {
     cursor: none; /* Hide mouse cursor */
 }
 
+.fullscreen_browser_overlay {
+    position: fixed; /* Fixed on screen (not on top of web page) */
+    top: 0;
+    left: 0;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    overflow: hidden; /* No scrollbars */
+    display: inline-block; /* Adapt width to content */
+    z-index: 10001; /* Make sure it is rendered on top */
+}
+
 .fullscreen_browser img {
 	margin-left: auto;  /* Center image within fullscreen div */
 	margin-right: auto; /* Center image within fullscreen div */
@@ -46,5 +58,9 @@ body {
 }
 
 #my_fullscreen_browser {
+    display: none; /* Hidden by default */
+}
+
+#my_fullscreen_browser_overlay {
     display: none; /* Hidden by default */
 }

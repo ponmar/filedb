@@ -1627,6 +1627,7 @@ function load_slideshow_file(){
 
     $('#file_browser_image_div').empty();
     $('#my_fullscreen_browser').empty();
+    $('#my_fullscreen_browser_overlay').empty();
 
     update_image_div_height('#file_browser_image_div');
 
@@ -1750,6 +1751,7 @@ function load_slideshow_file(){
     }
 
     $("#slideshow_item_text").html(file_text);
+    $("#my_fullscreen_browser_overlay").html(file_text);
 }
 
 function find_person(person_id){
@@ -1908,6 +1910,7 @@ function update_export_buttons(){
 
 function open_fullscreen_slideshow(){
     document.getElementById("my_fullscreen_browser").style.display = "block";
+    document.getElementById("my_fullscreen_browser_overlay").style.display = "inline-block";
 
     // Needed to hide body scrollbar
     $("body").css('overflow', 'hidden');
@@ -1918,6 +1921,7 @@ function close_fullscreen_browser(){
     $("body").css('overflow', 'visible');
 
     document.getElementById("my_fullscreen_browser").style.display = "none";
+    document.getElementById("my_fullscreen_browser_overlay").style.display = "none";
 }
 
 function fullscreen_slideshow_opened(){

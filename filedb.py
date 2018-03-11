@@ -71,7 +71,7 @@ def print_file_paths():
 @app.before_request
 def before_request():
     g.db = connect_db()
-    # Needed for each connection to turn on the CASCADE feature for foreign leys when removing rows from tables.
+    # Needed for each connection to turn on the CASCADE feature for foreign keys when removing rows from tables.
     g.db.execute('PRAGMA foreign_keys = ON')
 
 
