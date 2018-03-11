@@ -176,7 +176,7 @@ def api_import_files():
     num_imported_files = 0
     num_not_imported_files = 0
 
-    for root, directories, filenames in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
+    for root, _, filenames in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
@@ -1134,8 +1134,8 @@ def api_json_file_by_id(file_id):
 @app.route('/api/randomfile/', methods=['GET', 'POST'])
 def api_random_json_file():
     cur = g.db.execute('select id from files order by random() limit 1')
-    id = cur.fetchone()[0]
-    file_json = get_file_json(id)
+    file_id = cur.fetchone()[0]
+    file_json = get_file_json(file_id)
     if file_json is None:
         abort(404)
     return file_json
@@ -1154,8 +1154,7 @@ def get_person_dict(person_id):
     row = cur.fetchone()
     if row is not None:
         return dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4])
-    else:
-        return None
+    return None
 
 
 def get_person_json(person_id):
@@ -1176,8 +1175,7 @@ def get_location_dict(location_id):
     row = cur.fetchone()
     if row is not None:
         return dict(id=row[0], name=row[1], description=row[2], position=row[3])
-    else:
-        return None
+    return None
 
 
 def get_location_json(location_id):
@@ -1197,8 +1195,7 @@ def get_tag_dict(tag_id):
     row = cur.fetchone()
     if row is not None:
         return dict(id=row[0], name=row[1])
-    else:
-        return None
+    return None
 
 
 def get_tag_json(tag_id):
