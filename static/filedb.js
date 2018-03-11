@@ -2136,7 +2136,7 @@ function delete_file(id){
 }
 
 function delete_person(id){
-    if (window.confirm("Are you sure?")){
+    if (window.confirm("Deleting a person also removes it from all files. Continue?")){
         $.ajax({
             url: '/api/person/' + id,
             type: 'DELETE',
@@ -2151,7 +2151,7 @@ function delete_person(id){
 }
 
 function delete_location(id){
-    if (window.confirm("Are you sure?")){
+    if (window.confirm("Deleting a location also removes it from all files. Continue?")){
         $.ajax({
             url: '/api/location/' + id,
             type: 'DELETE',
@@ -2166,7 +2166,7 @@ function delete_location(id){
 }
 
 function delete_tag(id){
-    if (window.confirm("Are you sure?")){
+    if (window.confirm("Deleting a tag also removes it from all files. Continue?")){
         $.ajax({
             url: '/api/tag/' + id,
             type: 'DELETE',
