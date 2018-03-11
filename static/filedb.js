@@ -515,26 +515,31 @@ function reload_persons_table(){
         }
 
         $('#persons_firstname_col_header').click(function(){
+            clear_edit_person();
             persons_order_by = 'firstname:asc,lastname:asc,description:asc'
             get_persons();
         });
 
         $('#persons_lastname_col_header').click(function(){
+            clear_edit_person();
             persons_order_by = 'lastname:asc,firstname:asc,description:asc'
             get_persons();
         });
 
         $('#persons_description_col_header').click(function(){
+            clear_edit_person();
             persons_order_by = 'description:asc,lastname:asc,firstname:asc';
             get_persons();
         });
 
         $('#persons_age_col_header').click(function(){
+            clear_edit_person();
             persons_order_by = 'dateofbirth:desc,lastname:asc,firstname:asc,description:asc';
             get_persons();
         });
 
         $('#persons_dateofbirth_col_header').click(function(){
+            clear_edit_person();
             persons_order_by = 'dateofbirth:asc,lastname:asc,firstname:asc,description:asc';
             get_persons();
         });
@@ -615,11 +620,13 @@ function reload_locations_table(){
         }
 
         $('#locations_name_col_header').click(function(){
+            clear_edit_location();
             locations_order_by = 'name:asc,description:asc';
             get_locations();
         });
 
         $('#locations_description_col_header').click(function(){
+            clear_edit_location();
             locations_order_by = 'description:asc,name:asc';
             get_locations();
         });
@@ -691,6 +698,8 @@ function reload_tags_table(){
             tagRows += '<tr id="tr_tag_' + tag['id'] + '"><td>' + tag['name'] + '</td><td><a href="#tags_header" class="edit_tag_button" id="edit_tag_' + tag['id'] + '">Edit</a>, <a href="" class="delete_tag_button" id="delete_tag_' + tag['id'] + '">Delete</a></td></tr>';
         }
         $("#tagstable").append(tagRows);
+
+        // Note: no click handler is set for column sorting, because there is only one column.
 
         $(".edit_tag_button").click(function(){
             var id = $(this).attr('id').replace('edit_tag_', '');
