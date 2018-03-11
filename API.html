@@ -36,14 +36,14 @@ Response: 200 (OK), 404 (Not Found)
 
 <pre>Request: GET /api/files/[?personids=personids][&locationids=locationids][&tagids=tagids][&pathregexp=pathregexp][&descriptionregexp=descriptionregexp][&datetimeregexp=datetimeregexp]
 Request: GET|POST /api/randomfiles/&lt;numfiles&gt;
-Request: POST /api/files JSON: { "files"=[ fileid1, fileid2, ...] }
+Request: POST /api/files JSON: { "files":[ fileid1, fileid2, ...] }
 Response: 200 (OK)
 {
-    "files" =
+    "files":
     [
         Same data here as for single file
     ],
-    "total_num_files" = total_num_files
+    "total_num_files": total_num_files
 }
 </pre>
 
@@ -74,7 +74,7 @@ Response: 200 (OK), 404 (Not Found), data with content-type depending on file ex
 Request: GET /api/fs_directories
 Response: 200 (OK)
 {
-    "directories" =
+    "directories":
     [
         "first_dir",
         "second_dir",
@@ -98,9 +98,10 @@ Response: 200 (OK), 404 (Not Found)
 Request: GET /api/persons[?orderby=col1:(asc|desc),col2:(asc|desc),...
 Response: 200 (OK)
 {
-    "persons" =
+    "persons":
     [
-        Same data here as for single person
+        Same data here as for single person,
+        ...
     ]
 }
 </pre>
@@ -119,9 +120,10 @@ Response: 200 (OK), 404 (Not Found)
 Request: GET /api/locations[?orderby=col1:(asc|desc),col2:(asc|desc),...
 Response: 200 (OK)
 {
-    "locations" =
+    "locations":
     [
-        Same data here as for single location
+        Same data here as for single location,
+        ...
     ]
 }
 </pre>
@@ -139,22 +141,23 @@ Response: 200 (OK), 404 (Not Found)
 Request: GET /api/tags[?orderby=name:(asc|desc)
 Response: 200 (OK)
 {
-    "tags" =
+    "tags":
     [
-        Same data here as for single tag
+        Same data here as for single tag,
+        ...
     ]
 }
 </pre>
 
 <h2>Fetch Data: File content in zip archive</h2>
-<pre>Request: POST /api/exportzip JSON: { "files"=[ fileid1, fileid2, ...] }
+<pre>Request: POST /api/exportzip JSON: { "files": [ fileid1, fileid2, ...] }
 Response: 200 (OK), 400 (Bad Request)
 Zip archive
 </pre>
 
 <h2>Fetch Data: File paths</h2>
-<pre>Request: POST /api/exportpaths JSON: { "files"=[ fileid1, fileid2, ...] }
-Request: POST /api/exportabspaths JSON: { "files"=[ fileid1, fileid2, ...] }
+<pre>Request: POST /api/exportpaths JSON: { "files": [ fileid1, fileid2, ...] }
+Request: POST /api/exportabspaths JSON: { "files": [ fileid1, fileid2, ...] }
 Response: 200 (OK), 400 (Bad Request)
 Text:
 first/path/to/file
@@ -166,28 +169,28 @@ second/path/to/file
 <pre>Request: POST /api/import
 Response: 200 (OK), 409 (Conflict)
 </pre>
-<pre>Request: POST /api/file JSON: { "path"=..., "description"=... }
+<pre>Request: POST /api/file JSON: { "path":..., "description":... }
 Response: 200 (OK), 409 (Conflict)
 </pre>
-<pre>Request: POST /api/directory JSON: { "path"=... }
+<pre>Request: POST /api/directory JSON: { "path":... }
 Response: 200 (OK), 409 (Conflict)
 </pre>
 
-<pre>Request: POST /api/person JSON: { "firstname"=..., "lastname"=..., "description"=..., "dateofbirth"=... }
+<pre>Request: POST /api/person JSON: { "firstname":..., "lastname":..., "description":..., "dateofbirth":... }
 Response:
 {
     Same data here as for a single person
 }
 </pre>
 
-<pre>Request: POST /api/location JSON: { "name"=..., "description"=..., "position"=... }
+<pre>Request: POST /api/location JSON: { "name":..., "description":..., "position":... }
 Response:
 {
     Same data here as for a single location
 }
 </pre>
 
-<pre>Request: POST /api/tag JSON: { "name"=... }
+<pre>Request: POST /api/tag JSON: { "name":... }
 Response:
 {
     Same data here as for a single tag
@@ -224,14 +227,21 @@ Response: 201 (OK), ...
 }
 </pre>
 
-<pre>Request: PUT /api/filepersons JSON: { "files"=[...], "persons"=[...] }
-Request: PUT /api/filelocations JSON: { "files"=[...], "locations"=[...] }
-Request: PUT /api/filetags JSON: { "files"=[...], "tags"=[...] }
+<pre>Request: PUT /api/filepersons JSON: { "files":[...], "persons":[...] }
+Request: PUT /api/filelocations JSON: { "files":[...], "locations":[...] }
+Request: PUT /api/filetags JSON: { "files":[...], "tags":[...] }
 Response: 200 (OK)
 </pre>
 
-<pre>Request: PUT /api/renamefiles JSON: { "sourcefiles"=[id1, id2, id3, ...], "destinationdir"=... }
+<pre>Request: PUT /api/renamefiles JSON: { "sourcefiles":[id1, id2, id3, ...], "destinationdir":... }
 Response: 200 (OK)
+{
+    "files":
+    [
+        Same data here as for single file,
+        ...
+    ]
+}
 </pre>
 
 <h2>Remove Data</h2>
@@ -239,16 +249,16 @@ Response: 200 (OK)
 <pre>
 Request: DELETE /api/file/&lt;id&gt;
 Request: DELETE /api/files JSON: { "files": [id1, id2, id3, ...]}
-Request: DELETE /api/directory JSON: { "path"=... }
+Request: DELETE /api/directory JSON: { "path":... }
 Request: DELETE /api/person/&lt;id&gt;
 Request: DELETE /api/location/&lt;id&gt;
 Request: DELETE /api/tag/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found)
 </pre>
 
-<pre>Request: DELETE /api/filepersons JSON: { "files"=[...], "persons"=[...] }
-Request: DELETE /api/filelocations JSON: { "files"=[...], "locations"=[...] }
-Request: DELETE /api/filetags JSON: { "files"=[...], "tags"=[...] }
+<pre>Request: DELETE /api/filepersons JSON: { "files":[...], "persons":[...] }
+Request: DELETE /api/filelocations JSON: { "files":[...], "locations":[...] }
+Request: DELETE /api/filetags JSON: { "files":[...], "tags":[...] }
 Response: 200 (OK)
 </pre>
 
@@ -257,7 +267,7 @@ Response: 200 (OK)
 <pre>Request: GET /api/fileconsistency
 Response: 200 (OK)
 {
-    "missingfiles" = [fileid, fileid, ...]
+    "missingfiles": [fileid, fileid, ...]
 }
 </pre>
 

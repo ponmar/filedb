@@ -7,11 +7,8 @@ import zipfile
 import time
 from contextlib import closing
 import sqlite3
-from flask import Flask, request, session, g, url_for, \
-     abort, render_template, jsonify, send_from_directory, make_response, \
-     send_file
+from flask import Flask, request, g, abort, render_template, jsonify, send_from_directory, make_response, send_file
 import jpegfile
-from werkzeug.routing import BaseConverter
 from makeunicode import u
 
 
@@ -594,11 +591,11 @@ def api_rename_files():
             #print('Rename: ' + file_path + " -> " + new_file_path)
             g.db.execute("update files set path = ? where id = ?", (new_file_path, source_file_id))
         g.db.commit()
+        files = get_file_dicts(source_file_ids)
     except sqlite3.IntegrityError:
-        pass
+        files = []
 
-    # TODO: return updated files?
-    return jsonify({})
+    return jsonify({"files": files})
 
 
 @app.route('/api/filelocations', methods=['PUT'])
@@ -1046,12 +1043,7 @@ def api_get_json_files_from_ids():
     content = request.get_json(silent=True)
     file_ids = content['files']
 
-    files = []
-    for file_id in file_ids:
-        file_json = get_file_dict(file_id)
-        if file_json is not None:
-            files.append(file_json)
-
+    files = get_file_dicts(file_ids)
     files.sort(key=lambda file: file['path'])
 
     cursor = g.db.execute('select count(*) from files')
@@ -1116,6 +1108,15 @@ def get_file_dict(file_id):
     tag_ids = [filetags_row[0] for filetags_row in cur.fetchall()]
 
     return dict(id=row[0], path=row[1], description=row[2], datetime=row[3], persons=person_ids, locations=location_ids, tags=tag_ids)
+
+
+def get_file_dicts(file_ids):
+    file_dicts = []
+    for file_id in file_ids:
+        file_dict = get_file_dict(file_id)
+        if file_dict is not None:
+            file_dicts.append(file_dict)
+    return file_dicts
 
 
 def get_file_json(file_id):
