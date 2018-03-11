@@ -39,7 +39,8 @@ $(document).ready(function(){
         <div class="row">
             <div class="col-md-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Path prefix (examples: '2016', '2016/2016-05-03')" title="Path prefix (examples: '2016', '2016/2016-05-03')" id="find_file_by_path_input">
+                    <span class="input-group-addon" id="basic-addon1">Path prefix</span>
+                    <input type="text" class="form-control" placeholder="Example: 2016/2016-05-03" id="find_file_by_path_input" aria-describedby="basic-addon1">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" id="find_file_by_path_button">Search</button>
                     </span>
@@ -47,7 +48,8 @@ $(document).ready(function(){
             </div>
             <div class="col-md-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Path regular expression (example: '2016-05-03')" title="Path regular expression" id="find_file_by_path_regexp_input">
+                    <span class="input-group-addon" id="basic-addon2">Path regular expression</span>
+                    <input type="text" class="form-control" placeholder="Example: christmas" id="find_file_by_path_regexp_input" aria-describedby="basic-addon2">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" id="find_file_by_path_regexp_button">Search</button>
                     </span>
@@ -61,7 +63,8 @@ $(document).ready(function(){
   <div class="panel-heading">Find Files from Exported Search</div>
   <div class="panel-body">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="categorize_exported_list_of_files_input">
+      <span class="input-group-addon" id="basic-addon3">File list</span>
+      <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="categorize_exported_list_of_files_input" aria-describedby="basic-addon3">
       <span class="input-group-btn">
       <button type="button" class="btn btn-default" id="categorize_exported_list_of_files_button">Search</button>
       </span>
