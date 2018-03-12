@@ -1684,10 +1684,13 @@ function load_slideshow_file(){
     });
 
     var file_text = "";
+    var overlay_text = "";
 
     var file_datetime = file['datetime'];
     if (file_datetime != null){
-        file_text += file_datetime.replace('T', ' ') + " (" + get_age(file_datetime, new Date()) + " years ago)";
+        var timestamp = file_datetime.replace('T', ' ') + " (" + get_age(file_datetime, new Date()) + " years ago)";
+        file_text += timestamp;
+        overlay_text += '<p>' + timestamp + '</p>';
     }
 
     var file_description = file["description"];
@@ -1696,6 +1699,7 @@ function load_slideshow_file(){
             file_text += ": ";
         }
         file_text += file_description;
+        overlay_text += '<p>' + file_description + '</p>';
     }
 
     if (file_text.length > 0){
@@ -1703,19 +1707,25 @@ function load_slideshow_file(){
     }
 
     var item_separator = ', ';
+    var overlay_item_separator = '<br>';
     var found_location = false;
     var found_person = false;
 
     var file_location_ids = file['locations'];
     if (file_location_ids.length > 0){
+        overlay_text += '<p>';
         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
             var location = find_location(location_id);
             if (location != null){
-                file_text += get_location_map_link(location) + item_separator;
+                var location_map_link = get_location_map_link(location) + item_separator;
+                file_text += location_map_link;
+                overlay_text += location_map_link;
                 found_location = true;
            }
         }
         file_text = remove_text_ending(file_text, item_separator);
+        overlay_text = remove_text_ending(overlay_text, item_separator);
+        overlay_text += '</p>';
     }
 
     var file_person_ids = file['persons'];
@@ -1723,6 +1733,8 @@ function load_slideshow_file(){
         if (found_location){
             file_text += ": ";
         }
+
+        overlay_text += '<p>';
 
         var file_datetime_object = new Date(file_datetime);
         for (var i=0, person_id; person_id = file_person_ids[i]; i++){
@@ -1736,11 +1748,15 @@ function load_slideshow_file(){
                 else{
                     person_age_in_file = "";
                 }
-                file_text += get_person_span(person) + person_age_in_file + item_separator;
+                var person_text = get_person_span(person) + person_age_in_file;
+                file_text += person_text + item_separator;
+                overlay_text += person_text + overlay_item_separator;
                 found_person = true;
             }
         }
         file_text = remove_text_ending(file_text, item_separator);
+        overlay_text = remove_text_ending(overlay_text, overlay_item_separator);
+        overlay_text += '</p>';
     }
 
     var file_tag_ids = file['tags'];
@@ -1749,18 +1765,23 @@ function load_slideshow_file(){
             file_text += "<br>";
         }
 
+        overlay_text += '<p>';
+
         file_text += "Tags: ";
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++){
             var tag = find_tag(tag_id);
             if (tag != null){
                 file_text += tag['name'] + item_separator;
+                overlay_text += tag['name'] + overlay_item_separator;
             }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
+        overlay_text = remove_text_ending(overlay_text, overlay_item_separator);
+        overlay_text += '</p>';
     }
 
     $("#slideshow_item_text").html(file_text);
-    $("#my_fullscreen_browser_overlay").html(file_text);
+    $("#my_fullscreen_browser_overlay").html(overlay_text);
 }
 
 function find_person(person_id){
