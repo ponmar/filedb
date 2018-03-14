@@ -1608,7 +1608,7 @@ function update_search_result(files_json){
 }
 
 function remove_text_ending(text, ending){
-    if (text.endsWith(ending)){
+    if (text.indexOf(ending, text.length - ending.length) != -1){
         text = text.slice(0, -ending.length);
     }
     return text;
@@ -1717,14 +1717,14 @@ function load_slideshow_file(){
         for (var i=0, location_id; location_id = file_location_ids[i]; i++){
             var location = find_location(location_id);
             if (location != null){
-                var location_map_link = get_location_map_link(location) + item_separator;
-                file_text += location_map_link;
-                overlay_text += location_map_link;
+                var location_map_link = get_location_map_link(location);
+                file_text += location_map_link + item_separator;
+                overlay_text += location_map_link + overlay_item_separator;
                 found_location = true;
            }
         }
         file_text = remove_text_ending(file_text, item_separator);
-        overlay_text = remove_text_ending(overlay_text, item_separator);
+        overlay_text = remove_text_ending(overlay_text, overlay_item_separator);
         overlay_text += '</p>';
     }
 
