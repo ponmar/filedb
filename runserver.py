@@ -56,7 +56,7 @@ def main():
                         help='clean the database',
                         action='store_true')
     parser.add_argument('--configuration',
-                        help='change configuration without updating config.py')
+                        help='change configuration without updating config.py. Example: config.MyConfig')
     parser.add_argument('--print_files',
                         help='Print added files (used for debugging purposes only)',
                         action='store_true')
