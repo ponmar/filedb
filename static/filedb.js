@@ -396,46 +396,46 @@ function filedb_init_browse_page(){
         filelists_difference();
     });
 
-    $('body').keypress(function(e){
+    $('body').keydown(function(e){
         // Setup fullscreen controls
         //alert("keypress: " + e.keyCode);
         if (fullscreen_slideshow_opened()){
-            if (e.keyCode == 27){
+            if (e.which == 27){
                 // Escape pressed
                 close_fullscreen_browser();
                 e.preventDefault();
             }
-            else if (e.keyCode == 39){
+            else if (e.which == 39){
                 // Left pressed
                 next_slideshow_file();
                 e.preventDefault();
             }
-            else if (e.keyCode == 37){
+            else if (e.which == 37){
                 // Right pressed
                 prev_slideshow_file();
                 e.preventDefault();
             }
-            else if (e.keyCode == 33){
+            else if (e.which == 33){
                 // Page-up pressed
                 prev_directory_slideshow();
                 e.preventDefault();
             }
-            else if (e.keyCode == 34){
+            else if (e.which == 34){
                 // Page-down pressed
                 next_directory_slideshow();
                 e.preventDefault();
             }
-            else if (e.keyCode == 36){
+            else if (e.which == 36){
                 // Home pressed
                 restart_slideshow();
                 e.preventDefault();
             }
-            else if (e.keyCode == 35){
+            else if (e.which == 35){
                 // End pressed
                 end_slideshow();
                 e.preventDefault();
             }
-            else if (e.keyCode == 13){
+            else if (e.which == 13){
                 // Enter pressed
                 toggle_slideshow();
                 e.preventDefault();
