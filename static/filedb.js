@@ -498,19 +498,19 @@ function reload_persons_table(){
         $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name <span id="sort_by_person_first_name_icon"></span></th><th id="persons_lastname_col_header">Last Name <span id="sort_by_person_last_name_icon"></span></th><th id="persons_description_col_header">Description  <span id="sort_by_person_description_icon"></span></th><th id="persons_age_col_header">Born Years Ago  <span id="sort_by_person_age_icon"></span></th><th id="persons_dateofbirth_col_header">Date of Birth  <span id="sort_by_person_dateofbirth_icon"></span></th><th>Actions</th></tr></table>');
 
         $("#sort_by_person_last_name_icon").removeClass("glyphicon glyphicon-triangle-bottom");
-        if (persons_order_by.startsWith('firstname')){
+        if (persons_order_by.indexOf('firstname') == 0){
             $("#sort_by_person_first_name_icon").addClass("glyphicon glyphicon-triangle-bottom");
         }
-        else if (persons_order_by.startsWith('lastname')){
+        else if (persons_order_by.indexOf('lastname') == 0){
             $("#sort_by_person_last_name_icon").addClass("glyphicon glyphicon-triangle-bottom");
         }
-        else if (persons_order_by.startsWith('description')){
+        else if (persons_order_by.indexOf('description') == 0){
             $("#sort_by_person_description_icon").addClass("glyphicon glyphicon-triangle-bottom");
         }
-        else if (persons_order_by.startsWith('dateofbirth:desc')){
+        else if (persons_order_by.indexOf('dateofbirth:desc') == 0){
             $("#sort_by_person_age_icon").addClass("glyphicon glyphicon-triangle-bottom");
         }
-        else if (persons_order_by.startsWith('dateofbirth:asc')){
+        else if (persons_order_by.indexOf('dateofbirth:asc') == 0){
             $("#sort_by_person_dateofbirth_icon").addClass("glyphicon glyphicon-triangle-bottom");
         }
 
@@ -612,10 +612,10 @@ function reload_locations_table(){
         // TODO: do not set table id? instead search for the table inside locationsdiv below?
         $('#locationsdiv').html('<table class="table" id="locationstable"><tr><th id="locations_name_col_header">Name <span id="sort_by_location_name_icon"></span></th><th id="locations_description_col_header">Description <span id="sort_by_location_description_icon"></span></th><th>Position (Latitude and Longitude)</th><th>Actions</th></tr></table>');
 
-        if (locations_order_by.startsWith('name')){
+        if (locations_order_by.indexOf('name') == 0){
             $("#sort_by_location_name_icon").addClass("glyphicon glyphicon-triangle-bottom");
         }
-        else if (locations_order_by.startsWith('description')){
+        else if (locations_order_by.indexOf('description') == 0){
             $("#sort_by_location_description_icon").addClass("glyphicon glyphicon-triangle-bottom");
         }
 
@@ -960,7 +960,7 @@ function categorize_file_from_path(){
         if (path != ""){
             categorize_result = [];
             for (var file, i=0; file = categorize_files[i]; i++){
-                if (file['path'].startsWith(path)){
+                if (file['path'].indexOf(path) == 0){
                     categorize_result.push(i);
                 }
             }
@@ -1625,7 +1625,7 @@ function show_slideshow(){
 }
 
 function is_content_type_image(content_type){
-    return content_type.startsWith('image/');
+    return content_type.indexOf('image/') == 0;
 }
 
 function load_slideshow_file(){
