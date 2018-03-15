@@ -90,7 +90,8 @@ def main():
                         print('Starting the FileDB server...')
                         filedb.app.run(debug=filedb.app.config['DEBUG'],
                                        host=filedb.app.config['HOST'],
-                                       port=filedb.app.config['PORT'])
+                                       port=filedb.app.config['PORT'],
+                                       threaded=True)
                 finally:
                     if filedb.files_root_dir_exists():
                         unmount_root_directory()
