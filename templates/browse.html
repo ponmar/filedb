@@ -24,6 +24,7 @@ $(document).ready(function(){
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#basic_search_criteria">Basic</a></li>
       <li><a data-toggle="tab" href="#advanced_search_criteria">Advanced</a></li>
+      <li><a data-toggle="tab" href="#exported_search_criteria">Exported search</a></li>
     </ul>
     <div class="tab-content">
       <div id="basic_search_criteria" class="tab-pane fade in active">
@@ -31,7 +32,6 @@ $(document).ready(function(){
         <button type="button" class="btn btn-default" id="search_all_files_button" title="">Browse all files</button>
         <button type="button" class="btn btn-default" id="search_ten_random_files_button" title="">Browse ten random files</button>
       </div>
-
       <div id="advanced_search_criteria" class="tab-pane fade">
         <br>
         <div class="alert alert-info" role="alert"><strong>Note:</strong> Read about regular expressions at the <a href="{{ url_for('app_help') }}#regexp">Help page</a>.</div>
@@ -93,19 +93,16 @@ $(document).ready(function(){
         <button type="button" class="btn btn-default" id="clear_search_button" title="Clear previous search result">Clear</button>
         <button type="button" class="btn btn-default" id="search_files_by_all_button" title="Make a new search">Search</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Exported Search Criteria</div>
-  <div class="panel-body">
-    <div class="input-group">
-      <span class="input-group-addon" id="basic-addon4">File list</span>
-      <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="exported_list_of_files_input" aria-describedby="basic-addon4">
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" id="exported_list_of_files_button">Search</button>
-      </span>
+      <div id="exported_search_criteria" class="tab-pane fade in">
+        <br>
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon4">File list</span>
+          <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="exported_list_of_files_input" aria-describedby="basic-addon4">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" id="exported_list_of_files_button">Search</button>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
