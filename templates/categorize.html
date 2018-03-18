@@ -22,21 +22,26 @@ $(document).ready(function(){
 <div id="categorize_page_content" class="hidden">
 
 <div class="panel panel-default">
-    <div class="panel-heading">Find Files without Specified Categorization</div>
+    <div class="panel-heading">Find Files</div>
     <div class="panel-body">
-        <button type="button" class="btn btn-default margin_spacer" id="find_file_wo_any_button">Any</button>
-        <button type="button" class="btn btn-default" id="find_file_wo_person_button">Person</button>
-        <button type="button" class="btn btn-default" id="find_file_wo_location_button">Location</button>
-        <button type="button" class="btn btn-default margin_spacer" id="find_file_wo_tag_button">Tag</button>
-        <button type="button" class="btn btn-default" id="find_file_wo_description_button">Description</button>
-        <button type="button" class="btn btn-default" id="find_file_wo_date_button">Date</button>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">Find Files by Path</div>
-    <div class="panel-body">
-        <div class="row">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#find_files_without_catogorization">Without specified categorization</a></li>
+        <li><a data-toggle="tab" href="#find_files_by_path">By path</a></li>
+        <li><a data-toggle="tab" href="#find_exported_files">Exported search</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="find_files_without_catogorization" class="tab-pane fade in active">
+          <br>
+          <button type="button" class="btn btn-default margin_spacer" id="find_file_wo_any_button">Any</button>
+          <button type="button" class="btn btn-default" id="find_file_wo_person_button">Person</button>
+          <button type="button" class="btn btn-default" id="find_file_wo_location_button">Location</button>
+          <button type="button" class="btn btn-default margin_spacer" id="find_file_wo_tag_button">Tag</button>
+          <button type="button" class="btn btn-default" id="find_file_wo_description_button">Description</button>
+          <button type="button" class="btn btn-default" id="find_file_wo_date_button">Date</button>
+        </div>
+        <div id="find_files_by_path" class="tab-pane fade in">
+          <br>
+          <div class="row">
             <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1">Path prefix</span>
@@ -55,21 +60,20 @@ $(document).ready(function(){
                     </span>
                 </div>
             </div>
+          </div>
         </div>
+        <div id="find_exported_files" class="tab-pane fade in">
+          <br>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon3">File list</span>
+            <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="categorize_exported_list_of_files_input" aria-describedby="basic-addon3">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" id="categorize_exported_list_of_files_button">Search</button>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">Find Files from Exported Search</div>
-  <div class="panel-body">
-    <div class="input-group">
-      <span class="input-group-addon" id="basic-addon3">File list</span>
-      <input type="text" class="form-control" placeholder="Format: id1;id2;id3;..." id="categorize_exported_list_of_files_input" aria-describedby="basic-addon3">
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-default" id="categorize_exported_list_of_files_button">Search</button>
-      </span>
-    </div>
-  </div>
 </div>
 
 <div class="panel panel-default">
