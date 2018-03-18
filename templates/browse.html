@@ -19,74 +19,81 @@ $(document).ready(function(){
 <h1>Browse Files</h1>
 
 <div class="panel panel-default">
-  <div class="panel-heading">Simple Search Criteria</div>
+  <div class="panel-heading">Search Criteria</div>
   <div class="panel-body">
-    <button type="button" class="btn btn-default" id="search_all_files_button" title="">Browse all files</button>
-    <button type="button" class="btn btn-default" id="search_ten_random_files_button" title="">Browse ten random files</button>
-  </div>
-</div>
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="#basic_search_criteria">Basic</a></li>
+      <li><a data-toggle="tab" href="#advanced_search_criteria">Advanced</a></li>
+    </ul>
+    <div class="tab-content">
+      <div id="basic_search_criteria" class="tab-pane fade in active">
+        <br>
+        <button type="button" class="btn btn-default" id="search_all_files_button" title="">Browse all files</button>
+        <button type="button" class="btn btn-default" id="search_ten_random_files_button" title="">Browse ten random files</button>
+      </div>
 
-<div class="panel panel-default">
-  <div class="panel-heading">Advanced Search Criteria</div>
-  <div class="panel-body">
-    <div class="alert alert-info" role="alert"><strong>Note:</strong> Read about regular expressions at the <a href="{{ url_for('app_help') }}#regexp">Help page</a>.</div>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="form-group">
-          <label for="file_path_regexp_filter">File path regexp</label>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Should match: path/to/file" id="file_path_regexp_filter">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" id="file_path_regexp_button">Search</button>
-            </span>
+      <div id="advanced_search_criteria" class="tab-pane fade">
+        <br>
+        <div class="alert alert-info" role="alert"><strong>Note:</strong> Read about regular expressions at the <a href="{{ url_for('app_help') }}#regexp">Help page</a>.</div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="file_path_regexp_filter">File path regexp</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Should match: path/to/file" id="file_path_regexp_filter">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" id="file_path_regexp_button">Search</button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="file_description_regexp_filter">File description regexp</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Should match: Any text here" id="file_description_regexp_filter">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" id="file_description_regexp_button">Search</button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="file_date_regexp_filter">File date and time regexp</label>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Should match: YYYY-MM-DDTHH:MM:SS" id="file_date_regexp_filter">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" id="file_date_regexp_button">Search</button>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label for="file_description_regexp_filter">File description regexp</label>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Should match: Any text here" id="file_description_regexp_filter">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" id="file_description_regexp_button">Search</button>
-            </span>
+        <div class="row">
+          <div class="col-md-4">
+            <label for="multiplepersonselect">Persons (hold CTRL for multiple select)</label>
+            <select multiple class="form-control" id="multiplepersonselect" size="15"></select>
+            <button type="button" class="btn btn-default" id="search_files_by_persons_button">Search file persons</button>
+          </div>
+          <div class="col-md-4">
+            <label for="multiplelocationselect">Locations (hold CTRL for multiple select)</label>
+            <select multiple class="form-control" id="multiplelocationselect" size="15"></select>
+            <button type="button" class="btn btn-default" id="search_files_by_locations_button">Search file locations</button>
+          </div>
+          <div class="col-md-4">
+            <label for="multipletagselect">Tags (hold CTRL for multiple select)</label>
+            <select multiple class="form-control" id="multipletagselect" size="15"></select>
+            <button type="button" class="btn btn-default" id="search_files_by_tags_button">Search file tags</button>
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label for="file_date_regexp_filter">File date and time regexp</label>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Should match: YYYY-MM-DDTHH:MM:SS" id="file_date_regexp_filter">
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" id="file_date_regexp_button">Search</button>
-            </span>
-          </div>
-        </div>
+
+        <br>
+        <button type="button" class="btn btn-default" id="reset_search_criteria_button" title="Reset search criteria">Reset</button>
+        <button type="button" class="btn btn-default" id="clear_search_button" title="Clear previous search result">Clear</button>
+        <button type="button" class="btn btn-default" id="search_files_by_all_button" title="Make a new search">Search</button>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-4">
-        <label for="multiplepersonselect">Persons (hold CTRL for multiple select)</label>
-        <select multiple class="form-control" id="multiplepersonselect" size="15"></select>
-        <button type="button" class="btn btn-default" id="search_files_by_persons_button">Search file persons</button>
-      </div>
-      <div class="col-md-4">
-        <label for="multiplelocationselect">Locations (hold CTRL for multiple select)</label>
-        <select multiple class="form-control" id="multiplelocationselect" size="15"></select>
-        <button type="button" class="btn btn-default" id="search_files_by_locations_button">Search file locations</button>
-      </div>
-      <div class="col-md-4">
-        <label for="multipletagselect">Tags (hold CTRL for multiple select)</label>
-        <select multiple class="form-control" id="multipletagselect" size="15"></select>
-        <button type="button" class="btn btn-default" id="search_files_by_tags_button">Search file tags</button>
-      </div>
-    </div>
-
-    <br>
-    <button type="button" class="btn btn-default" id="reset_search_criteria_button" title="Reset search criteria">Reset</button>
-    <button type="button" class="btn btn-default" id="clear_search_button" title="Clear previous search result">Clear</button>
-    <button type="button" class="btn btn-default" id="search_files_by_all_button" title="Make a new search">Search</button>
   </div>
 </div>
 
