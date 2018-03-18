@@ -1363,6 +1363,7 @@ function reset_search_criteria(){
 }
 
 function clear_search_result(){
+    $("#search_result_heading_postfix").text("");
     $("#search_result_text").text("No search result available");
     clear_previous_search();
     clear_slideshow();
@@ -1562,7 +1563,8 @@ function update_search_result(files_json){
 
     var item_separator = ', ';
 
-    var text = slideshow_files.length + " of " + files_json['total_num_files'] + " files visible with categories: ";
+    $("#search_result_heading_postfix").text(": [" + slideshow_files.length + "/" + files_json['total_num_files'] + "]");
+    var text = "Categories: ";
 
     if (Object.keys(persons).length > 0 || Object.keys(locations).length > 0 || Object.keys(tags).length > 0){
         for (var person_id in persons){
