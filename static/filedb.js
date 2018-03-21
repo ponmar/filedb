@@ -1545,21 +1545,26 @@ function search_files_by_datetime(){
 function update_search_result(files_json){
     slideshow_files = files_json['files'];
 
-    // TODO: change data-structures for storing unique values?
-    var persons = {};
-    var locations = {};
-    var tags = {};
+    var persons = [];
+    var locations = [];
+    var tags = [];
 
     // Store unique persons, locations and tags from search result
     for (var i=0, file; file = slideshow_files[i]; i++){
         for (var j=0, person_id; person_id = file['persons'][j]; j++){
-            persons[person_id] = person_id;
+            if (persons.indexOf(person_id) == -1){
+                persons.push(person_id);
+            }
         }
         for (var j=0, location_id; location_id = file['locations'][j]; j++){
-            locations[location_id] = location_id;
+            if (locations.indexOf(location_id) == -1){
+                locations.push(location_id);
+            }
         }
         for (var j=0, tag_id; tag_id = file['tags'][j]; j++){
-            tags[tag_id] = tag_id;
+            if (tags.indexOf(tag_id) == -1){
+                tags.push(tag_id);
+            }
         }
     }
 
@@ -1585,8 +1590,8 @@ function update_search_result(files_json){
         directories_html = remove_text_ending(directories_html, '<br>');
     }
 
-    if (Object.keys(persons).length > 0){
-        for (var person_id in persons){
+    if (persons.length > 0){
+        for (var i=0, person_id; person_id = persons[i]; i++){
             var person = find_person(person_id);
             if (person != null){
                 persons_html += get_person_span(person) + '<br>';
@@ -1595,8 +1600,8 @@ function update_search_result(files_json){
         persons_html = remove_text_ending(persons_html, '<br>');
     }
 
-    if (Object.keys(locations).length > 0) {
-        for (var location_id in locations){
+    if (locations.length > 0) {
+        for (var i=0, location_id; location_id = locations[i]; i++){
             var location = find_location(location_id);
             if (location != null){
                 locations_html += get_location_map_link(location) + '<br>';
@@ -1605,8 +1610,8 @@ function update_search_result(files_json){
         locations_html = remove_text_ending(locations_html, '<br>');
     }
 
-    if (Object.keys(tags).length > 0) {
-        for (var tag_id in tags){
+    if (tags.length > 0) {
+        for (var i=0, tag_id; tag_id = tags[i]; i++){
             var tag = find_tag(tag_id);
             if (tag != null){
                 tags_html += tag['name'] + '<br>';
