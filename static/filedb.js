@@ -1365,6 +1365,10 @@ function reset_search_criteria(){
 function clear_search_result(){
     $("#search_result_heading_postfix").text("");
     $("#search_result_text").text("No search result available");
+    $("#search_result_directories").html("");
+    $("#search_result_persons").html("");
+    $("#search_result_locations").html("");
+    $("#search_result_tags").html("");
     clear_previous_search();
     clear_slideshow();
 }
@@ -1551,62 +1555,71 @@ function update_search_result(files_json){
         for (var j=0, person_id; person_id = file['persons'][j]; j++){
             persons[person_id] = person_id;
         }
-        for (var j=0, person_id; person_id = file['locations'][j]; j++){
-            locations[person_id] = person_id;
+        for (var j=0, location_id; location_id = file['locations'][j]; j++){
+            locations[location_id] = location_id;
         }
-        for (var j=0, person_id; person_id = file['tags'][j]; j++){
-            tags[person_id] = person_id;
+        for (var j=0, tag_id; tag_id = file['tags'][j]; j++){
+            tags[tag_id] = tag_id;
         }
     }
 
-    // Create result message
-
-    var item_separator = ', ';
-
+    // Update heading
     $("#search_result_heading_postfix").text(": [" + slideshow_files.length + "/" + files_json['total_num_files'] + "]");
-    var text = "Categories: ";
 
-    if (Object.keys(persons).length > 0 || Object.keys(locations).length > 0 || Object.keys(tags).length > 0){
-        for (var person_id in persons){
-            var person = find_person(person_id);
-            if (person != null){
-                text += get_person_span(person) + item_separator;
-            }
-        }
+    // Update search matches
+    var directories_html = '';
+    var persons_html = '';
+    var locations_html = '';
+    var tags_html = '';
 
-        for (var location_id in locations){
-            var location = find_location(location_id);
-            if (location != null){
-                text += get_location_map_link(location) + item_separator;
-            }
-        }
-
-        for (var tag_id in tags){
-            var tag = find_tag(tag_id);
-            if (tag != null){
-                text += tag['name'] + item_separator;
-            }
-        }
-
-        text = remove_text_ending(text, item_separator);
-    }
-    else{
-        text += "N/A";
-    }
-    
     if (slideshow_files.length > 0){
         prev_dir = null;
         for (var i=0, file; file = slideshow_files[i]; i++){
             path = slideshow_files[i]['path'];
             var dir = get_directory_from_path(path);
             if (prev_dir == null || prev_dir != dir){
-                text += '<br>' + dir;
+                directories_html += dir + '<br>';
                 prev_dir = dir;
             }
         }
+        directories_html = remove_text_ending(directories_html, '<br>');
     }
 
-    $("#search_result_text").html(text);
+    if (Object.keys(persons).length > 0){
+        for (var person_id in persons){
+            var person = find_person(person_id);
+            if (person != null){
+                persons_html += get_person_span(person) + '<br>';
+            }
+        }
+        persons_html = remove_text_ending(persons_html, '<br>');
+    }
+
+    if (Object.keys(locations).length > 0) {
+        for (var location_id in locations){
+            var location = find_location(location_id);
+            if (location != null){
+                locations_html += get_location_map_link(location) + '<br>';
+            }
+        }
+        locations_html = remove_text_ending(locations_html, '<br>');
+    }
+
+    if (Object.keys(tags).length > 0) {
+        for (var tag_id in tags){
+            var tag = find_tag(tag_id);
+            if (tag != null){
+                tags_html += tag['name'] + '<br>';
+            }
+        }
+        tags_html = remove_text_ending(tags_html, '<br>');
+    }
+
+    $("#search_result_directories").html(directories_html);
+    $("#search_result_persons").html(persons_html);
+    $("#search_result_locations").html(locations_html);
+    $("#search_result_tags").html(tags_html);
+    $("#search_result_text").html('');
 }
 
 function remove_text_ending(text, ending){
