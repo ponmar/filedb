@@ -3,7 +3,6 @@ import argparse
 
 TITLE = 'FileDB file downloader'
 FILENAME = '{index:0>3}_{file_id}.jpg'
-FILE_ID_SEPARATOR = ';'
 FILEDB_FILECONTENT_URL = '{}/api/filecontent/{}'
 
 
@@ -15,20 +14,23 @@ def get_file(url):
     return r.content
 
 
+def parse_file_ids(files_str):
+    file_id_strs = files_str.split(';')
+    file_ids = []
+    for file_id_str in file_id_strs:
+        if file_id_str:
+            file_ids.append(int(file_id_str))
+    return file_ids
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=TITLE)
     parser.add_argument('server', help='Example: http://localhost')
     parser.add_argument('files', help='Example: 20;3;2043')
     args = parser.parse_args()
 
-    file_id_strs = args.files.split(FILE_ID_SEPARATOR)
-    file_ids = []
-    for file_id_str in file_id_strs:
-        if file_id_str:
-            file_ids.append(int(file_id_str))
-
     filename_index = 1
-    for file_id in file_ids:
+    for file_id in parse_file_ids(args.files):
         url = FILEDB_FILECONTENT_URL.format(args.server, file_id)
         file_content = get_file(url)
         if file_content is not None:
