@@ -41,6 +41,8 @@ FileDB prerequisites:
 
         pip install pillow
 
+- [pychromecast](https://github.com/balloob/pychromecast) (for streaming to Google Chromecast compatible devices on the local network)
+
 ## Download ##
 
 Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or use the master branch.
