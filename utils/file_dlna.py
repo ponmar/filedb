@@ -3,12 +3,12 @@ import urllib
 import urllib.request
 import time
 try:
-    import pychromecast
+    import dlnap
 except ImportError:
-    print('Could not import pychromecast')
+    print('Could not import required dlnap module. Please download from https://github.com/cherezov/dlnap/')
     exit(1)
 
-TITLE = 'FileDB search result cast'
+TITLE = 'FileDB search result dlna playback'
 FILEDB_FILECONTENT_URL = '{}/api/filecontent/{}'
 CONTENT_TYPES_TO_PLAY = ['image/jpeg']
 FILE_DELAY = 4
@@ -31,13 +31,6 @@ def get_content_type(url):
         return None
 
 
-def find_cast(name):
-    for cc in pychromecast.get_chromecasts():
-        if cc.name == name:
-            return cc
-    return None
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=TITLE)
     parser.add_argument('server', help='Example: http://192.168.0.29')
@@ -45,12 +38,10 @@ if __name__ == '__main__':
     parser.add_argument('files', help='Example: 20;3;2043')
     args = parser.parse_args()
 
-    cast = find_cast(args.device)
-    if not cast:
-        print('No such cast device name: ' + args.device)
+    devices = dlnap.discover(args.device)
+    if not devices:
+        print('No such dlna device name: ' + args.device)
         exit(1)
-
-    cast.wait()
 
     for file_id in parse_file_ids(args.files):
         url = FILEDB_FILECONTENT_URL.format(args.server, file_id)
@@ -60,8 +51,9 @@ if __name__ == '__main__':
             print('Unable to get file content type from FileDB server')
             exit(1)
         elif content_type in CONTENT_TYPES_TO_PLAY:
-            cast.media_controller.play_media(url, content_type)
-            cast.media_controller.block_until_active()
+            for device in devices:
+                device.set_current_media(url=url)
+                device.play()
             time.sleep(FILE_DELAY)
         else:
             print('Ignored file with id {} due to content type {}'.format(file_id, content_type))

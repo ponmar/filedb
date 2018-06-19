@@ -135,6 +135,7 @@ class DevelopmentConfig(DefaultConfig):
 
 class MyConfig(DevelopmentConfig):
     """A custom configuration example."""
+    DATABASE = '../filedb_db/filedb.db'
     FILES_ROOT_DIRECTORY = 'x:/'
     FILES_ROOT_DIRECTORY_MOUNT_COMMAND = r'net use x: \\nas\data1\bilder'
     FILES_ROOT_DIRECTORY_UMOUNT_COMMAND = 'net use x: /delete'
