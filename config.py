@@ -141,7 +141,7 @@ class MyConfig(DevelopmentConfig):
     FILES_ROOT_DIRECTORY_UMOUNT_COMMAND = 'net use x: /delete'
     PORT = 80
     HOST = '0.0.0.0'
-    BLACKLISTED_FILE_PATH_PATTERNS = DevelopmentConfig.BLACKLISTED_FILE_PATH_PATTERNS + ['nytt', 'TN_']
+    BLACKLISTED_FILE_PATH_PATTERNS = DevelopmentConfig.BLACKLISTED_FILE_PATH_PATTERNS + ['unsorted', 'TN_']
 
 
 # The configuration class to use. Specify any of the above classes.
