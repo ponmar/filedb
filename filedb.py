@@ -404,6 +404,31 @@ def export_paths(file_ids, absolute):
     return '\n'.join(file_paths)
 
 
+@app.route('/api/exportm3u', methods=['POST'])
+def api_export_m3u():
+    content = request.get_json(silent=True)
+    file_urls = get_file_urls(request.url_root, content['files'])
+    # TODO: set content type audio/x-mpegurl?
+    return '\n'.join(file_urls)
+
+
+@app.route('/api/exportpls', methods=['POST'])
+def api_export_pls():
+    content = request.get_json(silent=True)
+    file_urls = get_file_urls(request.url_root, content['files'])
+    pls = '[playlist]\nNumberOfEntries={}\n'.format(len(file_urls))
+    for i in range(len(file_urls)):
+        pls += 'File{}={}\n'.format(i+1, file_urls[i])
+    return pls
+
+
+def get_file_urls(url_root, file_ids):
+    file_urls = []
+    for file_id in file_ids:
+        file_urls.append(url_root + 'api/filecontent/' + str(file_id))
+    return file_urls
+
+
 @app.route('/api/person', methods=['POST'])
 def api_add_person():
     content = request.get_json(silent=True)

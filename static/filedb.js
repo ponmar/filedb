@@ -376,6 +376,14 @@ function filedb_init_browse_page(){
         export_zip_file();
     });
 
+    $('#export_m3u_file').click(function(){
+        export_m3u_file();
+    });
+
+    $('#export_pls_file').click(function(){
+        export_pls_file();
+    });
+
     $('#filelist1_update_button').click(function(){
         filelist1_update();
     });
@@ -1956,6 +1964,8 @@ function update_export_buttons(){
     $("#export_absolute_paths").prop('disabled', !has_slideshow_files);
     $("#export_relative_paths").prop('disabled', !has_slideshow_files);
     $("#export_zip_file").prop('disabled', !has_slideshow_files);
+    $("#export_m3u_file").prop('disabled', !has_slideshow_files);
+    $("#export_pls_file").prop('disabled', !has_slideshow_files);
 }
 
 function open_fullscreen_slideshow(){
@@ -2547,6 +2557,14 @@ function export_data(url, success_function){
 
 function export_zip_file(){
     export_data('/api/exportzip', download_exported_data);
+}
+
+function export_m3u_file(){
+    export_data('/api/exportm3u', show_exported_data);
+}
+
+function export_pls_file(){
+    export_data('/api/exportpls', show_exported_data);
 }
 
 function get_search_result_file_export_str(){

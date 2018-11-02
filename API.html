@@ -165,6 +165,18 @@ second/path/to/file
 ...
 </pre>
 
+<h2>Fetch Data: M3U playlist</h2>
+<pre>Request: POST /api/exportm3u JSON: { "files": [ fileid1, fileid2, ...] }
+Response: 200 (OK), 400 (Bad Request)
+M3U playlist
+</pre>
+
+<h2>Fetch Data: PLS playlist</h2>
+<pre>Request: POST /api/exportpls JSON: { "files": [ fileid1, fileid2, ...] }
+Response: 200 (OK), 400 (Bad Request)
+PLS playlist
+</pre>
+
 <h2>Add Data</h2>
 <pre>Request: POST /api/import
 Response: 200 (OK), 409 (Conflict)
