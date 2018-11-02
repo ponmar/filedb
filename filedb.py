@@ -408,8 +408,10 @@ def export_paths(file_ids, absolute):
 def api_export_m3u():
     content = request.get_json(silent=True)
     file_urls = get_file_urls(request.url_root, content['files'])
-    # TODO: set content type audio/x-mpegurl?
-    return '\n'.join(file_urls)
+    m3u = '\n'.join(file_urls)
+    resp = app.make_response(m3u)
+    resp.mimetype = 'audio/x-mpegurl'
+    return resp
 
 
 @app.route('/api/exportpls', methods=['POST'])
