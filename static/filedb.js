@@ -404,6 +404,10 @@ function filedb_init_browse_page(){
         filelists_difference();
     });
 
+    $('#copy_filelists_result_button').click(function(){
+        filelists_copy_result();
+    });
+
     $('body').keydown(function(e){
         // Setup fullscreen controls
         //alert("keypress: " + e.keyCode);
@@ -2665,4 +2669,10 @@ function show_filelists_result(file_ids){
         files_str += file_id + ';';
     }
     $('#filelists_result_input').val(files_str);
+}
+
+function filelists_copy_result(){
+    var filelists_result = document.getElementById("filelists_result_input");
+    filelists_result.select();
+    document.execCommand("copy");
 }
