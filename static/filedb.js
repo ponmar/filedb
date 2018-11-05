@@ -449,8 +449,8 @@ function filedb_init_browse_page() {
                 end_slideshow();
                 e.preventDefault();
             }
-            else if (e.which == 13) {
-                // Enter pressed
+            else if (e.which == 13 || e.which == 32) {
+                // Enter or space pressed
                 toggle_slideshow();
                 e.preventDefault();
             }
@@ -1032,7 +1032,7 @@ function update_categorize_result() {
         categorize_file();
 
         var categorize_search_result_text = "";
-        prev_dir = null;
+        var prev_dir = null;
         for (i=0; i<categorize_result.length; i++) {
             var path = categorize_files[categorize_result[i]]['path'];
             var dir = get_directory_from_path(path);
@@ -1592,9 +1592,9 @@ function update_search_result(files_json) {
     var tags_html = '';
 
     if (slideshow_files.length > 0) {
-        prev_dir = null;
+        var prev_dir = null;
         for (var i=0, file; file = slideshow_files[i]; i++) {
-            path = slideshow_files[i]['path'];
+            var path = slideshow_files[i]['path'];
             var dir = get_directory_from_path(path);
             if (prev_dir == null || prev_dir != dir) {
                 directories_html += dir + '<br>';
