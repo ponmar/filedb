@@ -575,6 +575,10 @@ function pinned_files_modified() {
     $('#pinned_files_input').val(create_pinned_files_str());
     $("#clear_pinned_files_button").prop('disabled', pinned_file_ids.length == 0);
     update_slideshow_buttons();
+    // TODO: only update pinned text somehow, do not reload file etc.
+    if (slideshow_index != -1) {
+        load_slideshow_file();
+    }
 }
 
 function get_persons() {
@@ -1918,6 +1922,10 @@ function load_slideshow_file() {
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
         overlay_text = remove_text_ending(overlay_text, overlay_item_separator);
         overlay_text += '</p>';
+    }
+
+    if (pinned_file_ids.includes(file['id'])) {
+        overlay_text += "<p>PINNED</p>";
     }
 
     $("#slideshow_item_text").html(file_text);
