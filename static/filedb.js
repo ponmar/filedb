@@ -1991,7 +1991,7 @@ function find_tag_index(tag_id) {
 
 function slideshow_on() {
     if (slideshow_timer == null) {
-        $("#slideshow_toggle_button").html('Slideshow: On');
+        $('#slideshow_toggle_button').removeClass('btn-default').addClass('btn-primary');
         slideshow_timer = setTimeout(slideshow_timer_function, slideshow_interval);
     }
 }
@@ -2000,7 +2000,7 @@ function slideshow_off() {
     if (slideshow_timer != null) {
         clearTimeout(slideshow_timer);
         slideshow_timer = null;
-        $("#slideshow_toggle_button").html('Slideshow: Off');
+        $('#slideshow_toggle_button').removeClass('btn-primary').addClass('btn-default');
     }
 }
 
@@ -2016,10 +2016,10 @@ function toggle_slideshow() {
 function toggle_slideshow_repeat() {
     slideshow_repeat = !slideshow_repeat;
     if (slideshow_repeat) {
-        $("#slideshow_toggle_repeat_button").html('Repeat: On');
+        $('#slideshow_toggle_repeat_button').removeClass('btn-default').addClass('btn-primary');
     }
     else {
-        $("#slideshow_toggle_repeat_button").html('Repeat: Off');
+        $('#slideshow_toggle_repeat_button').removeClass('btn-primary').addClass('btn-default');
     }
     update_slideshow_buttons();
 }
@@ -2027,10 +2027,10 @@ function toggle_slideshow_repeat() {
 function toggle_slideshow_random() {
     slideshow_random = !slideshow_random;
     if (slideshow_random) {
-        $("#slideshow_toggle_random_button").html('Random: On');
+        $('#slideshow_toggle_random_button').removeClass('btn-default').addClass('btn-primary');
     }
     else {
-        $("#slideshow_toggle_random_button").html('Random: Off');
+        $('#slideshow_toggle_random_button').removeClass('btn-primary').addClass('btn-default');
     }
     update_slideshow_buttons();
 }
