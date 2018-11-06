@@ -323,10 +323,12 @@ function filedb_init_browse_page() {
     });
 
     $('#slideshow_restart_button').click(function () {
+        slideshow_off();
         restart_slideshow();
     });
 
     $('#slideshow_end_button').click(function () {
+        slideshow_off();
         end_slideshow();
     });
 
@@ -335,18 +337,22 @@ function filedb_init_browse_page() {
     });
 
     $('#slideshow_prev_file_button').click(function () {
+        slideshow_off();
         prev_slideshow_file();
     });
 
     $('#slideshow_next_file_button').click(function () {
+        slideshow_off();
         next_slideshow_file();
     });
 
     $('#slideshow_prev_directory_button').click(function () {
+        slideshow_off();
         prev_directory_slideshow();
     });
 
     $('#slideshow_next_directory_button').click(function () {
+        slideshow_off();
         next_directory_slideshow();
     });
 
@@ -416,36 +422,43 @@ function filedb_init_browse_page() {
         if (fullscreen_slideshow_opened()) {
             if (e.which == 27) {
                 // Escape pressed
+                slideshow_off();
                 close_fullscreen_browser();
                 e.preventDefault();
             }
             else if (e.which == 39) {
                 // Left pressed
+                slideshow_off();
                 next_slideshow_file();
                 e.preventDefault();
             }
             else if (e.which == 37) {
                 // Right pressed
+                slideshow_off();
                 prev_slideshow_file();
                 e.preventDefault();
             }
             else if (e.which == 33) {
                 // Page-up pressed
+                slideshow_off();
                 prev_directory_slideshow();
                 e.preventDefault();
             }
             else if (e.which == 34) {
                 // Page-down pressed
+                slideshow_off();
                 next_directory_slideshow();
                 e.preventDefault();
             }
             else if (e.which == 36) {
                 // Home pressed
+                slideshow_off();
                 restart_slideshow();
                 e.preventDefault();
             }
             else if (e.which == 35) {
                 // End pressed
+                slideshow_off();
                 end_slideshow();
                 e.preventDefault();
             }
@@ -1875,15 +1888,27 @@ function find_tag_index(tag_id) {
     return -1;
 }
 
-function toggle_slideshow() {
+function slideshow_on() {
+    if (slideshow_timer == null) {
+        $("#slideshow_toggle_button").html('Slideshow: On');
+        slideshow_timer = setTimeout(slideshow_timer_function, slideshow_interval);
+    }
+}
+
+function slideshow_off() {
     if (slideshow_timer != null) {
         clearTimeout(slideshow_timer);
         slideshow_timer = null;
         $("#slideshow_toggle_button").html('Slideshow: Off');
     }
+}
+
+function toggle_slideshow() {
+    if (slideshow_timer != null) {
+        slideshow_off();
+    }
     else {
-        $("#slideshow_toggle_button").html('Slideshow: On');
-        slideshow_timer = setTimeout(slideshow_timer_function, slideshow_interval);
+        slideshow_on();
     }
 }
 
@@ -1912,7 +1937,7 @@ function toggle_slideshow_random() {
 function slideshow_timer_function () {
     if (slideshow_timer != null) {
         if (!next_slideshow_file()) {
-            toggle_slideshow();
+            slideshow_off();
         }
         setTimeout(slideshow_timer_function, slideshow_interval);
     }
