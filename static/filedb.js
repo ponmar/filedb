@@ -322,6 +322,10 @@ function filedb_init_browse_page() {
         search_files_by_pinned_file_list();
     });
 
+    $("#clear_pinned_files_button").click(function () {
+        clear_pinned_files();
+    });
+
     $("#search_all_files_button").click(function () {
         search_all_files();
     });
@@ -526,7 +530,7 @@ function load_pinned_file_ids() {
 
     }
 
-    $('#pinned_files_input').val(create_pinned_files_str());
+    pinned_files_modified();
 }
 
 function create_pinned_files_str() {
@@ -558,8 +562,19 @@ function toggle_pinned_file() {
         pinned_file_ids.push(file_id);
     }
     store_pinned_file_ids();
+    pinned_files_modified();
+}
 
+function clear_pinned_files() {
+    pinned_file_ids = [];
+    store_pinned_file_ids();
+    pinned_files_modified();
+}
+
+function pinned_files_modified() {
     $('#pinned_files_input').val(create_pinned_files_str());
+    $("#clear_pinned_files_button").prop('disabled', pinned_file_ids.length == 0);
+    update_slideshow_buttons();
 }
 
 function get_persons() {
@@ -2062,7 +2077,20 @@ function update_slideshow_buttons() {
     $("#slideshow_next_file_button").prop('disabled', !(slideshow_random || slideshow_repeat || (has_slideshow_files && slideshow_index < slideshow_files.length - 1)));
     $("#slideshow_end_button").prop('disabled', !(has_slideshow_files && slideshow_index < slideshow_files.length - 1));
     $("#slideshow_fullscreen_button").prop('disabled', !has_slideshow_files);
+
     $("#slideshow_pin_button").prop('disabled', !has_slideshow_files);
+    if (has_slideshow_files) {
+        var file_id = slideshow_files[slideshow_index]['id'];
+        if (pinned_file_ids.includes(file_id)) {
+            $('#slideshow_pin_button').removeClass('btn-default').addClass('btn-primary');
+        }
+        else {
+            $('#slideshow_pin_button').removeClass('btn-primary').addClass('btn-default');
+        }
+    }
+    else {
+        $('#slideshow_pin_button').removeClass('btn-primary').addClass('btn-default');
+    }
 
     $("#slideshow_prev_directory_button").prop('disabled', get_prev_directory_slideshow_index() == -1);
     $("#slideshow_next_directory_button").prop('disabled', get_next_directory_slideshow_index() == -1);

@@ -113,6 +113,8 @@ $(document).ready(function(){
             <button type="button" class="btn btn-default" id="pinned_files_button">Search</button>
           </span>
         </div>
+        <br>
+        <button type="button" class="btn btn-default" id="clear_pinned_files_button" disabled>Clear pinned files</button>
       </div>
     </div>
   </div>
@@ -143,9 +145,9 @@ $(document).ready(function(){
       <button type="button" class="btn btn-default margin_spacer" id="slideshow_end_button" title="Skip to end" disabled>&gt;&gt;&#93;</button>
       <button type="button" class="btn btn-default" id="slideshow_toggle_repeat_button">Repeat: Off</button>
       <button type="button" class="btn btn-default" id="slideshow_toggle_random_button" title="">Random: Off</button>
-      <button type="button" class="btn btn-default margin_spacer" id="slideshow_toggle_button">Slideshow: Off</button>
+      <button type="button" class="btn btn-default" id="slideshow_toggle_button">Slideshow: Off</button>
+      <button type="button" class="btn btn-default margin_spacer" id="slideshow_pin_button" title="Toggle pin on/off for file" disabled>Pin</button>
       <button type="button" class="btn btn-default" id="slideshow_fullscreen_button" title="Open fullscreen viewer" disabled>Fullscreen</button>
-      <button type="button" class="btn btn-default" id="slideshow_pin_button" title="Toggle pin on/off for file" disabled>Pin file</button>
     </div>
     <div class="form-group"><span id="slideshow_item_text">No search result available</span></div>
     <div id="file_browser_image_div"></div>
