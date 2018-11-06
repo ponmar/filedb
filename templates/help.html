@@ -61,13 +61,17 @@ root
 <p>File paths in FileDB uses UNIX style directory separators ('/'), mostly because that is how FileDB stores the paths internally.</p>
 <p>If you rename or delete files that has been added to FileDB you need to remove them in FileDB as well (and possibly add them again). There is a tool for finding such files at the <a href="{{ url_for('app_files') }}">Manage Files page</a>.</p>
 
-<h2 id="">Keyboard Shortcuts</h2>
+<h2>Pinned Files</h2>
+<p>Files within FileDB can be marked for later use by using the pin file functionaltiy. This functionality is a light-weight tag that can be toggled when browsing files (no need to abort a slideshow to add, for example, a tag). The list of pinned files are stored by the browser and does not affect the FileDB database.</p>
+
+<h2>Keyboard Shortcuts</h2>
 <p>Fullscreen image browser:</p>
 <ul>
     <li><kbd>Right</kbd> <kbd>Left</kbd>: Select next/previous file</li>
     <li><kbd>Pg-Down</kbd> <kbd>Pg-Up</kbd>: Skip to file within next/previous directory</li>
     <li><kbd>Home</kbd> <kbd>End</kbd>: Go to beginning/end of search result</li>
     <li><kbd>Enter</kbd> <kbd>Space</kbd>: Toggle slideshow on/off</li>
+    <li><kbd>P</kbd>: Add/remove file to/from pinned files</li>
 </ul>
 
 <p>Enter browser fullscreen mode (useful for the fullscreen image browser):</p>
