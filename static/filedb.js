@@ -2755,8 +2755,8 @@ function filelists_union() {
     var list1 = $('#filelist1_input').val().trim();
     var list2 = $('#filelist2_input').val().trim();
 
-    list1_ids = list1.split(';');
-    list2_ids = list2.split(';');
+    var list1_ids = list1.split(';');
+    var list2_ids = list2.split(';');
 
     var result_ids = list1_ids;
     for (var i=0; i<list2_ids.length; i++) {
@@ -2774,8 +2774,8 @@ function filelists_intersection() {
     var list1 = $('#filelist1_input').val().trim();
     var list2 = $('#filelist2_input').val().trim();
 
-    list1_ids = list1.split(';');
-    list2_ids = list2.split(';');
+    var list1_ids = list1.split(';');
+    var list2_ids = list2.split(';');
 
     var result_ids = [];
     for (var i=0; i<list1_ids.length; i++) {
@@ -2793,8 +2793,8 @@ function filelists_difference() {
     var list1 = $('#filelist1_input').val().trim();
     var list2 = $('#filelist2_input').val().trim();
 
-    list1_ids = list1.split(';');
-    list2_ids = list2.split(';');
+    var list1_ids = list1.split(';');
+    var list2_ids = list2.split(';');
 
     var result_ids = [];
     for (var i=0; i<list1_ids.length; i++) {
@@ -2812,7 +2812,7 @@ function filelists_difference() {
 }
 
 function show_filelists_result(file_ids) {
-    files_str = "";
+    var files_str = "";
     for (var i=0, file_id; file_id = file_ids[i]; i++) {
         files_str += file_id + ';';
     }
