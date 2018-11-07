@@ -1559,22 +1559,28 @@ function parse_file_list_ids(input_string) {
 
 function search_files_by_exported_file_list() {
     var file_list_str = $('#exported_list_of_files_input').val().trim();
-    search_files_by_file_list(file_list_str);
+    var file_ids = parse_file_list_ids(file_list_str);
+    if (file_ids.length > 0) {
+        search_files_by_file_list(file_ids);
+    }
+    else {
+        alert("Export a search result to get a list of files");
+    }
 }
 
 function search_files_by_pinned_file_list() {
     var file_list_str = $('#pinned_files_input').val().trim();
-    search_files_by_file_list(file_list_str);
+    var file_ids = parse_file_list_ids(file_list_str);
+    if (file_ids.length > 0) {
+        search_files_by_file_list(file_ids);
+    }
+    else {
+        alert("No files pinned yet");
+    }
 }
 
-function search_files_by_file_list(file_list_str) {
+function search_files_by_file_list(file_ids) {
     clear_previous_search();
-
-    var file_ids = parse_file_list_ids(file_list_str);
-    if (file_ids.length == 0) {
-        alert("Specify a file list");
-        return;
-    }
 
     var jsonData = JSON.stringify({"files": file_ids});
 
