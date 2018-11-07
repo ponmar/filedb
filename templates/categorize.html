@@ -88,27 +88,24 @@ $(document).ready(function(){
     <div class="panel-body">
         <div class="row">
             <div class="form-group">
-                <button type="button" class="btn btn-default" id="categorize_remove_files_persons" title="Removes selected persons from search result files">- Persons...</button>
-                <button type="button" class="btn btn-default margin_spacer" id="categorize_add_files_persons" title="Adds selected persons to search result files">+ Persons...</button>
-                <button type="button" class="btn btn-default" id="categorize_remove_files_locations" title="Removes selected locations from search result files">- Locations...</button>
-                <button type="button" class="btn btn-default margin_spacer" id="categorize_add_files_locations" title="Adds selected locations to search result files">+ Locations...</button>
-                <button type="button" class="btn btn-default" id="categorize_remove_files_tags" title="Removes selected tags from search result files">- Tags...</button>
-                <button type="button" class="btn btn-default" id="categorize_add_files_tags" title="Adds selected tags to search result files">+ Tags...</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <button type="button" class="btn btn-default" id="prev_file_categorize_button" title="Previous">&lt;&lt;</button>
-                <button type="button" class="btn btn-default margin_spacer" id="next_file_categorize_button" title="Next">&gt;&gt;</button>
+                <button type="button" class="btn btn-default" id="prev_file_categorize_button" title="Previous"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                <button type="button" class="btn btn-default margin_spacer" id="next_file_categorize_button" title="Next"><span class="glyphicon glyphicon-chevron-right"></span></button>
 
-                <button type="button" class="btn btn-default" id="prev_directory_categorize_button" title="Skip to previous directory">&lt;&lt;&lt;</button>
-                <button type="button" class="btn btn-default margin_spacer" id="next_directory_categorize_button" title="Skip to next directory">&gt;&gt;&gt;</button>
+                <button type="button" class="btn btn-default" id="prev_directory_categorize_button" title="Skip to previous directory"><span class="glyphicon glyphicon-backward"></span></button>
+                <button type="button" class="btn btn-default margin_spacer" id="next_directory_categorize_button" title="Skip to next directory"><span class="glyphicon glyphicon-forward"></span></button>
 
-                <button type="button" class="btn btn-default" id="first_file_categorize_button" title="First">[&lt;&lt;</button>
-                <button type="button" class="btn btn-default margin_spacer" id="last_file_categorize_button" title="Last">&gt;&gt;]</button>
+                <button type="button" class="btn btn-default" id="first_file_categorize_button" title="First"><span class="glyphicon glyphicon-fast-backward"></span></button>
+                <button type="button" class="btn btn-default margin_spacer" id="last_file_categorize_button" title="Last"><span class="glyphicon glyphicon-fast-forward"></span></button>
 
-                <button type="button" class="btn btn-default" id="reset_file_categorize_button">Reset</button>
-                <button type="button" class="btn btn-default" id="save_file_categorize_button">Save</button>
+                <button type="button" class="btn btn-default" id="reset_file_categorize_button" title="Reset"><span class="glyphicon glyphicon-remove"></span></button>
+                <button type="button" class="btn btn-default margin_spacer" id="save_file_categorize_button" title="Save"><span class="glyphicon glyphicon-floppy-save"></span></span></button>
+
+                <button type="button" class="btn btn-default" id="categorize_remove_files_persons" title="Removes selected persons from search result files"><span class="glyphicon glyphicon-minus"></span><span class="glyphicon glyphicon-user"></span></button>
+                <button type="button" class="btn btn-default margin_spacer" id="categorize_add_files_persons" title="Adds selected persons to search result files"><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-user"></span></button>
+                <button type="button" class="btn btn-default" id="categorize_remove_files_locations" title="Removes selected locations from search result files"><span class="glyphicon glyphicon-minus"></span><span class="glyphicon glyphicon-home"></span></button>
+                <button type="button" class="btn btn-default margin_spacer" id="categorize_add_files_locations" title="Adds selected locations to search result files"><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-home"></span></button>
+                <button type="button" class="btn btn-default" id="categorize_remove_files_tags" title="Removes selected tags from search result files"><span class="glyphicon glyphicon-minus"></span><span class="glyphicon glyphicon-tag"></span></button>
+                <button type="button" class="btn btn-default" id="categorize_add_files_tags" title="Adds selected tags to search result files"><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-tag"></span></button>
             </div>
         </div>
         <div class="row">
