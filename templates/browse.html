@@ -137,17 +137,17 @@ $(document).ready(function(){
   <div class="panel-heading">File Browser<span id="slideshow_file_header"></span></div>
   <div class="panel-body">
     <div class="form-group">
-      <button type="button" class="btn btn-default" id="slideshow_prev_file_button" title="Previous" disabled>&lt;&lt;</button>
-      <button type="button" class="btn btn-default margin_spacer" id="slideshow_next_file_button" title="Next" disabled>&gt;&gt;</button>
-      <button type="button" class="btn btn-default" id="slideshow_prev_directory_button" title="Skip to previous directory" disabled>&lt;&lt;&lt;</button>
-      <button type="button" class="btn btn-default margin_spacer" id="slideshow_next_directory_button" title="Skip to next directory" disabled>&gt;&gt;&gt;</button>
-      <button type="button" class="btn btn-default" id="slideshow_restart_button" title="Skip to beginning" disabled>&#91;&lt;&lt;</button>
-      <button type="button" class="btn btn-default margin_spacer" id="slideshow_end_button" title="Skip to end" disabled>&gt;&gt;&#93;</button>
-      <button type="button" class="btn btn-default" id="slideshow_toggle_repeat_button">Repeat</button>
-      <button type="button" class="btn btn-default" id="slideshow_toggle_random_button" title="">Random</button>
-      <button type="button" class="btn btn-default" id="slideshow_toggle_button">Slideshow</button>
-      <button type="button" class="btn btn-default margin_spacer" id="slideshow_pin_button" title="Toggle pin on/off for file" disabled>Pin</button>
-      <button type="button" class="btn btn-default" id="slideshow_fullscreen_button" title="Open fullscreen viewer" disabled>Fullscreen</button>
+      <button type="button" class="btn btn-default" id="slideshow_prev_file_button" title="Previous" disabled><span class="glyphicon glyphicon-chevron-left"></span></button>
+      <button type="button" class="btn btn-default margin_spacer" id="slideshow_next_file_button" title="Next" disabled><span class="glyphicon glyphicon-chevron-right"></span></button>
+      <button type="button" class="btn btn-default" id="slideshow_prev_directory_button" title="Skip to previous directory" disabled><span class="glyphicon glyphicon-backward"></span></button>
+      <button type="button" class="btn btn-default margin_spacer" id="slideshow_next_directory_button" title="Skip to next directory" disabled><span class="glyphicon glyphicon-forward"></span></button>
+      <button type="button" class="btn btn-default" id="slideshow_restart_button" title="Skip to beginning" disabled><span class="glyphicon glyphicon-fast-backward"></span></button>
+      <button type="button" class="btn btn-default margin_spacer" id="slideshow_end_button" title="Skip to end" disabled><span class="glyphicon glyphicon-fast-forward"></span></button>
+      <button type="button" class="btn btn-default" id="slideshow_toggle_repeat_button" title="Toggle repeat"><span class="glyphicon glyphicon-repeat"></span></button>
+      <button type="button" class="btn btn-default" id="slideshow_toggle_random_button" title="Toggle random"><span class="glyphicon glyphicon-random"></span></button>
+      <button type="button" class="btn btn-default" id="slideshow_toggle_button" title="Toggle slideshow"><span class="glyphicon glyphicon-film"></span></button>
+      <button type="button" class="btn btn-default margin_spacer" id="slideshow_pin_button" title="Toggle pin on/off for file" disabled><span class="glyphicon glyphicon-pushpin"></span></button>
+      <button type="button" class="btn btn-default" id="slideshow_fullscreen_button" title="Open fullscreen viewer" disabled><span class="glyphicon glyphicon-fullscreen"></span></button>
     </div>
     <div class="form-group"><span id="slideshow_item_text">No search result available</span></div>
     <div id="file_browser_image_div"></div>
