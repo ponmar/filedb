@@ -1863,18 +1863,17 @@ function load_slideshow_file() {
 
     var file_location_ids = file['locations'];
     if (file_location_ids.length > 0) {
-        overlay_text += '<p>';
+        overlay_text += '<p><span class="glyphicon glyphicon-home"></span>';
         for (var i=0, location_id; location_id = file_location_ids[i]; i++) {
             var location = find_location(location_id);
             if (location != null) {
                 var location_map_link = get_location_map_link(location);
                 file_text += location_map_link + item_separator;
-                overlay_text += location_map_link + overlay_item_separator;
+                overlay_text += overlay_item_separator + location_map_link;
                 found_location = true;
            }
         }
         file_text = remove_text_ending(file_text, item_separator);
-        overlay_text = remove_text_ending(overlay_text, overlay_item_separator);
         overlay_text += '</p>';
     }
 
@@ -1884,7 +1883,7 @@ function load_slideshow_file() {
             file_text += ": ";
         }
 
-        overlay_text += '<p>';
+        overlay_text += '<p><span class="glyphicon glyphicon-user"></span>';
 
         var file_datetime_object = new Date(file_datetime);
         for (var i=0, person_id; person_id = file_person_ids[i]; i++) {
@@ -1900,12 +1899,11 @@ function load_slideshow_file() {
                 }
                 var person_text = get_person_span(person) + person_age_in_file;
                 file_text += person_text + item_separator;
-                overlay_text += person_text + overlay_item_separator;
+                overlay_text += overlay_item_separator + person_text;
                 found_person = true;
             }
         }
         file_text = remove_text_ending(file_text, item_separator);
-        overlay_text = remove_text_ending(overlay_text, overlay_item_separator);
         overlay_text += '</p>';
     }
 
@@ -1915,23 +1913,22 @@ function load_slideshow_file() {
             file_text += "<br>";
         }
 
-        overlay_text += '<p>';
+        overlay_text += '<p><span class="glyphicon glyphicon-tag"></span>';
 
         file_text += "Tags: ";
         for (var i=0, tag_id; tag_id = file_tag_ids[i]; i++) {
             var tag = find_tag(tag_id);
             if (tag != null) {
                 file_text += tag['name'] + item_separator;
-                overlay_text += tag['name'] + overlay_item_separator;
+                overlay_text += overlay_item_separator + tag['name'];
             }
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
-        overlay_text = remove_text_ending(overlay_text, overlay_item_separator);
         overlay_text += '</p>';
     }
 
     if (pinned_file_ids.includes(file['id'])) {
-        overlay_text += "<p>PINNED</p>";
+        overlay_text += '<p><span class="glyphicon glyphicon-pushpin"></span></p>';
     }
 
     $("#slideshow_item_text").html(file_text);
