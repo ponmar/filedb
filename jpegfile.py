@@ -75,17 +75,17 @@ class JpegFile:
             gps_longitude_ref = gps_info.get('GPSLongitudeRef')
 
             if gps_latitude and gps_latitude_ref and gps_longitude and gps_longitude_ref:
-                lat = self.__convert_to_degress(gps_latitude)
+                lat = self.__convert_to_degrees(gps_latitude)
                 if gps_latitude_ref != "N":
                     lat *= -1
 
-                lon = self.__convert_to_degress(gps_longitude)
+                lon = self.__convert_to_degrees(gps_longitude)
                 if gps_longitude_ref != "E":
                     lon *= -1
 
         return lat, lon
 
-    def __convert_to_degress(self, value):
+    def __convert_to_degrees(self, value):
         """Converts a GPS coordinate to degrees in float format."""
         deg_num, deg_denom = value[0]
         d = float(deg_num) / float(deg_denom)
