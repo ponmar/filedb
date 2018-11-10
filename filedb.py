@@ -103,6 +103,11 @@ def app_browse():
     return render_template('browse.html')
 
 
+@app.route('/birthdays')
+def app_birthdays():
+    return render_template('birthdays.html')
+
+
 @app.route('/categorize')
 def app_categorize_files():
     return render_template('categorize.html')

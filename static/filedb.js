@@ -492,6 +492,10 @@ function filedb_init_browse_page() {
     });
 }
 
+function filedb_init_birthdays_page() {
+    get_persons();
+}
+
 function filedb_init_categories_page() {
     get_persons();
     get_locations();
@@ -605,7 +609,63 @@ function get_persons() {
             labels = remove_text_ending(labels, '<br>');
             $('#person_categories').html(labels);
         }
+
+        if ($('#birthdays_page').length) {
+            var persons_with_dateofbirth = [];
+            for (var i=0, person; person = persons[i]; i++) {
+                if (person['dateofbirth'] != null) {
+                    persons_with_dateofbirth.push(person);
+                }
+            }
+
+            // Sort persons by birthdays
+            persons_with_dateofbirth.sort(birthday_sort);
+
+            var start_index = 0;
+            var now = new Date();
+            now.setFullYear(0);
+
+            // Rotate persons to get nearest birthday first
+            for (var i=0; i < persons_with_dateofbirth.length; i++) {
+                var person_date = new Date(persons_with_dateofbirth[0]['dateofbirth']);
+                person_date.setFullYear(0);
+                if (now < person_date) {
+                    break;
+                }
+                var p = persons_with_dateofbirth.shift();
+                persons_with_dateofbirth.push(p);
+            }
+
+            // Show persons
+            for (var i=0, person; person = persons_with_dateofbirth[i]; i++) {
+                var date = new Date(person['dateofbirth']);
+                var date_str = date.getDate() + ' ' + date.toLocaleString("en-us", { month: "short" });
+                $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + person['firstname'] + ' ' + person['lastname'] + '</td><td>' + date_str + '</td></tr>');
+            }
+       }
     });
+}
+
+function birthday_sort(person1, person2) {
+    var person1_date = new Date(person1['dateofbirth']);
+    var person2_date = new Date(person2['dateofbirth']);
+
+    person1_date.setFullYear(0);
+    person2_date.setFullYear(0);
+
+    if (person1_date < person2_date) {
+        return -1;
+    }
+    else if (person1_date > person2_date) {
+        return 1;
+    }
+
+    var name1 = person1['firstname'] + ' ' + person1['lstname'];
+    var name2 = person2['firstname'] + ' ' + person2['lstname'];
+    if (name1 < name2) {
+        return -1;
+    }
+    return 1;
 }
 
 function reload_persons_table() {

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block subtitle %} | Birthdays{% endblock %}
+
+{% block init_javascript %}
+<script>
+$(document).ready(function(){
+    filedb_init_birthdays_page();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<script>
+	$("#birthdays_page").addClass('active');
+</script>
+
+<h1>Birthdays</h1>
+
+<table class="table" id="birthdays_person_table">
+    <thead>
+        <th>Person</th>
+        <th>Date</th>
+    </thead>
+    <tbody></tbody>
+</table>
+
+{% endblock %}
