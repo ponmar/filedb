@@ -2317,7 +2317,7 @@ function clear_edit_location() {
 }
 
 function prepare_edit_tag(id) {
-    tag = find_tag(id);
+    var tag = find_tag(id);
     if (tag != null) {
         edited_tag_id = id;
         $('#tag_name_input').val(tag['name']);
