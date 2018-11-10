@@ -2089,6 +2089,11 @@ function update_slideshow_buttons() {
     $("#slideshow_end_button").prop('disabled', !(has_slideshow_files && slideshow_index < slideshow_files.length - 1));
     $("#slideshow_fullscreen_button").prop('disabled', !has_slideshow_files);
 
+    $("#slideshow_toggle_button").prop('disabled', !has_slideshow_files);
+    if (!has_slideshow_files) {
+        $('#slideshow_toggle_button').removeClass('btn-primary').addClass('btn-default');
+    }
+
     $("#slideshow_pin_button").prop('disabled', !has_slideshow_files);
     if (has_slideshow_files) {
         var file_id = slideshow_files[slideshow_index]['id'];
