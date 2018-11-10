@@ -1863,7 +1863,7 @@ function load_slideshow_file() {
 
     var file_location_ids = file['locations'];
     if (file_location_ids.length > 0) {
-        overlay_text += '<p><span class="glyphicon glyphicon-home"></span>';
+        overlay_text += '<p><span class="glyphicon glyphicon-globe"></span>';
         for (var i=0, location_id; location_id = file_location_ids[i]; i++) {
             var location = find_location(location_id);
             if (location != null) {

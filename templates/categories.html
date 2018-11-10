@@ -18,7 +18,7 @@ $(document).ready(function(){
 
 <h1>Edit Categories</h1>
 
-<h2 id="persons_header">Persons</h2>
+<h2 id="persons_header"><span class="glyphicon glyphicon-user"></span> Persons</h2>
 <div class="alert alert-info" role="alert"><strong>Note:</strong> Set date of birth to see age in specific files at the <a href="{{ url_for('app_browse') }}">Browse Files page</a>.</div>
 <div class="form-group clearfix">
     <form action="{{ url_for('api_add_person') }}" method=post class="navbar-form navbar-left" role="search" id="add_person_form">
@@ -31,7 +31,7 @@ $(document).ready(function(){
 </div>
 <div id="personsdiv" class="clearfix">Loading persons...</div>
 
-<h2 id="locations_header">Locations</h2>
+<h2 id="locations_header"><span class="glyphicon glyphicon-globe"></span> Locations</h2>
 <div class="alert alert-info" role="alert"><strong>Note:</strong> Set a position for the location to automatically set nearby locations when adding files. The position can, for example, be found in the URL at <a href="https://maps.google.com">Google Maps</a>.</div>
 <div class="form-group clearfix">
     <form action="{{ url_for('api_add_location') }}" method=post class="navbar-form navbar-left" role="search" id="add_location_form">
@@ -43,7 +43,7 @@ $(document).ready(function(){
 </div>
 <div id="locationsdiv" class="clearfix">Loading locations...</div>
 
-<h2 id="tags_header">Tags</h2>
+<h2 id="tags_header"><span class="glyphicon glyphicon-tag"></span> Tags</h2>
 <div class="form-group clearfix">
     <form action="{{ url_for('api_add_tag') }}" method=post class="navbar-form navbar-left" role="search" id="add_tag_form">
         <input type="text" class="form-control" placeholder="Name" name="name" title="Name" id="tag_name_input" required>
