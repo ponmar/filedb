@@ -623,13 +623,12 @@ function get_persons() {
 
             var start_index = 0;
             var now = new Date();
-            now.setFullYear(0);
 
             // Rotate persons to get nearest birthday first
             for (var i=0; i < persons_with_dateofbirth.length; i++) {
                 var person_date = new Date(persons_with_dateofbirth[0]['dateofbirth']);
                 person_date.setFullYear(0);
-                if (now < person_date) {
+                if (now.getMonth() < person_date.getMonth() || (now.getMonth() == person_date.getMonth() && now.getDate() <= person_date.getDate())) {
                     break;
                 }
                 var p = persons_with_dateofbirth.shift();
@@ -640,7 +639,11 @@ function get_persons() {
             for (var i=0, person; person = persons_with_dateofbirth[i]; i++) {
                 var date = new Date(person['dateofbirth']);
                 var date_str = date.getDate() + ' ' + date.toLocaleString("en-us", { month: "short" });
-                $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + person['firstname'] + ' ' + person['lastname'] + '</td><td>' + date_str + '</td></tr>');
+                var birthday_marker = '';
+                if (now.getMonth() == date.getMonth() && now.getDate() == date.getDate()) {
+                    birthday_marker = '<span class="glyphicon glyphicon-flag"></span> '
+                }
+                $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + birthday_marker + person['firstname'] + ' ' + person['lastname'] + '</td><td>' + date_str + '</td></tr>');
             }
        }
     });
