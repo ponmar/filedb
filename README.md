@@ -48,11 +48,13 @@ FileDB prerequisites:
 
         pip install flask
 
-- Pillow (for reading date, time and GPS location information from JPEG images and for generating thumbnails):
+- [Pillow](https://python-pillow.org/) (for reading date, time and GPS location information from JPEG images and for generating thumbnails):
 
         pip install pillow
 
-- Optional: [pychromecast](https://github.com/balloob/pychromecast) (for streaming to Google Chromecast compatible devices on the local network)
+- Optional: [PyChromecast](https://github.com/balloob/pychromecast) (for streaming to Google Chromecast compatible devices on the local network)
+
+        pip install PyChromecast
 
 ### Download ###
 
