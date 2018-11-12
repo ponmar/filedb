@@ -43,7 +43,7 @@ Note that it is recommended to have a backup procedure for your file collection 
 
 FileDB prerequisites:
 
-- Python and pip (installation instructions depends on your OS)
+- [Python](https://www.python.org/) and pip (installation instructions depends on your OS)
 - Flask (a web framework for running server-side code):
 
         pip install flask
