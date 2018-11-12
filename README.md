@@ -9,7 +9,7 @@ FileDB provides a server application, a web application and an API for performin
 FileDB pros:
 
 * Own your data: No data is shared with other parties
-* Control your data: All data is stored in an SQLite database and may be converted for future use depending on your future needs (no ‚Äúlock-in effect‚Äù)
+* Control your data: All data is stored in an SQLite database and may be converted for future use depending on your future needs (no ìlock-in effectî)
 * Search cababilities: Find files given a basic search criteria. Combine basic search criterias for creating an advanced search criteria
 * Present extra statisticts: People age, etc are presented when browsing files
 * 3rd party software integrations: Data may be exported to be used by other software and there is also an API to be used by custom software
@@ -36,16 +36,6 @@ The FileDB web application is tha main GUI. The web application should be able t
 The API is provided by the server application. It allows the web application, or any other custom application, to fetch and update file meta-data. Some util applications are included to show how the API can be used from Python.
 
 ## Getting Started ##
-
-### Documentation ###
-
-The release contains the following documentation:
-
-* This README
-* [Changelog](CHANGES.html)
-* [API documentation](API.html)
-* Web application help page (FileDB must be running to make it accessible)
-* [Development notes](DESIGN.txt)
 
 ### Prerequisites ###
 
@@ -106,19 +96,21 @@ Start the server:
 
 Note that your OS can be setup to run this command at startup. How to do this depends on your OS.
 
-### Accessing the Web Application ###
+### Accessing the Web Application and the API ###
 
-Open [http://localhost](http://localhost) in a browser. Note that the port may vary depending on your configuration.
+Open [http://localhost](http://localhost) in a browser. Note that the port may vary depending on your configuration. The web application may also be reached from the network via an external IP address if configured so.
 
-The web application may also be reached from the network via an external IP address if configured so.
+The API is accessed via the same web server as the web application. See the included [API documentation](API.html) for more details. See API example usage in the utils directory.
 
-### Accessing the API ###
+### Documentation ###
 
-The API is accessed via the same web server as the web application.
+The release contains the following documentation:
 
-See the included [API documentation](API.html) for more details.
-
-See API example usage in the utils directory.
+* This README
+* [Changelog](CHANGES.html)
+* [API documentation](API.html)
+* Web application help page (FileDB must be running to make it accessible)
+* [Development notes](DESIGN.txt)
 
 ## Contribute ##
 
