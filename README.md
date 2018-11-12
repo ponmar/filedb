@@ -9,7 +9,7 @@ FileDB provides a server application, a web application and an API for performin
 FileDB pros:
 
 * Own your data: No data is shared with other parties
-* Control your data: All data is stored in an SQLite database and may be converted for future use depending on your future needs (no ‚Äúlock-in effect‚Äù)
+* Control your data: All data is stored in an SQLite database and may be converted for future use depending on your future needs (no ìlock-in effectî)
 * Search cababilities: Find files given a basic search criteria. Combine basic search criterias for creating an advanced search criteria
 * Present extra statisticts: People age, etc are presented when browsing files
 * 3rd party software integrations: Data may be exported to be used by other software and there is also an API to be used by custom software
@@ -37,32 +37,24 @@ The API is provided by the server application. It allows the web application, or
 
 ## Getting Started ##
 
-### Documentation ###
-
-The release contains the following documentation:
-
-* This README
-* [Changelog](CHANGES.html)
-* [API documentation](API.html)
-* Web application help page (FileDB must be running to make it accessible)
-* [Development notes](DESIGN.txt)
-
 ### Prerequisites ###
 
 Note that it is recommended to have a backup procedure for your file collection before running FileDB (although FileDB itself does not modify your files).
 
 FileDB prerequisites:
 
-- Python and pip (installation instructions depends on your OS)
+- [Python](https://www.python.org/) (version 3.4 or later)
 - Flask (a web framework for running server-side code):
 
         pip install flask
 
-- Pillow (for reading date, time and GPS location information from JPEG images):
+- [Pillow](https://python-pillow.org/) (for reading date, time and GPS location information from JPEG images and for generating thumbnails):
 
         pip install pillow
 
-- [pychromecast](https://github.com/balloob/pychromecast) (for streaming to Google Chromecast compatible devices on the local network)
+- Optional: [PyChromecast](https://github.com/balloob/pychromecast) (for streaming to Google Chromecast compatible devices on the local network)
+
+        pip install PyChromecast
 
 ### Download ###
 
@@ -106,19 +98,21 @@ Start the server:
 
 Note that your OS can be setup to run this command at startup. How to do this depends on your OS.
 
-### Accessing the Web Application ###
+### Accessing the Web Application and the API ###
 
-Open [http://localhost](http://localhost) in a browser. Note that the port may vary depending on your configuration.
+Open [http://localhost](http://localhost) in a browser. Note that the port may vary depending on your configuration. The web application may also be reached from the network via an external IP address if configured so.
 
-The web application may also be reached from the network via an external IP address if configured so.
+The API is accessed via the same web server as the web application. See the included [API documentation](API.html) for more details. See API example usage in the utils directory.
 
-### Accessing the API ###
+### Documentation ###
 
-The API is accessed via the same web server as the web application.
+The release contains the following documentation:
 
-See the included [API documentation](API.html) for more details.
-
-See API example usage in the utils directory.
+* This README
+* [Changelog](CHANGES.html)
+* [API documentation](API.html)
+* Web application help page (FileDB must be running to make it accessible)
+* [Development notes](DESIGN.txt)
 
 ## Contribute ##
 
