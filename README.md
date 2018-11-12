@@ -43,7 +43,7 @@ Note that it is recommended to have a backup procedure for your file collection 
 
 FileDB prerequisites:
 
-- [Python](https://www.python.org/) and pip (installation instructions depends on your OS)
+- [Python](https://www.python.org/) (version 3.4 or later)
 - Flask (a web framework for running server-side code):
 
         pip install flask
@@ -52,7 +52,7 @@ FileDB prerequisites:
 
         pip install pillow
 
-- [pychromecast](https://github.com/balloob/pychromecast) (for streaming to Google Chromecast compatible devices on the local network)
+- Optional: [pychromecast](https://github.com/balloob/pychromecast) (for streaming to Google Chromecast compatible devices on the local network)
 
 ### Download ###
 
