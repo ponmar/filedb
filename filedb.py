@@ -9,7 +9,6 @@ from contextlib import closing
 import sqlite3
 from flask import Flask, request, g, abort, render_template, jsonify, send_from_directory, make_response, send_file
 import jpegfile
-from makeunicode import u
 
 
 ZIPFILE_COMMENT_MAX_LENGTH = 65535
@@ -176,12 +175,11 @@ def api_add_directory():
 
 @app.route('/api/import', methods=['POST'])
 def api_import_files():
-    # Note: unicode is required to get unicode filename paths
-
     num_imported_files = 0
     num_not_imported_files = 0
 
-    for root, _, filenames in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
+    # Note: os.walk requires a unicode directory path to return unicode encoded paths (automatic in Python 3 or later)
+    for root, _, filenames in os.walk(app.config['FILES_ROOT_DIRECTORY']):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
@@ -931,7 +929,8 @@ def api_get_json_fs_directories():
     Note: this function reads data from files collection.
     """
     directories = []
-    for root, _, _ in os.walk(u(app.config['FILES_ROOT_DIRECTORY'])):
+    # Note: os.walk requires a unicode directory path to return unicode encoded paths (automatic in Python 3 or later)
+    for root, _, _ in os.walk(app.config['FILES_ROOT_DIRECTORY']):
         path = update_path(root)
         if path != app.config['FILES_ROOT_DIRECTORY']:
             if '/' in path:
