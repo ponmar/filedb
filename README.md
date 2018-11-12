@@ -48,7 +48,7 @@ FileDB prerequisites:
 
         pip install flask
 
-- Pillow (for reading date, time and GPS location information from JPEG images):
+- Pillow (for reading date, time and GPS location information from JPEG images and for generating thumbnails):
 
         pip install pillow
 
