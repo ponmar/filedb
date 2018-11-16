@@ -942,6 +942,22 @@ def api_get_json_fs_directories():
 
     return jsonify(dict(directories=directories))
 
+
+@app.route('/api/files_without_data', methods=['GET', 'POST'])
+def api_get_json_files_without_data():
+    cursor = g.db.execute('select id from files where description is null')
+
+    files = []
+    for row in cursor.fetchall():
+        file_json = get_file_dict(row[0])
+        if len(file_json['persons']) == 0 and len(file_json['locations']) == 0 and len(file_json['tags']) == 0:
+            files.append(file_json)
+
+    cursor = g.db.execute('select count(*) from files')
+    total_num_files = cursor.fetchone()[0]
+
+    return jsonify(dict(files=files, total_num_files=total_num_files))
+
     
 @app.route('/api/randomfiles/<int(min=1, max=10):numfiles>', methods=['GET', 'POST'])
 def api_get_json_random_files(numfiles):
