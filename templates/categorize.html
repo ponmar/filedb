@@ -18,48 +18,19 @@ $(document).ready(function(){
 
 <h1>Categorize Files</h1>
 
-<span id="categorize_page_loading_text">Loading...</span>
-<div id="categorize_page_content" class="hidden">
-
 <div class="panel panel-default">
-    <div class="panel-heading">Find Files</div>
+    <div class="panel-heading">Search Criteria</div>
     <div class="panel-body">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#find_files_without_catogorization">Without specified categorization</a></li>
-        <li><a data-toggle="tab" href="#find_files_by_path">By path</a></li>
+        <li class="active"><a data-toggle="tab" href="#find_basic_files">Basic</a></li>
         <li><a data-toggle="tab" href="#find_exported_files">Exported search</a></li>
       </ul>
       <div class="tab-content">
-        <div id="find_files_without_catogorization" class="tab-pane fade in active">
+        <div id="find_basic_files" class="tab-pane fade in active">
           <br>
-          <button type="button" class="btn btn-default margin_spacer" id="find_file_wo_any_button">Any</button>
-          <button type="button" class="btn btn-default" id="find_file_wo_person_button">Person</button>
-          <button type="button" class="btn btn-default" id="find_file_wo_location_button">Location</button>
-          <button type="button" class="btn btn-default margin_spacer" id="find_file_wo_tag_button">Tag</button>
-          <button type="button" class="btn btn-default" id="find_file_wo_description_button">Description</button>
-          <button type="button" class="btn btn-default" id="find_file_wo_date_button">Date</button>
-        </div>
-        <div id="find_files_by_path" class="tab-pane fade in">
-          <br>
-          <div class="row">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Path prefix</span>
-                    <input type="text" class="form-control" placeholder="Example: 2016/2016-05-03" id="find_file_by_path_input" aria-describedby="basic-addon1">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" id="find_file_by_path_button">Search</button>
-                    </span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon2">Path regular expression</span>
-                    <input type="text" class="form-control" placeholder="Example: christmas" id="find_file_by_path_regexp_input" aria-describedby="basic-addon2">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" id="find_file_by_path_regexp_button">Search</button>
-                    </span>
-                </div>
-            </div>
+          <div class="input-group">
+              <button type="button" class="btn btn-default" id="find_noncategorized_files_button">Search non-categorized files</button>
+              <button type="button" class="btn btn-default" id="find_all_files_button">Search all files</button>
           </div>
         </div>
         <div id="find_exported_files" class="tab-pane fade in">
@@ -123,8 +94,6 @@ $(document).ready(function(){
             </div>
         </div>
     </div>
-</div>
-
 </div>
 
 {% endblock %}
