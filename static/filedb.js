@@ -171,12 +171,18 @@ function rename_files(source_file_ids, destination_directory) {
 }
 
 function filedb_init_categorize_page() {
+    load_pinned_file_ids();
+
     get_persons();
     get_locations();
     get_tags();
 
     $('#find_noncategorized_files_button').click(function () {
         categorize_noncategorized_files();
+    });
+
+    $('#find_pinned_files_button').click(function () {
+        categorize_pinned_files();
     });
 
     $('#find_all_files_button').click(function () {
@@ -1061,6 +1067,16 @@ function set_div_height(selector, factor) {
 function categorize_noncategorized_files() {
     clear_categorize_result();
     search_non_categorized_files(update_categorize_result);
+}
+
+function categorize_pinned_files() {
+    if (pinned_file_ids.length > 0) {
+        clear_categorize_result();
+        search_files_by_file_list(pinned_file_ids, update_categorize_result);
+    }
+    else {
+        alert("No files pinned yet");
+    }
 }
 
 function categorize_all_files() {
