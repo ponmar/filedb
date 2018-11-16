@@ -44,7 +44,7 @@ Note that it is recommended to have a backup procedure for your file collection 
 FileDB prerequisites:
 
 - [Python](https://www.python.org/) (version 3.4 or later)
-- Flask (a web framework for running server-side code):
+- [Flask](http://flask.pocoo.org/) (a web framework for running server-side code):
 
         pip install flask
 
