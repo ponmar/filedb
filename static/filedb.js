@@ -189,6 +189,10 @@ function filedb_init_categorize_page() {
         categorize_all_files();
     });
 
+    $('#categorize_by_path_button').click(function () {
+        categorize_from_path_search();
+    });
+
     $('#categorize_exported_list_of_files_button').click(function () {
         categorize_from_exported_search();
     });
@@ -1084,6 +1088,19 @@ function categorize_all_files() {
     search_all_files(update_categorize_result);
 }
 
+function categorize_from_path_search() {
+    var path_regexp = $('#categorize_by_path_input').val().trim();
+    if (path_regexp.length > 0) {
+        var url = '/api/files?pathregexp=' + path_regexp;
+        $.getJSON(url, function (result) {
+            update_categorize_result(result);
+        });
+    }
+    else {
+        alert("Enter a regular expression for your path");
+    }
+}
+
 function categorize_from_exported_search() {
     var file_list_str = $('#categorize_exported_list_of_files_input').val().trim();
     var file_ids = parse_file_list_ids(file_list_str);
@@ -1577,7 +1594,6 @@ function search_all_files(success_function) {
     });
 }
 
-// TODO: add success_function
 function search_files_by_random(numfiles) {
     clear_previous_search();
     $.getJSON('/api/randomfiles/' + numfiles, function (result) {
@@ -1585,7 +1601,6 @@ function search_files_by_random(numfiles) {
     });
 }
 
-// TODO: add success_function
 function search_files_by_all() {
     clear_previous_search();
     var url = create_files_url(true, true, true, true, true, true);
@@ -1594,7 +1609,6 @@ function search_files_by_all() {
     });
 }
 
-// TODO: add success_function
 function search_files_by_path() {
     clear_previous_search();
     var regexp = $('#file_path_regexp_filter').val();
@@ -1609,7 +1623,6 @@ function search_files_by_path() {
     }
 }
 
-// TODO: add success_function
 function search_files_by_description() {
     clear_previous_search();
     var regexp = $('#file_description_regexp_filter').val();
@@ -1624,7 +1637,6 @@ function search_files_by_description() {
     }
 }
 
-// TODO: add success_function
 function search_files_by_datetime() {
     clear_previous_search();
     var regexp = $('#file_date_regexp_filter').val();

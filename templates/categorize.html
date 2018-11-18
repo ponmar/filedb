@@ -23,15 +23,26 @@ $(document).ready(function(){
     <div class="panel-body">
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#find_basic_files">Basic</a></li>
+        <li><a data-toggle="tab" href="#find_path_files">Path</a></li>
         <li><a data-toggle="tab" href="#find_exported_files">Exported search</a></li>
       </ul>
       <div class="tab-content">
         <div id="find_basic_files" class="tab-pane fade in active">
           <br>
           <div class="input-group">
-              <button type="button" class="btn btn-default" id="find_noncategorized_files_button">Search non-categorized files</button>
-              <button type="button" class="btn btn-default" id="find_pinned_files_button">Search pinned files</button>
-              <button type="button" class="btn btn-default" id="find_all_files_button">Search all files</button>
+            <button type="button" class="btn btn-default" id="find_noncategorized_files_button">Search non-categorized files</button>
+            <button type="button" class="btn btn-default" id="find_pinned_files_button">Search pinned files</button>
+            <button type="button" class="btn btn-default" id="find_all_files_button">Search all files</button>
+          </div>
+        </div>
+        <div id="find_path_files" class="tab-pane fade in">
+          <br>
+          <div class="input-group">
+            <span class="input-group-addon" id="path_regexp_description">Path regexp</span>
+            <input type="text" class="form-control" placeholder="Should match: path/to/file" id="categorize_by_path_input" aria-describedby="path_regexp_description">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" id="categorize_by_path_button">Search</button>
+            </span>
           </div>
         </div>
         <div id="find_exported_files" class="tab-pane fade in">
