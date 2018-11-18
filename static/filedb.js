@@ -1232,7 +1232,7 @@ function save_file_categorization() {
 
 function get_categorize_file_ids() {
     var file_ids = [];
-    for (var i=0; i<categorize_result.length; i++) {
+    for (var i=0; i<categorize_files.length; i++) {
         file_ids.push(categorize_files[i]['id']);
     }
     return file_ids;
@@ -1292,7 +1292,9 @@ function modify_files_locations(type) {
                 //dataType: "json",
                 success: function (responseData) {
                     $('#categorize_save_status').text(file_ids.length + " files saved successfully");
-                    // TODO: update local data by adding location ids manually
+                    // Reload files to make sure that client and server data is synchronized
+                    clear_categorize_result();
+                    search_files_by_file_list(file_ids, update_categorize_result);
                 },
                 error: function () {
                     $("#categorize_save_status").text("An error occured");
@@ -1320,7 +1322,9 @@ function modify_files_persons(type) {
                 //dataType: "json",
                 success: function (responseData) {
                     $('#categorize_save_status').text(file_ids.length + " files saved successfully");
-                    // TODO: update local data by adding person ids manually
+                    // Reload files to make sure that client and server data is synchronized
+                    clear_categorize_result();
+                    search_files_by_file_list(file_ids, update_categorize_result);
                 },
                 error: function () {
                     $("#categorize_save_status").text("An error occured");
@@ -1348,7 +1352,9 @@ function modify_files_tags(type) {
                 //dataType: "json",
                 success: function (responseData) {
                     $('#categorize_save_status').text(file_ids.length + " files saved successfully");
-                    // TODO: update local data by adding tag ids manually
+                    // Reload files to make sure that client and server data is synchronized
+                    clear_categorize_result();
+                    search_files_by_file_list(file_ids, update_categorize_result);
                 },
                 error: function () {
                     $("#categorize_save_status").text("An error occured");
