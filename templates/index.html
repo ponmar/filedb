@@ -1,11 +1,23 @@
 {% extends "layout.html" %}
 
+{% block init_javascript %}
+<script>
+$(document).ready(function(){
+    filedb_init_index_page();
+});
+</script>
+{% endblock %}
+
 {% block content %}
 
     <h1>FileDB</h1>
     <p class="lead">Welcome! Now you can start browsing and categorizing files!</p>
     <p>If this is the first time using FileDB, please read the information at the <a href="{{ url_for('app_help') }}">Help page</a>.</p>
     <p>Visit the <a href="{{ config['PROJECT_HOME'] }}">FileDB project website</a> for more information, report improvements/bugs or to start contributing.</p>
+
+    <div class="alert alert-info">
+        <strong>Statistics:</strong> <span id="stats_span"></span>
+    </div>
 
 {% if not root_dir_exists %}
     <div class="alert alert-warning">

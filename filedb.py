@@ -1320,6 +1320,18 @@ def decode_bytes(bytes_data, decodings):
     return None
 
 
+@app.route('/api/stats', methods=['GET', 'POST'])
+def api_get_json_stats():
+    stats = dict()
+
+    stats["num_files"] = g.db.execute("select count(*) from files").fetchone()[0]
+    stats["num_persons"] = g.db.execute("select count(*) from persons").fetchone()[0]
+    stats["num_locations"] = g.db.execute("select count(*) from locations").fetchone()[0]
+    stats["num_tags"] = g.db.execute("select count(*) from tags").fetchone()[0]
+
+    return jsonify(stats)
+
+
 #
 # Documentation outside the Flask static directory
 #

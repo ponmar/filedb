@@ -24,6 +24,18 @@ var tags_order_by = 'name:asc';
 
 var pinned_file_ids = []
 
+function filedb_init_index_page() {
+    get_stats(function (result) {
+        $("#stats_span").html('<span class="glyphicon glyphicon-file"></span>' + result["num_files"] +  ' <span class="glyphicon glyphicon-user"></span> ' + result["num_persons"] + ' <span class="glyphicon glyphicon-globe"></span> ' + result["num_locations"] + ' <span class="glyphicon glyphicon-tag"></span>' + result["num_tags"]);
+    });
+}
+
+function get_stats(success_function) {
+    $.getJSON("/api/stats", function (result) {
+        success_function(result)
+    });
+}
+
 function filedb_init_files_page() {
     $("#import_button").click(function () {
         import_files();
