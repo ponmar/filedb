@@ -933,9 +933,8 @@ def api_get_json_fs_directories():
     for root, _, _ in os.walk(app.config['FILES_ROOT_DIRECTORY']):
         path = update_path(root)
         if path != app.config['FILES_ROOT_DIRECTORY']:
-            if '/' in path:
-                # Remove root dir prefix from path
-                path = path.split('/', 1)[1]
+            # Remove root dir prefix from path
+            path = path.split(app.config['FILES_ROOT_DIRECTORY'], 1)[1]
             if not path_is_blacklisted(path) and path_is_visible(path):
                 directories.append(path)
     directories.sort()
