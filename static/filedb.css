@@ -64,3 +64,10 @@ body {
 #my_fullscreen_browser_overlay {
     display: none; /* Hidden by default */
 }
+
+.file_image_area {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 2px solid grey;
+    border-radius: 5px;
+}

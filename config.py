@@ -93,7 +93,7 @@ class DefaultConfig(object):
 
     # Set this option to True to make it possible to start FileDB before the root
     # directory is available. This may be the case when mounting a Samba network
-    # share.
+    # share manually.
     #
     # Note: it will not be possible to get file content or Exif data from JPEG
     # images when the root directory is missing.
