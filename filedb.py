@@ -127,6 +127,11 @@ def app_fonts_route(path):
     return send_from_directory('static/fonts', path)
 
 
+@app.route('/favicon.ico')
+def app_favicon():
+    return send_from_directory('static', 'favicon.ico')
+
+
 #
 # API: add data
 #
