@@ -1565,7 +1565,7 @@ function search_files_by_pinned_file_list() {
     var file_list_str = $('#pinned_files_input').val().trim();
     var file_ids = parse_file_list_ids(file_list_str);
     if (file_ids.length > 0) {
-        clear_previous_result();
+        clear_previous_search();
         search_files_by_file_list(file_ids, update_search_result);
     }
     else {
