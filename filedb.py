@@ -916,6 +916,17 @@ def api_delete_file_tags():
 # API: get JSON with many items
 #
 
+@app.route('/api/todays_birthdays', methods=['GET'])
+def api_get_todays_birthdays():
+    date_query_str = datetime.datetime.now().strftime('____-%m-%d')
+    query = "select id from persons where dateofbirth like '{}'".format(date_query_str)
+    persons = []
+    cursor = g.db.execute(query)
+    for row in cursor.fetchall():
+        persons.append(get_person_dict(row[0]))
+    return jsonify(dict(persons=persons))
+
+
 @app.route('/api/directories', methods=['GET'])
 def api_get_json_directories():
     """Returns the directories that files have been added from."""
