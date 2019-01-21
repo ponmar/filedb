@@ -2258,7 +2258,7 @@ function consistency_check() {
         clear_manage_files_results();
         $("#tools_status").text("File consistency check running, please wait...");
         $.getJSON("/api/fileconsistency", function (result) {
-            missing_files = result['missing_files'];
+            var missing_files = result['missing_files'];
             if (missing_files.length == 0) {
                 $("#tools_status").text("File consistency check finished successfully");
                 clear_files_table();
