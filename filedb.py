@@ -9,6 +9,7 @@ from contextlib import closing
 import sqlite3
 from flask import Flask, request, g, abort, render_template, jsonify, send_from_directory, make_response, send_file
 import jpegfile
+import collections
 
 
 ZIPFILE_COMMENT_MAX_LENGTH = 65535
@@ -1289,6 +1290,44 @@ def api_create_file_thumbnail(file_id):
     file_path = get_file_abs_path(row[0])
     thumbnail = jpegfile.JpegThumbnail(file_path, size)
     return send_file(thumbnail.get_data(), mimetype='image/jpeg')
+
+
+@app.route('/api/fileduplicates', methods=['GET'])
+def api_fileduplicates():
+    """Note: this function reads data from files collection."""
+    duplicate_datetimes = []
+
+    # Find files with the same date and time
+    cur = g.db.execute('select datetime, count(*) c from files group by datetime having c > 1')
+    for row in cur.fetchall():
+        # Check for files with a specified date and time
+        if row[0] is not None and 'T' in row[0] and 'T00:00:00' not in row[0]:
+            duplicate_datetimes.append(row[0])
+
+    file_duplicates = []
+    num_errors = 0
+
+    for duplicate_datetime in duplicate_datetimes:
+        # Group file data by file size
+        file_sizes = {}
+        cur = g.db.execute('select id, path from files where datetime = ?', (duplicate_datetime, ))
+        for row in cur.fetchall():
+            file_abs_path = get_file_abs_path(row[1])
+            try:
+                file_size = os.path.getsize(file_abs_path)
+            except os.error:
+                num_errors += 1
+                continue
+
+            if file_size not in file_sizes:
+                file_sizes[file_size] = list()
+            file_sizes[file_size].append(row[0])
+
+        for duplicate_files in file_sizes.values():
+            if len(duplicate_files) > 1:
+                file_duplicates.append(get_file_dicts(duplicate_files))
+
+    return jsonify(dict(file_duplicates=file_duplicates, num_errors=num_errors))
 
 
 @app.route('/api/fileconsistency', methods=['GET'])

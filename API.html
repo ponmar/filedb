@@ -53,9 +53,9 @@ Response: 200 (OK)
 {
     "files":
     [
-        Same data here as for single file
+        &lt;Same data here as for a single file&gt;
     ],
-    "total_num_files": total_num_files
+    "total_num_files": &lt;total_num_files&gt;
 }
 </pre>
 
@@ -88,8 +88,8 @@ Response: 200 (OK)
 {
     "directories":
     [
-        "first_dir",
-        "second_dir",
+        &lt;directory&gt;,
+        &lt;directory&gt;,
         ...
     ]
 }
@@ -113,7 +113,7 @@ Response: 200 (OK)
 {
     "persons":
     [
-        Same data here as for single person,
+        &lt;Same data here as for a single person&gt;,
         ...
     ]
 }
@@ -135,7 +135,7 @@ Response: 200 (OK)
 {
     "locations":
     [
-        Same data here as for single location,
+        &lt;Same data here as for a single location&gt;,
         ...
     ]
 }
@@ -156,7 +156,7 @@ Response: 200 (OK)
 {
     "tags":
     [
-        Same data here as for single tag,
+        &lt;Same data here as for a single tag&gt;,
         ...
     ]
 }
@@ -204,21 +204,21 @@ Response: 200 (OK), 409 (Conflict)
 <pre>Request: POST /api/person JSON: { "firstname":..., "lastname":..., "description":..., "dateofbirth":... }
 Response:
 {
-    Same data here as for a single person
+    &lt;Same data here as for a single person&gt;
 }
 </pre>
 
 <pre>Request: POST /api/location JSON: { "name":..., "description":..., "position":... }
 Response:
 {
-    Same data here as for a single location
+    &lt;Same data here as for a single location&gt;
 }
 </pre>
 
 <pre>Request: POST /api/tag JSON: { "name":... }
 Response:
 {
-    Same data here as for a single tag
+    &lt;Same data here as for a single tag&gt;
 }
 </pre>
 
@@ -292,7 +292,22 @@ Response: 200 (OK)
 <pre>Request: GET /api/fileconsistency
 Response: 200 (OK)
 {
-    "missingfiles": [fileid, fileid, ...]
+    "missingfiles": [&lt;fileid&gt;, &lt;fileid&gt;, ...]
+}
+</pre>
+
+<h2>Find File Duplicates</h2>
+<p>Finds file duplicates within the added files. Returns the list of missing files.</p>
+<pre>Request: GET /api/fileduplicates
+Response: 200 (OK)
+{
+    "file_duplicates":
+    [
+        [ &lt;Same data here as for a single file&gt;, &lt;Same data here as for a single file&gt;, ... ],
+        [ &lt;Same data here as for a single file&gt;, &lt;Same data here as for a single file&gt;, ... ],
+        ...
+    ]
+    "num_errors": &lt;num_errors&gt;
 }
 </pre>
 
