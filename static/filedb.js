@@ -575,9 +575,8 @@ function pinned_files_modified() {
     $('#pinned_files_input').val(create_pinned_files_str());
     $("#clear_pinned_files_button").prop('disabled', pinned_file_ids.length == 0);
     update_slideshow_buttons();
-    // TODO: only update pinned text somehow, do not reload file etc.
     if (slideshow_index != -1) {
-        load_slideshow_file();
+        load_slideshow_text();
     }
 }
 
@@ -1831,7 +1830,10 @@ function load_slideshow_file() {
             update_image_div_height('#file_browser_image_div');
         }
     });
+}
 
+function load_slideshow_text() {
+    var file = slideshow_files[slideshow_index];
     var file_text = "";
     var overlay_text = "";
 
@@ -1930,6 +1932,10 @@ function load_slideshow_file() {
         overlay_text += '<p><span class="glyphicon glyphicon-pushpin"></span></p>';
     }
 
+    if (slideshow_timer != null) {
+        overlay_text += '<p><span class="glyphicon glyphicon-film"></span></p>';
+    }
+
     $("#slideshow_item_text").html(file_text);
     $("#my_fullscreen_browser_overlay").html(overlay_text);
 }
@@ -2013,6 +2019,8 @@ function toggle_slideshow() {
     else {
         slideshow_on();
     }
+    // Update slideshow indicator
+    load_slideshow_text();
 }
 
 function toggle_slideshow_repeat() {
@@ -2077,6 +2085,7 @@ function load_slideshow_index(index) {
     slideshow_index = index;
     update_slideshow_buttons();
     load_slideshow_file();
+    load_slideshow_text();
 }
 
 function update_slideshow_buttons() {
