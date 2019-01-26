@@ -100,13 +100,24 @@ $(document).ready(function(){
 </div>
 
 <div class="panel panel-default">
-    <div class="panel-heading">Tools</div>
+    <div class="panel-heading">Consistency Check Tool</div>
     <div class="panel-body">
         <div class="form-group">
-            <button type="submit" class="btn btn-default" id="consistency_check_button">Run consistency check...</button>
+            <button type="submit" class="btn btn-default" id="consistency_check_button">Start...</button>
         </div>
         <p id="tools_status"></p>
-        <table class="table" id="filestable"></table>
+        <table class="table" id="consistency_check_files_table"></table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Duplicate Files Finder Tool</div>
+    <div class="panel-body">
+        <div class="form-group">
+            <button type="submit" class="btn btn-default" id="duplicate_files_button">Start...</button>
+        </div>
+        <p id="duplicate_files_tool_status"></p>
+        <table class="table" id="duplicate_files_table"></table>
     </div>
 </div>
 

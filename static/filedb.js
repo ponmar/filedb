@@ -97,6 +97,10 @@ function filedb_init_files_page() {
     $("#consistency_check_button").click(function () {
         consistency_check();
     });
+
+    $("#duplicate_files_button").click(function () {
+        duplicate_files_finder();
+    });
 }
 
 function fetch_directories_to_add(url) {
@@ -898,11 +902,11 @@ function reload_tags_table() {
     }
 }
 
-function clear_files_table() {
-    $("#filestable").empty();
+function clear_consistency_check_files_table() {
+    $("#consistency_check_files_table").empty();
 }
 
-function update_files_table(files_json) {
+function update_consistency_check_files_table(files_json) {
     var tableRows = '<tr><th>File</th><th>Description</th><th>Age</th><th>Date and Time</th><th>Persons</th><th>Locations</th><th>Tags</th><th>Actions</th></tr>';
     var now = new Date();
     for (var i=0, file; file = files_json[i]; i++) {
@@ -918,14 +922,39 @@ function update_files_table(files_json) {
         tableRows += '<tr id="filerow_' + fileId + '"><td><a href="/api/filecontent/' + fileId + '">' + file['path'] + '</a></td><td>' + get_printable_value(file['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(datetime) + '</td><td>' + numPersons + '</td><td>' + numLocations + '</td><td>' + numTags + '</td><td><a href="" class="delete_file_button" id="delete_file_' + fileId + '">Delete</a>, <a href="/api/fileexif/' + fileId + '">Exif</a></td></tr>';
     }
 
-    $("#filestable").empty();
-    $("#filestable").append(tableRows);
+    $("#consistency_check_files_table").empty();
+    $("#consistency_check_files_table").append(tableRows);
 
     $(".delete_file_button").click(function () {
         var id = $(this).attr('id').replace('delete_file_', '');
         delete_file(id);
         return false; // do not follow link
     });
+}
+
+function clear_duplicate_files_table() {
+    $("#duplicate_files_table").empty();
+}
+
+function update_duplicate_files_table(duplicate_files_json) {
+    var tableRows = '<tr><th>Date and Time</th><th>Files</th></tr>';
+    for (var i=0, duplicate_file; duplicate_file = duplicate_files_json[i]; i++) {
+
+        var datetime = null;
+        var file_list = "";
+
+        for (var j=0, file; file = duplicate_file[j]; j++) {
+            if (datetime == null) {
+                datetime = get_printable_datetime(file['datetime']);
+            }
+            file_list += file['id'] + ';';
+        }
+
+        tableRows += '<tr><td>' + datetime + '</td><td>' + file_list + '</td></tr>';
+    }
+
+    $("#duplicate_files_table").empty();
+    $("#duplicate_files_table").append(tableRows);
 }
 
 function reset_file_categorization() {
@@ -1839,7 +1868,7 @@ function load_slideshow_text() {
 
     var file_datetime = file['datetime'];
     if (file_datetime != null) {
-        var timestamp = file_datetime.replace('T', ' ') + " (" + get_age(file_datetime, new Date()) + " years ago)";
+        var timestamp = get_printable_datetime(file_datetime) + " (" + get_age(file_datetime, new Date()) + " years ago)";
         file_text += timestamp;
         overlay_text += '<p>' + timestamp + '</p>';
     }
@@ -2257,9 +2286,10 @@ function import_files() {
 
 function clear_manage_files_results() {
     $("#add_files_status").text("");
-    $("#tools_status").text("");
     $("#delete_files_status").text("");
     $("#rename_files_status").text("");
+    $("#tools_status").text("");
+    $("#duplicate_files_tool_status").text("");
 }
 
 function consistency_check() {
@@ -2270,11 +2300,29 @@ function consistency_check() {
             var missing_files = result['missing_files'];
             if (missing_files.length == 0) {
                 $("#tools_status").text("File consistency check finished successfully");
-                clear_files_table();
+                clear_consistency_check_files_table();
             }
             else {
                 $("#tools_status").text("File consistency check found " + missing_files.length + " missing files:");
-                update_files_table(missing_files);
+                update_consistency_check_files_table(missing_files);
+            }
+        });
+    }
+}
+
+function duplicate_files_finder() {
+    if (window.confirm("Duplicate files finder may take a while for all files. Continue?")) {
+        clear_manage_files_results();
+        $("#duplicate_files_tool_status").text("Duplicate files finder running, please wait...");
+        $.getJSON("/api/fileduplicates", function (result) {
+            var duplicate_files = result['file_duplicates'];
+            if (duplicate_files.length == 0) {
+                $("#duplicate_files_tool_status").text("No duplicate files found");
+                clear_duplicate_files_table();
+            }
+            else {
+                $("#duplicate_files_tool_status").text("Duplicate files finder tool found  " + duplicate_files.length + " files that are duplicated:");
+                update_duplicate_files_table(duplicate_files);
             }
         });
     }
@@ -2347,8 +2395,8 @@ function delete_file(id) {
         type: 'DELETE',
         success: function (result) {
             $("#filerow_" + id).remove();
-            if ($('#filestable tr').length == 1) {
-                clear_files_table();
+            if ($('#consistency_check_files_table tr').length == 1) {
+                clear_consistency_check_files_table();
             }
         }
     })
@@ -2585,6 +2633,10 @@ function delete_files_from_filelist() {
             $("#delete_files_status").text("Failed to delete files");
         }
     });
+}
+
+function get_printable_datetime(datetime) {
+    return datetime.replace('T', ' ');
 }
 
 function get_printable_value(value) {
