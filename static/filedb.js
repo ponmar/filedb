@@ -2288,22 +2288,22 @@ function clear_manage_files_results() {
     $("#add_files_status").text("");
     $("#delete_files_status").text("");
     $("#rename_files_status").text("");
-    $("#tools_status").text("");
+    $("#consistency_check_status").text("");
     $("#duplicate_files_tool_status").text("");
 }
 
 function consistency_check() {
     if (window.confirm("File consistency check may take several minutes for all files. Continue?")) {
         clear_manage_files_results();
-        $("#tools_status").text("File consistency check running, please wait...");
+        $("#consistency_check_status").text("File consistency check running, please wait...");
         $.getJSON("/api/fileconsistency", function (result) {
             var missing_files = result['missing_files'];
             if (missing_files.length == 0) {
-                $("#tools_status").text("File consistency check finished successfully");
+                $("#consistency_check_status").text("File consistency check finished successfully");
                 clear_consistency_check_files_table();
             }
             else {
-                $("#tools_status").text("File consistency check found " + missing_files.length + " missing files:");
+                $("#consistency_check_status").text("File consistency check found " + missing_files.length + " missing files:");
                 update_consistency_check_files_table(missing_files);
             }
         });
