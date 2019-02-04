@@ -1772,15 +1772,14 @@ function update_search_result(files_json) {
 
 function get_directories_from_files(files_data) {
     var directories = [];
-    var prev_dir = null;
     for (var i=0, file; file = files_data[i]; i++) {
         var path = file['path'];
         var dir = get_directory_from_path(path);
-        if (prev_dir == null || prev_dir != dir) {
+        if (directories.indexOf(dir) == -1) {
             directories.push(dir);
-            prev_dir = dir;
         }
     }
+    directories.sort();
     return directories;
 }
 
@@ -2290,6 +2289,7 @@ function clear_manage_files_results() {
     $("#rename_files_status").text("");
     $("#consistency_check_status").text("");
     $("#duplicate_files_tool_status").text("");
+    // TODO: clean tool tables?
 }
 
 function consistency_check() {

@@ -1102,7 +1102,6 @@ def api_get_json_files_from_ids():
     file_ids = content['files']
 
     files = get_file_dicts(file_ids)
-    files.sort(key=lambda file: file['path'])
 
     cursor = g.db.execute('select count(*) from files')
     total_num_files = cursor.fetchone()[0]
