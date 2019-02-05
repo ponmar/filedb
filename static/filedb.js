@@ -2045,6 +2045,7 @@ function slideshow_off() {
         clearTimeout(slideshow_timer);
         slideshow_timer = null;
         $('#slideshow_toggle_button').removeClass('btn-primary').addClass('btn-default');
+        load_slideshow_text();
     }
 }
 
