@@ -1960,6 +1960,14 @@ function load_slideshow_text() {
         overlay_text += '<p><span class="glyphicon glyphicon-pushpin"></span></p>';
     }
 
+    if (slideshow_repeat) {
+        overlay_text += '<p><span class="glyphicon glyphicon-repeat"></span></p>';
+    }
+
+    if (slideshow_random) {
+        overlay_text += '<p><span class="glyphicon glyphicon-random"></span></p>';
+    }
+
     if (slideshow_timer != null) {
         overlay_text += '<p><span class="glyphicon glyphicon-film"></span></p>';
     }
