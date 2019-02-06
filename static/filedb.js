@@ -570,9 +570,11 @@ function toggle_pinned_file() {
 }
 
 function clear_pinned_files() {
-    pinned_file_ids = [];
-    store_pinned_file_ids();
-    pinned_files_modified();
+    if (window.confirm("Remove pin from " + pinned_file_ids.length + " files?")) {
+        pinned_file_ids = [];
+        store_pinned_file_ids();
+        pinned_files_modified();
+    }
 }
 
 function pinned_files_modified() {
