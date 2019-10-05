@@ -250,6 +250,7 @@ def add_file(path, file_description=None):
         file_datetime = None
         file_latitude = None
         file_longitude = None
+        file_position_str = None
 
         if jpegfile.is_jpeg_file(file_path):
             # Read date and time from jpeg exif information
@@ -265,9 +266,12 @@ def add_file(path, file_description=None):
             # Try to read date from sub-path (part of the path within the configured files directory)
             file_datetime = get_date_from_path(path)
 
+        if file_latitude is not None and file_longitude is not None:
+            file_position_str = '{} {}'.format(file_latitude, file_longitude)
+
         cursor = g.db.cursor()
-        cursor.execute('insert into files (path, description, datetime) values (?, ?, ?)',
-                       [path, file_description, file_datetime])
+        cursor.execute('insert into files (path, description, datetime, position) values (?, ?, ?, ?)',
+                       [path, file_description, file_datetime, file_position_str])
         g.db.commit()
 
         if file_latitude is not None and file_longitude is not None:
@@ -775,6 +779,45 @@ def api_update_tag(tag_id):
     return make_response(jsonify(tag_dict), 201)
 
 
+@app.route('/api/update_files_position', methods=['POST', 'GET'])
+def api_update_files_position():
+    file_position_updates = {}  # key: file id, value: position string
+
+    # Find jpeg files with position
+    cursor = g.db.execute('select id, path from files where position is null')
+    for row in cursor.fetchall():
+        file_id = row[0]
+        file_abs_path = get_file_abs_path(row[1])
+
+        if not os.path.isfile(file_abs_path) or not jpegfile.is_jpeg_file(file_abs_path):
+            app.logger.info('Ignored path (not a file): ' + file_abs_path)
+            continue
+
+        try:
+            jpeg = jpegfile.JpegFile(file_abs_path)
+            file_latitude, file_longitude = jpeg.get_gps_position()
+        except IOError:
+            app.logger.warning('Could not read Exif data from: ' + file_abs_path)
+            continue
+
+        if file_latitude is not None and file_longitude is not None:
+            file_position_updates[file_id] = '{} {}'.format(file_latitude, file_longitude)
+
+    # Update database
+    if len(file_position_updates) > 0:
+        cursor = g.db.cursor()
+        for file_id in file_position_updates:
+            cursor.execute("update files set position = ? where id = ?", (file_position_updates[file_id], file_id))
+
+        try:
+            g.db.commit()
+        except sqlite3.IntegrityError:
+            abort(409)
+
+    return make_response(jsonify({'num_updated_files': len(file_position_updates)}),
+                         201)
+
+
 #
 # API: delete data
 #
@@ -1153,7 +1196,7 @@ def api_get_json_tags():
 #
 
 def get_file_dict(file_id):
-    cur = g.db.execute('select id, path, description, datetime from files where id = ?', (file_id,))
+    cur = g.db.execute('select id, path, description, datetime, position from files where id = ?', (file_id,))
     row = cur.fetchone()
     if row is None:
         return None
@@ -1167,7 +1210,7 @@ def get_file_dict(file_id):
     cur = g.db.execute('select tagid from filetags where fileid = ?', (file_id,))
     tag_ids = [filetags_row[0] for filetags_row in cur.fetchall()]
 
-    return dict(id=row[0], path=row[1], description=row[2], datetime=row[3], persons=person_ids, locations=location_ids, tags=tag_ids)
+    return dict(id=row[0], path=row[1], description=row[2], datetime=row[3], position=row[4], persons=person_ids, locations=location_ids, tags=tag_ids)
 
 
 def get_file_dicts(file_ids):
