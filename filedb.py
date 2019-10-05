@@ -1094,7 +1094,7 @@ def api_get_json_files():
     else:
         query = ' intersect '.join(sub_queries)
     
-    #print(query)
+    print(query)
         
     cursor = g.db.execute(query)
 

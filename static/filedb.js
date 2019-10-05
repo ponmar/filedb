@@ -813,7 +813,7 @@ function reload_locations_table() {
 
         var locationRows = "";
         for (var i=0, location; location = locations[i]; i++) {
-            locationRows += '<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location) + '</td><td><a href="#locations_header" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>';
+            locationRows += '<tr id="tr_location_' + location['id'] + '"><td>' + location['name'] + '</td><td>' + get_printable_value(location['description']) + '</td><td>' + get_position_map_link(location['position']) + '</td><td><a href="#locations_header" class="edit_location_button" id="edit_location_' + location['id'] + '">Edit</a>, <a href="" class="delete_location_button" id="delete_location_' + location['id'] + '">Delete</a></td></tr>';
         }
         $("#locationstable").append(locationRows);
 
@@ -1934,7 +1934,11 @@ function load_slideshow_text() {
                 found_person = true;
             }
         }
-        file_text = remove_text_ending(file_text, item_separator);
+
+        if (file['position'] != null) {
+            file_text += 'Position: ' + get_position_map_link(file['position']);
+        }
+
         overlay_text += '</p>';
     }
 
@@ -1956,6 +1960,10 @@ function load_slideshow_text() {
         }
         file_text = remove_text_ending(file_text, item_separator) + "<br>";
         overlay_text += '</p>';
+    }
+
+    if (file['position'] != null) {
+        overlay_text += '<p>Position:<br>' + get_position_map_link(file['position'] + "</p>");
     }
 
     if (pinned_file_ids.includes(file['id'])) {
@@ -2710,8 +2718,7 @@ function get_location_map_link(location) {
     return '<span title="' + title  +'">' + location['name'] + '</span>';
 }
 
-function get_position_map_link(location) {
-    var position = location['position'];
+function get_position_map_link(position) {
     if (position != null) {
         var positionParts = position.split(" ");
         if (positionParts.length == 2) {
