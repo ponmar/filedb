@@ -1967,11 +1967,7 @@ function load_slideshow_text() {
                 found_person = true;
             }
         }
-
-        if (file['position'] != null) {
-            file_text += 'Position: ' + get_position_map_link(file['position']);
-        }
-
+        file_text = remove_text_ending(file_text, item_separator);
         overlay_text += '</p>';
     }
 
@@ -1996,6 +1992,7 @@ function load_slideshow_text() {
     }
 
     if (file['position'] != null) {
+        file_text += 'Position: ' + get_position_map_link(file['position']);
         overlay_text += '<p>Position:<br>' + get_position_map_link(file['position'] + "</p>");
     }
 
