@@ -281,6 +281,9 @@ def add_file(path, file_description=None):
 
 
 def add_file_near_locations(file_id, file_latitude, file_longitude):
+    if app.config['FILE_TO_LOCATION_MAX_DISTANCE'] is None:
+        return
+
     cursor = g.db.execute('select id, position from locations')
     for row in cursor.fetchall():
         location_id = row[0]

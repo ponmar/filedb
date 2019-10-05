@@ -120,6 +120,10 @@ class DefaultConfig(object):
     # The maximum distance, in meters, between a JPEG GPS position and a FileDB
     # location GPS position for automatically setting file locations when adding
     # files.
+    #
+    # Example with this feature disabled:
+    #   FILE_TO_LOCATION_MAX_DISTANCE = None
+    #
     FILE_TO_LOCATION_MAX_DISTANCE = 300
 
     # The thumbnail size used when no size is specified via the API.
