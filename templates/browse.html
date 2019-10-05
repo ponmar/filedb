@@ -24,6 +24,7 @@ $(document).ready(function(){
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#basic_search_criteria">Basic</a></li>
       <li><a data-toggle="tab" href="#advanced_search_criteria">Advanced</a></li>
+      <li><a data-toggle="tab" href="#map_search_criteria">Map</a></li>
       <li><a data-toggle="tab" href="#exported_search_criteria">Exported search</a></li>
       <li><a data-toggle="tab" href="#pinned_files_search_criteria">Pinned files</a></li>
     </ul>
@@ -93,6 +94,20 @@ $(document).ready(function(){
         <button type="button" class="btn btn-default" id="reset_search_criteria_button" title="Reset search criteria">Reset</button>
         <button type="button" class="btn btn-default" id="clear_search_button" title="Clear previous search result">Clear</button>
         <button type="button" class="btn btn-default" id="search_files_by_all_button" title="Make a new search">Search</button>
+      </div>
+      <div id="map_search_criteria" class="tab-pane fade in">
+        <br>
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon6">Position</span>
+          <input type="text" class="form-control" placeholder="Format: latitude longitude" id="map_position_input" aria-describedby="basic-addon6">
+        </div>
+        <br>
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon7">Radius [m]</span>
+          <input type="text" class="form-control" placeholder="" id="map_position_radius_input" aria-describedby="basic-addon7">
+        </div>
+        <br>
+        <button type="button" class="btn btn-default" id="map_position_search_button">Search</button>
       </div>
       <div id="exported_search_criteria" class="tab-pane fade in">
         <br>

@@ -313,6 +313,10 @@ function filedb_init_browse_page() {
         search_files_by_all();
     });
 
+    $("#map_position_search_button").click(function () {
+        search_files_by_map();
+    });
+
     $("#exported_list_of_files_button").click(function () {
         search_files_by_exported_file_list();
     });
@@ -1577,6 +1581,35 @@ function parse_file_list_ids(input_string) {
     }
 
     return result;
+}
+
+function search_files_by_map() {
+    var map_position_str = $('#map_position_input').val().trim();
+    var map_position_radius_str = $('#map_position_radius_input').val().trim();
+    var map_position_radius = parseInt(map_position_radius_str, 10);
+
+    if (map_position_str.length > 0 && !Number.isNaN(map_position_radius)) {
+        clear_previous_search();
+
+        var jsonData = JSON.stringify({'position': map_position_str, 'radius': map_position_radius});
+        $.ajax
+        ({
+            type: 'POST',
+            url: '/api/files_near_position',
+            contentType: 'application/json',
+            data: jsonData,
+            dataType: "json",
+            success: function (result) {
+                update_search_result(result);
+            },
+            error: function () {
+                alert("Could not post data");
+            }
+        });
+    }
+    else {
+        alert("Enter position and radius");
+    }
 }
 
 function search_files_by_exported_file_list() {
