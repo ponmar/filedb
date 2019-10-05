@@ -308,7 +308,7 @@ def add_file_near_locations(file_id, file_latitude, file_longitude):
 
 
 def get_gps_distance(lat1, lon1, lat2, lon2):
-    """Returns an approximated distance in meters between two GPS positions specified in longitude and latitude."""
+    """Returns an approximated distance in meters between two GPS positions specified in latitude and longitude."""
     return math.sqrt(pow(lat1 - lat2, 2) + pow(lon1 - lon2, 2)) / 0.000008998719243599958
 
 
@@ -1116,6 +1116,34 @@ def api_get_json_files():
     cursor = g.db.execute('select count(*) from files')
     total_num_files = cursor.fetchone()[0]
         
+    return jsonify(dict(files=files, total_num_files=total_num_files))
+
+
+@app.route('/api/files_near_position', methods=['POST'])
+def api_get_json_files_near_position():
+    content = request.get_json(silent=True)
+    target_position_str = content['position']
+    target_radius = content['radius']
+    target_position_latitude, target_position_longitude = parse_position(target_position_str)
+
+    near_file_ids = []
+
+    # Find files with position within the requested circle (position and radius)
+    cursor = g.db.execute('select id, position from files where position is not null')
+    for row in cursor.fetchall():
+        file_id = row[0]
+        file_position_str = row[1]
+
+        file_position_latitude, file_position_longitude = parse_position(file_position_str)
+        distance = get_gps_distance(file_position_latitude, file_position_longitude, target_position_latitude, target_position_longitude)
+        if distance <= target_radius:
+            near_file_ids.append(file_id)
+
+    files = get_file_dicts(near_file_ids)
+
+    cursor = g.db.execute('select count(*) from files')
+    total_num_files = cursor.fetchone()[0]
+
     return jsonify(dict(files=files, total_num_files=total_num_files))
 
 

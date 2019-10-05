@@ -49,6 +49,7 @@ Response: 200 (OK), 404 (Not Found)
 Request: GET|POST /api/randomfiles/&lt;numfiles&gt;
 Request: GET|POST /api/files_without_data
 Request: POST /api/files JSON: { "files":[ fileid1, fileid2, ...] }
+Request: POST /api/files_near_position JSON { position="&ltlatitude&gt &ltlongitude&gt", radius=X }
 Response: 200 (OK)
 {
     "files":
