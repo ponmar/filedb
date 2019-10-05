@@ -412,6 +412,10 @@ function filedb_init_browse_page() {
         export_pls_file();
     });
 
+    $('#export_google_maps_route').click(function () {
+        export_google_maps_route();
+    });
+
     $('#filelist1_update_button').click(function () {
         filelist1_update();
     });
@@ -2205,6 +2209,7 @@ function update_export_buttons() {
     $("#export_zip_file").prop('disabled', !has_slideshow_files);
     $("#export_m3u_file").prop('disabled', !has_slideshow_files);
     $("#export_pls_file").prop('disabled', !has_slideshow_files);
+    $("#export_google_maps_route").prop('disabled', !has_slideshow_files);
 }
 
 function open_fullscreen_slideshow() {
@@ -2741,8 +2746,7 @@ function get_location_map_link(location) {
         if (positionParts.length == 2) {
             var latitude = positionParts[0];
             var longitude = positionParts[1];
-            var zoom = 17;
-            return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank" title="' + title + '">' + location['name'] + '</a>';
+            return '<a href="https://www.google.com/maps?q=loc:' + latitude + ',' + longitude + '" target="_blank" title="' + title + '">' + location['name'] + '</a>';
         }
     }
     return '<span title="' + title  +'">' + location['name'] + '</span>';
@@ -2754,8 +2758,7 @@ function get_position_map_link(position) {
         if (positionParts.length == 2) {
             var latitude = positionParts[0];
             var longitude = positionParts[1];
-            var zoom = 17;
-            return '<a href="https://www.google.com/maps/preview/@' + latitude + ',' + longitude + ',' + zoom + 'z" target="_blank">' + position + '</a>';
+            return '<a href="https://www.google.com/maps?q=loc:' + latitude + ',' + longitude + '" target="_blank">' + position + '</a>';
         }
     }
     return "N/A";
@@ -2827,6 +2830,23 @@ function export_m3u_file() {
 
 function export_pls_file() {
     export_data('/api/exportpls', show_exported_data);
+}
+
+function export_google_maps_route() {
+    var positions_str = '';
+    for (var i=0, file; file = slideshow_files[i]; i++) {
+        if (file['position'] != null) {
+            positions_str += file['position'].replace(' ', ',') + '/';
+        }
+    }
+
+    if (positions_str.length > 0) {
+        var link = 'https://www.google.com/maps/dir/' + positions_str;
+        $('#exportresult').html('<a target="blank" href="' + link + '">' + link +'</a>');
+    }
+    else {
+        $('#exportresult').html('Missing file positions in search result');
+    }
 }
 
 function get_search_result_file_export_str() {
