@@ -1428,23 +1428,15 @@ def api_get_json_file_exif(file_id):
     json_data = {}
     for key in exif_data:
         value = exif_data[key]
-        if isinstance(value, bytes):
-            # Try to decode bytes data, because jsonify can not handle bytes.
-            # The specified encodings is what have been found so far in JPEG files.
-            value = decode_bytes(value, ['utf-8', 'windows-1252'])
-
-        json_data[key] = value
+        try:
+            # Check that key and value can be serialized before adding it to the response data
+            jsonify({key: value})
+            json_data[key] = value
+        except TypeError:
+            # Ignore this Exif data
+            pass
 
     return jsonify(json_data)
-
-
-def decode_bytes(bytes_data, decodings):
-    for decoding in decodings:
-        try:
-            return bytes_data.decode(decoding)
-        except ValueError:
-            pass
-    return None
 
 
 @app.route('/api/stats', methods=['GET', 'POST'])
