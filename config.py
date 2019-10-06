@@ -91,6 +91,16 @@ class DefaultConfig(object):
     #
     FILES_ROOT_DIRECTORY_UMOUNT_COMMAND = None
 
+    # Set to True to be able to follow symlinks to other directories. This makes it possible to have the collection of
+    # files within different directories.
+    #
+    # Warning: avoid symlinks back and forth when this feature is enabled (it results in an endless loop)
+    #
+    # Example (feature enabled):
+    #   FOLLOW_LINKS = True
+    #
+    FOLLOW_LINKS = False
+
     # Set this option to True to make it possible to start FileDB before the root
     # directory is available. This may be the case when mounting a Samba network
     # share manually.

@@ -184,8 +184,7 @@ def api_import_files():
     num_imported_files = 0
     num_not_imported_files = 0
 
-    # Note: os.walk requires a unicode directory path to return unicode encoded paths (automatic in Python 3 or later)
-    for root, _, filenames in os.walk(app.config['FILES_ROOT_DIRECTORY']):
+    for root, _, filenames in os.walk(app.config['FILES_ROOT_DIRECTORY'], followlinks=app.config['FOLLOW_LINKS']):
         for filename in filenames:
             filename_with_path = os.path.join(root, filename)
             filename_with_path = update_path(filename_with_path)
@@ -992,8 +991,7 @@ def api_get_json_fs_directories():
     Note: this function reads data from files collection.
     """
     directories = []
-    # Note: os.walk requires a unicode directory path to return unicode encoded paths (automatic in Python 3 or later)
-    for root, _, _ in os.walk(app.config['FILES_ROOT_DIRECTORY']):
+    for root, _, _ in os.walk(app.config['FILES_ROOT_DIRECTORY'], followlinks=app.config['FOLLOW_LINKS']):
         path = update_path(root)
         if path != app.config['FILES_ROOT_DIRECTORY']:
             # Remove root dir prefix from path
