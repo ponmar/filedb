@@ -1,8 +1,5 @@
 import datetime
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO  # for Python 3.6
+from io import BytesIO
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
@@ -100,13 +97,35 @@ class JpegFile:
 
 
 class JpegThumbnail:
-    def __init__(self, filename, size=(128, 128)):
+    def __init__(self, filename, size=(128, 128), fix_orientation=False):
         image = Image.open(filename)
-        img_io = StringIO()
+
+        if fix_orientation:
+            try:
+                image_exif = image._getexif()
+                image_orientation = image_exif[274]
+                if image_orientation in (2, '2'):
+                    image = image.transpose(Image.FLIP_LEFT_RIGHT)
+                elif image_orientation in (3, '3'):
+                    image = image.transpose(Image.ROTATE_180)
+                elif image_orientation in (4, '4'):
+                    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+                elif image_orientation in (5, '5'):
+                    image = image.transpose(Image.ROTATE_90).transpose(Image.FLIP_TOP_BOTTOM)
+                elif image_orientation in (6, '6'):
+                    image = image.transpose(Image.ROTATE_270)
+                elif image_orientation in (7, '7'):
+                    image = image.transpose(Image.ROTATE_270).transpose(Image.FLIP_TOP_BOTTOM)
+                elif image_orientation in (8, '8'):
+                    image = image.transpose(Image.ROTATE_90)
+            except (KeyError, AttributeError, TypeError, IndexError):
+                pass
+
+        bytes_io = BytesIO()
         image.thumbnail(size)
-        image.save(img_io, 'JPEG')
-        img_io.seek(0)
-        self.__data = img_io
+        image.save(bytes_io, 'JPEG')
+        bytes_io.seek(0)
+        self.__data = bytes_io
 
     def get_data(self):
         return self.__data

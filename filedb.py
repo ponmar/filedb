@@ -1359,7 +1359,7 @@ def api_create_file_thumbnail(file_id):
         size = size[0], int(request.args.get('height'))
 
     file_path = get_file_abs_path(row[0])
-    thumbnail = jpegfile.JpegThumbnail(file_path, size)
+    thumbnail = jpegfile.JpegThumbnail(file_path, size, app.config['FIX_THUMBNAIL_ORIENTATION'])
     return send_file(thumbnail.get_data(), mimetype='image/jpeg')
 
 

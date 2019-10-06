@@ -141,6 +141,12 @@ class DefaultConfig(object):
     # is specified.
     DEFAULT_THUMBNAIL_SIZE = (196, 196)
 
+    # JPEG images contains orientation information in the included Exif data. To generate a thumbnail with correct
+    # orientation the image must first be rotated according to the orientation information because no Exif data is
+    # included in the created thumbnail.
+    #
+    FIX_THUMBNAIL_ORIENTATION = True
+
 
 class DevelopmentConfig(DefaultConfig):
     """Use this configuration when troubleshooting FileDB."""
