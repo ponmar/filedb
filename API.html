@@ -67,6 +67,13 @@ Request: GET /api/filecontent/&lt;id&gt;
 Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
 </pre>
 
+<h2>Fetch Data: reoriented file content</h2>
+<p>JPEG images may contain Exif data with orientation. Not all programs use this data before displaying the image which renders the image with an incorrect rotation. Use this API, instead of the normal file content API, to reorient the image before sending it to the client. Exif data is not included in the generated response image. For other file formats the file content is returned.</p>
+<pre>
+Request: GET /api/filecontent_reoriented/&lt;id&gt;
+Response: 200 (OK), 404 (Not Found), data with content-type depending on file extension
+</pre>
+
 <h2>Fetch Data: Exif</h2>
 <p>Parses Exif data from the specified JPEG file and returns it in JSON format.</p>
 <pre>

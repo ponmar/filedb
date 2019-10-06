@@ -1342,6 +1342,27 @@ def api_get_file_content(file_id):
     return send_from_directory(app.config['FILES_ROOT_DIRECTORY'], file_path)
 
 
+@app.route('/api/filecontent_reoriented/<int:file_id>', methods=['GET'])
+def api_create_file_content_reoriented(file_id):
+    """Note: this function reads data from files collection."""
+    cur = g.db.execute('select path from files where id = ?', (file_id,))
+    row = cur.fetchone()
+    if row is None:
+        abort(404)
+
+    file_path = row[0]
+    file_abs_path = get_file_abs_path(file_path)
+    if jpegfile.is_jpeg_file(file_abs_path):
+        try:
+            thumbnail_jpeg = jpegfile.JpegFile(file_abs_path).create_fixed_orientation()
+            return send_file(thumbnail_jpeg, mimetype='image/jpeg')
+        except IOError:
+            pass
+
+    # Fallback to same method as for normal file content
+    return send_from_directory(app.config['FILES_ROOT_DIRECTORY'], file_path)
+
+
 @app.route('/api/thumbnail/<int:file_id>', methods=['GET'])
 def api_create_file_thumbnail(file_id):
     """Note: this function reads data from files collection."""
@@ -1359,8 +1380,9 @@ def api_create_file_thumbnail(file_id):
         size = size[0], int(request.args.get('height'))
 
     file_path = get_file_abs_path(row[0])
-    thumbnail = jpegfile.JpegThumbnail(file_path, size, app.config['FIX_THUMBNAIL_ORIENTATION'])
-    return send_file(thumbnail.get_data(), mimetype='image/jpeg')
+    jpeg = jpegfile.JpegFile(file_path)
+    thumbnail_jpeg = jpeg.create_thumbnail(size, app.config['FIX_THUMBNAIL_ORIENTATION'])
+    return send_file(thumbnail_jpeg, mimetype='image/jpeg')
 
 
 @app.route('/api/fileduplicates', methods=['GET'])
