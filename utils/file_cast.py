@@ -9,7 +9,7 @@ except ImportError:
     exit(1)
 
 TITLE = 'FileDB search result cast'
-FILEDB_FILECONTENT_URL = '{}/api/filecontent/{}'
+FILEDB_FILECONTENT_URL = '{}/api/filecontent_reoriented/{}'
 CONTENT_TYPES_TO_PLAY = ['image/jpeg']
 FILE_DELAY = 4
 
