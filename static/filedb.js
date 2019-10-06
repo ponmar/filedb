@@ -24,6 +24,8 @@ var tags_order_by = 'name:asc';
 
 var pinned_file_ids = []
 
+var fullscreen = false;
+
 function filedb_init_index_page() {
     get_stats(function (result) {
         $("#stats_span").html('<span class="glyphicon glyphicon-file"></span>' + result["num_files"] +  ' <span class="glyphicon glyphicon-user"></span> ' + result["num_persons"] + ' <span class="glyphicon glyphicon-globe"></span> ' + result["num_locations"] + ' <span class="glyphicon glyphicon-tag"></span>' + result["num_tags"]);
@@ -440,17 +442,31 @@ function filedb_init_browse_page() {
         filelists_copy_result();
     });
 
+    // Standard syntax
+    document.addEventListener("fullscreenchange", function() {
+        fullscreen_browser_changed();
+    });
+
+    // Firefox
+    document.addEventListener("mozfullscreenchange", function() {
+        fullscreen_browser_changed();
+    });
+
+    // Chrome, Safari and Opera
+    document.addEventListener("webkitfullscreenchange", function() {
+        fullscreen_browser_changed();
+    });
+
+    // IE / Edge
+    document.addEventListener("msfullscreenchange", function() {
+        fullscreen_browser_changed();
+    });
+
     $('body').keydown(function (e) {
         // Setup fullscreen controls
         //alert("keypress: " + e.which);
         if (fullscreen_slideshow_opened()) {
-            if (e.which == 27) {
-                // Escape pressed
-                slideshow_off();
-                close_fullscreen_browser();
-                e.preventDefault();
-            }
-            else if (e.which == 39) {
+            if (e.which == 39) {
                 // Left pressed
                 slideshow_off();
                 next_slideshow_file();
@@ -2230,6 +2246,15 @@ function close_fullscreen_browser() {
     document.getElementById("my_fullscreen_browser_overlay").style.display = "none";
 
     close_fullscreen();
+}
+
+function fullscreen_browser_changed() {
+    fullscreen = !fullscreen;
+
+    if (!fullscreen) {
+        slideshow_off();
+        close_fullscreen_browser();
+    }
 }
 
 function fullscreen_slideshow_opened() {
