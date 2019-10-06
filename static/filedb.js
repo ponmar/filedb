@@ -2218,6 +2218,8 @@ function open_fullscreen_slideshow() {
 
     // Needed to hide body scrollbar
     $("body").css('overflow', 'hidden');
+
+    open_fullscreen();
 }
 
 function close_fullscreen_browser() {
@@ -2226,10 +2228,43 @@ function close_fullscreen_browser() {
 
     document.getElementById("my_fullscreen_browser").style.display = "none";
     document.getElementById("my_fullscreen_browser_overlay").style.display = "none";
+
+    close_fullscreen();
 }
 
 function fullscreen_slideshow_opened() {
     return document.getElementById("my_fullscreen_browser").style.display == "block";
+}
+
+function open_fullscreen() {
+    var elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    }
+    else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+    }
+    else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        elem.webkitRequestFullscreen();
+    }
+    else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+    }
+}
+
+function close_fullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    }
+    else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+    }
+    else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+    }
+    else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+    }
 }
 
 function next_slideshow_file() {
