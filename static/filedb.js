@@ -465,7 +465,7 @@ function filedb_init_browse_page() {
     $('body').keydown(function (e) {
         // Setup fullscreen controls
         //alert("keypress: " + e.which);
-        if (fullscreen_slideshow_opened()) {
+        if (fullscreen) {
             if (e.which == 39) {
                 // Left pressed
                 slideshow_off();
@@ -2255,10 +2255,6 @@ function fullscreen_browser_changed() {
         slideshow_off();
         close_fullscreen_browser();
     }
-}
-
-function fullscreen_slideshow_opened() {
-    return document.getElementById("my_fullscreen_browser").style.display == "block";
 }
 
 function open_fullscreen() {
