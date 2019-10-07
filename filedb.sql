@@ -10,7 +10,7 @@ create table files(
     id integer primary key autoincrement not null,
     path text unique not null, /* Format: path/to/file/filename */
     description text,
-    datetime varchar(19) /* Format: YYYY, YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS */
+    datetime varchar(19), /* Format: YYYY, YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS */
     position text /* Format: <latitude> <longitude> */
 );
 
