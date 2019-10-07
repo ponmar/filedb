@@ -164,5 +164,11 @@ class MyConfig(DevelopmentConfig):
     BLACKLISTED_FILE_PATH_PATTERNS = DevelopmentConfig.BLACKLISTED_FILE_PATH_PATTERNS + ['unsorted', 'TN_']
 
 
+class DemoConfig(DevelopmentConfig):
+    """A demo configuration."""
+    DATABASE = '../filedb_db/filedb.db'
+    FILES_ROOT_DIRECTORY = '../filedb_files/'
+
+
 # The configuration class to use. Specify any of the above classes.
 MY_CONFIG = MyConfig
