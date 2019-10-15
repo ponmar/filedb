@@ -9,7 +9,7 @@ FileDB provides a server application, a web application and an API for performin
 FileDB pros:
 
 * Own your data: No data is shared with other parties
-* Control your data: All data is stored in an SQLite database and may be converted for future use depending on your future needs (no “lock-in effect”)
+* Control your data: All data is stored in an SQLite database and may be converted for future use depending on your future needs (no lock-in effect)
 * Search cababilities: Find files given a basic search criteria. Combine basic search criterias for creating an advanced search criteria
 * Present extra statisticts: People age, etc are presented when browsing files
 * 3rd party software integrations: Data may be exported to be used by other software and there is also an API to be used by custom software
@@ -58,7 +58,9 @@ FileDB prerequisites:
 
 ### Download ###
 
-Either download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags), or use the master branch.
+Download a specific release by finding the latest tag [here](https://bitbucket.org/pontusmarkstrom/filedb/downloads/?tab=tags).
+
+Advanced users may select one of the available branches. The dev branch is used during development and may contain unfinished work. When stable and tested, the dev branch is merged to the master branch (with an up-to-date changelog) and a version tag is set.  
 
 ### Installation ###
 
