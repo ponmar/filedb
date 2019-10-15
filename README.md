@@ -79,6 +79,7 @@ This chapter describes how to install FileDB from scratch (no upgrade).
 This chapter describes how to upgrade from an earlier version of FileDB.
 
 - Download a new FileDB version to a new directory
+- Check changelog for version specific upgrade instructions (may be provided when major version number is stepped)
 - Edit configuration for your needs (see config.py)
 - Copy your data (filedb.db) from the old FileDB directory to the new one
 

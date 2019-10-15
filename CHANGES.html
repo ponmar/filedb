@@ -15,6 +15,32 @@ h2 {
 
 <h1>FileDB CHANGES</h1>
 
+<h2>1.0</h2>
+<ul>
+<li>Major version stepped due to database format updates (see database upgrade instruction below)</li>
+<li>Database: add position column to files table (positions from JPEG files are now stored within the database for fast access)</li>
+<li>Database: add profilefileid column to persons table</li>
+<li>Webapp: person profile picture can be set</li>
+<li>Webapp: Google Maps links for files with position data</li>
+<li>Webapp: use javascript built-in fullscreen support to avoid browser-specific instructions</li>
+<li>Webapp: show file position, with link to Google Maps, in browser and fullscreen browser</li>
+<li>Webapp: add possibility to open route in Google Maps generated from file positions</li>
+<li>Server: exif data to json serialization bugfix</li>
+<li>Server: add feature for following symlinks in the files collection (disabled by default)</li>
+<li>Server: feature FILE_TO_LOCATION_MAX_DISTANCE can now be turned off</li>
+<li>API: generated thumbnails can now be rotated automatically according to the JPEG Exif orientation</li>
+<li>API: new API for rotating a JPEG according to its Exif orientation data (and can therefore be rendered correctly by a client that ignores the Exif data)</li>
+<li>API: new API for finding files located within a specified circle (lat, lon and radius)</li>
+<li>Util: use new API that makes server-side reorientation of JPEG images when casting to chromecast</li>
+</ul>
+
+<p>Upgrade instruction v0.X to v1.Y:</p>
+<ol>
+<li>Open a console (cmd on windows)</li>
+<li>Change directory to where your database file is located (example: cd c:\filedb_db)</li>
+<li>Run database upgrade script (example: python c:\filedb\scripts\upgrade_v0.X_to_v1.Y.py filedb.db</li>
+</ol>
+
 <h2>0.16</h2>
 <ul>
 <li>Webapp: Add duplicate files finder tool</li>
@@ -30,7 +56,7 @@ h2 {
 <li>API: Add API for getting some stats. Show this on the index page. </li>
 <li>API: Add API for fetching files that have not been categorized</li>
 <li>API: Add API for getting persons that have birthday today</li>
-<li>API: Add API for finding file duplicates </li>
+<li>API: Add API for finding file duplicates</li>
 </ul>
 
 <h2>0.15</h2>
