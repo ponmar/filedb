@@ -666,6 +666,7 @@ function get_persons() {
                 var date_str = date.getDate() + ' ' + date.toLocaleString("en-us", { month: "short" });
                 var birthday_marker = '';
                 if (now.getMonth() == date.getMonth() && now.getDate() == date.getDate()) {
+                    // TODO: show thumbnail if any?
                     birthday_marker = '<span class="glyphicon glyphicon-flag"></span> '
                 }
                 $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + birthday_marker + person['firstname'] + ' ' + person['lastname'] + '</td><td>' + date_str + '</td></tr>');
@@ -699,7 +700,7 @@ function birthday_sort(person1, person2) {
 function reload_persons_table() {
     if (persons.length > 0) {
         // TODO: do not set table id? instead search for the table inside personsdiv below?
-        $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name <span id="sort_by_person_first_name_icon"></span></th><th id="persons_lastname_col_header">Last Name <span id="sort_by_person_last_name_icon"></span></th><th id="persons_description_col_header">Description  <span id="sort_by_person_description_icon"></span></th><th id="persons_age_col_header">Born Years Ago  <span id="sort_by_person_age_icon"></span></th><th id="persons_dateofbirth_col_header">Date of Birth  <span id="sort_by_person_dateofbirth_icon"></span></th><th>Actions</th></tr></table>');
+        $('#personsdiv').html('<table class="table" id="personstable"><tr><th id="persons_firstname_col_header">First Name <span id="sort_by_person_first_name_icon"></span></th><th id="persons_lastname_col_header">Last Name <span id="sort_by_person_last_name_icon"></span></th><th id="persons_description_col_header">Description  <span id="sort_by_person_description_icon"></span></th><th id="persons_age_col_header">Born Years Ago  <span id="sort_by_person_age_icon"></span></th><th id="persons_dateofbirth_col_header">Date of Birth  <span id="sort_by_person_dateofbirth_icon"></span></th><th>Profile File Id</th><th>Actions</th></tr></table>');
 
         $("#sort_by_person_last_name_icon").removeClass("glyphicon glyphicon-triangle-bottom");
         if (persons_order_by.indexOf('firstname') == 0) {
@@ -757,7 +758,14 @@ function reload_persons_table() {
             if (dateofbirth != null) {
                 age = get_age(dateofbirth, now);
             }
-            personRows += '<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td><a href="#persons_header" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>';
+            var person_profile;
+            if (person['profilefileid'] != null) {
+                person_profile = '<a href="/api/filecontent/' + person['profilefileid'] +'"><img src="/api/thumbnail/' + person['profilefileid'] + '" title="File id: ' + person['profilefileid'] + '" alt="File id: ' + person['profilefileid'] + '"/></a>';
+            }
+            else {
+                person_profile = 'N/A';
+            }
+            personRows += '<tr id="tr_person_' + person['id'] + '"><td>' + person['firstname'] + '</td><td>' + person['lastname'] + '</td><td>' + get_printable_value(person['description']) + '</td><td>' + get_printable_value(age) + '</td><td>' + get_printable_value(person['dateofbirth']) + '</td><td>' + person_profile + '</td><td><a href="#persons_header" class="edit_person_button" id="edit_person_' + person['id'] + '">Edit</a>, <a href="" class="delete_person_button" id="delete_person_' + person['id'] + '">Delete</a></td></tr>';
         }
         $("#personstable").append(personRows);
 
@@ -2459,6 +2467,7 @@ function clear_edit_person() {
     $('#person_lastname_input').val("");
     $('#person_description_input').val("");
     $('#person_dateofbirth_input').val("");
+    $('#person_profilefileid_input').val("");
 }
 
 function prepare_edit_location(id) {
@@ -2574,7 +2583,8 @@ function modify_person() {
         "firstname": get_input('person_firstname_input'),
         "lastname": get_input('person_lastname_input'),
         "description": get_input('person_description_input'),
-        "dateofbirth": get_input('person_dateofbirth_input')
+        "dateofbirth": get_input('person_dateofbirth_input'),
+        "profilefileid": get_input('person_profilefileid_input')
     });
 
     var method;

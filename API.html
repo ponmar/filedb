@@ -111,7 +111,8 @@ Response: 200 (OK), 404 (Not Found)
     "id": id,
     "name": name,
     "description": description,
-    "dateofbirth": dateofbirth
+    "dateofbirth": dateofbirth,
+    "profilefileid": fileid
 }
 </pre>
 
@@ -210,7 +211,7 @@ Response: 200 (OK), 409 (Conflict)
 Response: 200 (OK), 409 (Conflict)
 </pre>
 
-<pre>Request: POST /api/person JSON: { "firstname":..., "lastname":..., "description":..., "dateofbirth":... }
+<pre>Request: POST /api/person JSON: { "firstname":..., "lastname":..., "description":..., "dateofbirth":..., "profilefileid":... }
 Response:
 {
     &lt;Same data here as for a single person&gt;

@@ -19,7 +19,8 @@ create table persons(
     firstname text not null,
     lastname text not null,
     description text,
-    dateofbirth varchar(10) /* Format: YYYY-MM-DD */
+    dateofbirth varchar(10), /* Format: YYYY-MM-DD */
+    profilefileid integer references files(id) on delete set null
 );
 
 create table locations(

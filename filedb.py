@@ -453,6 +453,7 @@ def api_add_person():
     lastname = content['lastname']
     description = content['description']
     dateofbirth = content['dateofbirth']
+    profilefileid = content['profilefileid']
 
     if firstname is None:
         abort(400, 'Person firstname not specified')
@@ -464,8 +465,8 @@ def api_add_person():
 
     try:
         cursor = g.db.cursor()
-        cursor.execute('insert into persons (firstname, lastname, description, dateofbirth) values (?, ?, ?, ?)',
-                       [firstname, lastname, description, dateofbirth])
+        cursor.execute('insert into persons (firstname, lastname, description, dateofbirth, profilefileid) values (?, ?, ?, ?, ?)',
+                       [firstname, lastname, description, dateofbirth, profilefileid])
         g.db.commit()
         return make_response(get_person_json(cursor.lastrowid), 201)
 
@@ -714,6 +715,10 @@ def api_update_person(person_id):
             if dateofbirth is not None and not is_date_format(dateofbirth):
                 abort(400, 'Invalid date of birth format')
             cursor.execute("update persons set dateofbirth = ? where id = ?", (dateofbirth, person_id))
+
+        if 'profilefileid' in content:
+            profilefileid = content['profilefileid']
+            cursor.execute("update persons set profilefileid = ? where id = ?", (profilefileid, person_id))
 
         g.db.commit()
 
@@ -1175,11 +1180,11 @@ def api_get_json_files_from_ids():
 @app.route('/api/persons', methods=['GET'])
 def api_get_json_persons():
     order_str = get_order_str(request.args, ('firstname', 'lastname', 'description', 'dateofbirth'))
-    query = 'select id, firstname, lastname, description, dateofbirth from persons'
+    query = 'select id, firstname, lastname, description, dateofbirth, profilefileid from persons'
     if order_str is not None:
         query = query + order_str
     cur = g.db.execute(query)
-    persons = [dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4]) for row in cur.fetchall()]
+    persons = [dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4], profilefileid=row[5]) for row in cur.fetchall()]
 
     return jsonify(dict(persons=persons))
 
@@ -1270,10 +1275,10 @@ def api_get_json_person(person_id):
 
 
 def get_person_dict(person_id):
-    cur = g.db.execute('select id, firstname, lastname, description, dateofbirth from persons where id = ?', (person_id,))
+    cur = g.db.execute('select id, firstname, lastname, description, dateofbirth, profilefileid from persons where id = ?', (person_id,))
     row = cur.fetchone()
     if row is not None:
-        return dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4])
+        return dict(id=row[0], firstname=row[1], lastname=row[2], description=row[3], dateofbirth=row[4], profilefileid=row[5])
     return None
 
 
