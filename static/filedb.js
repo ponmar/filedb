@@ -664,12 +664,16 @@ function get_persons() {
             for (var i=0, person; person = persons_with_dateofbirth[i]; i++) {
                 var date = new Date(person['dateofbirth']);
                 var date_str = date.getDate() + ' ' + date.toLocaleString("en-us", { month: "short" });
+                var has_birthday = now.getMonth() == date.getMonth() && now.getDate() == date.getDate();
                 var birthday_marker = '';
-                if (now.getMonth() == date.getMonth() && now.getDate() == date.getDate()) {
-                    // TODO: show thumbnail if any?
-                    birthday_marker = '<span class="glyphicon glyphicon-flag"></span> '
+                var thumbnail = '';
+                if (has_birthday) {
+                    birthday_marker = '<span class="glyphicon glyphicon-flag"></span> ';
+                    if (person['profilefileid'] != null) {
+                        thumbnail = '<br><br><a href="/api/filecontent/' + person['profilefileid'] + '"><img src="/api/thumbnail/' + person['profilefileid'] + '" alt="File id: ' + person['profilefileid'] + '" title="File id: ' + person['profilefileid'] + '"/></a>'
+                    }
                 }
-                $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + birthday_marker + person['firstname'] + ' ' + person['lastname'] + '</td><td>' + date_str + '</td></tr>');
+                $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + birthday_marker + person['firstname'] + ' ' + person['lastname'] + thumbnail + '</td><td>' + date_str + '</td></tr>');
             }
        }
     });
