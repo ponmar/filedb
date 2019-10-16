@@ -28,6 +28,7 @@ $(document).ready(function(){
         <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="dateofbirth" id="person_dateofbirth_input" pattern="[1-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]" title="YYYY-MM-DD">
         <input type="text" class="form-control" placeholder="Profile file id" name="profilefileid" id="person_profilefileid_input" pattern="\d*" title="Profile file id">
         <button type="submit" class="btn btn-default">Save</button>
+        <button type="reset" class="btn btn-default" value="Reset" id="cancel_edit_person">Cancel</button>
     </form>
 </div>
 <div id="personsdiv" class="clearfix">Loading persons...</div>
@@ -40,6 +41,7 @@ $(document).ready(function(){
         <input type="text" class="form-control" placeholder="Description" name="description" id="location_description_input" title="Description">
         <input type="text" class="form-control" placeholder="Position" name="position" id="location_position_input" pattern="^$|[-]{0,1}[0-9]*\.[0-9]*\s[-]{0,1}[0-9]*\.[0-9]*" title="latitude longitude">
         <button type="submit" class="btn btn-default">Save</button>
+        <button type="reset" class="btn btn-default" value="Reset" id="cancel_edit_location">Cancel</button>
     </form>
 </div>
 <div id="locationsdiv" class="clearfix">Loading locations...</div>
@@ -49,6 +51,7 @@ $(document).ready(function(){
     <form action="{{ url_for('api_add_tag') }}" method=post class="navbar-form navbar-left" role="search" id="add_tag_form">
         <input type="text" class="form-control" placeholder="Name" name="name" title="Name" id="tag_name_input" required>
         <button type="submit" class="btn btn-default">Save</button>
+        <button type="reset"  class="btn btn-default" value="Reset" id="cancel_edit_tag">Cancel</button>
     </form>
 </div>
 <div id="tagsdiv" class="clearfix">Loading tags...</div>

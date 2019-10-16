@@ -539,6 +539,18 @@ function filedb_init_categories_page() {
         evt.preventDefault();
         modify_tag();
     });
+
+    $("#cancel_edit_person").click(function (evt) {
+        clear_edit_person();
+    });
+
+    $("#cancel_edit_location").click(function (evt) {
+        clear_edit_location();
+    });
+
+    $("#cancel_edit_tag").click(function (evt) {
+        clear_edit_tag();
+    });
 }
 
 function load_pinned_file_ids() {
