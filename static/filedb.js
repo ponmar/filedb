@@ -2458,6 +2458,7 @@ function prepare_edit_person(id) {
         $('#person_lastname_input').val(person['lastname']);
         $('#person_description_input').val(person['description']);
         $('#person_dateofbirth_input').val(person['dateofbirth']);
+        $('#person_profilefileid_input').val(person['profilefileid']);
         $('#tr_person_' + id).attr("class", "success");
     }
 }
