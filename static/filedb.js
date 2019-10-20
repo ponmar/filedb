@@ -2847,41 +2847,41 @@ function get_position_map_link(position) {
     return "N/A";
 }
 
-function show_exported_data(data) {
-    $('#exportresult').html('<pre>' + data + '</pre>');
+function show_preformatted_exported_data(data) {
+    show_exported_data('<pre>' + data + '</pre>');
 }
 
-function download_exported_data(data) {
-    // TODO: how to trigger download dialog?
+function show_exported_data(data) {
+    $('#exportresult').html(data);
 }
 
 function export_file_list() {
     if (slideshow_files == null || slideshow_files.length == 0) {
-        $('#exportresult').html('Nothing to export');
+        show_exported_data('Nothing to export');
         return;
     }
     var exported_data = "";
     for (var i=0, file; file = slideshow_files[i]; i++) {
         exported_data += file['id'] + ';';
     }
-    show_exported_data(exported_data);
+    show_preformatted_exported_data(exported_data);
 }
 
 function export_absolute_paths() {
-    export_data('/api/exportabspaths', show_exported_data);
+    export_data('/api/exportabspaths', show_preformatted_exported_data);
 }
 
 function export_relative_paths() {
-    export_data('/api/exportpaths', show_exported_data);
+    export_data('/api/exportpaths', show_preformatted_exported_data);
 }
 
 function export_data(url, success_function) {
     if (slideshow_files == null || slideshow_files.length == 0) {
-        $('#exportresult').html('Nothing to export');
+        show_exported_data('Nothing to export');
         return;
     }
 
-    $('#exportresult').html('');
+    show_exported_data('');
 
     var file_ids = [];
     for (var i=0, file; file = slideshow_files[i]; i++) {
@@ -2898,21 +2898,36 @@ function export_data(url, success_function) {
         data: JSON.stringify(json),
         success: function (data) { success_function (data); },
         error: function (xhr, desc, err) {
-            $('#exportresult').html('Export failed: ' + desc);
+            show_exported_data('Export failed: ' + desc);
         }
     });
 }
 
 function export_zip_file() {
-    export_data('/api/exportzip', download_exported_data);
+    if (slideshow_files == null || slideshow_files.length == 0) {
+        show_exported_data('Nothing to export');
+        return;
+    }
+
+    var url = "/api/exportzip?files=";
+    for (var i=0, file; file = slideshow_files[i]; i++) {
+        url += file['id'] + ',';
+    }
+    url = url.slice(0, -1);
+
+    if (url.length > 2000) {
+        show_exported_data('Too many files');
+    }
+
+    show_exported_data('<a target="blank" href="' + url + '">Download Zip file</a>');
 }
 
 function export_m3u_file() {
-    export_data('/api/exportm3u', show_exported_data);
+    export_data('/api/exportm3u', show_preformatted_exported_data);
 }
 
 function export_pls_file() {
-    export_data('/api/exportpls', show_exported_data);
+    export_data('/api/exportpls', show_preformatted_exported_data);
 }
 
 function export_google_maps_route() {
@@ -2925,10 +2940,10 @@ function export_google_maps_route() {
 
     if (positions_str.length > 0) {
         var link = 'https://www.google.com/maps/dir/' + positions_str;
-        $('#exportresult').html('<a target="blank" href="' + link + '">' + link +'</a>');
+        show_exported_data('<a target="blank" href="' + link + '">' + link +'</a>');
     }
     else {
-        $('#exportresult').html('Missing file positions in search result');
+        show_exported_data('Missing file positions in search result');
     }
 }
 
