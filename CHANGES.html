@@ -15,6 +15,15 @@ h2 {
 
 <h1>FileDB CHANGES</h1>
 
+<h2>1.1</h2>
+<ul>
+<li>Webapp: export zip file with files uses HTTP GET request to be able to open the save file dialog in the browser</li>
+<li>Webapp: cancel buttons for the forms at the edit categories page</li>
+<li>Webapp: fix loading of person thumbnail when starting to edit a person</li>
+<li>Webapp: show thumbnail images, when available, for persons with birthday at the current day at the birthdays page</li>
+<li>API: a Zip file with specified files can now be downloaded via a HTTP GET request</li>
+</ul>
+
 <h2>1.0</h2>
 <ul>
 <li>Major version stepped due to database format updates (see database upgrade instruction below)</li>
@@ -34,11 +43,12 @@ h2 {
 <li>Util: use new API that makes server-side reorientation of JPEG images when casting to chromecast</li>
 </ul>
 
-<p>Upgrade instruction v0.X to v1.Y:</p>
+<h2>Upgrade v0.X to v1.Y</h2>
+<p>Follow this process to upgrade an existing FileDB database from version 0.X to version 1.Y:</p>
 <ol>
 <li>Open a console (cmd on windows)</li>
 <li>Change directory to where your database file is located (example: cd c:\filedb_db)</li>
-<li>Run database upgrade script (example: python c:\filedb\scripts\upgrade_v0.X_to_v1.Y.py filedb.db</li>
+<li>Run database upgrade script (example: python c:\filedb\scripts\upgrade_v0.X_to_v1.Y.py filedb.db)</li>
 </ol>
 
 <h2>0.16</h2>
