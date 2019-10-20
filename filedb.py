@@ -351,10 +351,15 @@ def update_path(path):
     return path
 
 
-@app.route('/api/exportzip', methods=['POST'])
+@app.route('/api/exportzip', methods=['POST', 'GET'])
 def api_export_zip():
-    content = request.get_json(silent=True)
-    file_ids = content['files']
+    if request.method == "POST":
+        # Parse list of files from json content
+        content = request.get_json(silent=True)
+        file_ids = content['files']
+    else:
+        # Parse list of files from url
+        file_ids = request.args.get('files').split(',')
 
     if app.config['EXPORTED_ZIP_MAX_NUM_FILES'] is not None and len(file_ids) > app.config['EXPORTED_ZIP_MAX_NUM_FILES']:
         abort(400, 'Too many files specified')
