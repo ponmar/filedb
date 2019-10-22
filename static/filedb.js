@@ -675,6 +675,13 @@ function get_persons() {
             // Show persons
             for (var i=0, person; person = persons_with_dateofbirth[i]; i++) {
                 var date = new Date(person['dateofbirth']);
+
+                var birthday = new Date(now.getFullYear(), date.getMonth(), date.getDate());
+                if (now.getMonth() > birthday.getMonth() || (now.getMonth() == birthday.getMonth() && now.getDate() > birthday.getDate())) {
+                    birthday.setFullYear(birthday.getFullYear() + 1);
+                }
+                var days_left = days_between(now, birthday);
+
                 var date_str = date.getDate() + ' ' + date.toLocaleString("en-us", { month: "short" });
                 var has_birthday = now.getMonth() == date.getMonth() && now.getDate() == date.getDate();
                 var birthday_marker = '';
@@ -685,10 +692,14 @@ function get_persons() {
                         thumbnail = '<br><br><a href="/api/filecontent/' + person['profilefileid'] + '"><img src="/api/thumbnail/' + person['profilefileid'] + '" alt="File id: ' + person['profilefileid'] + '" title="File id: ' + person['profilefileid'] + '"/></a>'
                     }
                 }
-                $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + birthday_marker + person['firstname'] + ' ' + person['lastname'] + thumbnail + '</td><td>' + date_str + '</td></tr>');
+                $('#birthdays_person_table > tbody:last-child').append('<tr><td>' + birthday_marker + person['firstname'] + ' ' + person['lastname'] + thumbnail + '</td><td>' + date_str + '</td><td>' + days_left + ' days</td></tr>');
             }
        }
     });
+}
+
+function days_between(date1, date2) {
+    return Math.ceil(Math.abs(date1 - date2) / (1000 * 60 * 60 * 24));
 }
 
 function person_birthday_sort(person1, person2) {
