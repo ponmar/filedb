@@ -5,38 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 using System.Threading.Tasks;
-using System.Net;
-using System.Net.Sockets;
 using System.Windows.Input;
 
 namespace FileDbCast
 {
-    public class ActionCommand : ICommand
-    {
-        private readonly Action action;
-
-        public ActionCommand(Action action)
-        {
-            this.action = action;
-        }
-
-        public void Execute(object parameter)
-        {
-            action();
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public event EventHandler CanExecuteChanged;
-    }
-
     public class MainPageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -163,6 +138,30 @@ namespace FileDbCast
 
         private bool slideshow;
 
+        public bool Random
+        {
+            get => random;
+            set
+            {
+                random = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Random)));
+            }
+        }
+
+        private bool random;
+
+        public bool Repeat
+        {
+            get => repeat;
+            set
+            {
+                repeat = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Repeat)));
+            }
+        }
+
+        private bool repeat;
+
         public string ExportedFileList
         {
             get => exportedFileList;
@@ -224,7 +223,7 @@ namespace FileDbCast
                 PreviousFilesAvailable = fileIndex > 0;
 
                 // Turn off slideshow if new index is last index
-                if (Slideshow && (fileIndex == -1 || fileIndex == fileIds.Count - 1))
+                if (Slideshow && !repeat && (fileIndex == -1 || fileIndex == fileIds.Count - 1))
                 {
                     Slideshow = false;
                 }
@@ -232,7 +231,7 @@ namespace FileDbCast
                 if (fileIndex != -1)
                 {
                     Status = (fileIndex + 1) + " [" + fileIds.Count + "] - Id: " + fileIds[fileIndex];
-                    // TODO: use: /api/filecontent_reoriented/ ?
+                    // TODO: use /api/filecontent_reoriented/ if cast device does not reorient image according to exif data? Make this configurable in the gui?
                     FileUrl = filedbUrl + "/api/filecontent/" + fileIds[fileIndex];
                 }
                 else
@@ -290,12 +289,14 @@ namespace FileDbCast
 
         private ICommand lastCommand;
 
+        private readonly Random randomGenerator = new Random();
+
         public MainPageViewModel()
         {
             slideshowTimer = new DispatcherTimer();
             slideshowTimer.Tick += SlideshowTimer_Tick;
 
-            string ipAddr = GetIPAddress();
+            string ipAddr = Utils.GetIPAddress();
 
             // Init properties
             // Note that localhost is no good hostname for casting to another device on the network
@@ -303,6 +304,8 @@ namespace FileDbCast
             Slideshow = false;
             SlideshowDelay = 3;
             Preview = false;
+            Random = false;
+            Repeat = false;
             ExportedFileList = string.Empty;
             CastDeviceStatus = string.Empty;
             Chromecasts = new ObservableCollection<Chromecast>();
@@ -341,7 +344,7 @@ namespace FileDbCast
 
                 LoadFile(0);
 
-                // Start slideshow if needed
+                // Start slideshow if checkbox already selected
                 Slideshow = slideshow;
             }
         }
@@ -353,14 +356,17 @@ namespace FileDbCast
 
         public void Previous()
         {
-            // TODO: handle random
-            LoadFile(fileIndex - 1);
+            LoadFile(random ? randomGenerator.Next(0, fileIds.Count) : fileIndex - 1);
         }
 
         public void Next()
         {
-            // TODO: handle random
-            LoadFile(fileIndex + 1);
+            int newIndex = random ? randomGenerator.Next(0, fileIds.Count) : fileIndex + 1;
+            if (repeat && newIndex == fileIds.Count)
+            {
+                newIndex = 0;
+            }
+            LoadFile(newIndex);
         }
 
         public void Last()
@@ -390,7 +396,6 @@ namespace FileDbCast
                 {
                     await Task.Delay(500);
                 }
-                //await controller.LoadMedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/mp4/DesigningForGoogleCast.mp4", "video/mp4");
 
                 // TODO: run in gui thread?
                 CastDeviceStatus = "Ready";
@@ -409,8 +414,6 @@ namespace FileDbCast
 
             if (selectedChromecast != null && controller != null && FileUrl != string.Empty)
             {
-                // TODO: use controller to load media?
-                //controller.LoadMedia("https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/mp4/DesigningForGoogleCast.mp4", "video/mp4", null, "BUFFERED");
                 controller.LoadMedia(FileUrl, "image/jpeg", null, "BUFFERED");
                 controller.Play();
             }
@@ -418,21 +421,7 @@ namespace FileDbCast
 
         private void SlideshowTimer_Tick(object sender, EventArgs e)
         {
-            // TODO: handle random
-            LoadFile(fileIndex + 1);
-        }
-
-        public static string GetIPAddress()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ipAddress in host.AddressList)
-            {
-                if (ipAddress.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ipAddress.ToString();
-                }
-            }
-            return String.Empty;
+            NextCommand.Execute(this);
         }
     }
 }

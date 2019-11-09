@@ -89,6 +89,8 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding Preview}">Preview</CheckBox>
+                    <CheckBox Name="RandomCheckbox" IsChecked="{Binding Random}">Repeat</CheckBox>
+                    <CheckBox Name="RepeatCheckbox" IsChecked="{Binding Repeat}">Random</CheckBox>
                     <CheckBox Name="SlideshowCheckbox" IsChecked="{Binding Slideshow}">Slideshow</CheckBox>
                 </StackPanel>
                 <Grid>
