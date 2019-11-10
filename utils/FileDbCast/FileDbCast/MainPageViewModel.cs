@@ -281,7 +281,7 @@ namespace FileDbCast
                 {
                     File file = files.files[fileIndex];
                     FileBrowserStatus = "[" + (fileIndex + 1) + "/" + files.files.Count + "]";
-                    FileUrl = filedbUrl + "/api/filecontent/" + file.id;
+                    FileUrl = filedbClient.GetFileContentUrl(file.id, reorient);
                     FilePath = file.path;
                     FileDescription = file.description;
                     FileDateTime = file.datetime.Replace('T', ' ');
@@ -300,6 +300,19 @@ namespace FileDbCast
         }
 
         private int fileIndex = -1;
+
+        public bool Reorient
+        {
+            get => reorient;
+            set
+            {
+                reorient = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Reorient)));
+                LoadFile(fileIndex);
+            }
+        }
+
+        bool reorient;
 
         private readonly DispatcherTimer slideshowTimer = new DispatcherTimer();
 
@@ -370,8 +383,9 @@ namespace FileDbCast
             // Init properties
             // Note that localhost is no good hostname for casting to another device on the network
             FiledbUrl = string.IsNullOrEmpty(ipAddr) ? "http://localhost:80" : "http://" + ipAddr + ":80";
+            Reorient = true;
             Slideshow = false;
-            SlideshowDelay = 3;
+            SlideshowDelay = 4;
             Preview = false;
             Random = false;
             Repeat = false;

@@ -61,4 +61,17 @@ namespace FileDbApi
     {
         public List<Tag> tags { get; set; }
     }
+
+    public class Directories
+    {
+        public List<string> directories { get; set; }
+    }
+
+    public class ServerStats
+    {
+        public int num_files { get; set; }
+        public int num_persons { get; set; }
+        public int num_locations { get; set; }
+        public int num_tags { get; set; }
+    }
 }

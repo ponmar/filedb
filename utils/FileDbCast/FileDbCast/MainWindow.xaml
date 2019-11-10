@@ -50,13 +50,12 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
-                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <!-- Select FileDB server -->
                 <Label Grid.Row="0" Grid.Column="0" Content="FileDB server URL: "/>
                 <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FiledbUrl}"></TextBox>
-
+                
                 <!-- Select cast device -->
                 <Label Grid.Row="1" Grid.Column="0" Content="Cast device:"/>
                 <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Chromecasts, Mode=OneTime}" SelectionChanged="ComboBox_SelectionChanged">
@@ -69,21 +68,31 @@
 
                 <Label Grid.Row="2" Grid.Column="0" Content="Cast device status: "/>
                 <Label Grid.Row="2" Grid.Column="1" Content="{Binding CastDeviceStatus}"/>
+
+                <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsChecked="{Binding Reorient}">Enable server-side JPEG reorientation (according to Exif data)</CheckBox>
             </Grid>
         </GroupBox>
 
         <GroupBox Header="Exported file list (format: 1;2;...)">
-            <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
                 <!-- Exported FileDB list of files -->
-                <TextBox Text="{Binding ExportedFileList}" TextWrapping="NoWrap"/>
-                <Button Command="{Binding LoadCommand}">Load</Button>
-            </StackPanel>
+                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ExportedFileList}" TextWrapping="NoWrap" Width="auto"/>
+                <Button Grid.Row="0" Grid.Column="1" Command="{Binding LoadCommand}">Load</Button>
+            </Grid>
         </GroupBox>
 
         <GroupBox>
             <GroupBox.Header>
                 <TextBlock>
-                    <Run Text="Browser "/>
+                    <Run Text="Browser"/>
                     <Run Text="{Binding FileBrowserStatus}"/>
                 </TextBlock>
             </GroupBox.Header>
