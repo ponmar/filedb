@@ -62,7 +62,6 @@
                 <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Chromecasts, Mode=OneTime}" SelectionChanged="ComboBox_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <!--<ComboBoxItem Content="{Binding Path=FriendlyName}"/-->
                             <TextBlock Text="{Binding Path=FriendlyName}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -70,10 +69,6 @@
 
                 <Label Grid.Row="2" Grid.Column="0" Content="Cast device status: "/>
                 <Label Grid.Row="2" Grid.Column="1" Content="{Binding CastDeviceStatus}"/>
-                
-                <!-- Slideshow -->
-                <Label Grid.Row="3" Grid.Column="0" Content="Slideshow delay [s]: "/>
-                <TextBox Grid.Row="3" Grid.Column="1" Name="SlideshowDelay" Text="{Binding SlideshowDelay}"/>
             </Grid>
         </GroupBox>
 
@@ -81,11 +76,18 @@
             <StackPanel>
                 <!-- Exported FileDB list of files -->
                 <TextBox Text="{Binding ExportedFileList}" TextWrapping="NoWrap"/>
-                <Button Click="LoadButton_Click">Load</Button>
+                <Button Command="{Binding LoadCommand}">Load</Button>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Browser">
+        <GroupBox>
+            <GroupBox.Header>
+                <TextBlock>
+                    <Run Text="Browser "/>
+                    <Run Text="{Binding FileBrowserStatus}"/>
+                </TextBlock>
+            </GroupBox.Header>
+            
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding Preview}">Preview</CheckBox>
@@ -93,6 +95,21 @@
                     <CheckBox Name="RepeatCheckbox" IsChecked="{Binding Repeat}">Random</CheckBox>
                     <CheckBox Name="SlideshowCheckbox" IsChecked="{Binding Slideshow}">Slideshow</CheckBox>
                 </StackPanel>
+
+                <!-- Slideshow -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="Slideshow delay [s]: "/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Name="SlideshowDelay" Text="{Binding SlideshowDelay}"/>
+                </Grid>
+
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -104,16 +121,20 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Column="0" Name="FirstButton" Command="{Binding FirstCommand}" IsEnabled="{Binding PreviousFilesAvailable}">First</Button>
-                    <Button Grid.Column="1" Name="PreviousButton" Command="{Binding PreviousCommand}" IsEnabled="{Binding PreviousFilesAvailable}">Previous</Button>
-                    <Button Grid.Column="2" Name="NextButton" Command="{Binding NextCommand}" IsEnabled="{Binding NextFilesAvailable}">Next</Button>
-                    <Button Grid.Column="3" Name="LastButton" Command="{Binding LastCommand}" IsEnabled="{Binding NextFilesAvailable}">Last</Button>
+                    <Button Grid.Column="0" Name="FirstButton" Command="{Binding FirstCommand}" IsEnabled="{Binding PreviousFilesAvailable}" ToolTip="First">[&lt;&lt;</Button>
+                    <Button Grid.Column="1" Name="PreviousButton" Command="{Binding PreviousCommand}" IsEnabled="{Binding PreviousFilesAvailable}" ToolTip="Previous">&lt;</Button>
+                    <Button Grid.Column="2" Name="NextButton" Command="{Binding NextCommand}" IsEnabled="{Binding NextFilesAvailable}" ToolTip="Next">&gt;</Button>
+                    <Button Grid.Column="3" Name="LastButton" Command="{Binding LastCommand}" IsEnabled="{Binding NextFilesAvailable}" ToolTip="Last">&gt;&gt;]</Button>
                 </Grid>
 
-                <Label HorizontalAlignment="Center" Content="{Binding Status}"/>
                 <Border Height="150" BorderBrush="Black" BorderThickness="1" IsEnabled="{Binding Preview}" Visibility="{Binding PreviewVisibility}">
                     <Image Name="PreviewImage" Source="{Binding FileUrl}" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Border>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FileDateTime}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FilePath}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FileDescription}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FilePosition}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FileUrl}"/>
             </StackPanel>
         </GroupBox>
     </StackPanel>

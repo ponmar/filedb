@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FileDbApi;
 
 namespace FileDbCast
 {
@@ -174,17 +175,17 @@ namespace FileDbCast
 
         private string exportedFileList;
 
-        public string Status
+        public string FileBrowserStatus
         {
-            get => status;
+            get => fileBrowserStatus;
             set
             {
-                status = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Status)));
+                fileBrowserStatus = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileBrowserStatus)));
             }
         }
 
-        private string status;
+        private string fileBrowserStatus;
 
         public bool NextFilesAvailable
         {
@@ -210,7 +211,55 @@ namespace FileDbCast
 
         private bool previousFilesAvailable;
 
-        private readonly List<int> fileIds = new List<int>();
+        public string FileDateTime
+        {
+            get => fileDateTime;
+            set
+            {
+                fileDateTime = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileDateTime)));
+            }
+        }
+
+        private string fileDateTime;
+
+        public string FilePath
+        {
+            get => filePath;
+            set
+            {
+                filePath = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilePath)));
+            }
+        }
+
+        private string filePath;
+
+        public string FileDescription
+        {
+            get => fileDescription;
+            set
+            {
+                fileDescription = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileDescription)));
+            }
+        }
+
+        private string fileDescription;
+
+        public string FilePosition
+        {
+            get => filePosition;
+            set
+            {
+                filePosition = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilePosition)));
+            }
+        }
+
+        private string filePosition;
+
+        private Files files;
 
         public int FileIndex
         {
@@ -219,25 +268,33 @@ namespace FileDbCast
             {
                 fileIndex = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileIndex)));
-                NextFilesAvailable = fileIndex != -1 && fileIndex < fileIds.Count - 1;
+                NextFilesAvailable = fileIndex != -1 && fileIndex < files.files.Count - 1;
                 PreviousFilesAvailable = fileIndex > 0;
 
                 // Turn off slideshow if new index is last index
-                if (Slideshow && !repeat && (fileIndex == -1 || fileIndex == fileIds.Count - 1))
+                if (Slideshow && !repeat && (fileIndex == -1 || fileIndex == files.files.Count - 1))
                 {
                     Slideshow = false;
                 }
 
                 if (fileIndex != -1)
                 {
-                    Status = (fileIndex + 1) + " [" + fileIds.Count + "] - Id: " + fileIds[fileIndex];
-                    // TODO: use /api/filecontent_reoriented/ if cast device does not reorient image according to exif data? Make this configurable in the gui?
-                    FileUrl = filedbUrl + "/api/filecontent/" + fileIds[fileIndex];
+                    File file = files.files[fileIndex];
+                    FileBrowserStatus = "[" + (fileIndex + 1) + "/" + files.files.Count + "]";
+                    FileUrl = filedbUrl + "/api/filecontent/" + file.id;
+                    FilePath = file.path;
+                    FileDescription = file.description;
+                    FileDateTime = file.datetime.Replace('T', ' ');
+                    FilePosition = file.position;
                 }
                 else
                 {
-                    Status = "No file list loaded";
+                    FileBrowserStatus = "No file list loaded";
                     FileUrl = string.Empty;
+                    FilePath = string.Empty;
+                    FileDescription = string.Empty;
+                    FileDateTime = string.Empty;
+                    FilePosition = string.Empty;
                 }
             }
         }
@@ -248,6 +305,16 @@ namespace FileDbCast
 
         private Chromecast selectedChromecast = null;
         private SharpCasterDemoController controller = null;
+
+        public ICommand LoadCommand
+        {
+            get
+            {
+                return loadCommand ?? (loadCommand = new ActionCommand(() => { LoadAsync(); }));
+            }
+        }
+
+        private ICommand loadCommand;
 
         public ICommand NextCommand
         {
@@ -291,6 +358,8 @@ namespace FileDbCast
 
         private readonly Random randomGenerator = new Random();
 
+        private FileDbClient filedbClient;
+
         public MainPageViewModel()
         {
             slideshowTimer = new DispatcherTimer();
@@ -324,54 +393,68 @@ namespace FileDbCast
 
         private void Reset()
         {
-            fileIds.Clear();
+            files = null;
             FileIndex = -1;
         }
 
-        public void Load()
+        private async Task LoadAsync()
         {
             Reset();
 
             if (!string.IsNullOrEmpty(FiledbUrl) && !string.IsNullOrEmpty(ExportedFileList))
             {
+                var inputFileIds = new List<int>();
                 foreach (string fileIdStr in ExportedFileList.Split(";"))
                 {
                     if (int.TryParse(fileIdStr, out int fileId))
                     {
-                        fileIds.Add(fileId);
+                        inputFileIds.Add(fileId);
                     }
                 }
 
-                LoadFile(0);
+                if (inputFileIds.Count > 0)
+                {
+                    filedbClient = new FileDbClient(FiledbUrl);
+                    var fileIds = new FileIds
+                    {
+                        files = inputFileIds
+                    };
 
-                // Start slideshow if checkbox already selected
-                Slideshow = slideshow;
+                    files = await filedbClient.GetFilesAsync(fileIds);
+                    if (files != null)
+                    {
+                        LoadFile(0);
+
+                        // Start slideshow if checkbox already selected
+                        Slideshow = slideshow;
+                    }
+                }
             }
         }
 
-        public void First()
+        private void First()
         {
             LoadFile(0);
         }
 
-        public void Previous()
+        private void Previous()
         {
-            LoadFile(random ? randomGenerator.Next(0, fileIds.Count) : fileIndex - 1);
+            LoadFile(random ? randomGenerator.Next(0, files.files.Count) : fileIndex - 1);
         }
 
-        public void Next()
+        private void Next()
         {
-            int newIndex = random ? randomGenerator.Next(0, fileIds.Count) : fileIndex + 1;
-            if (repeat && newIndex == fileIds.Count)
+            int newIndex = random ? randomGenerator.Next(0, files.files.Count) : fileIndex + 1;
+            if (repeat && newIndex == files.files.Count)
             {
                 newIndex = 0;
             }
             LoadFile(newIndex);
         }
 
-        public void Last()
+        private void Last()
         {
-            LoadFile(fileIds.Count - 1);
+            LoadFile(files.files.Count - 1);
         }
 
         public void SelectCastDevice(Chromecast cc)
@@ -407,7 +490,7 @@ namespace FileDbCast
 
         private void LoadFile(int index)
         {
-            if (index >= 0 && fileIds.Count > 0 && index < fileIds.Count)
+            if (index >= 0 && files.files.Count > 0 && index < files.files.Count)
             {
                 FileIndex = index;
             }

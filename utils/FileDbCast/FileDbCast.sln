@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDbCast", "FileDbCast\FileDbCast.csproj", "{3FC467CA-0A61-4AD9-9D54-EF11D7035615}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileDbCast", "FileDbCast\FileDbCast.csproj", "{3FC467CA-0A61-4AD9-9D54-EF11D7035615}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FileDbApi", "FileDbApi\FileDbApi.shproj", "{6CF1338B-BB83-4332-9AF3-109C7E2ECCF9}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		FileDbApi\FileDbApi.projitems*{6cf1338b-bb83-4332-9af3-109c7e2eccf9}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
