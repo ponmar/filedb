@@ -699,7 +699,11 @@ function get_persons() {
 }
 
 function days_between(date1, date2) {
-    return Math.ceil(Math.abs(date1 - date2) / (1000 * 60 * 60 * 24));
+    var days = Math.abs(date1 - date2) / (1000 * 60 * 60 * 24);
+    if (days < 0.01) {
+        return 0;
+    }
+    return Math.ceil(days);
 }
 
 function person_birthday_sort(person1, person2) {
