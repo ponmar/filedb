@@ -284,7 +284,7 @@ namespace FileDbCast
                     FileUrl = filedbClient.GetFileContentUrl(file.id, reorient);
                     FilePath = file.path;
                     FileDescription = file.description;
-                    FileDateTime = file.datetime.Replace('T', ' ');
+                    FileDateTime = string.IsNullOrEmpty(file.datetime) ? string.Empty : file.datetime.Replace('T', ' ');
                     FilePosition = file.position;
                 }
                 else

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace FileDbApi
 {
+    /// <summary>
+    /// This is a client implementation for the FileDB HTTP REST API
+    /// </summary>
     public class FileDbClient
     {
         private readonly string filedbUrl;
