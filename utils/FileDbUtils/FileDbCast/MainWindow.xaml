@@ -36,6 +36,10 @@
         <Style TargetType="GroupBox">
             <Setter Property="Margin" Value="5"></Setter>
         </Style>
+
+        <Style TargetType="Border">
+            <Setter Property="Margin" Value="5"></Setter>
+        </Style>
     </Window.Resources>
     
     <StackPanel Width="auto" Height="auto">
