@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileDbCast"
         mc:Ignorable="d"
         Title="FileDBCast"
         ResizeMode="NoResize" SizeToContent="Height" Width="400" Height="auto">
@@ -37,9 +38,13 @@
             <Setter Property="Margin" Value="5"></Setter>
         </Style>
 
-        <Style TargetType="Border">
+        <Style x:Key="PreviewImageBorderStyle" TargetType="Border">
             <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="BorderBrush" Value="Black"></Setter>
+            <Setter Property="BorderThickness" Value="1"></Setter>
         </Style>
+
+        <local:StringContentToVisibilityConverter x:Key="StringContentToVisibilityConverter"/>
     </Window.Resources>
     
     <StackPanel Width="auto" Height="auto">
@@ -140,14 +145,14 @@
                     <Button Grid.Column="3" Name="LastButton" Command="{Binding LastCommand}" IsEnabled="{Binding NextFilesAvailable}" ToolTip="Last">&gt;&gt;]</Button>
                 </Grid>
 
-                <Border Height="150" BorderBrush="Black" BorderThickness="1" IsEnabled="{Binding Preview}" Visibility="{Binding PreviewVisibility}">
+                <Border Height="150" IsEnabled="{Binding Preview}" Visibility="{Binding PreviewVisibility}"  Style="{StaticResource PreviewImageBorderStyle}">
                     <Image Name="PreviewImage" Source="{Binding FileUrl}" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Border>
-                <TextBlock HorizontalAlignment="Center" Text="{Binding FileDateTime}"/>
-                <TextBlock HorizontalAlignment="Center" Text="{Binding FilePath}"/>
-                <TextBlock HorizontalAlignment="Center" Text="{Binding FileDescription}"/>
-                <TextBlock HorizontalAlignment="Center" Text="{Binding FilePosition}"/>
-                <TextBlock HorizontalAlignment="Center" Text="{Binding FileUrl}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FileDateTime}" Visibility="{Binding FileDateTime, Mode=OneWay, Converter={StaticResource StringContentToVisibilityConverter}}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FilePath}" Visibility="{Binding FilePath, Mode=OneWay, Converter={StaticResource StringContentToVisibilityConverter}}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FileDescription}" Visibility="{Binding FileDescription, Mode=OneWay, Converter={StaticResource StringContentToVisibilityConverter}}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FilePosition}" Visibility="{Binding FilePosition, Mode=OneWay, Converter={StaticResource StringContentToVisibilityConverter}}"/>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding FileUrl}" Visibility="{Binding FileUrl, Mode=OneWay, Converter={StaticResource StringContentToVisibilityConverter}}"/>
             </StackPanel>
         </GroupBox>
     </StackPanel>
