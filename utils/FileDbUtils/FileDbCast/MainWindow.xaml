@@ -94,7 +94,7 @@
                 </Grid.RowDefinitions>
                 
                 <!-- Exported FileDB list of files -->
-                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ExportedFileList}" TextWrapping="NoWrap" Width="auto"/>
+                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ExportedFileList, UpdateSourceTrigger=PropertyChanged}" TextWrapping="NoWrap" Width="auto"/>
                 <Button Grid.Row="0" Grid.Column="1" IsEnabled="{Binding ExportedFileList, Mode=OneWay, Converter={StaticResource ExportedFilesListValidConverter}}" Command="{Binding LoadCommand}">Load</Button>
             </Grid>
         </GroupBox>
