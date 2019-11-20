@@ -45,6 +45,7 @@
         </Style>
 
         <local:StringContentToVisibilityConverter x:Key="StringContentToVisibilityConverter"/>
+        <local:ExportedFilesListValidConverter x:Key="ExportedFilesListValidConverter"/>
     </Window.Resources>
     
     <StackPanel Width="auto" Height="auto">
@@ -94,7 +95,7 @@
                 
                 <!-- Exported FileDB list of files -->
                 <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ExportedFileList}" TextWrapping="NoWrap" Width="auto"/>
-                <Button Grid.Row="0" Grid.Column="1" Command="{Binding LoadCommand}">Load</Button>
+                <Button Grid.Row="0" Grid.Column="1" IsEnabled="{Binding ExportedFileList, Mode=OneWay, Converter={StaticResource ExportedFilesListValidConverter}}" Command="{Binding LoadCommand}">Load</Button>
             </Grid>
         </GroupBox>
 

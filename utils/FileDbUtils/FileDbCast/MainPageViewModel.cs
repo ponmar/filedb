@@ -386,7 +386,7 @@ namespace FileDbCast
             Reorient = true;
             Slideshow = false;
             SlideshowDelay = 4;
-            Preview = false;
+            Preview = true;
             Random = false;
             Repeat = false;
             ExportedFileList = string.Empty;
@@ -415,17 +415,8 @@ namespace FileDbCast
         {
             Reset();
 
-            if (!string.IsNullOrEmpty(FiledbUrl) && !string.IsNullOrEmpty(ExportedFileList))
+            if (!string.IsNullOrEmpty(FiledbUrl) && ExportedFileListParser.TryParse(ExportedFileList, out List<int> inputFileIds))
             {
-                var inputFileIds = new List<int>();
-                foreach (string fileIdStr in ExportedFileList.Split(";"))
-                {
-                    if (int.TryParse(fileIdStr, out int fileId))
-                    {
-                        inputFileIds.Add(fileId);
-                    }
-                }
-
                 if (inputFileIds.Count > 0)
                 {
                     filedbClient = new FileDbClient(FiledbUrl);

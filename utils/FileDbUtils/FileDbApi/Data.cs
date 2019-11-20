@@ -5,6 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// This namespace contains helper classes for handling serialization and deserialization of FileDB JSON formatted data
 /// </summary>
+/// <remarks>Naming of variables below has been set to match JSON data, not to follow C# naming standard</remarks>
 namespace FileDbApi
 {
     public class Files

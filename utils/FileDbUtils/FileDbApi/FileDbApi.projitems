@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Data.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExportedFileListParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileDbClient.cs" />
   </ItemGroup>
 </Project>
