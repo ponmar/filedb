@@ -1,5 +1,7 @@
 # README #
 
+**Note:** this project has been replaced by [filedb2](https://github.com/ponmar/filedb2) and is no longer maintained.
+
 ## About ##
 
 This is a project for storing, maintaining and presenting meta-data (persons, locations and tags) for files. A typical use case is to make a picture and video collection searchable and for running slideshows.
